@@ -1,0 +1,21 @@
+query GetActivities($id: bigint!, $limit: Int!) {
+    marketplace_activity(
+        where: {id: {_gt: $id}},
+        order_by: {id: asc},
+        limit: $limit
+    ) {
+        amount
+        contract
+        id
+        internal_order_id
+        maker
+        network
+        operation_hash
+        operation_level
+        operation_timestamp
+        platform
+        sell_price
+        token_id
+        type
+    }
+}
