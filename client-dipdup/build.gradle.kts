@@ -6,7 +6,7 @@ plugins {
 }
 
 dependencies {
-    implementation("com.apollographql.apollo3:apollo-runtime:$apolloVersion")
+    api("com.apollographql.apollo3:apollo-runtime:$apolloVersion")
     testImplementation("com.apollographql.apollo3:apollo-mockserver:$apolloVersion")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
@@ -16,3 +16,5 @@ apollo {
     schemaFile.set(file("src/main/graphql/schema.graphql"))
     packageName.set("com.rarible.dipdup.client")
 }
+
+

@@ -1,16 +1,20 @@
 plugins {
     kotlin("jvm")
     kotlin("plugin.spring")
+    `java`
+    `maven-publish`
 }
 
 val springBootVersion: String by project
 val coroutinesVersion: String by project
 
+java {
+    withSourcesJar()
+}
+
 repositories {
     mavenLocal()
     mavenCentral()
-    maven(url = "http://nexus-ext.rarible.int/repository/maven-public/") { isAllowInsecureProtocol = true }
-    maven(url = "https://repo.rarible.org/repository/maven-public/")
 }
 
 dependencies {
@@ -36,3 +40,21 @@ tasks.test {
 }
 
 tasks.register<TestReport>("coverage")
+
+publishing {
+    repositories {
+        maven {
+            url = uri("https://repo.rarible.org/repository/maven-public")
+            credentials {
+                username = if (project.hasProperty("nexus_user")) project.property("nexus_user").toString() else ""
+                password = if (project.hasProperty("nexus_pwd")) project.property("nexus_pwd").toString() else ""
+            }
+        }
+    }
+    publications {
+        create<MavenPublication>("maven") {
+            artifactId = tasks.jar.get().archiveBaseName.get()
+            from(components["java"])
+        }
+    }
+}
