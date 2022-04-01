@@ -18,4 +18,9 @@ class OrderClient(
         val response = safeExecution(GetOrdersQuery(id = id, limit = limit))
         return response.marketplace_order
     }
+
+    suspend fun getOrdersByIds(ids: List<String>): List<GetOrdersByIdsQuery.Marketplace_order> {
+        val response = safeExecution(GetOrdersByIdsQuery(ids = ids))
+        return response.marketplace_order
+    }
 }
