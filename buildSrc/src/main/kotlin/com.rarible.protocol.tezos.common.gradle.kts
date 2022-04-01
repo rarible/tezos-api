@@ -44,7 +44,7 @@ tasks.register<TestReport>("coverage")
 publishing {
     repositories {
         maven {
-            url = uri(System.getenv("GRADLE_NEXUS_URL"))
+            url = uri("http://nexus-ext.rarible.int/repository/maven-releases")
             credentials {
                 username = System.getenv("GRADLE_NEXUS_USER")
                 password = System.getenv("GRADLE_NEXUS_PASS")
