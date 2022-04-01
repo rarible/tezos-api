@@ -45,6 +45,7 @@ publishing {
     repositories {
         maven {
             url = uri("http://nexus-ext.rarible.int/repository/maven-releases")
+            setAllowInsecureProtocol(true)
             credentials {
                 username = System.getenv("GRADLE_NEXUS_USER")
                 password = System.getenv("GRADLE_NEXUS_PASS")
