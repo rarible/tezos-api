@@ -44,10 +44,10 @@ tasks.register<TestReport>("coverage")
 publishing {
     repositories {
         maven {
-            url = uri("https://repo.rarible.org/repository/maven-public")
+            url = uri(System.getenv("GRADLE_NEXUS_URL"))
             credentials {
-                username = if (project.hasProperty("nexus_user")) project.property("nexus_user").toString() else ""
-                password = if (project.hasProperty("nexus_pwd")) project.property("nexus_pwd").toString() else ""
+                username = System.getenv("GRADLE_NEXUS_USER")
+                password = System.getenv("GRADLE_NEXUS_PASS")
             }
         }
     }
