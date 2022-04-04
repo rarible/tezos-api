@@ -1,6 +1,6 @@
 subprojects {
     group = "com.rarible.protocol.tezos"
-    version = "1.0.2"
+    version = "1.0.3"
 
     apply(plugin = "com.rarible.protocol.tezos.common")
 }
