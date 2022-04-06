@@ -15,6 +15,7 @@ java {
 repositories {
     mavenLocal()
     mavenCentral()
+    maven(url = "https://repo.rarible.org/repository/maven-public/")
 }
 
 dependencies {
