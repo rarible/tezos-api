@@ -35,8 +35,8 @@ import com.rarible.tzkt.filters.InclusionFilterImpl
  */
 
 data class ContractKindParameter (
-    val equalityFilterImpl: EqualityFilterImpl? = null,
-    val inclusionFilterImpl: InclusionFilterImpl? = null
+    var equalityFilterImpl: EqualityFilterImpl? = null,
+    var inclusionFilterImpl: InclusionFilterImpl? = null
 ) {
     fun getFilter(): String {
         return equalityFilterImpl?.getFilter()

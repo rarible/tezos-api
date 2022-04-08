@@ -1,7 +1,7 @@
 /**
  * TzKT API
  *
- * # Introduction  TzKT Explorer provides free REST API and WebSocket API for accessing detailed Tezos blockchain data and helps developers build more services and applications on top of Tezos. TzKT is an open-source project, so you can easily clone and build it and use it as a self-hosted service to avoid any risks of depending on third-party services.  TzKT API is available for the following Tezos networks with the following base URLs:  - Mainnet: `https://api.tzkt.io/` or `https://api.mainnet.tzkt.io/` ([view docs](https://api.tzkt.io))  - Granadanet: `https://api.granadanet.tzkt.io/` ([view docs](https://api.granadanet.tzkt.io))     - Hangzhou2net: `https://api.hangzhou2net.tzkt.io/` ([view docs](https://api.hangzhou2net.tzkt.io))  We also provide a staging environment for testing newest features and pre-updating client applications before deploying to production:  - Mainnet staging: `https://api.tzkt.io/` or `https://staging.api.mainnet.tzkt.io/` ([view docs](https://api.tzkt.io))  Feel free to contact us if you have any questions or feature requests. Your feedback really helps us make TzKT better!  - Discord: https://discord.gg/aG8XKuwsQd - Telegram: https://t.me/baking_bad_chat - Slack: https://tezos-dev.slack.com/archives/CV5NX7F2L - Twitter: https://twitter.com/TezosBakingBad - Email: hello@baking-bad.org  And don't forget to star TzKT project [on GitHub](https://github.com/baking-bad/tzkt) ;)  # Terms of Use  TzKT API is free for everyone and for both commercial and non-commercial usage.  If your application or service uses the TzKT API in any forms: directly on frontend or indirectly on backend, you should mention that fact on your website or application by placing the label **\"Powered by TzKT API\"** with a direct link to [tzkt.io](https://tzkt.io).   # Rate Limits  There will be no rate limits as long as our servers can handle the load without additional infrastructure costs. However, any apparent abuse will be prevented by setting targeted rate limits.  Check out [Tezos Explorer API Best Practices](https://baking-bad.org/blog/tag/TzKT/) and in particular [how to optimize requests count](https://baking-bad.org/blog/2020/07/29/tezos-explorer-api-tzkt-how-often-to-make-requests/).  --- 
+ * # Introduction  TzKT Explorer provides free REST API and WebSocket API for accessing detailed Tezos blockchain data and helps developers build more services and applications on top of Tezos. TzKT is an open-source project, so you can easily clone and build it and use it as a self-hosted service to avoid any risks of depending on third-party services.  TzKT API is available for the following Tezos networks with the following base URLs:  - Mainnet: `https://api.tzkt.io/` or `https://api.mainnet.tzkt.io/` ([view docs](https://api.tzkt.io))  - Granadanet: `https://api.granadanet.tzkt.io/` ([view docs](https://api.granadanet.tzkt.io))     - Hangzhou2net: `https://api.hangzhou2net.tzkt.io/` ([view docs](https://api.hangzhou2net.tzkt.io))  We also provide a staging environment for testing newest features and pre-updating client applications before deploying to production:  - Mainnet staging: `https://api.tzkt.io/` or `https://staging.api.mainnet.tzkt.io/` ([view docs](https://api.tzkt.io))  Feel free to contact us if you have any questions or feature requests. Your feedback really helps us make TzKT better!  - Discord: https://discord.gg/aG8XKuwsQd - Telegram: https://t.me/baking_bad_chat - Slack: https://tezos-dev.slack.com/archives/CV5NX7F2L - Twitter: https://twitter.com/TezosBakingBad - Email: hello@baking-bad.org  And don't forget to star TzKT project [on GitHub](https://github.com/baking-bad/tzkt) ;)  # Terms of Use  TzKT API is free for everyone and for both commercial and non-commercial usage.  If your application or service uses the TzKT API in any forms: directly on frontend or indirectly on backend, you should mention that fact on your website or application by placing the label **\"Powered by TzKT API\"** with a direct link to [tzkt.io](https://tzkt.io).   # Rate Limits  There will be no rate limits as long as our servers can handle the load without additional infrastructure costs. However, any apparent abuse will be prevented by setting targeted rate limits.  Check out [Tezos Explorer API Best Practices](https://baking-bad.org/blog/tag/TzKT/) and in particular [how to optimize requests count](https://baking-bad.org/blog/2020/07/29/tezos-explorer-api-tzkt-how-often-to-make-requests/).  ---
  *
  * The version of the OpenAPI document: v1.7.0
  * Contact: hello@baking-bad.org
@@ -63,29 +63,57 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * Get accounts
-    * Returns a list of accounts.
-    * @param type Filters accounts by type (&#x60;user&#x60;, &#x60;delegate&#x60;, &#x60;contract&#x60;, &#x60;ghost&#x60;). (optional)
-    * @param kind Filters accounts by contract kind (&#x60;delegator_contract&#x60; or &#x60;smart_contract&#x60;) (optional)
-    * @param `delegate` Filters accounts by delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param balance Filters accounts by balance (optional)
-    * @param staked Filters accounts by participation in staking (optional)
-    * @param lastActivity Filters accounts by last activity level (where the account was updated) (optional)
-    * @param select Specify comma-separated list of fields to include into response or leave it undefined to return full object. If you select single field, response will be an array of values in both &#x60;.fields&#x60; and &#x60;.values&#x60; modes. (optional)
-    * @param sort Sorts delegators by specified field. Supported fields: &#x60;id&#x60; (default), &#x60;balance&#x60;, &#x60;firstActivity&#x60;, &#x60;lastActivity&#x60;, &#x60;numTransactions&#x60;, &#x60;numContracts&#x60;. (optional)
-    * @param offset Specifies which or how many items should be skipped (optional)
-    * @param limit Maximum number of items to return (optional, default to 100)
-    * @return kotlin.collections.List<Account>
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    * @throws UnsupportedOperationException If the API returns an informational or redirection response
-    * @throws ClientException If the API returns a client error response
-    * @throws ServerException If the API returns a server error response
-    */
+     * Get accounts
+     * Returns a list of accounts.
+     * @param type Filters accounts by type (&#x60;user&#x60;, &#x60;delegate&#x60;, &#x60;contract&#x60;, &#x60;ghost&#x60;). (optional)
+     * @param kind Filters accounts by contract kind (&#x60;delegator_contract&#x60; or &#x60;smart_contract&#x60;) (optional)
+     * @param `delegate` Filters accounts by delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param balance Filters accounts by balance (optional)
+     * @param staked Filters accounts by participation in staking (optional)
+     * @param lastActivity Filters accounts by last activity level (where the account was updated) (optional)
+     * @param select Specify comma-separated list of fields to include into response or leave it undefined to return full object. If you select single field, response will be an array of values in both &#x60;.fields&#x60; and &#x60;.values&#x60; modes. (optional)
+     * @param sort Sorts delegators by specified field. Supported fields: &#x60;id&#x60; (default), &#x60;balance&#x60;, &#x60;firstActivity&#x60;, &#x60;lastActivity&#x60;, &#x60;numTransactions&#x60;, &#x60;numContracts&#x60;. (optional)
+     * @param offset Specifies which or how many items should be skipped (optional)
+     * @param limit Maximum number of items to return (optional, default to 100)
+     * @return kotlin.collections.List<Account>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
     @Suppress("UNCHECKED_CAST")
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun accountsGet(type: AccountTypeParameter?, kind: ContractKindParameter?, `delegate`: AccountParameter?, balance: IntParameter?, staked: BoolParameter?, lastActivity: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : kotlin.collections.List<Account> {
-        val localVarResponse = accountsGetWithHttpInfo(type = type, kind = kind, `delegate` = `delegate`, balance = balance, staked = staked, lastActivity = lastActivity, select = select, sort = sort, offset = offset, limit = limit)
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class
+    )
+    fun accountsGet(
+        type: AccountTypeParameter?,
+        kind: ContractKindParameter?,
+        `delegate`: AccountParameter?,
+        balance: IntParameter?,
+        staked: BoolParameter?,
+        lastActivity: IntParameter?,
+        select: SelectParameter?,
+        sort: SortParameter?,
+        offset: OffsetParameter?,
+        limit: kotlin.Int?
+    ): kotlin.collections.List<Account> {
+        val localVarResponse = accountsGetWithHttpInfo(
+            type = type,
+            kind = kind,
+            `delegate` = `delegate`,
+            balance = balance,
+            staked = staked,
+            lastActivity = lastActivity,
+            select = select,
+            sort = sort,
+            offset = offset,
+            limit = limit
+        )
 
         return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.collections.List<Account>
@@ -93,36 +121,66 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
                 val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
         }
     }
 
     /**
-    * Get accounts
-    * Returns a list of accounts.
-    * @param type Filters accounts by type (&#x60;user&#x60;, &#x60;delegate&#x60;, &#x60;contract&#x60;, &#x60;ghost&#x60;). (optional)
-    * @param kind Filters accounts by contract kind (&#x60;delegator_contract&#x60; or &#x60;smart_contract&#x60;) (optional)
-    * @param `delegate` Filters accounts by delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param balance Filters accounts by balance (optional)
-    * @param staked Filters accounts by participation in staking (optional)
-    * @param lastActivity Filters accounts by last activity level (where the account was updated) (optional)
-    * @param select Specify comma-separated list of fields to include into response or leave it undefined to return full object. If you select single field, response will be an array of values in both &#x60;.fields&#x60; and &#x60;.values&#x60; modes. (optional)
-    * @param sort Sorts delegators by specified field. Supported fields: &#x60;id&#x60; (default), &#x60;balance&#x60;, &#x60;firstActivity&#x60;, &#x60;lastActivity&#x60;, &#x60;numTransactions&#x60;, &#x60;numContracts&#x60;. (optional)
-    * @param offset Specifies which or how many items should be skipped (optional)
-    * @param limit Maximum number of items to return (optional, default to 100)
-    * @return ApiResponse<kotlin.collections.List<Account>?>
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    */
+     * Get accounts
+     * Returns a list of accounts.
+     * @param type Filters accounts by type (&#x60;user&#x60;, &#x60;delegate&#x60;, &#x60;contract&#x60;, &#x60;ghost&#x60;). (optional)
+     * @param kind Filters accounts by contract kind (&#x60;delegator_contract&#x60; or &#x60;smart_contract&#x60;) (optional)
+     * @param `delegate` Filters accounts by delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param balance Filters accounts by balance (optional)
+     * @param staked Filters accounts by participation in staking (optional)
+     * @param lastActivity Filters accounts by last activity level (where the account was updated) (optional)
+     * @param select Specify comma-separated list of fields to include into response or leave it undefined to return full object. If you select single field, response will be an array of values in both &#x60;.fields&#x60; and &#x60;.values&#x60; modes. (optional)
+     * @param sort Sorts delegators by specified field. Supported fields: &#x60;id&#x60; (default), &#x60;balance&#x60;, &#x60;firstActivity&#x60;, &#x60;lastActivity&#x60;, &#x60;numTransactions&#x60;, &#x60;numContracts&#x60;. (optional)
+     * @param offset Specifies which or how many items should be skipped (optional)
+     * @param limit Maximum number of items to return (optional, default to 100)
+     * @return ApiResponse<kotlin.collections.List<Account>?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun accountsGetWithHttpInfo(type: AccountTypeParameter?, kind: ContractKindParameter?, `delegate`: AccountParameter?, balance: IntParameter?, staked: BoolParameter?, lastActivity: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : ApiResponse<List<Account>?> {
-        val localVariableConfig = accountsGetRequestConfig(type = type, kind = kind, `delegate` = `delegate`, balance = balance, staked = staked, lastActivity = lastActivity, select = select, sort = sort, offset = offset, limit = limit)
+    fun accountsGetWithHttpInfo(
+        type: AccountTypeParameter?,
+        kind: ContractKindParameter?,
+        `delegate`: AccountParameter?,
+        balance: IntParameter?,
+        staked: BoolParameter?,
+        lastActivity: IntParameter?,
+        select: SelectParameter?,
+        sort: SortParameter?,
+        offset: OffsetParameter?,
+        limit: kotlin.Int?
+    ): ApiResponse<List<Account>?> {
+        val localVariableConfig = accountsGetRequestConfig(
+            type = type,
+            kind = kind,
+            `delegate` = `delegate`,
+            balance = balance,
+            staked = staked,
+            lastActivity = lastActivity,
+            select = select,
+            sort = sort,
+            offset = offset,
+            limit = limit
+        )
 
         return request(
             localVariableConfig
@@ -130,21 +188,32 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * To obtain the request config of the operation accountsGet
-    *
-    * @param type Filters accounts by type (&#x60;user&#x60;, &#x60;delegate&#x60;, &#x60;contract&#x60;, &#x60;ghost&#x60;). (optional)
-    * @param kind Filters accounts by contract kind (&#x60;delegator_contract&#x60; or &#x60;smart_contract&#x60;) (optional)
-    * @param `delegate` Filters accounts by delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param balance Filters accounts by balance (optional)
-    * @param staked Filters accounts by participation in staking (optional)
-    * @param lastActivity Filters accounts by last activity level (where the account was updated) (optional)
-    * @param select Specify comma-separated list of fields to include into response or leave it undefined to return full object. If you select single field, response will be an array of values in both &#x60;.fields&#x60; and &#x60;.values&#x60; modes. (optional)
-    * @param sort Sorts delegators by specified field. Supported fields: &#x60;id&#x60; (default), &#x60;balance&#x60;, &#x60;firstActivity&#x60;, &#x60;lastActivity&#x60;, &#x60;numTransactions&#x60;, &#x60;numContracts&#x60;. (optional)
-    * @param offset Specifies which or how many items should be skipped (optional)
-    * @param limit Maximum number of items to return (optional, default to 100)
-    * @return RequestConfig
-    */
-    private fun accountsGetRequestConfig(type: AccountTypeParameter?, kind: ContractKindParameter?, `delegate`: AccountParameter?, balance: IntParameter?, staked: BoolParameter?, lastActivity: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : RequestConfig<Unit> {
+     * To obtain the request config of the operation accountsGet
+     *
+     * @param type Filters accounts by type (&#x60;user&#x60;, &#x60;delegate&#x60;, &#x60;contract&#x60;, &#x60;ghost&#x60;). (optional)
+     * @param kind Filters accounts by contract kind (&#x60;delegator_contract&#x60; or &#x60;smart_contract&#x60;) (optional)
+     * @param `delegate` Filters accounts by delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param balance Filters accounts by balance (optional)
+     * @param staked Filters accounts by participation in staking (optional)
+     * @param lastActivity Filters accounts by last activity level (where the account was updated) (optional)
+     * @param select Specify comma-separated list of fields to include into response or leave it undefined to return full object. If you select single field, response will be an array of values in both &#x60;.fields&#x60; and &#x60;.values&#x60; modes. (optional)
+     * @param sort Sorts delegators by specified field. Supported fields: &#x60;id&#x60; (default), &#x60;balance&#x60;, &#x60;firstActivity&#x60;, &#x60;lastActivity&#x60;, &#x60;numTransactions&#x60;, &#x60;numContracts&#x60;. (optional)
+     * @param offset Specifies which or how many items should be skipped (optional)
+     * @param limit Maximum number of items to return (optional, default to 100)
+     * @return RequestConfig
+     */
+    private fun accountsGetRequestConfig(
+        type: AccountTypeParameter?,
+        kind: ContractKindParameter?,
+        `delegate`: AccountParameter?,
+        balance: IntParameter?,
+        staked: BoolParameter?,
+        lastActivity: IntParameter?,
+        select: SelectParameter?,
+        sort: SortParameter?,
+        offset: OffsetParameter?,
+        limit: kotlin.Int?
+    ): RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -152,28 +221,28 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
                     put("type${type.getFilter()}", listOf(type.getFilterValue()))
                 }
                 if (kind != null) {
-                    put("kind", listOf(kind.toString()))
+                    put("kind${kind.getFilter()}", listOf(kind.getFilterValue()))
                 }
                 if (`delegate` != null) {
-                    put("delegate", listOf(`delegate`.toString()))
+                    put("delegate${delegate.getFilter()}", listOf(`delegate`.getFilterValue()))
                 }
                 if (balance != null) {
-                    put("balance", listOf(balance.toString()))
+                    put("balance${balance.getFilter()}", listOf(balance.getFilterValue()))
                 }
                 if (staked != null) {
-                    put("staked", listOf(staked.toString()))
+                    put("staked${staked.getFilter()}", listOf(staked.getFilterValue()))
                 }
                 if (lastActivity != null) {
-                    put("lastActivity", listOf(lastActivity.toString()))
+                    put("lastActivity${lastActivity.getFilter()}", listOf(lastActivity.getFilterValue()))
                 }
                 if (select != null) {
-                    put("select", listOf(select.toString()))
+                    put("select${select.getFilter()}", listOf(select.getFilterValue()))
                 }
                 if (sort != null) {
-                    put("sort", listOf(sort.toString()))
+                    put("sort${sort.getFilter()}", listOf(sort.getFilterValue()))
                 }
                 if (offset != null) {
-                    put("offset", listOf(offset.toString()))
+                    put("offset${offset.getFilter()}", listOf(offset.getFilterValue()))
                 }
                 if (limit != null) {
                     put("limit", listOf(limit.toString()))
@@ -192,19 +261,25 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * Get balance
-    * Returns account balance
-    * @param address Account address (starting with tz or KT) 
-    * @return kotlin.Long
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    * @throws UnsupportedOperationException If the API returns an informational or redirection response
-    * @throws ClientException If the API returns a client error response
-    * @throws ServerException If the API returns a server error response
-    */
+     * Get balance
+     * Returns account balance
+     * @param address Account address (starting with tz or KT)
+     * @return kotlin.Long
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
     @Suppress("UNCHECKED_CAST")
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun accountsGetBalance(address: kotlin.String) : kotlin.Long {
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class
+    )
+    fun accountsGetBalance(address: kotlin.String): kotlin.Long {
         val localVarResponse = accountsGetBalanceWithHttpInfo(address = address)
 
         return when (localVarResponse.responseType) {
@@ -213,26 +288,34 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
                 val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
         }
     }
 
     /**
-    * Get balance
-    * Returns account balance
-    * @param address Account address (starting with tz or KT) 
-    * @return ApiResponse<kotlin.Long?>
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    */
+     * Get balance
+     * Returns account balance
+     * @param address Account address (starting with tz or KT)
+     * @return ApiResponse<kotlin.Long?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun accountsGetBalanceWithHttpInfo(address: kotlin.String) : ApiResponse<kotlin.Long?> {
+    fun accountsGetBalanceWithHttpInfo(address: kotlin.String): ApiResponse<kotlin.Long?> {
         val localVariableConfig = accountsGetBalanceRequestConfig(address = address)
 
         return request<Unit, kotlin.Long>(
@@ -241,12 +324,12 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * To obtain the request config of the operation accountsGetBalance
-    *
-    * @param address Account address (starting with tz or KT) 
-    * @return RequestConfig
-    */
-    fun accountsGetBalanceRequestConfig(address: kotlin.String) : RequestConfig<Unit> {
+     * To obtain the request config of the operation accountsGetBalance
+     *
+     * @param address Account address (starting with tz or KT)
+     * @return RequestConfig
+     */
+    fun accountsGetBalanceRequestConfig(address: kotlin.String): RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
@@ -254,7 +337,7 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
 
         return RequestConfig(
             method = RequestMethod.GET,
-            path = "/v1/accounts/{address}/balance".replace("{"+"address"+"}", "$address"),
+            path = "/v1/accounts/{address}/balance".replace("{" + "address" + "}", "$address"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             body = localVariableBody
@@ -262,20 +345,26 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * Get balance at date
-    * Returns account balance at the specified datetime
-    * @param address Account address (starting with tz or KT) 
-    * @param datetime Datetime at which you want to know account balance (e.g. &#x60;2020-01-01&#x60;, or &#x60;2019-12-30T23:42:59Z&#x60;) 
-    * @return kotlin.Long
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    * @throws UnsupportedOperationException If the API returns an informational or redirection response
-    * @throws ClientException If the API returns a client error response
-    * @throws ServerException If the API returns a server error response
-    */
+     * Get balance at date
+     * Returns account balance at the specified datetime
+     * @param address Account address (starting with tz or KT)
+     * @param datetime Datetime at which you want to know account balance (e.g. &#x60;2020-01-01&#x60;, or &#x60;2019-12-30T23:42:59Z&#x60;)
+     * @return kotlin.Long
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
     @Suppress("UNCHECKED_CAST")
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun accountsGetBalanceAtDate(address: kotlin.String, datetime: java.time.OffsetDateTime) : kotlin.Long {
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class
+    )
+    fun accountsGetBalanceAtDate(address: kotlin.String, datetime: java.time.OffsetDateTime): kotlin.Long {
         val localVarResponse = accountsGetBalanceAtDateWithHttpInfo(address = address, datetime = datetime)
 
         return when (localVarResponse.responseType) {
@@ -284,27 +373,38 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
                 val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
         }
     }
 
     /**
-    * Get balance at date
-    * Returns account balance at the specified datetime
-    * @param address Account address (starting with tz or KT) 
-    * @param datetime Datetime at which you want to know account balance (e.g. &#x60;2020-01-01&#x60;, or &#x60;2019-12-30T23:42:59Z&#x60;) 
-    * @return ApiResponse<kotlin.Long?>
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    */
+     * Get balance at date
+     * Returns account balance at the specified datetime
+     * @param address Account address (starting with tz or KT)
+     * @param datetime Datetime at which you want to know account balance (e.g. &#x60;2020-01-01&#x60;, or &#x60;2019-12-30T23:42:59Z&#x60;)
+     * @return ApiResponse<kotlin.Long?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun accountsGetBalanceAtDateWithHttpInfo(address: kotlin.String, datetime: java.time.OffsetDateTime) : ApiResponse<kotlin.Long?> {
+    fun accountsGetBalanceAtDateWithHttpInfo(
+        address: kotlin.String,
+        datetime: java.time.OffsetDateTime
+    ): ApiResponse<kotlin.Long?> {
         val localVariableConfig = accountsGetBalanceAtDateRequestConfig(address = address, datetime = datetime)
 
         return request<Unit, kotlin.Long>(
@@ -313,13 +413,16 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * To obtain the request config of the operation accountsGetBalanceAtDate
-    *
-    * @param address Account address (starting with tz or KT) 
-    * @param datetime Datetime at which you want to know account balance (e.g. &#x60;2020-01-01&#x60;, or &#x60;2019-12-30T23:42:59Z&#x60;) 
-    * @return RequestConfig
-    */
-    fun accountsGetBalanceAtDateRequestConfig(address: kotlin.String, datetime: java.time.OffsetDateTime) : RequestConfig<Unit> {
+     * To obtain the request config of the operation accountsGetBalanceAtDate
+     *
+     * @param address Account address (starting with tz or KT)
+     * @param datetime Datetime at which you want to know account balance (e.g. &#x60;2020-01-01&#x60;, or &#x60;2019-12-30T23:42:59Z&#x60;)
+     * @return RequestConfig
+     */
+    fun accountsGetBalanceAtDateRequestConfig(
+        address: kotlin.String,
+        datetime: java.time.OffsetDateTime
+    ): RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
@@ -327,7 +430,8 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
 
         return RequestConfig(
             method = RequestMethod.GET,
-            path = "/v1/accounts/{address}/balance_history/{datetime}".replace("{"+"address"+"}", "$address").replace("{"+"datetime"+"}", "$datetime"),
+            path = "/v1/accounts/{address}/balance_history/{datetime}".replace("{" + "address" + "}", "$address")
+                .replace("{" + "datetime" + "}", "$datetime"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             body = localVariableBody
@@ -335,20 +439,26 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * Get balance at level
-    * Returns account balance at the specified block
-    * @param address Account address (starting with tz or KT) 
-    * @param level Block height at which you want to know account balance 
-    * @return kotlin.Long
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    * @throws UnsupportedOperationException If the API returns an informational or redirection response
-    * @throws ClientException If the API returns a client error response
-    * @throws ServerException If the API returns a server error response
-    */
+     * Get balance at level
+     * Returns account balance at the specified block
+     * @param address Account address (starting with tz or KT)
+     * @param level Block height at which you want to know account balance
+     * @return kotlin.Long
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
     @Suppress("UNCHECKED_CAST")
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun accountsGetBalanceAtLevel(address: kotlin.String, level: kotlin.Int) : kotlin.Long {
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class
+    )
+    fun accountsGetBalanceAtLevel(address: kotlin.String, level: kotlin.Int): kotlin.Long {
         val localVarResponse = accountsGetBalanceAtLevelWithHttpInfo(address = address, level = level)
 
         return when (localVarResponse.responseType) {
@@ -357,27 +467,35 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
                 val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
         }
     }
 
     /**
-    * Get balance at level
-    * Returns account balance at the specified block
-    * @param address Account address (starting with tz or KT) 
-    * @param level Block height at which you want to know account balance 
-    * @return ApiResponse<kotlin.Long?>
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    */
+     * Get balance at level
+     * Returns account balance at the specified block
+     * @param address Account address (starting with tz or KT)
+     * @param level Block height at which you want to know account balance
+     * @return ApiResponse<kotlin.Long?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun accountsGetBalanceAtLevelWithHttpInfo(address: kotlin.String, level: kotlin.Int) : ApiResponse<kotlin.Long?> {
+    fun accountsGetBalanceAtLevelWithHttpInfo(address: kotlin.String, level: kotlin.Int): ApiResponse<kotlin.Long?> {
         val localVariableConfig = accountsGetBalanceAtLevelRequestConfig(address = address, level = level)
 
         return request<Unit, kotlin.Long>(
@@ -386,13 +504,13 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * To obtain the request config of the operation accountsGetBalanceAtLevel
-    *
-    * @param address Account address (starting with tz or KT) 
-    * @param level Block height at which you want to know account balance 
-    * @return RequestConfig
-    */
-    fun accountsGetBalanceAtLevelRequestConfig(address: kotlin.String, level: kotlin.Int) : RequestConfig<Unit> {
+     * To obtain the request config of the operation accountsGetBalanceAtLevel
+     *
+     * @param address Account address (starting with tz or KT)
+     * @param level Block height at which you want to know account balance
+     * @return RequestConfig
+     */
+    fun accountsGetBalanceAtLevelRequestConfig(address: kotlin.String, level: kotlin.Int): RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
@@ -400,7 +518,8 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
 
         return RequestConfig(
             method = RequestMethod.GET,
-            path = "/v1/accounts/{address}/balance_history/{level}".replace("{"+"address"+"}", "$address").replace("{"+"level"+"}", "$level"),
+            path = "/v1/accounts/{address}/balance_history/{level}".replace("{" + "address" + "}", "$address")
+                .replace("{" + "level" + "}", "$level"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             body = localVariableBody
@@ -408,26 +527,48 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * Get balance history
-    * Returns time series with historical balances (only changes, without duplicates).
-    * @param address Account address (starting with tz or KT) 
-    * @param step Step of the time series, for example if &#x60;step &#x3D; 1000&#x60; you will get balances at blocks &#x60;1000, 2000, 3000, ...&#x60;. (optional)
-    * @param select Specify comma-separated list of fields to include into response or leave it undefined to return full object. If you select single field, response will be an array of values in both &#x60;.fields&#x60; and &#x60;.values&#x60; modes. (optional)
-    * @param sort Sorts historical balances by specified field. Supported fields: &#x60;level&#x60;. (optional)
-    * @param offset Specifies which or how many items should be skipped (optional, default to 0)
-    * @param limit Maximum number of items to return (optional, default to 100)
-    * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
-    * @return kotlin.collections.List<HistoricalBalance>
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    * @throws UnsupportedOperationException If the API returns an informational or redirection response
-    * @throws ClientException If the API returns a client error response
-    * @throws ServerException If the API returns a server error response
-    */
+     * Get balance history
+     * Returns time series with historical balances (only changes, without duplicates).
+     * @param address Account address (starting with tz or KT)
+     * @param step Step of the time series, for example if &#x60;step &#x3D; 1000&#x60; you will get balances at blocks &#x60;1000, 2000, 3000, ...&#x60;. (optional)
+     * @param select Specify comma-separated list of fields to include into response or leave it undefined to return full object. If you select single field, response will be an array of values in both &#x60;.fields&#x60; and &#x60;.values&#x60; modes. (optional)
+     * @param sort Sorts historical balances by specified field. Supported fields: &#x60;level&#x60;. (optional)
+     * @param offset Specifies which or how many items should be skipped (optional, default to 0)
+     * @param limit Maximum number of items to return (optional, default to 100)
+     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
+     * @return kotlin.collections.List<HistoricalBalance>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
     @Suppress("UNCHECKED_CAST")
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun accountsGetBalanceHistory(address: kotlin.String, step: kotlin.Int?, select: SelectParameter?, sort: SortParameter?, offset: kotlin.Int?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<HistoricalBalance> {
-        val localVarResponse = accountsGetBalanceHistoryWithHttpInfo(address = address, step = step, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class
+    )
+    fun accountsGetBalanceHistory(
+        address: kotlin.String,
+        step: kotlin.Int?,
+        select: SelectParameter?,
+        sort: SortParameter?,
+        offset: kotlin.Int?,
+        limit: kotlin.Int?,
+        quote: Symbols?
+    ): kotlin.collections.List<HistoricalBalance> {
+        val localVarResponse = accountsGetBalanceHistoryWithHttpInfo(
+            address = address,
+            step = step,
+            select = select,
+            sort = sort,
+            offset = offset,
+            limit = limit,
+            quote = quote
+        )
 
         return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.collections.List<HistoricalBalance>
@@ -435,33 +576,57 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
                 val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
         }
     }
 
     /**
-    * Get balance history
-    * Returns time series with historical balances (only changes, without duplicates).
-    * @param address Account address (starting with tz or KT) 
-    * @param step Step of the time series, for example if &#x60;step &#x3D; 1000&#x60; you will get balances at blocks &#x60;1000, 2000, 3000, ...&#x60;. (optional)
-    * @param select Specify comma-separated list of fields to include into response or leave it undefined to return full object. If you select single field, response will be an array of values in both &#x60;.fields&#x60; and &#x60;.values&#x60; modes. (optional)
-    * @param sort Sorts historical balances by specified field. Supported fields: &#x60;level&#x60;. (optional)
-    * @param offset Specifies which or how many items should be skipped (optional, default to 0)
-    * @param limit Maximum number of items to return (optional, default to 100)
-    * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
-    * @return ApiResponse<kotlin.collections.List<HistoricalBalance>?>
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    */
+     * Get balance history
+     * Returns time series with historical balances (only changes, without duplicates).
+     * @param address Account address (starting with tz or KT)
+     * @param step Step of the time series, for example if &#x60;step &#x3D; 1000&#x60; you will get balances at blocks &#x60;1000, 2000, 3000, ...&#x60;. (optional)
+     * @param select Specify comma-separated list of fields to include into response or leave it undefined to return full object. If you select single field, response will be an array of values in both &#x60;.fields&#x60; and &#x60;.values&#x60; modes. (optional)
+     * @param sort Sorts historical balances by specified field. Supported fields: &#x60;level&#x60;. (optional)
+     * @param offset Specifies which or how many items should be skipped (optional, default to 0)
+     * @param limit Maximum number of items to return (optional, default to 100)
+     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
+     * @return ApiResponse<kotlin.collections.List<HistoricalBalance>?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun accountsGetBalanceHistoryWithHttpInfo(address: kotlin.String, step: kotlin.Int?, select: SelectParameter?, sort: SortParameter?, offset: kotlin.Int?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<HistoricalBalance>?> {
-        val localVariableConfig = accountsGetBalanceHistoryRequestConfig(address = address, step = step, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
+    fun accountsGetBalanceHistoryWithHttpInfo(
+        address: kotlin.String,
+        step: kotlin.Int?,
+        select: SelectParameter?,
+        sort: SortParameter?,
+        offset: kotlin.Int?,
+        limit: kotlin.Int?,
+        quote: Symbols?
+    ): ApiResponse<kotlin.collections.List<HistoricalBalance>?> {
+        val localVariableConfig = accountsGetBalanceHistoryRequestConfig(
+            address = address,
+            step = step,
+            select = select,
+            sort = sort,
+            offset = offset,
+            limit = limit,
+            quote = quote
+        )
 
         return request<Unit, kotlin.collections.List<HistoricalBalance>>(
             localVariableConfig
@@ -469,18 +634,26 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * To obtain the request config of the operation accountsGetBalanceHistory
-    *
-    * @param address Account address (starting with tz or KT) 
-    * @param step Step of the time series, for example if &#x60;step &#x3D; 1000&#x60; you will get balances at blocks &#x60;1000, 2000, 3000, ...&#x60;. (optional)
-    * @param select Specify comma-separated list of fields to include into response or leave it undefined to return full object. If you select single field, response will be an array of values in both &#x60;.fields&#x60; and &#x60;.values&#x60; modes. (optional)
-    * @param sort Sorts historical balances by specified field. Supported fields: &#x60;level&#x60;. (optional)
-    * @param offset Specifies which or how many items should be skipped (optional, default to 0)
-    * @param limit Maximum number of items to return (optional, default to 100)
-    * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
-    * @return RequestConfig
-    */
-    fun accountsGetBalanceHistoryRequestConfig(address: kotlin.String, step: kotlin.Int?, select: SelectParameter?, sort: SortParameter?, offset: kotlin.Int?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
+     * To obtain the request config of the operation accountsGetBalanceHistory
+     *
+     * @param address Account address (starting with tz or KT)
+     * @param step Step of the time series, for example if &#x60;step &#x3D; 1000&#x60; you will get balances at blocks &#x60;1000, 2000, 3000, ...&#x60;. (optional)
+     * @param select Specify comma-separated list of fields to include into response or leave it undefined to return full object. If you select single field, response will be an array of values in both &#x60;.fields&#x60; and &#x60;.values&#x60; modes. (optional)
+     * @param sort Sorts historical balances by specified field. Supported fields: &#x60;level&#x60;. (optional)
+     * @param offset Specifies which or how many items should be skipped (optional, default to 0)
+     * @param limit Maximum number of items to return (optional, default to 100)
+     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
+     * @return RequestConfig
+     */
+    fun accountsGetBalanceHistoryRequestConfig(
+        address: kotlin.String,
+        step: kotlin.Int?,
+        select: SelectParameter?,
+        sort: SortParameter?,
+        offset: kotlin.Int?,
+        limit: kotlin.Int?,
+        quote: Symbols?
+    ): RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -488,10 +661,10 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
                     put("step", listOf(step.toString()))
                 }
                 if (select != null) {
-                    put("select", listOf(select.toString()))
+                    put("select${select.getFilter()}", listOf(select.getFilterValue()))
                 }
                 if (sort != null) {
-                    put("sort", listOf(sort.toString()))
+                    put("sort${sort.getFilter()}", listOf(sort.getFilterValue()))
                 }
                 if (offset != null) {
                     put("offset", listOf(offset.toString()))
@@ -508,7 +681,7 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
 
         return RequestConfig(
             method = RequestMethod.GET,
-            path = "/v1/accounts/{address}/balance_history".replace("{"+"address"+"}", "$address"),
+            path = "/v1/accounts/{address}/balance_history".replace("{" + "address" + "}", "$address"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             body = localVariableBody
@@ -516,26 +689,48 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * Get account report
-    * Exports account balance report in .csv format
-    * @param address Account address (starting with tz or KT) 
-    * @param from Start of the datetime range to filter by (ISO 8601, e.g. 2019-11-31) (optional)
-    * @param to End of the datetime range to filter by (ISO 8601, e.g. 2019-12-31) (optional)
-    * @param currency Currency to convert amounts to (&#x60;btc&#x60;, &#x60;eur&#x60;, &#x60;usd&#x60;, &#x60;cny&#x60;, &#x60;jpy&#x60;, &#x60;krw&#x60;, &#x60;eth&#x60;, &#x60;gbp&#x60;) (optional)
-    * @param historical &#x60;true&#x60; if you want to use historical prices, &#x60;false&#x60; to use current price (optional, default to false)
-    * @param delimiter Column delimiter (&#x60;comma&#x60;, &#x60;semicolon&#x60;) (optional, default to "comma")
-    * @param separator Decimal separator (&#x60;comma&#x60;, &#x60;point&#x60;) (optional, default to "point")
-    * @return java.io.File
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    * @throws UnsupportedOperationException If the API returns an informational or redirection response
-    * @throws ClientException If the API returns a client error response
-    * @throws ServerException If the API returns a server error response
-    */
+     * Get account report
+     * Exports account balance report in .csv format
+     * @param address Account address (starting with tz or KT)
+     * @param from Start of the datetime range to filter by (ISO 8601, e.g. 2019-11-31) (optional)
+     * @param to End of the datetime range to filter by (ISO 8601, e.g. 2019-12-31) (optional)
+     * @param currency Currency to convert amounts to (&#x60;btc&#x60;, &#x60;eur&#x60;, &#x60;usd&#x60;, &#x60;cny&#x60;, &#x60;jpy&#x60;, &#x60;krw&#x60;, &#x60;eth&#x60;, &#x60;gbp&#x60;) (optional)
+     * @param historical &#x60;true&#x60; if you want to use historical prices, &#x60;false&#x60; to use current price (optional, default to false)
+     * @param delimiter Column delimiter (&#x60;comma&#x60;, &#x60;semicolon&#x60;) (optional, default to "comma")
+     * @param separator Decimal separator (&#x60;comma&#x60;, &#x60;point&#x60;) (optional, default to "point")
+     * @return java.io.File
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
     @Suppress("UNCHECKED_CAST")
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun accountsGetBalanceReport(address: kotlin.String, from: java.time.OffsetDateTime?, to: java.time.OffsetDateTime?, currency: kotlin.String?, historical: kotlin.Boolean?, delimiter: kotlin.String?, separator: kotlin.String?) : java.io.File {
-        val localVarResponse = accountsGetBalanceReportWithHttpInfo(address = address, from = from, to = to, currency = currency, historical = historical, delimiter = delimiter, separator = separator)
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class
+    )
+    fun accountsGetBalanceReport(
+        address: kotlin.String,
+        from: java.time.OffsetDateTime?,
+        to: java.time.OffsetDateTime?,
+        currency: kotlin.String?,
+        historical: kotlin.Boolean?,
+        delimiter: kotlin.String?,
+        separator: kotlin.String?
+    ): java.io.File {
+        val localVarResponse = accountsGetBalanceReportWithHttpInfo(
+            address = address,
+            from = from,
+            to = to,
+            currency = currency,
+            historical = historical,
+            delimiter = delimiter,
+            separator = separator
+        )
 
         return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as java.io.File
@@ -543,33 +738,57 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
                 val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
         }
     }
 
     /**
-    * Get account report
-    * Exports account balance report in .csv format
-    * @param address Account address (starting with tz or KT) 
-    * @param from Start of the datetime range to filter by (ISO 8601, e.g. 2019-11-31) (optional)
-    * @param to End of the datetime range to filter by (ISO 8601, e.g. 2019-12-31) (optional)
-    * @param currency Currency to convert amounts to (&#x60;btc&#x60;, &#x60;eur&#x60;, &#x60;usd&#x60;, &#x60;cny&#x60;, &#x60;jpy&#x60;, &#x60;krw&#x60;, &#x60;eth&#x60;, &#x60;gbp&#x60;) (optional)
-    * @param historical &#x60;true&#x60; if you want to use historical prices, &#x60;false&#x60; to use current price (optional, default to false)
-    * @param delimiter Column delimiter (&#x60;comma&#x60;, &#x60;semicolon&#x60;) (optional, default to "comma")
-    * @param separator Decimal separator (&#x60;comma&#x60;, &#x60;point&#x60;) (optional, default to "point")
-    * @return ApiResponse<java.io.File?>
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    */
+     * Get account report
+     * Exports account balance report in .csv format
+     * @param address Account address (starting with tz or KT)
+     * @param from Start of the datetime range to filter by (ISO 8601, e.g. 2019-11-31) (optional)
+     * @param to End of the datetime range to filter by (ISO 8601, e.g. 2019-12-31) (optional)
+     * @param currency Currency to convert amounts to (&#x60;btc&#x60;, &#x60;eur&#x60;, &#x60;usd&#x60;, &#x60;cny&#x60;, &#x60;jpy&#x60;, &#x60;krw&#x60;, &#x60;eth&#x60;, &#x60;gbp&#x60;) (optional)
+     * @param historical &#x60;true&#x60; if you want to use historical prices, &#x60;false&#x60; to use current price (optional, default to false)
+     * @param delimiter Column delimiter (&#x60;comma&#x60;, &#x60;semicolon&#x60;) (optional, default to "comma")
+     * @param separator Decimal separator (&#x60;comma&#x60;, &#x60;point&#x60;) (optional, default to "point")
+     * @return ApiResponse<java.io.File?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun accountsGetBalanceReportWithHttpInfo(address: kotlin.String, from: java.time.OffsetDateTime?, to: java.time.OffsetDateTime?, currency: kotlin.String?, historical: kotlin.Boolean?, delimiter: kotlin.String?, separator: kotlin.String?) : ApiResponse<java.io.File?> {
-        val localVariableConfig = accountsGetBalanceReportRequestConfig(address = address, from = from, to = to, currency = currency, historical = historical, delimiter = delimiter, separator = separator)
+    fun accountsGetBalanceReportWithHttpInfo(
+        address: kotlin.String,
+        from: java.time.OffsetDateTime?,
+        to: java.time.OffsetDateTime?,
+        currency: kotlin.String?,
+        historical: kotlin.Boolean?,
+        delimiter: kotlin.String?,
+        separator: kotlin.String?
+    ): ApiResponse<java.io.File?> {
+        val localVariableConfig = accountsGetBalanceReportRequestConfig(
+            address = address,
+            from = from,
+            to = to,
+            currency = currency,
+            historical = historical,
+            delimiter = delimiter,
+            separator = separator
+        )
 
         return request<Unit, java.io.File>(
             localVariableConfig
@@ -577,18 +796,26 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * To obtain the request config of the operation accountsGetBalanceReport
-    *
-    * @param address Account address (starting with tz or KT) 
-    * @param from Start of the datetime range to filter by (ISO 8601, e.g. 2019-11-31) (optional)
-    * @param to End of the datetime range to filter by (ISO 8601, e.g. 2019-12-31) (optional)
-    * @param currency Currency to convert amounts to (&#x60;btc&#x60;, &#x60;eur&#x60;, &#x60;usd&#x60;, &#x60;cny&#x60;, &#x60;jpy&#x60;, &#x60;krw&#x60;, &#x60;eth&#x60;, &#x60;gbp&#x60;) (optional)
-    * @param historical &#x60;true&#x60; if you want to use historical prices, &#x60;false&#x60; to use current price (optional, default to false)
-    * @param delimiter Column delimiter (&#x60;comma&#x60;, &#x60;semicolon&#x60;) (optional, default to "comma")
-    * @param separator Decimal separator (&#x60;comma&#x60;, &#x60;point&#x60;) (optional, default to "point")
-    * @return RequestConfig
-    */
-    fun accountsGetBalanceReportRequestConfig(address: kotlin.String, from: java.time.OffsetDateTime?, to: java.time.OffsetDateTime?, currency: kotlin.String?, historical: kotlin.Boolean?, delimiter: kotlin.String?, separator: kotlin.String?) : RequestConfig<Unit> {
+     * To obtain the request config of the operation accountsGetBalanceReport
+     *
+     * @param address Account address (starting with tz or KT)
+     * @param from Start of the datetime range to filter by (ISO 8601, e.g. 2019-11-31) (optional)
+     * @param to End of the datetime range to filter by (ISO 8601, e.g. 2019-12-31) (optional)
+     * @param currency Currency to convert amounts to (&#x60;btc&#x60;, &#x60;eur&#x60;, &#x60;usd&#x60;, &#x60;cny&#x60;, &#x60;jpy&#x60;, &#x60;krw&#x60;, &#x60;eth&#x60;, &#x60;gbp&#x60;) (optional)
+     * @param historical &#x60;true&#x60; if you want to use historical prices, &#x60;false&#x60; to use current price (optional, default to false)
+     * @param delimiter Column delimiter (&#x60;comma&#x60;, &#x60;semicolon&#x60;) (optional, default to "comma")
+     * @param separator Decimal separator (&#x60;comma&#x60;, &#x60;point&#x60;) (optional, default to "point")
+     * @return RequestConfig
+     */
+    fun accountsGetBalanceReportRequestConfig(
+        address: kotlin.String,
+        from: java.time.OffsetDateTime?,
+        to: java.time.OffsetDateTime?,
+        currency: kotlin.String?,
+        historical: kotlin.Boolean?,
+        delimiter: kotlin.String?,
+        separator: kotlin.String?
+    ): RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -612,10 +839,10 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
                 }
             }
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
-        
+
         return RequestConfig(
             method = RequestMethod.GET,
-            path = "/v1/accounts/{address}/report".replace("{"+"address"+"}", "$address"),
+            path = "/v1/accounts/{address}/report".replace("{" + "address" + "}", "$address"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             body = localVariableBody
@@ -623,20 +850,26 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * Get account by address
-    * Returns an account with the specified address.
-    * @param address Account address (starting with tz or KT) 
-    * @param metadata Include or not account metadata (optional, default to false)
-    * @return Account
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    * @throws UnsupportedOperationException If the API returns an informational or redirection response
-    * @throws ClientException If the API returns a client error response
-    * @throws ServerException If the API returns a server error response
-    */
+     * Get account by address
+     * Returns an account with the specified address.
+     * @param address Account address (starting with tz or KT)
+     * @param metadata Include or not account metadata (optional, default to false)
+     * @return Account
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
     @Suppress("UNCHECKED_CAST")
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun accountsGetByAddress(address: kotlin.String, metadata: kotlin.Boolean?) : Account {
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class
+    )
+    fun accountsGetByAddress(address: kotlin.String, metadata: kotlin.Boolean?): Account {
         val localVarResponse = accountsGetByAddressWithHttpInfo(address = address, metadata = metadata)
 
         return when (localVarResponse.responseType) {
@@ -645,27 +878,35 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
                 val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
         }
     }
 
     /**
-    * Get account by address
-    * Returns an account with the specified address.
-    * @param address Account address (starting with tz or KT) 
-    * @param metadata Include or not account metadata (optional, default to false)
-    * @return ApiResponse<Account?>
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    */
+     * Get account by address
+     * Returns an account with the specified address.
+     * @param address Account address (starting with tz or KT)
+     * @param metadata Include or not account metadata (optional, default to false)
+     * @return ApiResponse<Account?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun accountsGetByAddressWithHttpInfo(address: kotlin.String, metadata: kotlin.Boolean?) : ApiResponse<Account?> {
+    fun accountsGetByAddressWithHttpInfo(address: kotlin.String, metadata: kotlin.Boolean?): ApiResponse<Account?> {
         val localVariableConfig = accountsGetByAddressRequestConfig(address = address, metadata = metadata)
 
         return request<Unit, Account>(
@@ -674,13 +915,13 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * To obtain the request config of the operation accountsGetByAddress
-    *
-    * @param address Account address (starting with tz or KT) 
-    * @param metadata Include or not account metadata (optional, default to false)
-    * @return RequestConfig
-    */
-    fun accountsGetByAddressRequestConfig(address: kotlin.String, metadata: kotlin.Boolean?) : RequestConfig<Unit> {
+     * To obtain the request config of the operation accountsGetByAddress
+     *
+     * @param address Account address (starting with tz or KT)
+     * @param metadata Include or not account metadata (optional, default to false)
+     * @return RequestConfig
+     */
+    fun accountsGetByAddressRequestConfig(address: kotlin.String, metadata: kotlin.Boolean?): RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -693,7 +934,7 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
 
         return RequestConfig(
             method = RequestMethod.GET,
-            path = "/v1/accounts/{address}".replace("{"+"address"+"}", "$address"),
+            path = "/v1/accounts/{address}".replace("{" + "address" + "}", "$address"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             body = localVariableBody
@@ -701,23 +942,35 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * Get account contracts
-    * Returns a list of contracts created by (or related to) the specified account.
-    * @param address Account address (starting with tz or KT) 
-    * @param sort Sorts contracts by specified field. Supported fields: &#x60;id&#x60; (default, desc), &#x60;balance&#x60;, &#x60;creationLevel&#x60;. (optional)
-    * @param offset Specifies which or how many items should be skipped (optional)
-    * @param limit Maximum number of items to return (optional, default to 100)
-    * @return kotlin.collections.List<RelatedContract>
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    * @throws UnsupportedOperationException If the API returns an informational or redirection response
-    * @throws ClientException If the API returns a client error response
-    * @throws ServerException If the API returns a server error response
-    */
+     * Get account contracts
+     * Returns a list of contracts created by (or related to) the specified account.
+     * @param address Account address (starting with tz or KT)
+     * @param sort Sorts contracts by specified field. Supported fields: &#x60;id&#x60; (default, desc), &#x60;balance&#x60;, &#x60;creationLevel&#x60;. (optional)
+     * @param offset Specifies which or how many items should be skipped (optional)
+     * @param limit Maximum number of items to return (optional, default to 100)
+     * @return kotlin.collections.List<RelatedContract>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
     @Suppress("UNCHECKED_CAST")
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun accountsGetContracts(address: kotlin.String, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : kotlin.collections.List<RelatedContract> {
-        val localVarResponse = accountsGetContractsWithHttpInfo(address = address, sort = sort, offset = offset, limit = limit)
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class
+    )
+    fun accountsGetContracts(
+        address: kotlin.String,
+        sort: SortParameter?,
+        offset: OffsetParameter?,
+        limit: kotlin.Int?
+    ): kotlin.collections.List<RelatedContract> {
+        val localVarResponse =
+            accountsGetContractsWithHttpInfo(address = address, sort = sort, offset = offset, limit = limit)
 
         return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.collections.List<RelatedContract>
@@ -725,30 +978,44 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
                 val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
         }
     }
 
     /**
-    * Get account contracts
-    * Returns a list of contracts created by (or related to) the specified account.
-    * @param address Account address (starting with tz or KT) 
-    * @param sort Sorts contracts by specified field. Supported fields: &#x60;id&#x60; (default, desc), &#x60;balance&#x60;, &#x60;creationLevel&#x60;. (optional)
-    * @param offset Specifies which or how many items should be skipped (optional)
-    * @param limit Maximum number of items to return (optional, default to 100)
-    * @return ApiResponse<kotlin.collections.List<RelatedContract>?>
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    */
+     * Get account contracts
+     * Returns a list of contracts created by (or related to) the specified account.
+     * @param address Account address (starting with tz or KT)
+     * @param sort Sorts contracts by specified field. Supported fields: &#x60;id&#x60; (default, desc), &#x60;balance&#x60;, &#x60;creationLevel&#x60;. (optional)
+     * @param offset Specifies which or how many items should be skipped (optional)
+     * @param limit Maximum number of items to return (optional, default to 100)
+     * @return ApiResponse<kotlin.collections.List<RelatedContract>?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun accountsGetContractsWithHttpInfo(address: kotlin.String, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : ApiResponse<kotlin.collections.List<RelatedContract>?> {
-        val localVariableConfig = accountsGetContractsRequestConfig(address = address, sort = sort, offset = offset, limit = limit)
+    fun accountsGetContractsWithHttpInfo(
+        address: kotlin.String,
+        sort: SortParameter?,
+        offset: OffsetParameter?,
+        limit: kotlin.Int?
+    ): ApiResponse<kotlin.collections.List<RelatedContract>?> {
+        val localVariableConfig =
+            accountsGetContractsRequestConfig(address = address, sort = sort, offset = offset, limit = limit)
 
         return request<Unit, kotlin.collections.List<RelatedContract>>(
             localVariableConfig
@@ -756,23 +1023,28 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * To obtain the request config of the operation accountsGetContracts
-    *
-    * @param address Account address (starting with tz or KT) 
-    * @param sort Sorts contracts by specified field. Supported fields: &#x60;id&#x60; (default, desc), &#x60;balance&#x60;, &#x60;creationLevel&#x60;. (optional)
-    * @param offset Specifies which or how many items should be skipped (optional)
-    * @param limit Maximum number of items to return (optional, default to 100)
-    * @return RequestConfig
-    */
-    fun accountsGetContractsRequestConfig(address: kotlin.String, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : RequestConfig<Unit> {
+     * To obtain the request config of the operation accountsGetContracts
+     *
+     * @param address Account address (starting with tz or KT)
+     * @param sort Sorts contracts by specified field. Supported fields: &#x60;id&#x60; (default, desc), &#x60;balance&#x60;, &#x60;creationLevel&#x60;. (optional)
+     * @param offset Specifies which or how many items should be skipped (optional)
+     * @param limit Maximum number of items to return (optional, default to 100)
+     * @return RequestConfig
+     */
+    fun accountsGetContractsRequestConfig(
+        address: kotlin.String,
+        sort: SortParameter?,
+        offset: OffsetParameter?,
+        limit: kotlin.Int?
+    ): RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
                 if (sort != null) {
-                    put("sort", listOf(sort.toString()))
+                    put("sort${sort.getFilter()}", listOf(sort.getFilterValue()))
                 }
                 if (offset != null) {
-                    put("offset", listOf(offset.toString()))
+                    put("offset${offset.getFilter()}", listOf(offset.getFilterValue()))
                 }
                 if (limit != null) {
                     put("limit", listOf(limit.toString()))
@@ -783,7 +1055,7 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
 
         return RequestConfig(
             method = RequestMethod.GET,
-            path = "/v1/accounts/{address}/contracts".replace("{"+"address"+"}", "$address"),
+            path = "/v1/accounts/{address}/contracts".replace("{" + "address" + "}", "$address"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             body = localVariableBody
@@ -791,23 +1063,35 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * Get accounts count
-    * Returns a number of accounts.
-    * @param type Filters accounts by type (&#x60;user&#x60;, &#x60;delegate&#x60;, &#x60;contract&#x60;, &#x60;ghost&#x60;). (optional)
-    * @param kind Filters accounts by contract kind (&#x60;delegator_contract&#x60; or &#x60;smart_contract&#x60;) (optional)
-    * @param balance Filters accounts by balance (optional)
-    * @param staked Filters accounts by participation in staking (optional)
-    * @return kotlin.Int
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    * @throws UnsupportedOperationException If the API returns an informational or redirection response
-    * @throws ClientException If the API returns a client error response
-    * @throws ServerException If the API returns a server error response
-    */
+     * Get accounts count
+     * Returns a number of accounts.
+     * @param type Filters accounts by type (&#x60;user&#x60;, &#x60;delegate&#x60;, &#x60;contract&#x60;, &#x60;ghost&#x60;). (optional)
+     * @param kind Filters accounts by contract kind (&#x60;delegator_contract&#x60; or &#x60;smart_contract&#x60;) (optional)
+     * @param balance Filters accounts by balance (optional)
+     * @param staked Filters accounts by participation in staking (optional)
+     * @return kotlin.Int
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
     @Suppress("UNCHECKED_CAST")
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun accountsGetCount(type: AccountTypeParameter?, kind: ContractKindParameter?, balance: IntParameter?, staked: BoolParameter?) : kotlin.Int {
-        val localVarResponse = accountsGetCountWithHttpInfo(type = type, kind = kind, balance = balance, staked = staked)
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class
+    )
+    fun accountsGetCount(
+        type: AccountTypeParameter?,
+        kind: ContractKindParameter?,
+        balance: IntParameter?,
+        staked: BoolParameter?
+    ): kotlin.Int {
+        val localVarResponse =
+            accountsGetCountWithHttpInfo(type = type, kind = kind, balance = balance, staked = staked)
 
         return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.Int
@@ -815,30 +1099,44 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
                 val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
         }
     }
 
     /**
-    * Get accounts count
-    * Returns a number of accounts.
-    * @param type Filters accounts by type (&#x60;user&#x60;, &#x60;delegate&#x60;, &#x60;contract&#x60;, &#x60;ghost&#x60;). (optional)
-    * @param kind Filters accounts by contract kind (&#x60;delegator_contract&#x60; or &#x60;smart_contract&#x60;) (optional)
-    * @param balance Filters accounts by balance (optional)
-    * @param staked Filters accounts by participation in staking (optional)
-    * @return ApiResponse<kotlin.Int?>
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    */
+     * Get accounts count
+     * Returns a number of accounts.
+     * @param type Filters accounts by type (&#x60;user&#x60;, &#x60;delegate&#x60;, &#x60;contract&#x60;, &#x60;ghost&#x60;). (optional)
+     * @param kind Filters accounts by contract kind (&#x60;delegator_contract&#x60; or &#x60;smart_contract&#x60;) (optional)
+     * @param balance Filters accounts by balance (optional)
+     * @param staked Filters accounts by participation in staking (optional)
+     * @return ApiResponse<kotlin.Int?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun accountsGetCountWithHttpInfo(type: AccountTypeParameter?, kind: ContractKindParameter?, balance: IntParameter?, staked: BoolParameter?) : ApiResponse<kotlin.Int?> {
-        val localVariableConfig = accountsGetCountRequestConfig(type = type, kind = kind, balance = balance, staked = staked)
+    fun accountsGetCountWithHttpInfo(
+        type: AccountTypeParameter?,
+        kind: ContractKindParameter?,
+        balance: IntParameter?,
+        staked: BoolParameter?
+    ): ApiResponse<kotlin.Int?> {
+        val localVariableConfig =
+            accountsGetCountRequestConfig(type = type, kind = kind, balance = balance, staked = staked)
 
         return request<Unit, kotlin.Int>(
             localVariableConfig
@@ -846,29 +1144,34 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * To obtain the request config of the operation accountsGetCount
-    *
-    * @param type Filters accounts by type (&#x60;user&#x60;, &#x60;delegate&#x60;, &#x60;contract&#x60;, &#x60;ghost&#x60;). (optional)
-    * @param kind Filters accounts by contract kind (&#x60;delegator_contract&#x60; or &#x60;smart_contract&#x60;) (optional)
-    * @param balance Filters accounts by balance (optional)
-    * @param staked Filters accounts by participation in staking (optional)
-    * @return RequestConfig
-    */
-    fun accountsGetCountRequestConfig(type: AccountTypeParameter?, kind: ContractKindParameter?, balance: IntParameter?, staked: BoolParameter?) : RequestConfig<Unit> {
+     * To obtain the request config of the operation accountsGetCount
+     *
+     * @param type Filters accounts by type (&#x60;user&#x60;, &#x60;delegate&#x60;, &#x60;contract&#x60;, &#x60;ghost&#x60;). (optional)
+     * @param kind Filters accounts by contract kind (&#x60;delegator_contract&#x60; or &#x60;smart_contract&#x60;) (optional)
+     * @param balance Filters accounts by balance (optional)
+     * @param staked Filters accounts by participation in staking (optional)
+     * @return RequestConfig
+     */
+    fun accountsGetCountRequestConfig(
+        type: AccountTypeParameter?,
+        kind: ContractKindParameter?,
+        balance: IntParameter?,
+        staked: BoolParameter?
+    ): RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
                 if (type != null) {
-                    put("type", listOf(type.toString()))
+                    put("type${type.getFilter()}", listOf(type.getFilterValue()))
                 }
                 if (kind != null) {
-                    put("kind", listOf(kind.toString()))
+                    put("kind${kind.getFilter()}", listOf(kind.getFilterValue()))
                 }
                 if (balance != null) {
-                    put("balance", listOf(balance.toString()))
+                    put("balance${balance.getFilter()}", listOf(balance.getFilterValue()))
                 }
                 if (staked != null) {
-                    put("staked", listOf(staked.toString()))
+                    put("staked${staked.getFilter()}", listOf(staked.getFilterValue()))
                 }
             }
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
@@ -884,19 +1187,25 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * Get counter
-    * Returns account counter
-    * @param address Account address (starting with tz or KT) 
-    * @return kotlin.Int
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    * @throws UnsupportedOperationException If the API returns an informational or redirection response
-    * @throws ClientException If the API returns a client error response
-    * @throws ServerException If the API returns a server error response
-    */
+     * Get counter
+     * Returns account counter
+     * @param address Account address (starting with tz or KT)
+     * @return kotlin.Int
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
     @Suppress("UNCHECKED_CAST")
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun accountsGetCounter(address: kotlin.String) : kotlin.Int {
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class
+    )
+    fun accountsGetCounter(address: kotlin.String): kotlin.Int {
         val localVarResponse = accountsGetCounterWithHttpInfo(address = address)
 
         return when (localVarResponse.responseType) {
@@ -905,26 +1214,34 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
                 val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
         }
     }
 
     /**
-    * Get counter
-    * Returns account counter
-    * @param address Account address (starting with tz or KT) 
-    * @return ApiResponse<kotlin.Int?>
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    */
+     * Get counter
+     * Returns account counter
+     * @param address Account address (starting with tz or KT)
+     * @return ApiResponse<kotlin.Int?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun accountsGetCounterWithHttpInfo(address: kotlin.String) : ApiResponse<kotlin.Int?> {
+    fun accountsGetCounterWithHttpInfo(address: kotlin.String): ApiResponse<kotlin.Int?> {
         val localVariableConfig = accountsGetCounterRequestConfig(address = address)
 
         return request<Unit, kotlin.Int>(
@@ -933,12 +1250,12 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * To obtain the request config of the operation accountsGetCounter
-    *
-    * @param address Account address (starting with tz or KT) 
-    * @return RequestConfig
-    */
-    fun accountsGetCounterRequestConfig(address: kotlin.String) : RequestConfig<Unit> {
+     * To obtain the request config of the operation accountsGetCounter
+     *
+     * @param address Account address (starting with tz or KT)
+     * @return RequestConfig
+     */
+    fun accountsGetCounterRequestConfig(address: kotlin.String): RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
@@ -946,7 +1263,7 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
 
         return RequestConfig(
             method = RequestMethod.GET,
-            path = "/v1/accounts/{address}/counter".replace("{"+"address"+"}", "$address"),
+            path = "/v1/accounts/{address}/counter".replace("{" + "address" + "}", "$address"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             body = localVariableBody
@@ -954,26 +1271,48 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * Get account delegators
-    * Returns a list of accounts delegated to the specified account.
-    * @param address Account address (starting with tz) 
-    * @param type Filters delegators by type (&#x60;user&#x60;, &#x60;delegate&#x60;, &#x60;contract&#x60;, &#x60;ghost&#x60;). (optional)
-    * @param balance Filters delegators by balance. (optional)
-    * @param delegationLevel Number of items to skip (optional)
-    * @param sort Sorts delegators by specified field. Supported fields: &#x60;delegationLevel&#x60; (default, desc), &#x60;balance&#x60;. (optional)
-    * @param offset Specifies which or how many items should be skipped (optional)
-    * @param limit Maximum number of items to return (optional, default to 100)
-    * @return kotlin.collections.List<Delegator>
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    * @throws UnsupportedOperationException If the API returns an informational or redirection response
-    * @throws ClientException If the API returns a client error response
-    * @throws ServerException If the API returns a server error response
-    */
+     * Get account delegators
+     * Returns a list of accounts delegated to the specified account.
+     * @param address Account address (starting with tz)
+     * @param type Filters delegators by type (&#x60;user&#x60;, &#x60;delegate&#x60;, &#x60;contract&#x60;, &#x60;ghost&#x60;). (optional)
+     * @param balance Filters delegators by balance. (optional)
+     * @param delegationLevel Number of items to skip (optional)
+     * @param sort Sorts delegators by specified field. Supported fields: &#x60;delegationLevel&#x60; (default, desc), &#x60;balance&#x60;. (optional)
+     * @param offset Specifies which or how many items should be skipped (optional)
+     * @param limit Maximum number of items to return (optional, default to 100)
+     * @return kotlin.collections.List<Delegator>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
     @Suppress("UNCHECKED_CAST")
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun accountsGetDelegators(address: kotlin.String, type: AccountTypeParameter?, balance: IntParameter?, delegationLevel: IntParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : kotlin.collections.List<Delegator> {
-        val localVarResponse = accountsGetDelegatorsWithHttpInfo(address = address, type = type, balance = balance, delegationLevel = delegationLevel, sort = sort, offset = offset, limit = limit)
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class
+    )
+    fun accountsGetDelegators(
+        address: kotlin.String,
+        type: AccountTypeParameter?,
+        balance: IntParameter?,
+        delegationLevel: IntParameter?,
+        sort: SortParameter?,
+        offset: OffsetParameter?,
+        limit: kotlin.Int?
+    ): kotlin.collections.List<Delegator> {
+        val localVarResponse = accountsGetDelegatorsWithHttpInfo(
+            address = address,
+            type = type,
+            balance = balance,
+            delegationLevel = delegationLevel,
+            sort = sort,
+            offset = offset,
+            limit = limit
+        )
 
         return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.collections.List<Delegator>
@@ -981,33 +1320,57 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
                 val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
         }
     }
 
     /**
-    * Get account delegators
-    * Returns a list of accounts delegated to the specified account.
-    * @param address Account address (starting with tz) 
-    * @param type Filters delegators by type (&#x60;user&#x60;, &#x60;delegate&#x60;, &#x60;contract&#x60;, &#x60;ghost&#x60;). (optional)
-    * @param balance Filters delegators by balance. (optional)
-    * @param delegationLevel Number of items to skip (optional)
-    * @param sort Sorts delegators by specified field. Supported fields: &#x60;delegationLevel&#x60; (default, desc), &#x60;balance&#x60;. (optional)
-    * @param offset Specifies which or how many items should be skipped (optional)
-    * @param limit Maximum number of items to return (optional, default to 100)
-    * @return ApiResponse<kotlin.collections.List<Delegator>?>
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    */
+     * Get account delegators
+     * Returns a list of accounts delegated to the specified account.
+     * @param address Account address (starting with tz)
+     * @param type Filters delegators by type (&#x60;user&#x60;, &#x60;delegate&#x60;, &#x60;contract&#x60;, &#x60;ghost&#x60;). (optional)
+     * @param balance Filters delegators by balance. (optional)
+     * @param delegationLevel Number of items to skip (optional)
+     * @param sort Sorts delegators by specified field. Supported fields: &#x60;delegationLevel&#x60; (default, desc), &#x60;balance&#x60;. (optional)
+     * @param offset Specifies which or how many items should be skipped (optional)
+     * @param limit Maximum number of items to return (optional, default to 100)
+     * @return ApiResponse<kotlin.collections.List<Delegator>?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun accountsGetDelegatorsWithHttpInfo(address: kotlin.String, type: AccountTypeParameter?, balance: IntParameter?, delegationLevel: IntParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : ApiResponse<kotlin.collections.List<Delegator>?> {
-        val localVariableConfig = accountsGetDelegatorsRequestConfig(address = address, type = type, balance = balance, delegationLevel = delegationLevel, sort = sort, offset = offset, limit = limit)
+    fun accountsGetDelegatorsWithHttpInfo(
+        address: kotlin.String,
+        type: AccountTypeParameter?,
+        balance: IntParameter?,
+        delegationLevel: IntParameter?,
+        sort: SortParameter?,
+        offset: OffsetParameter?,
+        limit: kotlin.Int?
+    ): ApiResponse<kotlin.collections.List<Delegator>?> {
+        val localVariableConfig = accountsGetDelegatorsRequestConfig(
+            address = address,
+            type = type,
+            balance = balance,
+            delegationLevel = delegationLevel,
+            sort = sort,
+            offset = offset,
+            limit = limit
+        )
 
         return request<Unit, kotlin.collections.List<Delegator>>(
             localVariableConfig
@@ -1015,35 +1378,43 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * To obtain the request config of the operation accountsGetDelegators
-    *
-    * @param address Account address (starting with tz) 
-    * @param type Filters delegators by type (&#x60;user&#x60;, &#x60;delegate&#x60;, &#x60;contract&#x60;, &#x60;ghost&#x60;). (optional)
-    * @param balance Filters delegators by balance. (optional)
-    * @param delegationLevel Number of items to skip (optional)
-    * @param sort Sorts delegators by specified field. Supported fields: &#x60;delegationLevel&#x60; (default, desc), &#x60;balance&#x60;. (optional)
-    * @param offset Specifies which or how many items should be skipped (optional)
-    * @param limit Maximum number of items to return (optional, default to 100)
-    * @return RequestConfig
-    */
-    fun accountsGetDelegatorsRequestConfig(address: kotlin.String, type: AccountTypeParameter?, balance: IntParameter?, delegationLevel: IntParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : RequestConfig<Unit> {
+     * To obtain the request config of the operation accountsGetDelegators
+     *
+     * @param address Account address (starting with tz)
+     * @param type Filters delegators by type (&#x60;user&#x60;, &#x60;delegate&#x60;, &#x60;contract&#x60;, &#x60;ghost&#x60;). (optional)
+     * @param balance Filters delegators by balance. (optional)
+     * @param delegationLevel Number of items to skip (optional)
+     * @param sort Sorts delegators by specified field. Supported fields: &#x60;delegationLevel&#x60; (default, desc), &#x60;balance&#x60;. (optional)
+     * @param offset Specifies which or how many items should be skipped (optional)
+     * @param limit Maximum number of items to return (optional, default to 100)
+     * @return RequestConfig
+     */
+    fun accountsGetDelegatorsRequestConfig(
+        address: kotlin.String,
+        type: AccountTypeParameter?,
+        balance: IntParameter?,
+        delegationLevel: IntParameter?,
+        sort: SortParameter?,
+        offset: OffsetParameter?,
+        limit: kotlin.Int?
+    ): RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
                 if (type != null) {
-                    put("type", listOf(type.toString()))
+                    put("type${type.getFilter()}", listOf(type.getFilterValue()))
                 }
                 if (balance != null) {
-                    put("balance", listOf(balance.toString()))
+                    put("balance${balance.getFilter()}", listOf(balance.getFilterValue()))
                 }
                 if (delegationLevel != null) {
-                    put("delegationLevel", listOf(delegationLevel.toString()))
+                    put("delegationLevel${delegationLevel.getFilter()}", listOf(delegationLevel.getFilterValue()))
                 }
                 if (sort != null) {
-                    put("sort", listOf(sort.toString()))
+                    put("sort${sort.getFilter()}", listOf(sort.getFilterValue()))
                 }
                 if (offset != null) {
-                    put("offset", listOf(offset.toString()))
+                    put("offset${offset.getFilter()}", listOf(offset.getFilterValue()))
                 }
                 if (limit != null) {
                     put("limit", listOf(limit.toString()))
@@ -1054,7 +1425,7 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
 
         return RequestConfig(
             method = RequestMethod.GET,
-            path = "/v1/accounts/{address}/delegators".replace("{"+"address"+"}", "$address"),
+            path = "/v1/accounts/{address}/delegators".replace("{" + "address" + "}", "$address"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             body = localVariableBody
@@ -1062,19 +1433,25 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * Get account metadata
-    * Returns metadata of the specified account (alias, logo, website, contacts, etc).
-    * @param address Account address (starting with tz or KT) 
-    * @return AccountMetadata
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    * @throws UnsupportedOperationException If the API returns an informational or redirection response
-    * @throws ClientException If the API returns a client error response
-    * @throws ServerException If the API returns a server error response
-    */
+     * Get account metadata
+     * Returns metadata of the specified account (alias, logo, website, contacts, etc).
+     * @param address Account address (starting with tz or KT)
+     * @return AccountMetadata
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
     @Suppress("UNCHECKED_CAST")
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun accountsGetMetadata(address: kotlin.String) : AccountMetadata {
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class
+    )
+    fun accountsGetMetadata(address: kotlin.String): AccountMetadata {
         val localVarResponse = accountsGetMetadataWithHttpInfo(address = address)
 
         return when (localVarResponse.responseType) {
@@ -1083,26 +1460,34 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
                 val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
         }
     }
 
     /**
-    * Get account metadata
-    * Returns metadata of the specified account (alias, logo, website, contacts, etc).
-    * @param address Account address (starting with tz or KT) 
-    * @return ApiResponse<AccountMetadata?>
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    */
+     * Get account metadata
+     * Returns metadata of the specified account (alias, logo, website, contacts, etc).
+     * @param address Account address (starting with tz or KT)
+     * @return ApiResponse<AccountMetadata?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun accountsGetMetadataWithHttpInfo(address: kotlin.String) : ApiResponse<AccountMetadata?> {
+    fun accountsGetMetadataWithHttpInfo(address: kotlin.String): ApiResponse<AccountMetadata?> {
         val localVariableConfig = accountsGetMetadataRequestConfig(address = address)
 
         return request<Unit, AccountMetadata>(
@@ -1111,12 +1496,12 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * To obtain the request config of the operation accountsGetMetadata
-    *
-    * @param address Account address (starting with tz or KT) 
-    * @return RequestConfig
-    */
-    fun accountsGetMetadataRequestConfig(address: kotlin.String) : RequestConfig<Unit> {
+     * To obtain the request config of the operation accountsGetMetadata
+     *
+     * @param address Account address (starting with tz or KT)
+     * @return RequestConfig
+     */
+    fun accountsGetMetadataRequestConfig(address: kotlin.String): RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
@@ -1124,7 +1509,7 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
 
         return RequestConfig(
             method = RequestMethod.GET,
-            path = "/v1/accounts/{address}/metadata".replace("{"+"address"+"}", "$address"),
+            path = "/v1/accounts/{address}/metadata".replace("{" + "address" + "}", "$address"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             body = localVariableBody
@@ -1132,43 +1517,99 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * Get account operations
-    * Returns a list of operations related to the specified account. Note: for better flexibility this endpoint accumulates query parameters (filters) of each &#x60;/operations/{type}&#x60; endpoint, so a particular filter may affect several operation types containing this filter. For example, if you specify an &#x60;initiator&#x60; it will affect all transactions, delegations and originations, because all these types have an &#x60;initiator&#x60; field.
-    * @param address Account address (starting with tz or KT) 
-    * @param type Comma separated list of operation types to return (&#x60;endorsement&#x60;, &#x60;ballot&#x60;, &#x60;proposal&#x60;, &#x60;activation&#x60;, &#x60;double_baking&#x60;, &#x60;double_endorsing&#x60;, &#x60;nonce_revelation&#x60;, &#x60;delegation&#x60;, &#x60;origination&#x60;, &#x60;transaction&#x60;, &#x60;reveal&#x60;, &#x60;migration&#x60;, &#x60;revelation_penalty&#x60;, &#x60;baking&#x60;). If not specified then all operation types except &#x60;endorsement&#x60; and &#x60;baking&#x60; will be returned. (optional)
-    * @param initiator Filters transactions, delegations and originations by initiator. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param sender Filters transactions, delegations, originations, reveals and seed nonce revelations by sender. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param target Filters transactions by target. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param prevDelegate Filters delegations by prev delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param newDelegate Filters delegations by new delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param contractManager Filters origination operations by manager. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param contractDelegate Filters origination operations by delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param originatedContract Filters origination operations by originated contract. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param accuser Filters double baking and double endorsing by accuser. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param offender Filters double baking and double endorsing by offender. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param baker Filters seed nonce revelation operations by baker. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param level Filters operations by level. (optional)
-    * @param timestamp Filters operations by timestamp. (optional)
-    * @param entrypoint Filters transactions by entrypoint called on the target contract. (optional)
-    * @param parameter Filters transactions by parameter value. Note, this query parameter supports the following format: &#x60;?parameter{.path?}{.mode?}&#x3D;...&#x60;,             so you can specify a path to a particular field to filter by, for example: &#x60;?parameter.token_id&#x3D;...&#x60; or &#x60;?parameter.sigs.0.ne&#x3D;...&#x60;. (optional)
-    * @param hasInternals Filters transactions by presence of internal operations. (optional)
-    * @param status Filters transactions, delegations, originations and reveals by operation status (&#x60;applied&#x60;, &#x60;failed&#x60;, &#x60;backtracked&#x60;, &#x60;skipped&#x60;). (optional)
-    * @param sort Sort mode (0 - ascending, 1 - descending), operations of different types can only be sorted by ID. (optional)
-    * @param lastId Id of the last operation received, which is used as an offset for pagination (optional)
-    * @param limit Number of items to return (optional, default to 100)
-    * @param micheline Format of the parameters, storage and diffs: &#x60;0&#x60; - JSON, &#x60;1&#x60; - JSON string, &#x60;2&#x60; - raw micheline, &#x60;3&#x60; - raw micheline string (optional)
-    * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
-    * @return kotlin.collections.List<Operation>
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    * @throws UnsupportedOperationException If the API returns an informational or redirection response
-    * @throws ClientException If the API returns a client error response
-    * @throws ServerException If the API returns a server error response
-    */
+     * Get account operations
+     * Returns a list of operations related to the specified account. Note: for better flexibility this endpoint accumulates query parameters (filters) of each &#x60;/operations/{type}&#x60; endpoint, so a particular filter may affect several operation types containing this filter. For example, if you specify an &#x60;initiator&#x60; it will affect all transactions, delegations and originations, because all these types have an &#x60;initiator&#x60; field.
+     * @param address Account address (starting with tz or KT)
+     * @param type Comma separated list of operation types to return (&#x60;endorsement&#x60;, &#x60;ballot&#x60;, &#x60;proposal&#x60;, &#x60;activation&#x60;, &#x60;double_baking&#x60;, &#x60;double_endorsing&#x60;, &#x60;nonce_revelation&#x60;, &#x60;delegation&#x60;, &#x60;origination&#x60;, &#x60;transaction&#x60;, &#x60;reveal&#x60;, &#x60;migration&#x60;, &#x60;revelation_penalty&#x60;, &#x60;baking&#x60;). If not specified then all operation types except &#x60;endorsement&#x60; and &#x60;baking&#x60; will be returned. (optional)
+     * @param initiator Filters transactions, delegations and originations by initiator. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param sender Filters transactions, delegations, originations, reveals and seed nonce revelations by sender. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param target Filters transactions by target. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param prevDelegate Filters delegations by prev delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param newDelegate Filters delegations by new delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param contractManager Filters origination operations by manager. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param contractDelegate Filters origination operations by delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param originatedContract Filters origination operations by originated contract. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param accuser Filters double baking and double endorsing by accuser. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param offender Filters double baking and double endorsing by offender. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param baker Filters seed nonce revelation operations by baker. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param level Filters operations by level. (optional)
+     * @param timestamp Filters operations by timestamp. (optional)
+     * @param entrypoint Filters transactions by entrypoint called on the target contract. (optional)
+     * @param parameter Filters transactions by parameter value. Note, this query parameter supports the following format: &#x60;?parameter{.path?}{.mode?}&#x3D;...&#x60;,             so you can specify a path to a particular field to filter by, for example: &#x60;?parameter.token_id&#x3D;...&#x60; or &#x60;?parameter.sigs.0.ne&#x3D;...&#x60;. (optional)
+     * @param hasInternals Filters transactions by presence of internal operations. (optional)
+     * @param status Filters transactions, delegations, originations and reveals by operation status (&#x60;applied&#x60;, &#x60;failed&#x60;, &#x60;backtracked&#x60;, &#x60;skipped&#x60;). (optional)
+     * @param sort Sort mode (0 - ascending, 1 - descending), operations of different types can only be sorted by ID. (optional)
+     * @param lastId Id of the last operation received, which is used as an offset for pagination (optional)
+     * @param limit Number of items to return (optional, default to 100)
+     * @param micheline Format of the parameters, storage and diffs: &#x60;0&#x60; - JSON, &#x60;1&#x60; - JSON string, &#x60;2&#x60; - raw micheline, &#x60;3&#x60; - raw micheline string (optional)
+     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
+     * @return kotlin.collections.List<Operation>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     * @throws UnsupportedOperationException If the API returns an informational or redirection response
+     * @throws ClientException If the API returns a client error response
+     * @throws ServerException If the API returns a server error response
+     */
     @Suppress("UNCHECKED_CAST")
-    @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun accountsGetOperations(address: kotlin.String, type: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, target: AccountParameter?, prevDelegate: AccountParameter?, newDelegate: AccountParameter?, contractManager: AccountParameter?, contractDelegate: AccountParameter?, originatedContract: AccountParameter?, accuser: AccountParameter?, offender: AccountParameter?, baker: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, entrypoint: StringParameter?, parameter: JsonParameter?, hasInternals: BoolParameter?, status: OperationStatusParameter?, sort: SortMode?, lastId: kotlin.Int?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : kotlin.collections.List<Operation> {
-        val localVarResponse = accountsGetOperationsWithHttpInfo(address = address, type = type, initiator = initiator, sender = sender, target = target, prevDelegate = prevDelegate, newDelegate = newDelegate, contractManager = contractManager, contractDelegate = contractDelegate, originatedContract = originatedContract, accuser = accuser, offender = offender, baker = baker, level = level, timestamp = timestamp, entrypoint = entrypoint, parameter = parameter, hasInternals = hasInternals, status = status, sort = sort, lastId = lastId, limit = limit, micheline = micheline, quote = quote)
+    @Throws(
+        IllegalStateException::class,
+        IOException::class,
+        UnsupportedOperationException::class,
+        ClientException::class,
+        ServerException::class
+    )
+    fun accountsGetOperations(
+        address: kotlin.String,
+        type: kotlin.String?,
+        initiator: AccountParameter?,
+        sender: AccountParameter?,
+        target: AccountParameter?,
+        prevDelegate: AccountParameter?,
+        newDelegate: AccountParameter?,
+        contractManager: AccountParameter?,
+        contractDelegate: AccountParameter?,
+        originatedContract: AccountParameter?,
+        accuser: AccountParameter?,
+        offender: AccountParameter?,
+        baker: AccountParameter?,
+        level: IntParameter?,
+        timestamp: DateTimeParameter?,
+        entrypoint: StringParameter?,
+        parameter: JsonParameter?,
+        hasInternals: BoolParameter?,
+        status: OperationStatusParameter?,
+        sort: SortMode?,
+        lastId: kotlin.Int?,
+        limit: kotlin.Int?,
+        micheline: MichelineFormat?,
+        quote: Symbols?
+    ): kotlin.collections.List<Operation> {
+        val localVarResponse = accountsGetOperationsWithHttpInfo(
+            address = address,
+            type = type,
+            initiator = initiator,
+            sender = sender,
+            target = target,
+            prevDelegate = prevDelegate,
+            newDelegate = newDelegate,
+            contractManager = contractManager,
+            contractDelegate = contractDelegate,
+            originatedContract = originatedContract,
+            accuser = accuser,
+            offender = offender,
+            baker = baker,
+            level = level,
+            timestamp = timestamp,
+            entrypoint = entrypoint,
+            parameter = parameter,
+            hasInternals = hasInternals,
+            status = status,
+            sort = sort,
+            lastId = lastId,
+            limit = limit,
+            micheline = micheline,
+            quote = quote
+        )
 
         return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.collections.List<Operation>
@@ -1176,50 +1617,108 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
                 val localVarError = localVarResponse as ClientError<*>
-                throw ClientException("Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ClientException(
+                    "Client error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
             ResponseType.ServerError -> {
                 val localVarError = localVarResponse as ServerError<*>
-                throw ServerException("Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}", localVarError.statusCode, localVarResponse)
+                throw ServerException(
+                    "Server error : ${localVarError.statusCode} ${localVarError.message.orEmpty()}",
+                    localVarError.statusCode,
+                    localVarResponse
+                )
             }
         }
     }
 
     /**
-    * Get account operations
-    * Returns a list of operations related to the specified account. Note: for better flexibility this endpoint accumulates query parameters (filters) of each &#x60;/operations/{type}&#x60; endpoint, so a particular filter may affect several operation types containing this filter. For example, if you specify an &#x60;initiator&#x60; it will affect all transactions, delegations and originations, because all these types have an &#x60;initiator&#x60; field.
-    * @param address Account address (starting with tz or KT) 
-    * @param type Comma separated list of operation types to return (&#x60;endorsement&#x60;, &#x60;ballot&#x60;, &#x60;proposal&#x60;, &#x60;activation&#x60;, &#x60;double_baking&#x60;, &#x60;double_endorsing&#x60;, &#x60;nonce_revelation&#x60;, &#x60;delegation&#x60;, &#x60;origination&#x60;, &#x60;transaction&#x60;, &#x60;reveal&#x60;, &#x60;migration&#x60;, &#x60;revelation_penalty&#x60;, &#x60;baking&#x60;). If not specified then all operation types except &#x60;endorsement&#x60; and &#x60;baking&#x60; will be returned. (optional)
-    * @param initiator Filters transactions, delegations and originations by initiator. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param sender Filters transactions, delegations, originations, reveals and seed nonce revelations by sender. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param target Filters transactions by target. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param prevDelegate Filters delegations by prev delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param newDelegate Filters delegations by new delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param contractManager Filters origination operations by manager. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param contractDelegate Filters origination operations by delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param originatedContract Filters origination operations by originated contract. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param accuser Filters double baking and double endorsing by accuser. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param offender Filters double baking and double endorsing by offender. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param baker Filters seed nonce revelation operations by baker. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param level Filters operations by level. (optional)
-    * @param timestamp Filters operations by timestamp. (optional)
-    * @param entrypoint Filters transactions by entrypoint called on the target contract. (optional)
-    * @param parameter Filters transactions by parameter value. Note, this query parameter supports the following format: &#x60;?parameter{.path?}{.mode?}&#x3D;...&#x60;,             so you can specify a path to a particular field to filter by, for example: &#x60;?parameter.token_id&#x3D;...&#x60; or &#x60;?parameter.sigs.0.ne&#x3D;...&#x60;. (optional)
-    * @param hasInternals Filters transactions by presence of internal operations. (optional)
-    * @param status Filters transactions, delegations, originations and reveals by operation status (&#x60;applied&#x60;, &#x60;failed&#x60;, &#x60;backtracked&#x60;, &#x60;skipped&#x60;). (optional)
-    * @param sort Sort mode (0 - ascending, 1 - descending), operations of different types can only be sorted by ID. (optional)
-    * @param lastId Id of the last operation received, which is used as an offset for pagination (optional)
-    * @param limit Number of items to return (optional, default to 100)
-    * @param micheline Format of the parameters, storage and diffs: &#x60;0&#x60; - JSON, &#x60;1&#x60; - JSON string, &#x60;2&#x60; - raw micheline, &#x60;3&#x60; - raw micheline string (optional)
-    * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
-    * @return ApiResponse<kotlin.collections.List<Operation>?>
-    * @throws IllegalStateException If the request is not correctly configured
-    * @throws IOException Rethrows the OkHttp execute method exception
-    */
+     * Get account operations
+     * Returns a list of operations related to the specified account. Note: for better flexibility this endpoint accumulates query parameters (filters) of each &#x60;/operations/{type}&#x60; endpoint, so a particular filter may affect several operation types containing this filter. For example, if you specify an &#x60;initiator&#x60; it will affect all transactions, delegations and originations, because all these types have an &#x60;initiator&#x60; field.
+     * @param address Account address (starting with tz or KT)
+     * @param type Comma separated list of operation types to return (&#x60;endorsement&#x60;, &#x60;ballot&#x60;, &#x60;proposal&#x60;, &#x60;activation&#x60;, &#x60;double_baking&#x60;, &#x60;double_endorsing&#x60;, &#x60;nonce_revelation&#x60;, &#x60;delegation&#x60;, &#x60;origination&#x60;, &#x60;transaction&#x60;, &#x60;reveal&#x60;, &#x60;migration&#x60;, &#x60;revelation_penalty&#x60;, &#x60;baking&#x60;). If not specified then all operation types except &#x60;endorsement&#x60; and &#x60;baking&#x60; will be returned. (optional)
+     * @param initiator Filters transactions, delegations and originations by initiator. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param sender Filters transactions, delegations, originations, reveals and seed nonce revelations by sender. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param target Filters transactions by target. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param prevDelegate Filters delegations by prev delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param newDelegate Filters delegations by new delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param contractManager Filters origination operations by manager. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param contractDelegate Filters origination operations by delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param originatedContract Filters origination operations by originated contract. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param accuser Filters double baking and double endorsing by accuser. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param offender Filters double baking and double endorsing by offender. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param baker Filters seed nonce revelation operations by baker. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param level Filters operations by level. (optional)
+     * @param timestamp Filters operations by timestamp. (optional)
+     * @param entrypoint Filters transactions by entrypoint called on the target contract. (optional)
+     * @param parameter Filters transactions by parameter value. Note, this query parameter supports the following format: &#x60;?parameter{.path?}{.mode?}&#x3D;...&#x60;,             so you can specify a path to a particular field to filter by, for example: &#x60;?parameter.token_id&#x3D;...&#x60; or &#x60;?parameter.sigs.0.ne&#x3D;...&#x60;. (optional)
+     * @param hasInternals Filters transactions by presence of internal operations. (optional)
+     * @param status Filters transactions, delegations, originations and reveals by operation status (&#x60;applied&#x60;, &#x60;failed&#x60;, &#x60;backtracked&#x60;, &#x60;skipped&#x60;). (optional)
+     * @param sort Sort mode (0 - ascending, 1 - descending), operations of different types can only be sorted by ID. (optional)
+     * @param lastId Id of the last operation received, which is used as an offset for pagination (optional)
+     * @param limit Number of items to return (optional, default to 100)
+     * @param micheline Format of the parameters, storage and diffs: &#x60;0&#x60; - JSON, &#x60;1&#x60; - JSON string, &#x60;2&#x60; - raw micheline, &#x60;3&#x60; - raw micheline string (optional)
+     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
+     * @return ApiResponse<kotlin.collections.List<Operation>?>
+     * @throws IllegalStateException If the request is not correctly configured
+     * @throws IOException Rethrows the OkHttp execute method exception
+     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun accountsGetOperationsWithHttpInfo(address: kotlin.String, type: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, target: AccountParameter?, prevDelegate: AccountParameter?, newDelegate: AccountParameter?, contractManager: AccountParameter?, contractDelegate: AccountParameter?, originatedContract: AccountParameter?, accuser: AccountParameter?, offender: AccountParameter?, baker: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, entrypoint: StringParameter?, parameter: JsonParameter?, hasInternals: BoolParameter?, status: OperationStatusParameter?, sort: SortMode?, lastId: kotlin.Int?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : ApiResponse<kotlin.collections.List<Operation>?> {
-        val localVariableConfig = accountsGetOperationsRequestConfig(address = address, type = type, initiator = initiator, sender = sender, target = target, prevDelegate = prevDelegate, newDelegate = newDelegate, contractManager = contractManager, contractDelegate = contractDelegate, originatedContract = originatedContract, accuser = accuser, offender = offender, baker = baker, level = level, timestamp = timestamp, entrypoint = entrypoint, parameter = parameter, hasInternals = hasInternals, status = status, sort = sort, lastId = lastId, limit = limit, micheline = micheline, quote = quote)
+    fun accountsGetOperationsWithHttpInfo(
+        address: kotlin.String,
+        type: kotlin.String?,
+        initiator: AccountParameter?,
+        sender: AccountParameter?,
+        target: AccountParameter?,
+        prevDelegate: AccountParameter?,
+        newDelegate: AccountParameter?,
+        contractManager: AccountParameter?,
+        contractDelegate: AccountParameter?,
+        originatedContract: AccountParameter?,
+        accuser: AccountParameter?,
+        offender: AccountParameter?,
+        baker: AccountParameter?,
+        level: IntParameter?,
+        timestamp: DateTimeParameter?,
+        entrypoint: StringParameter?,
+        parameter: JsonParameter?,
+        hasInternals: BoolParameter?,
+        status: OperationStatusParameter?,
+        sort: SortMode?,
+        lastId: kotlin.Int?,
+        limit: kotlin.Int?,
+        micheline: MichelineFormat?,
+        quote: Symbols?
+    ): ApiResponse<kotlin.collections.List<Operation>?> {
+        val localVariableConfig = accountsGetOperationsRequestConfig(
+            address = address,
+            type = type,
+            initiator = initiator,
+            sender = sender,
+            target = target,
+            prevDelegate = prevDelegate,
+            newDelegate = newDelegate,
+            contractManager = contractManager,
+            contractDelegate = contractDelegate,
+            originatedContract = originatedContract,
+            accuser = accuser,
+            offender = offender,
+            baker = baker,
+            level = level,
+            timestamp = timestamp,
+            entrypoint = entrypoint,
+            parameter = parameter,
+            hasInternals = hasInternals,
+            status = status,
+            sort = sort,
+            lastId = lastId,
+            limit = limit,
+            micheline = micheline,
+            quote = quote
+        )
 
         return request<Unit, kotlin.collections.List<Operation>>(
             localVariableConfig
@@ -1227,35 +1726,60 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     }
 
     /**
-    * To obtain the request config of the operation accountsGetOperations
-    *
-    * @param address Account address (starting with tz or KT) 
-    * @param type Comma separated list of operation types to return (&#x60;endorsement&#x60;, &#x60;ballot&#x60;, &#x60;proposal&#x60;, &#x60;activation&#x60;, &#x60;double_baking&#x60;, &#x60;double_endorsing&#x60;, &#x60;nonce_revelation&#x60;, &#x60;delegation&#x60;, &#x60;origination&#x60;, &#x60;transaction&#x60;, &#x60;reveal&#x60;, &#x60;migration&#x60;, &#x60;revelation_penalty&#x60;, &#x60;baking&#x60;). If not specified then all operation types except &#x60;endorsement&#x60; and &#x60;baking&#x60; will be returned. (optional)
-    * @param initiator Filters transactions, delegations and originations by initiator. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param sender Filters transactions, delegations, originations, reveals and seed nonce revelations by sender. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param target Filters transactions by target. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param prevDelegate Filters delegations by prev delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param newDelegate Filters delegations by new delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param contractManager Filters origination operations by manager. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param contractDelegate Filters origination operations by delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param originatedContract Filters origination operations by originated contract. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param accuser Filters double baking and double endorsing by accuser. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param offender Filters double baking and double endorsing by offender. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param baker Filters seed nonce revelation operations by baker. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
-    * @param level Filters operations by level. (optional)
-    * @param timestamp Filters operations by timestamp. (optional)
-    * @param entrypoint Filters transactions by entrypoint called on the target contract. (optional)
-    * @param parameter Filters transactions by parameter value. Note, this query parameter supports the following format: &#x60;?parameter{.path?}{.mode?}&#x3D;...&#x60;,             so you can specify a path to a particular field to filter by, for example: &#x60;?parameter.token_id&#x3D;...&#x60; or &#x60;?parameter.sigs.0.ne&#x3D;...&#x60;. (optional)
-    * @param hasInternals Filters transactions by presence of internal operations. (optional)
-    * @param status Filters transactions, delegations, originations and reveals by operation status (&#x60;applied&#x60;, &#x60;failed&#x60;, &#x60;backtracked&#x60;, &#x60;skipped&#x60;). (optional)
-    * @param sort Sort mode (0 - ascending, 1 - descending), operations of different types can only be sorted by ID. (optional)
-    * @param lastId Id of the last operation received, which is used as an offset for pagination (optional)
-    * @param limit Number of items to return (optional, default to 100)
-    * @param micheline Format of the parameters, storage and diffs: &#x60;0&#x60; - JSON, &#x60;1&#x60; - JSON string, &#x60;2&#x60; - raw micheline, &#x60;3&#x60; - raw micheline string (optional)
-    * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
-    * @return RequestConfig
-    */
-    fun accountsGetOperationsRequestConfig(address: kotlin.String, type: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, target: AccountParameter?, prevDelegate: AccountParameter?, newDelegate: AccountParameter?, contractManager: AccountParameter?, contractDelegate: AccountParameter?, originatedContract: AccountParameter?, accuser: AccountParameter?, offender: AccountParameter?, baker: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, entrypoint: StringParameter?, parameter: JsonParameter?, hasInternals: BoolParameter?, status: OperationStatusParameter?, sort: SortMode?, lastId: kotlin.Int?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : RequestConfig<Unit> {
+     * To obtain the request config of the operation accountsGetOperations
+     *
+     * @param address Account address (starting with tz or KT)
+     * @param type Comma separated list of operation types to return (&#x60;endorsement&#x60;, &#x60;ballot&#x60;, &#x60;proposal&#x60;, &#x60;activation&#x60;, &#x60;double_baking&#x60;, &#x60;double_endorsing&#x60;, &#x60;nonce_revelation&#x60;, &#x60;delegation&#x60;, &#x60;origination&#x60;, &#x60;transaction&#x60;, &#x60;reveal&#x60;, &#x60;migration&#x60;, &#x60;revelation_penalty&#x60;, &#x60;baking&#x60;). If not specified then all operation types except &#x60;endorsement&#x60; and &#x60;baking&#x60; will be returned. (optional)
+     * @param initiator Filters transactions, delegations and originations by initiator. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param sender Filters transactions, delegations, originations, reveals and seed nonce revelations by sender. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param target Filters transactions by target. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param prevDelegate Filters delegations by prev delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param newDelegate Filters delegations by new delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param contractManager Filters origination operations by manager. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param contractDelegate Filters origination operations by delegate. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param originatedContract Filters origination operations by originated contract. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param accuser Filters double baking and double endorsing by accuser. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param offender Filters double baking and double endorsing by offender. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param baker Filters seed nonce revelation operations by baker. Allowed fields for &#x60;.eqx&#x60; mode: none. (optional)
+     * @param level Filters operations by level. (optional)
+     * @param timestamp Filters operations by timestamp. (optional)
+     * @param entrypoint Filters transactions by entrypoint called on the target contract. (optional)
+     * @param parameter Filters transactions by parameter value. Note, this query parameter supports the following format: &#x60;?parameter{.path?}{.mode?}&#x3D;...&#x60;,             so you can specify a path to a particular field to filter by, for example: &#x60;?parameter.token_id&#x3D;...&#x60; or &#x60;?parameter.sigs.0.ne&#x3D;...&#x60;. (optional)
+     * @param hasInternals Filters transactions by presence of internal operations. (optional)
+     * @param status Filters transactions, delegations, originations and reveals by operation status (&#x60;applied&#x60;, &#x60;failed&#x60;, &#x60;backtracked&#x60;, &#x60;skipped&#x60;). (optional)
+     * @param sort Sort mode (0 - ascending, 1 - descending), operations of different types can only be sorted by ID. (optional)
+     * @param lastId Id of the last operation received, which is used as an offset for pagination (optional)
+     * @param limit Number of items to return (optional, default to 100)
+     * @param micheline Format of the parameters, storage and diffs: &#x60;0&#x60; - JSON, &#x60;1&#x60; - JSON string, &#x60;2&#x60; - raw micheline, &#x60;3&#x60; - raw micheline string (optional)
+     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
+     * @return RequestConfig
+     */
+    fun accountsGetOperationsRequestConfig(
+        address: kotlin.String,
+        type: kotlin.String?,
+        initiator: AccountParameter?,
+        sender: AccountParameter?,
+        target: AccountParameter?,
+        prevDelegate: AccountParameter?,
+        newDelegate: AccountParameter?,
+        contractManager: AccountParameter?,
+        contractDelegate: AccountParameter?,
+        originatedContract: AccountParameter?,
+        accuser: AccountParameter?,
+        offender: AccountParameter?,
+        baker: AccountParameter?,
+        level: IntParameter?,
+        timestamp: DateTimeParameter?,
+        entrypoint: StringParameter?,
+        parameter: JsonParameter?,
+        hasInternals: BoolParameter?,
+        status: OperationStatusParameter?,
+        sort: SortMode?,
+        lastId: kotlin.Int?,
+        limit: kotlin.Int?,
+        micheline: MichelineFormat?,
+        quote: Symbols?
+    ): RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -1263,55 +1787,58 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
                     put("type", listOf(type.toString()))
                 }
                 if (initiator != null) {
-                    put("initiator", listOf(initiator.toString()))
+                    put("initiator${initiator.getFilter()}", listOf(initiator.getFilterValue()))
                 }
                 if (sender != null) {
-                    put("sender", listOf(sender.toString()))
+                    put("sender${sender.getFilter()}", listOf(sender.getFilterValue()))
                 }
                 if (target != null) {
-                    put("target", listOf(target.toString()))
+                    put("target${target.getFilter()}", listOf(target.getFilterValue()))
                 }
                 if (prevDelegate != null) {
-                    put("prevDelegate", listOf(prevDelegate.toString()))
+                    put("prevDelegate${prevDelegate.getFilter()}", listOf(prevDelegate.getFilterValue()))
                 }
                 if (newDelegate != null) {
-                    put("newDelegate", listOf(newDelegate.toString()))
+                    put("newDelegate${newDelegate.getFilter()}", listOf(newDelegate.getFilterValue()))
                 }
                 if (contractManager != null) {
-                    put("contractManager", listOf(contractManager.toString()))
+                    put("contractManager${contractManager.getFilter()}", listOf(contractManager.getFilterValue()))
                 }
                 if (contractDelegate != null) {
-                    put("contractDelegate", listOf(contractDelegate.toString()))
+                    put("contractDelegate${contractDelegate.getFilter()}", listOf(contractDelegate.getFilterValue()))
                 }
                 if (originatedContract != null) {
-                    put("originatedContract", listOf(originatedContract.toString()))
+                    put(
+                        "originatedContract${originatedContract.getFilter()}",
+                        listOf(originatedContract.getFilterValue())
+                    )
                 }
                 if (accuser != null) {
-                    put("accuser", listOf(accuser.toString()))
+                    put("accuser${accuser.getFilter()}", listOf(accuser.getFilterValue()))
                 }
                 if (offender != null) {
-                    put("offender", listOf(offender.toString()))
+                    put("offender${offender.getFilter()}", listOf(offender.getFilterValue()))
                 }
                 if (baker != null) {
-                    put("baker", listOf(baker.toString()))
+                    put("baker${baker.getFilter()}", listOf(baker.getFilterValue()))
                 }
                 if (level != null) {
-                    put("level", listOf(level.toString()))
+                    put("level${level.getFilter()}", listOf(level.getFilterValue()))
                 }
                 if (timestamp != null) {
-                    put("timestamp", listOf(timestamp.toString()))
+                    put("timestamp${timestamp.getFilter()}", listOf(timestamp.getFilterValue()))
                 }
                 if (entrypoint != null) {
-                    put("entrypoint", listOf(entrypoint.toString()))
+                    put("entrypoint${entrypoint.getFilter()}", listOf(entrypoint.getFilterValue()))
                 }
                 if (parameter != null) {
-                    put("parameter", listOf(parameter.toString()))
+                    put("parameter${parameter.getFilter()}", listOf(parameter.getFilterValue()))
                 }
                 if (hasInternals != null) {
-                    put("hasInternals", listOf(hasInternals.toString()))
+                    put("hasInternals${hasInternals.getFilter()}", listOf(hasInternals.getFilterValue()))
                 }
                 if (status != null) {
-                    put("status", listOf(status.toString()))
+                    put("status${status.getFilter()}", listOf(status.getFilterValue()))
                 }
                 if (sort != null) {
                     put("sort", listOf(sort.toString()))
@@ -1334,7 +1861,7 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
 
         return RequestConfig(
             method = RequestMethod.GET,
-            path = "/v1/accounts/{address}/operations".replace("{"+"address"+"}", "$address"),
+            path = "/v1/accounts/{address}/operations".replace("{" + "address" + "}", "$address"),
             query = localVariableQuery,
             headers = localVariableHeaders,
             body = localVariableBody
