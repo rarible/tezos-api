@@ -31,7 +31,7 @@ import com.rarible.tzkt.filters.OffsetFilterImpl
  */
 
 data class OffsetParameter (
-    val offsetFilterImpl: OffsetFilterImpl? = null
+    var offsetFilterImpl: OffsetFilterImpl? = null
 ){
     fun getFilter(): String {
         return offsetFilterImpl?.getFilter() ?: ""
