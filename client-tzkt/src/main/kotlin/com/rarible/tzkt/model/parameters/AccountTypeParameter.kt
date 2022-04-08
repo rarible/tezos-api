@@ -18,30 +18,29 @@
     "UnusedImport"
 )
 
-package com.rarible.tzkt.models
+package com.rarible.tzkt.model.parameters
 
 
 import com.squareup.moshi.Json
-import com.rarible.tzkt.filters.ComparisonFilterImpl
+import com.rarible.tzkt.filters.EqualityFilter
 import com.rarible.tzkt.filters.EqualityFilterImpl
-import com.rarible.tzkt.filters.InclusionFilterImpl
 
 /**
  * 
  *
- * @param eq **Equal** filter mode (optional, i.e. `param.eq=123` is the same as `param=123`). \\ Specify a `nat` value to get items where the specified field is equal to the specified value.  Example: `?balance=1234`.
- * @param ne **Not equal** filter mode. \\ Specify a `nat` value to get items where the specified field is not equal to the specified value.  Example: `?balance.ne=1234`.
- * @param gt **Greater than** filter mode. \\ Specify a `nat` value to get items where the specified field is greater than the specified value.  Example: `?balance.gt=1234`.
- * @param ge **Greater or equal** filter mode. \\ Specify a `nat` value to get items where the specified field is greater than equal to the specified value.  Example: `?balance.ge=1234`.
- * @param lt **Less than** filter mode. \\ Specify a `nat` value to get items where the specified field is less than the specified value.  Example: `?balance.lt=1234`.
- * @param le **Less or equal** filter mode. \\ Specify a `nat` value to get items where the specified field is less than or equal to the specified value.  Example: `?balance.le=1234`.
- * @param `in` **In list** (any of) filter mode. \\ Specify a comma-separated list of `nat` values to get items where the specified field is equal to one of the specified values.  Example: `?level.in=12,14,52,69`.
- * @param ni **Not in list** (none of) filter mode. \\ Specify a comma-separated list of `nat` values to get items where the specified field is not equal to all the specified values.  Example: `?level.ni=12,14,52,69`.
+ * @param eq **Equal** filter mode (optional, i.e. `param.eq=123` is the same as `param=123`). \\ Specify an account type to get items where the specified field is equal to the specified value.  Example: `?type=delegate`.
+ * @param ne **Not equal** filter mode. \\ Specify an account type to get items where the specified field is not equal to the specified value.  Example: `?type.ne=contract`.
  */
 
-data class NatParameter (
-    var equalityFilterImpl: EqualityFilterImpl = EqualityFilterImpl(),
-    val comparisonFilterImpl: ComparisonFilterImpl = ComparisonFilterImpl(),
-    val inclusionFilterImpl: InclusionFilterImpl = InclusionFilterImpl()
-)
+data class AccountTypeParameter (
+    var equalityFilterImpl: EqualityFilterImpl? = null,
+) {
+    fun getFilter(): String {
+        return equalityFilterImpl?.getFilter() ?: ""
+    }
+
+    fun getFilterValue(): String {
+        return equalityFilterImpl?.getFilterValue() ?: ""
+    }
+}
 

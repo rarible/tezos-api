@@ -31,23 +31,23 @@ import com.rarible.tzkt.infrastructure.ResponseType
 import com.rarible.tzkt.infrastructure.ServerError
 import com.rarible.tzkt.infrastructure.ServerException
 import com.rarible.tzkt.infrastructure.Success
-import com.rarible.tzkt.models.AccountParameter
+import com.rarible.tzkt.model.parameters.AccountParameter
 import com.rarible.tzkt.models.BigMap
-import com.rarible.tzkt.models.BigMapActionParameter
+import com.rarible.tzkt.model.parameters.BigMapActionParameter
 import com.rarible.tzkt.models.BigMapKey
 import com.rarible.tzkt.models.BigMapKeyHistorical
 import com.rarible.tzkt.models.BigMapKeyUpdate
-import com.rarible.tzkt.models.BigMapTagsParameter
+import com.rarible.tzkt.model.parameters.BigMapTagsParameter
 import com.rarible.tzkt.models.BigMapUpdate
-import com.rarible.tzkt.models.IntParameter
-import com.rarible.tzkt.models.JsonParameter
+import com.rarible.tzkt.model.parameters.IntParameter
+import com.rarible.tzkt.model.parameters.JsonParameter
 import com.rarible.tzkt.models.MichelineFormat
 import com.rarible.tzkt.models.MichelinePrim
-import com.rarible.tzkt.models.OffsetParameter
-import com.rarible.tzkt.models.SelectParameter
-import com.rarible.tzkt.models.SortParameter
-import com.rarible.tzkt.models.StringParameter
-import com.rarible.tzkt.models.TimestampParameter
+import com.rarible.tzkt.model.parameters.OffsetParameter
+import com.rarible.tzkt.model.parameters.SelectParameter
+import com.rarible.tzkt.model.parameters.SortParameter
+import com.rarible.tzkt.model.parameters.StringParameter
+import com.rarible.tzkt.model.parameters.TimestampParameter
 import java.io.IOException
 
 

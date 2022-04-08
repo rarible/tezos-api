@@ -32,10 +32,10 @@ import com.rarible.tzkt.infrastructure.ServerError
 import com.rarible.tzkt.infrastructure.ServerException
 import com.rarible.tzkt.infrastructure.Success
 import com.rarible.tzkt.models.Commitment
-import com.rarible.tzkt.models.IntParameter
-import com.rarible.tzkt.models.OffsetParameter
-import com.rarible.tzkt.models.SelectParameter
-import com.rarible.tzkt.models.SortParameter
+import com.rarible.tzkt.model.parameters.IntParameter
+import com.rarible.tzkt.model.parameters.OffsetParameter
+import com.rarible.tzkt.model.parameters.SelectParameter
+import com.rarible.tzkt.model.parameters.SortParameter
 import java.io.IOException
 
 

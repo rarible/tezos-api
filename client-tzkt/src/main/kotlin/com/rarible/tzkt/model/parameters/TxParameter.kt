@@ -18,23 +18,28 @@
     "UnusedImport"
 )
 
-package com.rarible.tzkt.models
+package com.rarible.tzkt.model.parameters
 
 
 import com.squareup.moshi.Json
-import com.rarible.tzkt.filters.AnyAllFilterImpl
-import com.rarible.tzkt.filters.EqualityFilterImpl
+import com.rarible.tzkt.filters.TxFilterImpl
 
 /**
  * 
  *
- * @param eq **Equal** filter mode (optional, i.e. `param.eq=123` is the same as `param=123`). \\ Specify a comma-separated list of bigmap tags to get bigmaps with exactly the same set of tags.  Example: `?tags=metadata` or `?tags=token_metadata,metadata`.
- * @param any **Has any** filter mode. \\ Specify a comma-separated list of bigmap tags to get bigmaps where at least one of the specified tags is presented.  Example: `?tags=metadata` or `?tags=token_metadata,metadata`.
- * @param all **Has all** filter mode. \\ Specify a comma-separated list of bigmap tags to get bigmaps where all of the specified tags are presented.  Example: `?tags=metadata` or `?tags=token_metadata,metadata`.
+ * @param entrypoint Entrypoint called on the target contract
+ * @param `value` Value passed to the called entrypoint converted to human-readable JSON. Note: you can configure parameters format by setting `micheline` query parameter.
  */
 
-data class BigMapTagsParameter (
-    val equalityFilterImpl: EqualityFilterImpl = EqualityFilterImpl(),
-    val anyAllFilterImpl: AnyAllFilterImpl = AnyAllFilterImpl(),
-)
+data class TxParameter (
+    val txFilterImpl: TxFilterImpl? = null
+){
+    fun getFilter(): String {
+        return txFilterImpl?.getFilter() ?: ""
+    }
+
+    fun getFilterValue(): String {
+        return txFilterImpl?.getFilterValue() ?: ""
+    }
+}
 

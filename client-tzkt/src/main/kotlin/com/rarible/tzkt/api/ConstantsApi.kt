@@ -31,14 +31,14 @@ import com.rarible.tzkt.infrastructure.ResponseType
 import com.rarible.tzkt.infrastructure.ServerError
 import com.rarible.tzkt.infrastructure.ServerException
 import com.rarible.tzkt.infrastructure.Success
-import com.rarible.tzkt.models.AccountParameter
+import com.rarible.tzkt.model.parameters.AccountParameter
 import com.rarible.tzkt.models.Constant
-import com.rarible.tzkt.models.ExpressionParameter
-import com.rarible.tzkt.models.IntParameter
-import com.rarible.tzkt.models.OffsetParameter
-import com.rarible.tzkt.models.SelectParameter
-import com.rarible.tzkt.models.SortParameter
-import com.rarible.tzkt.models.TimestampParameter
+import com.rarible.tzkt.model.parameters.ExpressionParameter
+import com.rarible.tzkt.model.parameters.IntParameter
+import com.rarible.tzkt.model.parameters.OffsetParameter
+import com.rarible.tzkt.model.parameters.SelectParameter
+import com.rarible.tzkt.model.parameters.SortParameter
+import com.rarible.tzkt.model.parameters.TimestampParameter
 import java.io.IOException
 
 class ConstantsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath) {

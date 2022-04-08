@@ -31,15 +31,15 @@ import com.rarible.tzkt.models.ContractInterface
 import com.rarible.tzkt.models.ContractView
 import com.rarible.tzkt.models.Entrypoint
 import com.rarible.tzkt.models.IMicheline
-import com.rarible.tzkt.models.AccountParameter
-import com.rarible.tzkt.models.BigMapTagsParameter
-import com.rarible.tzkt.models.ContractKindParameter
-import com.rarible.tzkt.models.IntParameter
-import com.rarible.tzkt.models.JsonParameter
+import com.rarible.tzkt.model.parameters.AccountParameter
+import com.rarible.tzkt.model.parameters.BigMapTagsParameter
+import com.rarible.tzkt.model.parameters.ContractKindParameter
+import com.rarible.tzkt.model.parameters.IntParameter
+import com.rarible.tzkt.model.parameters.JsonParameter
 import com.rarible.tzkt.models.MichelineFormat
-import com.rarible.tzkt.models.OffsetParameter
-import com.rarible.tzkt.models.SelectParameter
-import com.rarible.tzkt.models.SortParameter
+import com.rarible.tzkt.model.parameters.OffsetParameter
+import com.rarible.tzkt.model.parameters.SelectParameter
+import com.rarible.tzkt.model.parameters.SortParameter
 import com.rarible.tzkt.models.StorageRecord
 
 import com.rarible.tzkt.infrastructure.ApiClient

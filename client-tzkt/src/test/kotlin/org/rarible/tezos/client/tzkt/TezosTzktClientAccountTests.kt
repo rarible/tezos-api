@@ -1,10 +1,9 @@
 package com.rarible.tzkt
 
 import com.rarible.tzkt.api.AccountsApi
-import com.rarible.tzkt.filters.AnyAllFilterImpl
 import com.rarible.tzkt.filters.EqualityFilterImpl
 import com.rarible.tzkt.models.Account
-import com.rarible.tzkt.models.AccountTypeParameter
+import com.rarible.tzkt.model.parameters.AccountTypeParameter
 import org.junit.jupiter.api.Test
 class TezosTzktClientAccountTests {
 

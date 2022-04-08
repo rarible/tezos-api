@@ -18,20 +18,28 @@
     "UnusedImport"
 )
 
-package com.rarible.tzkt.models
+package com.rarible.tzkt.model.parameters
 
 
 import com.squareup.moshi.Json
-import com.rarible.tzkt.filters.SelectionFilterImpl
+import com.rarible.tzkt.filters.EqualityFilterImpl
 
 /**
  * 
  *
- * @param fields **Fields** selection mode (optional, i.e. `select.fields=balance` is the same as `select=balance`). \\ Specify a comma-separated list of fields to include into response.  Example: `?select=address,balance as b,metadata.name as meta_name` will result in `[ { \"address\": \"asd\", \"b\": 10, \"meta_name\": \"qwe\" } ]`.
- * @param propertyValues **Values** selection mode. \\ Specify a comma-separated list of fields to include their values into response.  Example: `?select.values=address,balance,metadata.name`  will result in `[ [ \"asd\", 10, \"qwe\" ] ]`.
+ * @param eq **Equal** filter mode (optional, i.e. `param.eq=applied` is the same as `param=applied`). \\ Specify an operation status to get items where the specified field is equal to the specified value.  Example: `?type=failed`.
+ * @param ne **Not equal** filter mode. \\ Specify an operation status to get items where the specified field is not equal to the specified value.  Example: `?type.ne=applied`.
  */
 
-data class SelectionParameter (
-    val selectionFilterImpl: SelectionFilterImpl = SelectionFilterImpl()
-)
+data class OperationStatusParameter (
+    val equalityFilterImpl: EqualityFilterImpl? = null
+){
+    fun getFilter(): String {
+        return equalityFilterImpl?.getFilter() ?: ""
+    }
+
+    fun getFilterValue(): String {
+        return equalityFilterImpl?.getFilterValue() ?: ""
+    }
+}
 

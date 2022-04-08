@@ -18,24 +18,48 @@
     "UnusedImport"
 )
 
-package com.rarible.tzkt.models
-
+package com.rarible.tzkt.model.parameters
 
 import com.squareup.moshi.Json
+import com.rarible.tzkt.filters.EqualityFilter
 import com.rarible.tzkt.filters.EqualityFilterImpl
+import com.rarible.tzkt.filters.FieldEqualityFilter
+import com.rarible.tzkt.filters.FieldEqualityFilterImpl
+import com.rarible.tzkt.filters.InclusionFilter
 import com.rarible.tzkt.filters.InclusionFilterImpl
+import com.rarible.tzkt.filters.NullFilter
+import com.rarible.tzkt.filters.NullFilterImpl
 
 /**
- * 
  *
- * @param eq **Equal** filter mode (optional, i.e. `param.eq=123` is the same as `param=123`). \\ Specify a protocol hash to get items where the specified field is equal to the specified value.  Example: `?protocol=PsCARTHAGaz...`.
- * @param ne **Not equal** filter mode. \\ Specify a protocol hash to get items where the specified field is not equal to the specified value.  Example: `?sender.ne=PsBabyM1eUX...`.
- * @param `in` **In list** (any of) filter mode. \\ Specify a comma-separated list of protocol hashes to get items where the specified field is equal to one of the specified values.  Example: `?sender.in=PsCARTHAGaz,PsBabyM1eUX`.
- * @param ni **Not in list** (none of) filter mode. \\ Specify a comma-separated list of protocol hashes to get items where the specified field is not equal to all the specified values.  Example: `?sender.ni=PsCARTHAGaz,PsBabyM1eUX`.
+ *
+ * @param eq **Equal** filter mode (optional, i.e. `param.eq=123` is the same as `param=123`). \\ Specify a `tz` or `KT` address to get items where the specified field is equal to the specified value.  Example: `?sender=tz1WnfXMPaNTBmH7DBPwqCWs9cPDJdkGBTZ8`.
+ * @param ne **Not equal** filter mode. \\ Specify a `tz` or `KT` address to get items where the specified field is not equal to the specified value.  Example: `?sender.ne=tz1WnfXMPaNTBmH7DBPwqCWs9cPDJdkGBTZ8`.
+ * @param `in` **In list** (any of) filter mode. \\ Specify a comma-separated list of addresses to get items where the specified field is equal to one of the specified values.  Example: `?sender.in=tz1WnfXMPaNTB,tz1SiPXX4MYGNJND`.
+ * @param ni **Not in list** (none of) filter mode. \\ Specify a comma-separated list of addresses to get items where the specified field is not equal to all the specified values.  Example: `?sender.ni=tz1WnfXMPaNTB,tz1SiPXX4MYGNJND`.
+ * @param eqx **Equal to another field** filter mode. \\ Specify a field name to get items where the specified fields are equal.  Example: `?sender.eqx=target`.
+ * @param nex **Not equal to another field** filter mode. \\ Specify a field name to get items where the specified fields are not equal.  Example: `?sender.nex=initiator`.
+ * @param `null` **Is null** filter mode. \\ Use this mode to get items where the specified field is null or not.  Example: `?initiator.null` or `?initiator.null=false`.
  */
 
-data class ProtocolParameter (
-    val equalityFilterImpl: EqualityFilterImpl = EqualityFilterImpl(),
-    val inclusionFilterImpl: InclusionFilterImpl = InclusionFilterImpl()
-)
+data class AccountParameter(
+    var equalityFilterImpl: EqualityFilterImpl? = null,
+    val fieldEqualityFilterImpl: FieldEqualityFilterImpl? = null,
+    val inclusionFilterImpl: InclusionFilterImpl? = null,
+    val nullFilterImpl: NullFilterImpl? = null
+) {
+    fun getFilter(): String {
+        return equalityFilterImpl?.getFilter()
+            ?: (fieldEqualityFilterImpl?.getFilter()
+                ?: (inclusionFilterImpl?.getFilter()
+                    ?: (nullFilterImpl?.getFilter() ?: "")))
+    }
+
+    fun getFilterValue(): String {
+        return equalityFilterImpl?.getFilterValue()
+            ?: (fieldEqualityFilterImpl?.getFilterValue()
+                ?: (inclusionFilterImpl?.getFilterValue()
+                    ?: (nullFilterImpl?.getFilterValue() ?: "")))
+    }
+}
 

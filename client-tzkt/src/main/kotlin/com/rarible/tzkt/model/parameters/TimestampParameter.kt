@@ -18,7 +18,7 @@
     "UnusedImport"
 )
 
-package com.rarible.tzkt.models
+package com.rarible.tzkt.model.parameters
 
 
 import com.squareup.moshi.Json
@@ -40,8 +40,20 @@ import com.rarible.tzkt.filters.InclusionFilterImpl
  */
 
 data class TimestampParameter (
-    val equalityFilterImpl: EqualityFilterImpl = EqualityFilterImpl(),
-    val comparisonFilterImpl: ComparisonFilterImpl = ComparisonFilterImpl(),
-    val inclusionFilterImpl: InclusionFilterImpl = InclusionFilterImpl()
-)
+    val equalityFilterImpl: EqualityFilterImpl? = null,
+    val comparisonFilterImpl: ComparisonFilterImpl? = null,
+    val inclusionFilterImpl: InclusionFilterImpl? = null
+){
+    fun getFilter(): String {
+        return equalityFilterImpl?.getFilter()
+            ?: (comparisonFilterImpl?.getFilter()
+                ?: (inclusionFilterImpl?.getFilter() ?: ""))
+    }
+
+    fun getFilterValue(): String {
+        return equalityFilterImpl?.getFilterValue()
+            ?: (comparisonFilterImpl?.getFilterValue()
+                ?: (inclusionFilterImpl?.getFilterValue() ?: ""))
+    }
+}
 

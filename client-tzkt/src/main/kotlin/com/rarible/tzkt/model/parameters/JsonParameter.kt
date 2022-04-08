@@ -18,7 +18,7 @@
     "UnusedImport"
 )
 
-package com.rarible.tzkt.models
+package com.rarible.tzkt.model.parameters
 
 
 import com.rarible.tzkt.filters.NullFilterImpl
@@ -41,7 +41,17 @@ import com.rarible.tzkt.filters.AsUnlikeFilterImpl
  */
 
 data class JsonParameter (
-    val stringFilterImpl: AsUnlikeFilterImpl = AsUnlikeFilterImpl(),
-    val nullFilterImpl: NullFilterImpl = NullFilterImpl()
-)
+    val stringFilterImpl: AsUnlikeFilterImpl? = null,
+    val nullFilterImpl: NullFilterImpl? = null
+){
+    fun getFilter(): String {
+        return stringFilterImpl?.getFilter()
+            ?: (nullFilterImpl?.getFilter() ?: "")
+    }
+
+    fun getFilterValue(): String {
+        return stringFilterImpl?.getFilterValue()
+            ?: (nullFilterImpl?.getFilterValue() ?: "")
+    }
+}
 

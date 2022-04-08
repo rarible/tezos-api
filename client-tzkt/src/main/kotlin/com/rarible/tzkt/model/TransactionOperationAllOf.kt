@@ -20,11 +20,7 @@
 
 package com.rarible.tzkt.models
 
-import com.rarible.tzkt.models.Alias
-import com.rarible.tzkt.models.BigMapDiff
-import com.rarible.tzkt.models.OperationError
-import com.rarible.tzkt.models.QuoteShort
-import com.rarible.tzkt.models.TxParameter
+import com.rarible.tzkt.model.parameters.TxParameter
 
 import com.squareup.moshi.Json
 

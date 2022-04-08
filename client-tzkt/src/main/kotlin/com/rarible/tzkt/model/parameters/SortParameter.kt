@@ -18,35 +18,28 @@
     "UnusedImport"
 )
 
-package com.rarible.tzkt.models
+package com.rarible.tzkt.model.parameters
 
 
 import com.squareup.moshi.Json
-import com.rarible.tzkt.filters.EqualityFilter
-import com.rarible.tzkt.filters.EqualityFilterImpl
-import com.rarible.tzkt.filters.FieldEqualityFilter
-import com.rarible.tzkt.filters.FieldEqualityFilterImpl
-import com.rarible.tzkt.filters.InclusionFilter
-import com.rarible.tzkt.filters.InclusionFilterImpl
-import com.rarible.tzkt.filters.NullFilter
-import com.rarible.tzkt.filters.NullFilterImpl
+import com.rarible.tzkt.filters.SortFilterImpl
 
 /**
  * 
  *
- * @param eq **Equal** filter mode (optional, i.e. `param.eq=123` is the same as `param=123`). \\ Specify a `tz` or `KT` address to get items where the specified field is equal to the specified value.  Example: `?sender=tz1WnfXMPaNTBmH7DBPwqCWs9cPDJdkGBTZ8`.
- * @param ne **Not equal** filter mode. \\ Specify a `tz` or `KT` address to get items where the specified field is not equal to the specified value.  Example: `?sender.ne=tz1WnfXMPaNTBmH7DBPwqCWs9cPDJdkGBTZ8`.
- * @param `in` **In list** (any of) filter mode. \\ Specify a comma-separated list of addresses to get items where the specified field is equal to one of the specified values.  Example: `?sender.in=tz1WnfXMPaNTB,tz1SiPXX4MYGNJND`.
- * @param ni **Not in list** (none of) filter mode. \\ Specify a comma-separated list of addresses to get items where the specified field is not equal to all the specified values.  Example: `?sender.ni=tz1WnfXMPaNTB,tz1SiPXX4MYGNJND`.
- * @param eqx **Equal to another field** filter mode. \\ Specify a field name to get items where the specified fields are equal.  Example: `?sender.eqx=target`.
- * @param nex **Not equal to another field** filter mode. \\ Specify a field name to get items where the specified fields are not equal.  Example: `?sender.nex=initiator`.
- * @param `null` **Is null** filter mode. \\ Use this mode to get items where the specified field is null or not.  Example: `?initiator.null` or `?initiator.null=false`.
+ * @param asc **Ascending** sort mode (optional, i.e. `sort.asc=id` is the same as `sort=id`). \\ Specify a field name to sort by.  Example: `?sort=balance`.
+ * @param desc **Descending** sort mode. \\ Specify a field name to sort by descending.  Example: `?sort.desc=id`.
  */
 
-data class AccountParameter (
-    var equalityFilterImpl: EqualityFilterImpl = EqualityFilterImpl(),
-    val fieldEqualityFilterImpl: FieldEqualityFilterImpl = FieldEqualityFilterImpl(),
-    val inclusionFilterImpl: InclusionFilterImpl = InclusionFilterImpl(),
-    val nullFilterImpl: NullFilterImpl= NullFilterImpl()
-)
+data class SortParameter (
+    val sortFilterImpl: SortFilterImpl? = null
+){
+    fun getFilter(): String {
+        return sortFilterImpl?.getFilter() ?: ""
+    }
+
+    fun getFilterValue(): String {
+        return sortFilterImpl?.getFilterValue() ?: ""
+    }
+}
 

@@ -17,7 +17,7 @@
     "RemoveRedundantQualifierName",
 )
 
-package com.rarible.tzkt.models
+package com.rarible.tzkt.model.parameters
 
 
 import com.rarible.tzkt.filters.EqualityFilterImpl
@@ -33,7 +33,17 @@ import com.rarible.tzkt.filters.InclusionFilterImpl
  */
 
 data class VoterStatusParameter (
-    val equalityFilterImpl: EqualityFilterImpl = EqualityFilterImpl(),
-    val inclusionFilterImpl: InclusionFilterImpl = InclusionFilterImpl(),
-)
+    val equalityFilterImpl: EqualityFilterImpl? = null,
+    val inclusionFilterImpl: InclusionFilterImpl? = null,
+){
+    fun getFilter(): String {
+        return equalityFilterImpl?.getFilter()
+            ?: (inclusionFilterImpl?.getFilter() ?: "")
+    }
+
+    fun getFilterValue(): String {
+        return equalityFilterImpl?.getFilterValue()
+            ?: (inclusionFilterImpl?.getFilterValue() ?: "")
+    }
+}
 

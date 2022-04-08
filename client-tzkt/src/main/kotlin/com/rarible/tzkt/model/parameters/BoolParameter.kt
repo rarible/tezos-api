@@ -18,20 +18,32 @@
     "UnusedImport"
 )
 
-package com.rarible.tzkt.models
+package com.rarible.tzkt.model.parameters
 
 
-import com.squareup.moshi.Json
 import com.rarible.tzkt.filters.EqualityFilterImpl
+import com.rarible.tzkt.filters.NullFilterImpl
+import com.squareup.moshi.Json
 
 /**
  * 
  *
- * @param eq **Equal** filter mode (optional, i.e. `param.eq=123` is the same as `param=123`). \\ Specify baking right status to get items where the specified field is equal to the specified value.  Example: `?type=future`.
- * @param ne **Not equal** filter mode. \\ Specify baking right status to get items where the specified field is not equal to the specified value.  Example: `?type.ne=missed`.
+ * @param eq **Equal** filter mode (optional, i.e. `param.eq=true` is the same as `param=true`). \\ Specify a bool flag to get items where the specified field is equal to the specified value.  Example: `?active=true` or `?active=1` or `?active`.
+ * @param `null` **Is null** filter mode. \\ Use this mode to get items where the specified field is null or not.  Example: `?active.null` or `?active.null=false`.
  */
 
-data class BakingRightStatusParameter (
-    val equalityFilterImpl: EqualityFilterImpl = EqualityFilterImpl()
-)
+data class BoolParameter (
+    var equalityFilterImpl: EqualityFilterImpl? = null,
+    val nullFilterImpl: NullFilterImpl? = null
+){
+    fun getFilter(): String {
+        return equalityFilterImpl?.getFilter()
+            ?: (nullFilterImpl?.getFilter() ?: "")
+    }
+
+    fun getFilterValue(): String {
+        return equalityFilterImpl?.getFilterValue()
+            ?: (nullFilterImpl?.getFilterValue() ?: "")
+    }
+}
 

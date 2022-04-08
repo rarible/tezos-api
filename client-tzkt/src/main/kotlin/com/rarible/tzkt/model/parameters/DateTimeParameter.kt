@@ -18,47 +18,34 @@
     "UnusedImport"
 )
 
-package com.rarible.tzkt.filters
+package com.rarible.tzkt.model.parameters
 
 
-import com.squareup.moshi.Json
+import com.rarible.tzkt.filters.ComparisonFilterImpl
 
 /**
  * 
  *
- * @param fields **Fields** selection mode (optional, i.e. `select.fields=balance` is the same as `select=balance`). \\ Specify a comma-separated list of fields to include into response.  Example: `?select=address,balance as b,metadata.name as meta_name` will result in `[ { \"address\": \"asd\", \"b\": 10, \"meta_name\": \"qwe\" } ]`.
- * @param propertyValues **Values** selection mode. \\ Specify a comma-separated list of fields to include their values into response.  Example: `?select.values=address,balance,metadata.name`  will result in `[ [ \"asd\", 10, \"qwe\" ] ]`.
+ * @param eq **Equal** filter mode (optional, i.e. `param.eq=2020-01-01` is the same as `param=2020-01-01`). \\ Specify a datetime to get items where the specified field is equal to the specified value.  Example: `?timestamp=2020-02-20T02:40:57Z`.
+ * @param ne **Not equal** filter mode. \\ Specify a datetime to get items where the specified field is not equal to the specified value.  Example: `?timestamp.ne=2020-02-20T02:40:57Z`.
+ * @param gt **Greater than** filter mode. \\ Specify a datetime to get items where the specified field is greater than the specified value.  Example: `?timestamp.gt=2020-02-20T02:40:57Z`.
+ * @param ge **Greater or equal** filter mode. \\ Specify a datetime to get items where the specified field is greater than equal to the specified value.  Example: `?timestamp.ge=2020-02-20T02:40:57Z`.
+ * @param lt **Less than** filter mode. \\ Specify a datetime to get items where the specified field is less than the specified value.  Example: `?timestamp.lt=2020-02-20T02:40:57Z`.
+ * @param le **Less or equal** filter mode. \\ Specify a datetime to get items where the specified field is less than or equal to the specified value.  Example: `?timestamp.le=2020-02-20T02:40:57Z`.
+ * @param `in` **In list** (any of) filter mode. \\ Specify a comma-separated list of datetimes to get items where the specified field is equal to one of the specified values.  Example: `?timestamp.in=2020-02-20,2020-02-21`.
+ * @param ni **Not in list** (none of) filter mode. \\ Specify a comma-separated list of datetimes to get items where the specified field is not equal to all the specified values.  Example: `?timestamp.ni=2020-02-20,2020-02-21`.
  */
 
- class SelectionFilterImpl: SelectionFilter {
-
-    /* **Fields** selection mode (optional, i.e. `select.fields=balance` is the same as `select=balance`). \\ Specify a comma-separated list of fields to include into response.  Example: `?select=address,balance as b,metadata.name as meta_name` will result in `[ { \"address\": \"asd\", \"b\": 10, \"meta_name\": \"qwe\" } ]`. */
-    @Json(name = "fields")
-    override val fields: kotlin.collections.List<kotlin.String>? = null
-
-    /* **Values** selection mode. \\ Specify a comma-separated list of fields to include their values into response.  Example: `?select.values=address,balance,metadata.name`  will result in `[ [ \"asd\", 10, \"qwe\" ] ]`. */
-    @Json(name = "values")
-    override val propertyValues: kotlin.collections.List<kotlin.String>? = null
-
-
-    override fun getFilter(): String {
-        return if(!fields.isNullOrEmpty()){
-            ".fields"
-        } else if(!propertyValues.isNullOrEmpty()){
-            ".values"
-        } else {
-            ""
-        }
+data class DateTimeParameter (
+   val dateFilterImpl: ComparisonFilterImpl? = null
+){
+    fun getFilter(): String {
+        return dateFilterImpl?.getFilter() ?: ""
     }
 
-    override fun getFilterValue(): String {
-        return if (!fields.isNullOrEmpty()) {
-            fields!!.joinToString(",")
-        } else if (!propertyValues.isNullOrEmpty()) {
-            propertyValues!!.joinToString(",")
-        } else {
-            ""
-        }
+    fun getFilterValue(): String {
+        return dateFilterImpl?.getFilterValue() ?: ""
+
     }
 }
 

@@ -22,11 +22,9 @@ package com.rarible.tzkt.api
 
 import java.io.IOException
 
-import com.rarible.tzkt.models.OffsetParameter
-import com.rarible.tzkt.models.SortParameter
+import com.rarible.tzkt.model.parameters.OffsetParameter
+import com.rarible.tzkt.model.parameters.SortParameter
 import com.rarible.tzkt.models.Protocol
-
-import com.squareup.moshi.Json
 
 import com.rarible.tzkt.infrastructure.ApiClient
 import com.rarible.tzkt.infrastructure.ApiResponse
@@ -39,7 +37,6 @@ import com.rarible.tzkt.infrastructure.RequestConfig
 import com.rarible.tzkt.infrastructure.RequestMethod
 import com.rarible.tzkt.infrastructure.ResponseType
 import com.rarible.tzkt.infrastructure.Success
-import com.rarible.tzkt.infrastructure.toMultiValue
 
 class ProtocolsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath) {
     companion object {

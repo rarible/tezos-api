@@ -18,24 +18,35 @@
     "UnusedImport"
 )
 
-package com.rarible.tzkt.models
+package com.rarible.tzkt.model.parameters
 
 
 import com.squareup.moshi.Json
 import com.rarible.tzkt.filters.EqualityFilterImpl
+import com.rarible.tzkt.filters.FieldEqualityFilterImpl
 import com.rarible.tzkt.filters.InclusionFilterImpl
 
 /**
  * 
  *
- * @param eq **Equal** filter mode (optional, i.e. `param.eq=123` is the same as `param=123`). \\ Specify an expression hash to get items where the specified field is equal to the specified value.  Example: `?address=expr...`.
- * @param ne **Not equal** filter mode. \\ Specify an expression hash to get items where the specified field is not equal to the specified value.  Example: `?address.ne=expr...`.
- * @param `in` **In list** (any of) filter mode. \\ Specify a comma-separated list of expression hashes to get items where the specified field is equal to one of the specified values.  Example: `?address.in=expr1,expr2`.
- * @param ni **Not in list** (none of) filter mode. \\ Specify a comma-separated list of expression hashes to get items where the specified field is not equal to all the specified values.  Example: `?address.ni=expr1,expr2`.
+ * @param eq **Equal** filter mode (optional, i.e. `param.eq=123` is the same as `param=123`). \\ Specify a contract kind to get items where the specified field is equal to the specified value.  Example: `?kind=smart_contract`.
+ * @param ne **Not equal** filter mode. \\ Specify a contract kind to get items where the specified field is not equal to the specified value.  Example: `?kind.ne=delegator_contract`.
+ * @param `in` **In list** (any of) filter mode. \\ Specify a comma-separated list of contract kinds to get items where the specified field is equal to one of the specified values.  Example: `?kind.in=smart_contract,asset`.
+ * @param ni **Not in list** (none of) filter mode. \\ Specify a comma-separated list of contract kinds to get items where the specified field is not equal to all the specified values.  Example: `?kind.ni=smart_contract,asset`.
  */
 
-data class ExpressionParameter (
-    val equalityFilterImpl: EqualityFilterImpl = EqualityFilterImpl(),
-    val inclusionFilterImpl: InclusionFilterImpl = InclusionFilterImpl(),
-)
+data class BigMapActionParameter (
+    val equalityFilterImpl: EqualityFilterImpl? = null,
+    val inclusionFilterImpl: InclusionFilterImpl? = null,
+){
+    fun getFilter(): String {
+        return equalityFilterImpl?.getFilter()
+            ?: (inclusionFilterImpl?.getFilter() ?: "")
+    }
+
+    fun getFilterValue(): String {
+        return equalityFilterImpl?.getFilterValue()
+            ?: (inclusionFilterImpl?.getFilterValue() ?: "")
+    }
+}
 

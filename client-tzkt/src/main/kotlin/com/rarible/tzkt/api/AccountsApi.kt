@@ -33,24 +33,24 @@ import com.rarible.tzkt.infrastructure.ServerException
 import com.rarible.tzkt.infrastructure.Success
 import com.rarible.tzkt.models.Account
 import com.rarible.tzkt.models.AccountMetadata
-import com.rarible.tzkt.models.AccountParameter
-import com.rarible.tzkt.models.AccountTypeParameter
-import com.rarible.tzkt.models.BoolParameter
-import com.rarible.tzkt.models.ContractKindParameter
-import com.rarible.tzkt.models.DateTimeParameter
+import com.rarible.tzkt.model.parameters.AccountParameter
+import com.rarible.tzkt.model.parameters.AccountTypeParameter
+import com.rarible.tzkt.model.parameters.BoolParameter
+import com.rarible.tzkt.model.parameters.ContractKindParameter
+import com.rarible.tzkt.model.parameters.DateTimeParameter
 import com.rarible.tzkt.models.Delegator
 import com.rarible.tzkt.models.HistoricalBalance
-import com.rarible.tzkt.models.IntParameter
-import com.rarible.tzkt.models.JsonParameter
+import com.rarible.tzkt.model.parameters.IntParameter
+import com.rarible.tzkt.model.parameters.JsonParameter
 import com.rarible.tzkt.models.MichelineFormat
-import com.rarible.tzkt.models.OffsetParameter
+import com.rarible.tzkt.model.parameters.OffsetParameter
 import com.rarible.tzkt.models.Operation
-import com.rarible.tzkt.models.OperationStatusParameter
+import com.rarible.tzkt.model.parameters.OperationStatusParameter
 import com.rarible.tzkt.models.RelatedContract
-import com.rarible.tzkt.models.SelectParameter
+import com.rarible.tzkt.model.parameters.SelectParameter
 import com.rarible.tzkt.models.SortMode
-import com.rarible.tzkt.models.SortParameter
-import com.rarible.tzkt.models.StringParameter
+import com.rarible.tzkt.model.parameters.SortParameter
+import com.rarible.tzkt.model.parameters.StringParameter
 import com.rarible.tzkt.models.Symbols
 import java.io.IOException
 
@@ -149,7 +149,7 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
                 if (type != null) {
-                    put("type${type.equalityFilterImpl.getFilter()}", listOf(type.equalityFilterImpl.getFilterValue()))
+                    put("type${type.getFilter()}", listOf(type.getFilterValue()))
                 }
                 if (kind != null) {
                     put("kind", listOf(kind.toString()))

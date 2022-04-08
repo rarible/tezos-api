@@ -22,14 +22,14 @@ package com.rarible.tzkt.api
 
 import java.io.IOException
 
-import com.rarible.tzkt.models.AccountParameter
-import com.rarible.tzkt.models.JsonParameter
-import com.rarible.tzkt.models.NatParameter
-import com.rarible.tzkt.models.OffsetParameter
-import com.rarible.tzkt.models.SelectionParameter
-import com.rarible.tzkt.models.SortParameter
-import com.rarible.tzkt.models.TimestampParameter
-import com.rarible.tzkt.models.TokenStandardParameter
+import com.rarible.tzkt.model.parameters.AccountParameter
+import com.rarible.tzkt.model.parameters.JsonParameter
+import com.rarible.tzkt.model.parameters.NatParameter
+import com.rarible.tzkt.model.parameters.OffsetParameter
+import com.rarible.tzkt.model.parameters.SelectionParameter
+import com.rarible.tzkt.model.parameters.SortParameter
+import com.rarible.tzkt.model.parameters.TimestampParameter
+import com.rarible.tzkt.model.parameters.TokenStandardParameter
 import com.rarible.tzkt.models.Token
 import com.rarible.tzkt.models.TokenBalance
 import com.rarible.tzkt.models.TokenBalanceShort
@@ -46,7 +46,8 @@ import com.rarible.tzkt.infrastructure.RequestConfig
 import com.rarible.tzkt.infrastructure.RequestMethod
 import com.rarible.tzkt.infrastructure.ResponseType
 import com.rarible.tzkt.infrastructure.Success
-import com.rarible.tzkt.models.IntParameter
+import com.rarible.tzkt.model.parameters.IntParameter
+import okhttp3.internal.platform.android.AndroidLogHandler.getFilter
 
 class TokensApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath) {
     companion object {
@@ -167,16 +168,16 @@ class TokensApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath)
                     put("id", listOf(id.toString()))
                 }
                 if (account != null) {
-                    put("account${account.equalityFilterImpl.getFilter()}", listOf(account.equalityFilterImpl.getFilterValue()))
+                    put("account${account.getFilter()}", listOf(account.getFilterValue()))
                 }
                 if (tokenId != null) {
                     put("token.id", listOf(tokenId.toString()))
                 }
                 if (tokenContract != null) {
-                    put("token.contract${tokenContract.equalityFilterImpl.getFilter()}", listOf(tokenContract.equalityFilterImpl.getFilterValue()))
+                    put("token.contract${tokenContract.getFilter()}", listOf(tokenContract.getFilterValue()))
                 }
                 if (tokenTokenId != null) {
-                    put("token.tokenId${tokenTokenId.equalityFilterImpl.getFilter()}", listOf(tokenTokenId.equalityFilterImpl.getFilterValue()))
+                    put("token.tokenId${tokenTokenId.getFilter()}", listOf(tokenTokenId.getFilterValue()))
                 }
                 if (tokenStandard != null) {
                     put("token.standard", listOf(tokenStandard.toString()))

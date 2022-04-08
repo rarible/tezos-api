@@ -23,12 +23,12 @@ package com.rarible.tzkt.api
 import java.io.IOException
 
 import com.rarible.tzkt.models.BakingRight
-import com.rarible.tzkt.models.AccountParameter
-import com.rarible.tzkt.models.BakingRightStatusParameter
-import com.rarible.tzkt.models.BakingRightTypeParameter
-import com.rarible.tzkt.models.OffsetParameter
-import com.rarible.tzkt.models.SelectParameter
-import com.rarible.tzkt.models.SortParameter
+import com.rarible.tzkt.model.parameters.AccountParameter
+import com.rarible.tzkt.model.parameters.BakingRightStatusParameter
+import com.rarible.tzkt.model.parameters.BakingRightTypeParameter
+import com.rarible.tzkt.model.parameters.OffsetParameter
+import com.rarible.tzkt.model.parameters.SelectParameter
+import com.rarible.tzkt.model.parameters.SortParameter
 
 import com.rarible.tzkt.infrastructure.ApiClient
 import com.rarible.tzkt.infrastructure.ApiResponse
@@ -41,7 +41,7 @@ import com.rarible.tzkt.infrastructure.RequestConfig
 import com.rarible.tzkt.infrastructure.RequestMethod
 import com.rarible.tzkt.infrastructure.ResponseType
 import com.rarible.tzkt.infrastructure.Success
-import com.rarible.tzkt.models.IntParameter
+import com.rarible.tzkt.model.parameters.IntParameter
 
 class RightsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath) {
     companion object {

@@ -18,24 +18,46 @@
     "UnusedImport"
 )
 
-package com.rarible.tzkt.models
+package com.rarible.tzkt.model.parameters
 
 
 import com.squareup.moshi.Json
+import com.rarible.tzkt.filters.AsUnlikeFilterImpl
 import com.rarible.tzkt.filters.EqualityFilterImpl
+import com.rarible.tzkt.filters.InclusionFilter
 import com.rarible.tzkt.filters.InclusionFilterImpl
+import com.rarible.tzkt.filters.NullFilterImpl
 
 /**
  * 
  *
- * @param eq **Equal** filter mode (optional, i.e. `param.eq=123` is the same as `param=123`). \\ Specify a migration kind to get items where the specified field is equal to the specified value.  Example: `?kind=bootstrap`.
- * @param ne **Not equal** filter mode. \\ Specify a migration kind to get items where the specified field is not equal to the specified value.  Example: `?type.ne=proposal_invoice`.
- * @param `in` **In list** (any of) filter mode. \\ Specify a comma-separated list of migration kinds to get items where the specified field is equal to one of the specified values.  Example: `?sender.in=bootstrap,proposal_invoice`.
- * @param ni **Not in list** (none of) filter mode. \\ Specify a comma-separated list of migration kinds to get items where the specified field is not equal to all the specified values.  Example: `?sender.ni=airdrop,bootstrap`.
+ * @param eq **Equal** filter mode (optional, i.e. `param.eq=123` is the same as `param=123`). \\ Specify a string to get items where the specified field is equal to the specified value.  Example: `?parameters=abc`.
+ * @param ne **Not equal** filter mode. \\ Specify a string to get items where the specified field is not equal to the specified value.  Example: `?parameters.ne=abc`.
+ * @param `as` **Same as** filter mode. \\ Specify a string template to get items where the specified field matches the specified template. \\ This mode supports wildcard `*`. Use `\\*` as an escape symbol.  Example: `?parameters.as=*mid*` or `?parameters.as=*end`.
+ * @param un **Unlike** filter mode. \\ Specify a string template to get items where the specified field doesn't match the specified template. This mode supports wildcard `*`. Use `\\*` as an escape symbol.  Example: `?parameters.un=*mid*` or `?parameters.un=*end`.
+ * @param `in` **In list** (any of) filter mode. \\ Specify a comma-separated list of strings to get items where the specified field is equal to one of the specified values. \\ Use `\\,` as an escape symbol.  Example: `?errors.in=bla,bal,abl`.
+ * @param ni **Not in list** (none of) filter mode. \\ Specify a comma-separated list of strings to get items where the specified field is not equal to all the specified values. \\ Use `\\,` as an escape symbol.  Example: `?errors.ni=bla,bal,abl`.
+ * @param `null` **Is null** filter mode. \\ Use this mode to get items where the specified field is null or not.  Example: `?parameters.null` or `?parameters.null=false`.
  */
 
-data class MigrationKindParameter (
-    val equalityFilterImpl: EqualityFilterImpl = EqualityFilterImpl(),
-    val inclusionFilterImpl: InclusionFilterImpl = InclusionFilterImpl()
-)
+data class StringParameter (
+    val equalityFilterImpl: EqualityFilterImpl? = null,
+    val asUnlikeFilterImpl: AsUnlikeFilterImpl? = null,
+    val inclusionFilterImpl: InclusionFilterImpl? = null,
+    val nullFilterImpl: NullFilterImpl? = null
+){
+    fun getFilter(): String {
+        return equalityFilterImpl?.getFilter()
+            ?: (asUnlikeFilterImpl?.getFilter()
+                ?: (inclusionFilterImpl?.getFilter()
+                    ?: (nullFilterImpl?.getFilter() ?: "")))
+    }
+
+    fun getFilterValue(): String {
+        return equalityFilterImpl?.getFilterValue()
+            ?: (asUnlikeFilterImpl?.getFilterValue()
+                ?: (inclusionFilterImpl?.getFilterValue()
+                    ?: (nullFilterImpl?.getFilterValue() ?: "")))
+    }
+}
 

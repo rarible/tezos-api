@@ -18,20 +18,33 @@
     "UnusedImport"
 )
 
-package com.rarible.tzkt.models
+package com.rarible.tzkt.model.parameters
 
 
 import com.squareup.moshi.Json
+import com.rarible.tzkt.filters.AnyAllFilterImpl
+import com.rarible.tzkt.filters.EqualityFilterImpl
 
 /**
  * 
  *
- * @param el **Elements** offset mode (optional, i.e. `offset.el=123` is the same as `offset=123`). \\ Skips specified number of elements.  Example: `?offset=100`.
- * @param pg **Page** offset mode. \\ Skips `page * limit` elements. This is a classic pagination.  Example: `?offset.pg=1`.
- * @param cr **Cursor** offset mode. \\ Skips all elements with the `cursor` before (including) the specified value. Cursor is a field used for sorting, e.g. `id`. Avoid using this offset mode with non-unique or non-sequential cursors such as `amount`, `balance`, etc.  Example: `?offset.cr=45837`.
+ * @param eq **Equal** filter mode (optional, i.e. `param.eq=123` is the same as `param=123`). \\ Specify a comma-separated list of bigmap tags to get bigmaps with exactly the same set of tags.  Example: `?tags=metadata` or `?tags=token_metadata,metadata`.
+ * @param any **Has any** filter mode. \\ Specify a comma-separated list of bigmap tags to get bigmaps where at least one of the specified tags is presented.  Example: `?tags=metadata` or `?tags=token_metadata,metadata`.
+ * @param all **Has all** filter mode. \\ Specify a comma-separated list of bigmap tags to get bigmaps where all of the specified tags are presented.  Example: `?tags=metadata` or `?tags=token_metadata,metadata`.
  */
 
-data class OffsetParameter (
-    val offsetParameter: OffsetParameter
-)
+data class BigMapTagsParameter (
+    val equalityFilterImpl: EqualityFilterImpl? = null,
+    val anyAllFilterImpl: AnyAllFilterImpl? = null
+){
+    fun getFilter(): String {
+        return equalityFilterImpl?.getFilter()
+            ?: (anyAllFilterImpl?.getFilter() ?: "")
+    }
+
+    fun getFilterValue(): String {
+        return equalityFilterImpl?.getFilterValue()
+            ?: (anyAllFilterImpl?.getFilterValue() ?: "")
+    }
+}
 

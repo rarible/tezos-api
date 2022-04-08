@@ -18,27 +18,34 @@
     "UnusedImport"
 )
 
-package com.rarible.tzkt.models
+package com.rarible.tzkt.model.parameters
 
 
 import com.squareup.moshi.Json
+import com.rarible.tzkt.filters.EqualityFilterImpl
+import com.rarible.tzkt.filters.InclusionFilterImpl
 
 /**
  * 
  *
- * @param eq **Equal** filter mode (optional, i.e. `param.eq=true` is the same as `param=true`). \\ Specify a bool flag to get items where the specified field is equal to the specified value.  Example: `?active=true` or `?active=1` or `?active`.
- * @param `null` **Is null** filter mode. \\ Use this mode to get items where the specified field is null or not.  Example: `?active.null` or `?active.null=false`.
+ * @param eq **Equal** filter mode (optional, i.e. `param.eq=123` is the same as `param=123`). \\ Specify a contract kind to get items where the specified field is equal to the specified value.  Example: `?kind=smart_contract`.
+ * @param ne **Not equal** filter mode. \\ Specify a contract kind to get items where the specified field is not equal to the specified value.  Example: `?kind.ne=delegator_contract`.
+ * @param `in` **In list** (any of) filter mode. \\ Specify a comma-separated list of contract kinds to get items where the specified field is equal to one of the specified values.  Example: `?kind.in=smart_contract,asset`.
+ * @param ni **Not in list** (none of) filter mode. \\ Specify a comma-separated list of contract kinds to get items where the specified field is not equal to all the specified values.  Example: `?kind.ni=smart_contract,asset`.
  */
 
-data class BoolParameter (
+data class ContractKindParameter (
+    val equalityFilterImpl: EqualityFilterImpl? = null,
+    val inclusionFilterImpl: InclusionFilterImpl? = null
+) {
+    fun getFilter(): String {
+        return equalityFilterImpl?.getFilter()
+            ?: (inclusionFilterImpl?.getFilter() ?: "")
+    }
 
-    /* **Equal** filter mode (optional, i.e. `param.eq=true` is the same as `param=true`). \\ Specify a bool flag to get items where the specified field is equal to the specified value.  Example: `?active=true` or `?active=1` or `?active`. */
-    @Json(name = "eq")
-    val eq: kotlin.Boolean? = null,
-
-    /* **Is null** filter mode. \\ Use this mode to get items where the specified field is null or not.  Example: `?active.null` or `?active.null=false`. */
-    @Json(name = "null")
-    val `null`: kotlin.Boolean? = null
-
-)
+    fun getFilterValue(): String {
+        return equalityFilterImpl?.getFilterValue()
+            ?: (inclusionFilterImpl?.getFilterValue() ?: "")
+    }
+}
 

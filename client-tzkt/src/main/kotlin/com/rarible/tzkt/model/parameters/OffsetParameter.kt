@@ -18,20 +18,25 @@
     "UnusedImport"
 )
 
-package com.rarible.tzkt.models
-
-
-import com.squareup.moshi.Json
-import com.rarible.tzkt.filters.TxFilterImpl
+package com.rarible.tzkt.model.parameters
 
 /**
  * 
  *
- * @param entrypoint Entrypoint called on the target contract
- * @param `value` Value passed to the called entrypoint converted to human-readable JSON. Note: you can configure parameters format by setting `micheline` query parameter.
+ * @param el **Elements** offset mode (optional, i.e. `offset.el=123` is the same as `offset=123`). \\ Skips specified number of elements.  Example: `?offset=100`.
+ * @param pg **Page** offset mode. \\ Skips `page * limit` elements. This is a classic pagination.  Example: `?offset.pg=1`.
+ * @param cr **Cursor** offset mode. \\ Skips all elements with the `cursor` before (including) the specified value. Cursor is a field used for sorting, e.g. `id`. Avoid using this offset mode with non-unique or non-sequential cursors such as `amount`, `balance`, etc.  Example: `?offset.cr=45837`.
  */
 
-data class TxParameter (
-    val txFilterImpl: TxFilterImpl = TxFilterImpl()
-)
+data class OffsetParameter (
+    val offsetParameter: OffsetParameter? = null
+){
+    fun getFilter(): String {
+        return offsetParameter?.getFilter() ?: ""
+    }
+
+    fun getFilterValue(): String {
+        return offsetParameter?.getFilterValue() ?: ""
+    }
+}
 

@@ -18,25 +18,34 @@
     "UnusedImport"
 )
 
-package com.rarible.tzkt.models
+package com.rarible.tzkt.model.parameters
 
 
-import com.rarible.tzkt.filters.ComparisonFilterImpl
+import com.squareup.moshi.Json
+import com.rarible.tzkt.filters.EqualityFilterImpl
+import com.rarible.tzkt.filters.InclusionFilterImpl
 
 /**
  * 
  *
- * @param eq **Equal** filter mode (optional, i.e. `param.eq=2020-01-01` is the same as `param=2020-01-01`). \\ Specify a datetime to get items where the specified field is equal to the specified value.  Example: `?timestamp=2020-02-20T02:40:57Z`.
- * @param ne **Not equal** filter mode. \\ Specify a datetime to get items where the specified field is not equal to the specified value.  Example: `?timestamp.ne=2020-02-20T02:40:57Z`.
- * @param gt **Greater than** filter mode. \\ Specify a datetime to get items where the specified field is greater than the specified value.  Example: `?timestamp.gt=2020-02-20T02:40:57Z`.
- * @param ge **Greater or equal** filter mode. \\ Specify a datetime to get items where the specified field is greater than equal to the specified value.  Example: `?timestamp.ge=2020-02-20T02:40:57Z`.
- * @param lt **Less than** filter mode. \\ Specify a datetime to get items where the specified field is less than the specified value.  Example: `?timestamp.lt=2020-02-20T02:40:57Z`.
- * @param le **Less or equal** filter mode. \\ Specify a datetime to get items where the specified field is less than or equal to the specified value.  Example: `?timestamp.le=2020-02-20T02:40:57Z`.
- * @param `in` **In list** (any of) filter mode. \\ Specify a comma-separated list of datetimes to get items where the specified field is equal to one of the specified values.  Example: `?timestamp.in=2020-02-20,2020-02-21`.
- * @param ni **Not in list** (none of) filter mode. \\ Specify a comma-separated list of datetimes to get items where the specified field is not equal to all the specified values.  Example: `?timestamp.ni=2020-02-20,2020-02-21`.
+ * @param eq **Equal** filter mode (optional, i.e. `param.eq=123` is the same as `param=123`). \\ Specify a protocol hash to get items where the specified field is equal to the specified value.  Example: `?protocol=PsCARTHAGaz...`.
+ * @param ne **Not equal** filter mode. \\ Specify a protocol hash to get items where the specified field is not equal to the specified value.  Example: `?sender.ne=PsBabyM1eUX...`.
+ * @param `in` **In list** (any of) filter mode. \\ Specify a comma-separated list of protocol hashes to get items where the specified field is equal to one of the specified values.  Example: `?sender.in=PsCARTHAGaz,PsBabyM1eUX`.
+ * @param ni **Not in list** (none of) filter mode. \\ Specify a comma-separated list of protocol hashes to get items where the specified field is not equal to all the specified values.  Example: `?sender.ni=PsCARTHAGaz,PsBabyM1eUX`.
  */
 
-data class DateTimeParameter (
-   val dateFilterImpl: ComparisonFilterImpl = ComparisonFilterImpl()
-)
+data class ProtocolParameter (
+    val equalityFilterImpl: EqualityFilterImpl? = null,
+    val inclusionFilterImpl: InclusionFilterImpl? = null
+){
+    fun getFilter(): String {
+        return equalityFilterImpl?.getFilter()
+            ?: (inclusionFilterImpl?.getFilter() ?: "")
+    }
+
+    fun getFilterValue(): String {
+        return equalityFilterImpl?.getFilterValue()
+            ?: (inclusionFilterImpl?.getFilterValue() ?: "")
+    }
+}
 
