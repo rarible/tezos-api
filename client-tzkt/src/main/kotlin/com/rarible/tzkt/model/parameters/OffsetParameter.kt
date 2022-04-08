@@ -20,6 +20,8 @@
 
 package com.rarible.tzkt.model.parameters
 
+import com.rarible.tzkt.filters.OffsetFilterImpl
+
 /**
  * 
  *
@@ -29,14 +31,14 @@ package com.rarible.tzkt.model.parameters
  */
 
 data class OffsetParameter (
-    val offsetParameter: OffsetParameter? = null
+    val offsetFilterImpl: OffsetFilterImpl? = null
 ){
     fun getFilter(): String {
-        return offsetParameter?.getFilter() ?: ""
+        return offsetFilterImpl?.getFilter() ?: ""
     }
 
     fun getFilterValue(): String {
-        return offsetParameter?.getFilterValue() ?: ""
+        return offsetFilterImpl?.getFilterValue() ?: ""
     }
 }
 

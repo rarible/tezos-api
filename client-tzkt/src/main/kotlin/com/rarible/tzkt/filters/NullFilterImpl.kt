@@ -4,7 +4,7 @@ import com.squareup.moshi.Json
 
 class NullFilterImpl: NullFilter {
     @Json(name = "null")
-    override val `null`: Boolean? = null
+    override var `null`: Boolean? = null
 
     override fun getFilter(): String {
         return if(`null` != null){

@@ -34,11 +34,11 @@ import com.squareup.moshi.Json
 
     /* **Ascending** sort mode (optional, i.e. `sort.asc=id` is the same as `sort=id`). \\ Specify a field name to sort by.  Example: `?sort=balance`. */
     @Json(name = "asc")
-    override val asc: kotlin.String? = null
+    override var asc: kotlin.String? = null
 
     /* **Descending** sort mode. \\ Specify a field name to sort by descending.  Example: `?sort.desc=id`. */
     @Json(name = "desc")
-    override val desc: kotlin.String? = null
+    override var desc: kotlin.String? = null
 
     override fun getFilter(): String {
         return if(!asc.isNullOrEmpty()){
@@ -52,9 +52,9 @@ import com.squareup.moshi.Json
 
     override fun getFilterValue(): String {
         return if (!asc.isNullOrEmpty()) {
-            asc
+            asc!!
         } else if (!desc.isNullOrEmpty()) {
-            desc
+            desc!!
         } else {
             ""
         }

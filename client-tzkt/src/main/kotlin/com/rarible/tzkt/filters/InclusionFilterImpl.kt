@@ -9,7 +9,7 @@ class InclusionFilterImpl: InclusionFilter {
 
     /* **Not in list** (none of) filter mode. \\ Specify a comma-separated list of addresses to get items where the specified field is not equal to all the specified values.  Example: `?sender.ni=tz1WnfXMPaNTB,tz1SiPXX4MYGNJND`. */
     @Json(name = "ni")
-    override val ni: List<String>? = null
+    override var ni: List<String>? = null
 
     override fun getFilter(): String{
         return if(!`in`.isNullOrEmpty()){

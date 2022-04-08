@@ -34,11 +34,11 @@ import com.squareup.moshi.Json
 
     /* **Fields** selection mode (optional, i.e. `select.fields=balance` is the same as `select=balance`). \\ Specify a comma-separated list of fields to include into response.  Example: `?select=address,balance as b,metadata.name as meta_name` will result in `[ { \"address\": \"asd\", \"b\": 10, \"meta_name\": \"qwe\" } ]`. */
     @Json(name = "fields")
-    override val fields: kotlin.collections.List<kotlin.String>? = null
+    override var fields: kotlin.collections.List<kotlin.String>? = null
 
     /* **Values** selection mode. \\ Specify a comma-separated list of fields to include their values into response.  Example: `?select.values=address,balance,metadata.name`  will result in `[ [ \"asd\", 10, \"qwe\" ] ]`. */
     @Json(name = "values")
-    override val propertyValues: kotlin.collections.List<kotlin.String>? = null
+    override var propertyValues: kotlin.collections.List<kotlin.String>? = null
 
 
     override fun getFilter(): String {
