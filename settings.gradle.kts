@@ -8,4 +8,4 @@
  */
 
 rootProject.name = "tezos-api"
-include("client-dipdup", "client-dipdup-starter", "listener-dipdup")
+include("client-dipdup", "client-dipdup-starter", "listener-dipdup", "client-tzkt")
