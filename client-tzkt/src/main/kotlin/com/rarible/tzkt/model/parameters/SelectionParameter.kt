@@ -32,7 +32,7 @@ import com.rarible.tzkt.filters.SelectionFilterImpl
  */
 
 data class SelectionParameter (
-    val selectionFilterImpl: SelectionFilterImpl? = null
+    var selectionFilterImpl: SelectionFilterImpl? = null
 ){
     fun getFilter(): String {
         return selectionFilterImpl?.getFilter() ?: ""

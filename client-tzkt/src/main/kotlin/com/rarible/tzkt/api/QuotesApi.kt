@@ -24,7 +24,6 @@ import java.io.IOException
 
 import com.rarible.tzkt.model.parameters.DateTimeParameter
 import com.rarible.tzkt.model.parameters.OffsetParameter
-import com.rarible.tzkt.model.parameters.SelectParameter
 import com.rarible.tzkt.model.parameters.SortParameter
 import com.rarible.tzkt.models.Quote
 
@@ -40,6 +39,7 @@ import com.rarible.tzkt.infrastructure.RequestMethod
 import com.rarible.tzkt.infrastructure.ResponseType
 import com.rarible.tzkt.infrastructure.Success
 import com.rarible.tzkt.model.parameters.IntParameter
+import com.rarible.tzkt.model.parameters.SelectionParameter
 
 class QuotesApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath) {
     companion object {
@@ -67,7 +67,7 @@ class QuotesApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath)
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun quotesGet(level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : kotlin.collections.List<Quote> {
+    fun quotesGet(level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : kotlin.collections.List<Quote> {
         val localVarResponse = quotesGetWithHttpInfo(level = level, timestamp = timestamp, select = select, sort = sort, offset = offset, limit = limit)
 
         return when (localVarResponse.responseType) {
@@ -100,7 +100,7 @@ class QuotesApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath)
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun quotesGetWithHttpInfo(level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : ApiResponse<kotlin.collections.List<Quote>?> {
+    fun quotesGetWithHttpInfo(level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : ApiResponse<kotlin.collections.List<Quote>?> {
         val localVariableConfig = quotesGetRequestConfig(level = level, timestamp = timestamp, select = select, sort = sort, offset = offset, limit = limit)
 
         return request<Unit, kotlin.collections.List<Quote>>(
@@ -119,7 +119,7 @@ class QuotesApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath)
     * @param limit Maximum number of items to return (optional, default to 100)
     * @return RequestConfig
     */
-    fun quotesGetRequestConfig(level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : RequestConfig<Unit> {
+    fun quotesGetRequestConfig(level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {

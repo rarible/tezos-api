@@ -46,8 +46,8 @@ import com.rarible.tzkt.models.MichelineFormat
 import com.rarible.tzkt.model.parameters.OffsetParameter
 import com.rarible.tzkt.models.Operation
 import com.rarible.tzkt.model.parameters.OperationStatusParameter
+import com.rarible.tzkt.model.parameters.SelectionParameter
 import com.rarible.tzkt.models.RelatedContract
-import com.rarible.tzkt.model.parameters.SelectParameter
 import com.rarible.tzkt.models.SortMode
 import com.rarible.tzkt.model.parameters.SortParameter
 import com.rarible.tzkt.model.parameters.StringParameter
@@ -97,7 +97,7 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
         balance: IntParameter?,
         staked: BoolParameter?,
         lastActivity: IntParameter?,
-        select: SelectParameter?,
+        select: SelectionParameter?,
         sort: SortParameter?,
         offset: OffsetParameter?,
         limit: kotlin.Int?
@@ -164,7 +164,7 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
         balance: IntParameter?,
         staked: BoolParameter?,
         lastActivity: IntParameter?,
-        select: SelectParameter?,
+        select: SelectionParameter?,
         sort: SortParameter?,
         offset: OffsetParameter?,
         limit: kotlin.Int?
@@ -209,7 +209,7 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
         balance: IntParameter?,
         staked: BoolParameter?,
         lastActivity: IntParameter?,
-        select: SelectParameter?,
+        select: SelectionParameter?,
         sort: SortParameter?,
         offset: OffsetParameter?,
         limit: kotlin.Int?
@@ -554,7 +554,7 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     fun accountsGetBalanceHistory(
         address: kotlin.String,
         step: kotlin.Int?,
-        select: SelectParameter?,
+        select: SelectionParameter?,
         sort: SortParameter?,
         offset: kotlin.Int?,
         limit: kotlin.Int?,
@@ -612,7 +612,7 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     fun accountsGetBalanceHistoryWithHttpInfo(
         address: kotlin.String,
         step: kotlin.Int?,
-        select: SelectParameter?,
+        select: SelectionParameter?,
         sort: SortParameter?,
         offset: kotlin.Int?,
         limit: kotlin.Int?,
@@ -648,7 +648,7 @@ class AccountsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     fun accountsGetBalanceHistoryRequestConfig(
         address: kotlin.String,
         step: kotlin.Int?,
-        select: SelectParameter?,
+        select: SelectionParameter?,
         sort: SortParameter?,
         offset: kotlin.Int?,
         limit: kotlin.Int?,

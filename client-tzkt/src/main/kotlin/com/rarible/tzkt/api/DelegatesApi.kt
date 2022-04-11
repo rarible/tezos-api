@@ -25,7 +25,6 @@ import java.io.IOException
 import com.rarible.tzkt.models.Delegate
 import com.rarible.tzkt.model.parameters.BoolParameter
 import com.rarible.tzkt.model.parameters.OffsetParameter
-import com.rarible.tzkt.model.parameters.SelectParameter
 import com.rarible.tzkt.model.parameters.SortParameter
 import com.rarible.tzkt.infrastructure.ApiClient
 import com.rarible.tzkt.infrastructure.ApiResponse
@@ -39,6 +38,7 @@ import com.rarible.tzkt.infrastructure.RequestMethod
 import com.rarible.tzkt.infrastructure.ResponseType
 import com.rarible.tzkt.infrastructure.Success
 import com.rarible.tzkt.model.parameters.IntParameter
+import com.rarible.tzkt.model.parameters.SelectionParameter
 
 class DelegatesApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath) {
     companion object {
@@ -66,7 +66,7 @@ class DelegatesApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun delegatesGet(active: BoolParameter?, lastActivity: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : kotlin.collections.List<Delegate> {
+    fun delegatesGet(active: BoolParameter?, lastActivity: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : kotlin.collections.List<Delegate> {
         val localVarResponse = delegatesGetWithHttpInfo(active = active, lastActivity = lastActivity, select = select, sort = sort, offset = offset, limit = limit)
 
         return when (localVarResponse.responseType) {
@@ -99,7 +99,7 @@ class DelegatesApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun delegatesGetWithHttpInfo(active: BoolParameter?, lastActivity: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : ApiResponse<kotlin.collections.List<Delegate>?> {
+    fun delegatesGetWithHttpInfo(active: BoolParameter?, lastActivity: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : ApiResponse<kotlin.collections.List<Delegate>?> {
         val localVariableConfig = delegatesGetRequestConfig(active = active, lastActivity = lastActivity, select = select, sort = sort, offset = offset, limit = limit)
 
         return request<Unit, kotlin.collections.List<Delegate>>(
@@ -118,7 +118,7 @@ class DelegatesApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     * @param limit Maximum number of items to return (optional, default to 100)
     * @return RequestConfig
     */
-    fun delegatesGetRequestConfig(active: BoolParameter?, lastActivity: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : RequestConfig<Unit> {
+    fun delegatesGetRequestConfig(active: BoolParameter?, lastActivity: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {

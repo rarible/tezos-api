@@ -54,10 +54,10 @@ import com.rarible.tzkt.model.parameters.OperationStatusParameter
 import com.rarible.tzkt.models.OriginationOperation
 import com.rarible.tzkt.models.ProposalOperation
 import com.rarible.tzkt.model.parameters.ProtocolParameter
+import com.rarible.tzkt.model.parameters.SelectionParameter
 import com.rarible.tzkt.models.RegisterConstantOperation
 import com.rarible.tzkt.models.RevealOperation
 import com.rarible.tzkt.models.RevelationPenaltyOperation
-import com.rarible.tzkt.model.parameters.SelectParameter
 import com.rarible.tzkt.model.parameters.SortParameter
 import com.rarible.tzkt.model.parameters.StringParameter
 import com.rarible.tzkt.models.Symbols
@@ -170,7 +170,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun operationsGetActivations(account: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<ActivationOperation> {
+    fun operationsGetActivations(account: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<ActivationOperation> {
         val localVarResponse = operationsGetActivationsWithHttpInfo(account = account, level = level, timestamp = timestamp, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return when (localVarResponse.responseType) {
@@ -205,7 +205,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun operationsGetActivationsWithHttpInfo(account: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<ActivationOperation>?> {
+    fun operationsGetActivationsWithHttpInfo(account: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<ActivationOperation>?> {
         val localVariableConfig = operationsGetActivationsRequestConfig(account = account, level = level, timestamp = timestamp, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return request<Unit, kotlin.collections.List<ActivationOperation>>(
@@ -226,7 +226,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
     * @return RequestConfig
     */
-    fun operationsGetActivationsRequestConfig(account: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
+    fun operationsGetActivationsRequestConfig(account: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -368,7 +368,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun operationsGetBaking(baker: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<BakingOperation> {
+    fun operationsGetBaking(baker: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<BakingOperation> {
         val localVarResponse = operationsGetBakingWithHttpInfo(baker = baker, level = level, timestamp = timestamp, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return when (localVarResponse.responseType) {
@@ -403,7 +403,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun operationsGetBakingWithHttpInfo(baker: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<BakingOperation>?> {
+    fun operationsGetBakingWithHttpInfo(baker: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<BakingOperation>?> {
         val localVariableConfig = operationsGetBakingRequestConfig(baker = baker, level = level, timestamp = timestamp, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return request<Unit, kotlin.collections.List<BakingOperation>>(
@@ -424,7 +424,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
     * @return RequestConfig
     */
-    fun operationsGetBakingRequestConfig(baker: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
+    fun operationsGetBakingRequestConfig(baker: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -725,7 +725,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun operationsGetBallots(`delegate`: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, epoch: IntParameter?, period: IntParameter?, proposal: ProtocolParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<BallotOperation> {
+    fun operationsGetBallots(`delegate`: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, epoch: IntParameter?, period: IntParameter?, proposal: ProtocolParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<BallotOperation> {
         val localVarResponse = operationsGetBallotsWithHttpInfo(`delegate` = `delegate`, level = level, timestamp = timestamp, epoch = epoch, period = period, proposal = proposal, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return when (localVarResponse.responseType) {
@@ -763,7 +763,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun operationsGetBallotsWithHttpInfo(`delegate`: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, epoch: IntParameter?, period: IntParameter?, proposal: ProtocolParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<BallotOperation>?> {
+    fun operationsGetBallotsWithHttpInfo(`delegate`: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, epoch: IntParameter?, period: IntParameter?, proposal: ProtocolParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<BallotOperation>?> {
         val localVariableConfig = operationsGetBallotsRequestConfig(`delegate` = `delegate`, level = level, timestamp = timestamp, epoch = epoch, period = period, proposal = proposal, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return request<Unit, kotlin.collections.List<BallotOperation>>(
@@ -787,7 +787,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
     * @return RequestConfig
     */
-    fun operationsGetBallotsRequestConfig(`delegate`: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, epoch: IntParameter?, period: IntParameter?, proposal: ProtocolParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
+    fun operationsGetBallotsRequestConfig(`delegate`: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, epoch: IntParameter?, period: IntParameter?, proposal: ProtocolParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -1282,7 +1282,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun operationsGetDelegations(anyof: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, prevDelegate: AccountParameter?, newDelegate: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<DelegationOperation> {
+    fun operationsGetDelegations(anyof: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, prevDelegate: AccountParameter?, newDelegate: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<DelegationOperation> {
         val localVarResponse = operationsGetDelegationsWithHttpInfo(anyof = anyof, initiator = initiator, sender = sender, prevDelegate = prevDelegate, newDelegate = newDelegate, level = level, timestamp = timestamp, status = status, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return when (localVarResponse.responseType) {
@@ -1322,7 +1322,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun operationsGetDelegationsWithHttpInfo(anyof: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, prevDelegate: AccountParameter?, newDelegate: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<DelegationOperation>?> {
+    fun operationsGetDelegationsWithHttpInfo(anyof: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, prevDelegate: AccountParameter?, newDelegate: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<DelegationOperation>?> {
         val localVariableConfig = operationsGetDelegationsRequestConfig(anyof = anyof, initiator = initiator, sender = sender, prevDelegate = prevDelegate, newDelegate = newDelegate, level = level, timestamp = timestamp, status = status, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return request<Unit, kotlin.collections.List<DelegationOperation>>(
@@ -1348,7 +1348,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
     * @return RequestConfig
     */
-    fun operationsGetDelegationsRequestConfig(anyof: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, prevDelegate: AccountParameter?, newDelegate: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
+    fun operationsGetDelegationsRequestConfig(anyof: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, prevDelegate: AccountParameter?, newDelegate: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -1507,7 +1507,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun operationsGetDoubleBaking(anyof: kotlin.String?, accuser: AccountParameter?, offender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<DoubleBakingOperation> {
+    fun operationsGetDoubleBaking(anyof: kotlin.String?, accuser: AccountParameter?, offender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<DoubleBakingOperation> {
         val localVarResponse = operationsGetDoubleBakingWithHttpInfo(anyof = anyof, accuser = accuser, offender = offender, level = level, timestamp = timestamp, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return when (localVarResponse.responseType) {
@@ -1544,7 +1544,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun operationsGetDoubleBakingWithHttpInfo(anyof: kotlin.String?, accuser: AccountParameter?, offender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<DoubleBakingOperation>?> {
+    fun operationsGetDoubleBakingWithHttpInfo(anyof: kotlin.String?, accuser: AccountParameter?, offender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<DoubleBakingOperation>?> {
         val localVariableConfig = operationsGetDoubleBakingRequestConfig(anyof = anyof, accuser = accuser, offender = offender, level = level, timestamp = timestamp, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return request<Unit, kotlin.collections.List<DoubleBakingOperation>>(
@@ -1567,7 +1567,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
     * @return RequestConfig
     */
-    fun operationsGetDoubleBakingRequestConfig(anyof: kotlin.String?, accuser: AccountParameter?, offender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
+    fun operationsGetDoubleBakingRequestConfig(anyof: kotlin.String?, accuser: AccountParameter?, offender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -1795,7 +1795,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun operationsGetDoubleEndorsing(anyof: kotlin.String?, accuser: AccountParameter?, offender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<DoubleEndorsingOperation> {
+    fun operationsGetDoubleEndorsing(anyof: kotlin.String?, accuser: AccountParameter?, offender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<DoubleEndorsingOperation> {
         val localVarResponse = operationsGetDoubleEndorsingWithHttpInfo(anyof = anyof, accuser = accuser, offender = offender, level = level, timestamp = timestamp, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return when (localVarResponse.responseType) {
@@ -1832,7 +1832,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun operationsGetDoubleEndorsingWithHttpInfo(anyof: kotlin.String?, accuser: AccountParameter?, offender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<DoubleEndorsingOperation>?> {
+    fun operationsGetDoubleEndorsingWithHttpInfo(anyof: kotlin.String?, accuser: AccountParameter?, offender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<DoubleEndorsingOperation>?> {
         val localVariableConfig = operationsGetDoubleEndorsingRequestConfig(anyof = anyof, accuser = accuser, offender = offender, level = level, timestamp = timestamp, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return request<Unit, kotlin.collections.List<DoubleEndorsingOperation>>(
@@ -1855,7 +1855,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
     * @return RequestConfig
     */
-    fun operationsGetDoubleEndorsingRequestConfig(anyof: kotlin.String?, accuser: AccountParameter?, offender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
+    fun operationsGetDoubleEndorsingRequestConfig(anyof: kotlin.String?, accuser: AccountParameter?, offender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -2159,7 +2159,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun operationsGetEndorsements(`delegate`: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<EndorsementOperation> {
+    fun operationsGetEndorsements(`delegate`: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<EndorsementOperation> {
         val localVarResponse = operationsGetEndorsementsWithHttpInfo(`delegate` = `delegate`, level = level, timestamp = timestamp, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return when (localVarResponse.responseType) {
@@ -2194,7 +2194,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun operationsGetEndorsementsWithHttpInfo(`delegate`: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<EndorsementOperation>?> {
+    fun operationsGetEndorsementsWithHttpInfo(`delegate`: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<EndorsementOperation>?> {
         val localVariableConfig = operationsGetEndorsementsRequestConfig(`delegate` = `delegate`, level = level, timestamp = timestamp, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return request<Unit, kotlin.collections.List<EndorsementOperation>>(
@@ -2215,7 +2215,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
     * @return RequestConfig
     */
-    fun operationsGetEndorsementsRequestConfig(`delegate`: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
+    fun operationsGetEndorsementsRequestConfig(`delegate`: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -2445,7 +2445,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun operationsGetMigrations(account: AccountParameter?, kind: MigrationKindParameter?, balanceChange: IntParameter?, id: IntParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : kotlin.collections.List<MigrationOperation> {
+    fun operationsGetMigrations(account: AccountParameter?, kind: MigrationKindParameter?, balanceChange: IntParameter?, id: IntParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : kotlin.collections.List<MigrationOperation> {
         val localVarResponse = operationsGetMigrationsWithHttpInfo(account = account, kind = kind, balanceChange = balanceChange, id = id, level = level, timestamp = timestamp, select = select, sort = sort, offset = offset, limit = limit, micheline = micheline, quote = quote)
 
         return when (localVarResponse.responseType) {
@@ -2484,7 +2484,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun operationsGetMigrationsWithHttpInfo(account: AccountParameter?, kind: MigrationKindParameter?, balanceChange: IntParameter?, id: IntParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : ApiResponse<kotlin.collections.List<MigrationOperation>?> {
+    fun operationsGetMigrationsWithHttpInfo(account: AccountParameter?, kind: MigrationKindParameter?, balanceChange: IntParameter?, id: IntParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : ApiResponse<kotlin.collections.List<MigrationOperation>?> {
         val localVariableConfig = operationsGetMigrationsRequestConfig(account = account, kind = kind, balanceChange = balanceChange, id = id, level = level, timestamp = timestamp, select = select, sort = sort, offset = offset, limit = limit, micheline = micheline, quote = quote)
 
         return request<Unit, kotlin.collections.List<MigrationOperation>>(
@@ -2509,7 +2509,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
     * @return RequestConfig
     */
-    fun operationsGetMigrationsRequestConfig(account: AccountParameter?, kind: MigrationKindParameter?, balanceChange: IntParameter?, id: IntParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : RequestConfig<Unit> {
+    fun operationsGetMigrationsRequestConfig(account: AccountParameter?, kind: MigrationKindParameter?, balanceChange: IntParameter?, id: IntParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -2743,7 +2743,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun operationsGetNonceRevelations(anyof: kotlin.String?, baker: AccountParameter?, sender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<NonceRevelationOperation> {
+    fun operationsGetNonceRevelations(anyof: kotlin.String?, baker: AccountParameter?, sender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<NonceRevelationOperation> {
         val localVarResponse = operationsGetNonceRevelationsWithHttpInfo(anyof = anyof, baker = baker, sender = sender, level = level, timestamp = timestamp, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return when (localVarResponse.responseType) {
@@ -2780,7 +2780,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun operationsGetNonceRevelationsWithHttpInfo(anyof: kotlin.String?, baker: AccountParameter?, sender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<NonceRevelationOperation>?> {
+    fun operationsGetNonceRevelationsWithHttpInfo(anyof: kotlin.String?, baker: AccountParameter?, sender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<NonceRevelationOperation>?> {
         val localVariableConfig = operationsGetNonceRevelationsRequestConfig(anyof = anyof, baker = baker, sender = sender, level = level, timestamp = timestamp, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return request<Unit, kotlin.collections.List<NonceRevelationOperation>>(
@@ -2803,7 +2803,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
     * @return RequestConfig
     */
-    fun operationsGetNonceRevelationsRequestConfig(anyof: kotlin.String?, baker: AccountParameter?, sender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
+    fun operationsGetNonceRevelationsRequestConfig(anyof: kotlin.String?, baker: AccountParameter?, sender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -3045,7 +3045,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun operationsGetOriginations(anyof: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, contractManager: AccountParameter?, contractDelegate: AccountParameter?, originatedContract: AccountParameter?, id: IntParameter?, typeHash: IntParameter?, codeHash: IntParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : kotlin.collections.List<OriginationOperation> {
+    fun operationsGetOriginations(anyof: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, contractManager: AccountParameter?, contractDelegate: AccountParameter?, originatedContract: AccountParameter?, id: IntParameter?, typeHash: IntParameter?, codeHash: IntParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : kotlin.collections.List<OriginationOperation> {
         val localVarResponse = operationsGetOriginationsWithHttpInfo(anyof = anyof, initiator = initiator, sender = sender, contractManager = contractManager, contractDelegate = contractDelegate, originatedContract = originatedContract, id = id, typeHash = typeHash, codeHash = codeHash, level = level, timestamp = timestamp, status = status, select = select, sort = sort, offset = offset, limit = limit, micheline = micheline, quote = quote)
 
         return when (localVarResponse.responseType) {
@@ -3090,7 +3090,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun operationsGetOriginationsWithHttpInfo(anyof: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, contractManager: AccountParameter?, contractDelegate: AccountParameter?, originatedContract: AccountParameter?, id: IntParameter?, typeHash: IntParameter?, codeHash: IntParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : ApiResponse<kotlin.collections.List<OriginationOperation>?> {
+    fun operationsGetOriginationsWithHttpInfo(anyof: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, contractManager: AccountParameter?, contractDelegate: AccountParameter?, originatedContract: AccountParameter?, id: IntParameter?, typeHash: IntParameter?, codeHash: IntParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : ApiResponse<kotlin.collections.List<OriginationOperation>?> {
         val localVariableConfig = operationsGetOriginationsRequestConfig(anyof = anyof, initiator = initiator, sender = sender, contractManager = contractManager, contractDelegate = contractDelegate, originatedContract = originatedContract, id = id, typeHash = typeHash, codeHash = codeHash, level = level, timestamp = timestamp, status = status, select = select, sort = sort, offset = offset, limit = limit, micheline = micheline, quote = quote)
 
         return request<Unit, kotlin.collections.List<OriginationOperation>>(
@@ -3121,7 +3121,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
     * @return RequestConfig
     */
-    fun operationsGetOriginationsRequestConfig(anyof: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, contractManager: AccountParameter?, contractDelegate: AccountParameter?, originatedContract: AccountParameter?, id: IntParameter?, typeHash: IntParameter?, codeHash: IntParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : RequestConfig<Unit> {
+    fun operationsGetOriginationsRequestConfig(anyof: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, contractManager: AccountParameter?, contractDelegate: AccountParameter?, originatedContract: AccountParameter?, id: IntParameter?, typeHash: IntParameter?, codeHash: IntParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -3375,7 +3375,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun operationsGetProposals(`delegate`: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, epoch: IntParameter?, period: IntParameter?, proposal: ProtocolParameter?, duplicated: BoolParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<ProposalOperation> {
+    fun operationsGetProposals(`delegate`: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, epoch: IntParameter?, period: IntParameter?, proposal: ProtocolParameter?, duplicated: BoolParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<ProposalOperation> {
         val localVarResponse = operationsGetProposalsWithHttpInfo(`delegate` = `delegate`, level = level, timestamp = timestamp, epoch = epoch, period = period, proposal = proposal, duplicated = duplicated, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return when (localVarResponse.responseType) {
@@ -3414,7 +3414,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun operationsGetProposalsWithHttpInfo(`delegate`: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, epoch: IntParameter?, period: IntParameter?, proposal: ProtocolParameter?, duplicated: BoolParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<ProposalOperation>?> {
+    fun operationsGetProposalsWithHttpInfo(`delegate`: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, epoch: IntParameter?, period: IntParameter?, proposal: ProtocolParameter?, duplicated: BoolParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<ProposalOperation>?> {
         val localVariableConfig = operationsGetProposalsRequestConfig(`delegate` = `delegate`, level = level, timestamp = timestamp, epoch = epoch, period = period, proposal = proposal, duplicated = duplicated, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return request<Unit, kotlin.collections.List<ProposalOperation>>(
@@ -3439,7 +3439,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
     * @return RequestConfig
     */
-    fun operationsGetProposalsRequestConfig(`delegate`: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, epoch: IntParameter?, period: IntParameter?, proposal: ProtocolParameter?, duplicated: BoolParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
+    fun operationsGetProposalsRequestConfig(`delegate`: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, epoch: IntParameter?, period: IntParameter?, proposal: ProtocolParameter?, duplicated: BoolParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -3680,7 +3680,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun operationsGetRegisterConstants(sender: AccountParameter?, address: ExpressionParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : kotlin.collections.List<RegisterConstantOperation> {
+    fun operationsGetRegisterConstants(sender: AccountParameter?, address: ExpressionParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : kotlin.collections.List<RegisterConstantOperation> {
         val localVarResponse = operationsGetRegisterConstantsWithHttpInfo(sender = sender, address = address, level = level, timestamp = timestamp, status = status, select = select, sort = sort, offset = offset, limit = limit, micheline = micheline, quote = quote)
 
         return when (localVarResponse.responseType) {
@@ -3718,7 +3718,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun operationsGetRegisterConstantsWithHttpInfo(sender: AccountParameter?, address: ExpressionParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : ApiResponse<kotlin.collections.List<RegisterConstantOperation>?> {
+    fun operationsGetRegisterConstantsWithHttpInfo(sender: AccountParameter?, address: ExpressionParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : ApiResponse<kotlin.collections.List<RegisterConstantOperation>?> {
         val localVariableConfig = operationsGetRegisterConstantsRequestConfig(sender = sender, address = address, level = level, timestamp = timestamp, status = status, select = select, sort = sort, offset = offset, limit = limit, micheline = micheline, quote = quote)
 
         return request<Unit, kotlin.collections.List<RegisterConstantOperation>>(
@@ -3742,7 +3742,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
     * @return RequestConfig
     */
-    fun operationsGetRegisterConstantsRequestConfig(sender: AccountParameter?, address: ExpressionParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : RequestConfig<Unit> {
+    fun operationsGetRegisterConstantsRequestConfig(sender: AccountParameter?, address: ExpressionParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -3972,7 +3972,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun operationsGetReveals(sender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<RevealOperation> {
+    fun operationsGetReveals(sender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<RevealOperation> {
         val localVarResponse = operationsGetRevealsWithHttpInfo(sender = sender, level = level, timestamp = timestamp, status = status, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return when (localVarResponse.responseType) {
@@ -4008,7 +4008,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun operationsGetRevealsWithHttpInfo(sender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<RevealOperation>?> {
+    fun operationsGetRevealsWithHttpInfo(sender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<RevealOperation>?> {
         val localVariableConfig = operationsGetRevealsRequestConfig(sender = sender, level = level, timestamp = timestamp, status = status, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return request<Unit, kotlin.collections.List<RevealOperation>>(
@@ -4030,7 +4030,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
     * @return RequestConfig
     */
-    fun operationsGetRevealsRequestConfig(sender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
+    fun operationsGetRevealsRequestConfig(sender: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, status: OperationStatusParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -4175,7 +4175,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun operationsGetRevelationPenalties(baker: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<RevelationPenaltyOperation> {
+    fun operationsGetRevelationPenalties(baker: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<RevelationPenaltyOperation> {
         val localVarResponse = operationsGetRevelationPenaltiesWithHttpInfo(baker = baker, level = level, timestamp = timestamp, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return when (localVarResponse.responseType) {
@@ -4210,7 +4210,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun operationsGetRevelationPenaltiesWithHttpInfo(baker: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<RevelationPenaltyOperation>?> {
+    fun operationsGetRevelationPenaltiesWithHttpInfo(baker: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<RevelationPenaltyOperation>?> {
         val localVariableConfig = operationsGetRevelationPenaltiesRequestConfig(baker = baker, level = level, timestamp = timestamp, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return request<Unit, kotlin.collections.List<RevelationPenaltyOperation>>(
@@ -4231,7 +4231,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
     * @return RequestConfig
     */
-    fun operationsGetRevelationPenaltiesRequestConfig(baker: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
+    fun operationsGetRevelationPenaltiesRequestConfig(baker: AccountParameter?, level: IntParameter?, timestamp: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -4722,7 +4722,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun operationsGetTransactions(anyof: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, target: AccountParameter?, amount: IntParameter?, id: IntParameter?, level: IntParameter?, timestamp: DateTimeParameter?, entrypoint: StringParameter?, parameter: JsonParameter?, hasInternals: BoolParameter?, status: OperationStatusParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : kotlin.collections.List<TransactionOperation> {
+    fun operationsGetTransactions(anyof: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, target: AccountParameter?, amount: IntParameter?, id: IntParameter?, level: IntParameter?, timestamp: DateTimeParameter?, entrypoint: StringParameter?, parameter: JsonParameter?, hasInternals: BoolParameter?, status: OperationStatusParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : kotlin.collections.List<TransactionOperation> {
         val localVarResponse = operationsGetTransactionsWithHttpInfo(anyof = anyof, initiator = initiator, sender = sender, target = target, amount = amount, id = id, level = level, timestamp = timestamp, entrypoint = entrypoint, parameter = parameter, hasInternals = hasInternals, status = status, select = select, sort = sort, offset = offset, limit = limit, micheline = micheline, quote = quote)
 
         return when (localVarResponse.responseType) {
@@ -4767,7 +4767,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun operationsGetTransactionsWithHttpInfo(anyof: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, target: AccountParameter?, amount: IntParameter?, id: IntParameter?, level: IntParameter?, timestamp: DateTimeParameter?, entrypoint: StringParameter?, parameter: JsonParameter?, hasInternals: BoolParameter?, status: OperationStatusParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : ApiResponse<kotlin.collections.List<TransactionOperation>?> {
+    fun operationsGetTransactionsWithHttpInfo(anyof: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, target: AccountParameter?, amount: IntParameter?, id: IntParameter?, level: IntParameter?, timestamp: DateTimeParameter?, entrypoint: StringParameter?, parameter: JsonParameter?, hasInternals: BoolParameter?, status: OperationStatusParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : ApiResponse<kotlin.collections.List<TransactionOperation>?> {
         val localVariableConfig = operationsGetTransactionsRequestConfig(anyof = anyof, initiator = initiator, sender = sender, target = target, amount = amount, id = id, level = level, timestamp = timestamp, entrypoint = entrypoint, parameter = parameter, hasInternals = hasInternals, status = status, select = select, sort = sort, offset = offset, limit = limit, micheline = micheline, quote = quote)
 
         return request<Unit, kotlin.collections.List<TransactionOperation>>(
@@ -4798,7 +4798,7 @@ class OperationsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
     * @return RequestConfig
     */
-    fun operationsGetTransactionsRequestConfig(anyof: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, target: AccountParameter?, amount: IntParameter?, id: IntParameter?, level: IntParameter?, timestamp: DateTimeParameter?, entrypoint: StringParameter?, parameter: JsonParameter?, hasInternals: BoolParameter?, status: OperationStatusParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : RequestConfig<Unit> {
+    fun operationsGetTransactionsRequestConfig(anyof: kotlin.String?, initiator: AccountParameter?, sender: AccountParameter?, target: AccountParameter?, amount: IntParameter?, id: IntParameter?, level: IntParameter?, timestamp: DateTimeParameter?, entrypoint: StringParameter?, parameter: JsonParameter?, hasInternals: BoolParameter?, status: OperationStatusParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?, quote: Symbols?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {

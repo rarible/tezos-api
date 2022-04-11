@@ -23,7 +23,6 @@ package com.rarible.tzkt.api
 import java.io.IOException
 
 import com.rarible.tzkt.model.parameters.OffsetParameter
-import com.rarible.tzkt.model.parameters.SelectParameter
 import com.rarible.tzkt.model.parameters.SortParameter
 import com.rarible.tzkt.models.Software
 
@@ -38,6 +37,7 @@ import com.rarible.tzkt.infrastructure.RequestConfig
 import com.rarible.tzkt.infrastructure.RequestMethod
 import com.rarible.tzkt.infrastructure.ResponseType
 import com.rarible.tzkt.infrastructure.Success
+import com.rarible.tzkt.model.parameters.SelectionParameter
 
 class SoftwareApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath) {
     companion object {
@@ -63,7 +63,7 @@ class SoftwareApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun softwareGet(select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : kotlin.collections.List<Software> {
+    fun softwareGet(select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : kotlin.collections.List<Software> {
         val localVarResponse = softwareGetWithHttpInfo(select = select, sort = sort, offset = offset, limit = limit)
 
         return when (localVarResponse.responseType) {
@@ -94,7 +94,7 @@ class SoftwareApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun softwareGetWithHttpInfo(select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : ApiResponse<kotlin.collections.List<Software>?> {
+    fun softwareGetWithHttpInfo(select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : ApiResponse<kotlin.collections.List<Software>?> {
         val localVariableConfig = softwareGetRequestConfig(select = select, sort = sort, offset = offset, limit = limit)
 
         return request<Unit, kotlin.collections.List<Software>>(
@@ -111,7 +111,7 @@ class SoftwareApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     * @param limit Maximum number of items to return (optional, default to 100)
     * @return RequestConfig
     */
-    fun softwareGetRequestConfig(select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : RequestConfig<Unit> {
+    fun softwareGetRequestConfig(select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {

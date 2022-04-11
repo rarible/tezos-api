@@ -38,7 +38,6 @@ import com.rarible.tzkt.model.parameters.IntParameter
 import com.rarible.tzkt.model.parameters.JsonParameter
 import com.rarible.tzkt.models.MichelineFormat
 import com.rarible.tzkt.model.parameters.OffsetParameter
-import com.rarible.tzkt.model.parameters.SelectParameter
 import com.rarible.tzkt.model.parameters.SortParameter
 import com.rarible.tzkt.models.StorageRecord
 
@@ -53,6 +52,7 @@ import com.rarible.tzkt.infrastructure.RequestConfig
 import com.rarible.tzkt.infrastructure.RequestMethod
 import com.rarible.tzkt.infrastructure.ResponseType
 import com.rarible.tzkt.infrastructure.Success
+import com.rarible.tzkt.model.parameters.SelectionParameter
 
 class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath) {
     companion object {
@@ -243,7 +243,7 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun contractsGet(kind: ContractKindParameter?, creator: AccountParameter?, manager: AccountParameter?, `delegate`: AccountParameter?, balance: IntParameter?, lastActivity: IntParameter?, typeHash: IntParameter?, codeHash: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, includeStorage: kotlin.Boolean?) : kotlin.collections.List<Contract> {
+    fun contractsGet(kind: ContractKindParameter?, creator: AccountParameter?, manager: AccountParameter?, `delegate`: AccountParameter?, balance: IntParameter?, lastActivity: IntParameter?, typeHash: IntParameter?, codeHash: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, includeStorage: kotlin.Boolean?) : kotlin.collections.List<Contract> {
         val localVarResponse = contractsGetWithHttpInfo(kind = kind, creator = creator, manager = manager, `delegate` = `delegate`, balance = balance, lastActivity = lastActivity, typeHash = typeHash, codeHash = codeHash, select = select, sort = sort, offset = offset, limit = limit, includeStorage = includeStorage)
 
         return when (localVarResponse.responseType) {
@@ -283,7 +283,7 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun contractsGetWithHttpInfo(kind: ContractKindParameter?, creator: AccountParameter?, manager: AccountParameter?, `delegate`: AccountParameter?, balance: IntParameter?, lastActivity: IntParameter?, typeHash: IntParameter?, codeHash: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, includeStorage: kotlin.Boolean?) : ApiResponse<kotlin.collections.List<Contract>?> {
+    fun contractsGetWithHttpInfo(kind: ContractKindParameter?, creator: AccountParameter?, manager: AccountParameter?, `delegate`: AccountParameter?, balance: IntParameter?, lastActivity: IntParameter?, typeHash: IntParameter?, codeHash: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, includeStorage: kotlin.Boolean?) : ApiResponse<kotlin.collections.List<Contract>?> {
         val localVariableConfig = contractsGetRequestConfig(kind = kind, creator = creator, manager = manager, `delegate` = `delegate`, balance = balance, lastActivity = lastActivity, typeHash = typeHash, codeHash = codeHash, select = select, sort = sort, offset = offset, limit = limit, includeStorage = includeStorage)
 
         return request<Unit, kotlin.collections.List<Contract>>(
@@ -309,42 +309,42 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     * @param includeStorage Specifies whether to include contract storage value in response. (optional, default to false)
     * @return RequestConfig
     */
-    fun contractsGetRequestConfig(kind: ContractKindParameter?, creator: AccountParameter?, manager: AccountParameter?, `delegate`: AccountParameter?, balance: IntParameter?, lastActivity: IntParameter?, typeHash: IntParameter?, codeHash: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, includeStorage: kotlin.Boolean?) : RequestConfig<Unit> {
+    fun contractsGetRequestConfig(kind: ContractKindParameter?, creator: AccountParameter?, manager: AccountParameter?, `delegate`: AccountParameter?, balance: IntParameter?, lastActivity: IntParameter?, typeHash: IntParameter?, codeHash: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, includeStorage: kotlin.Boolean?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
                 if (kind != null) {
-                    put("kind", listOf(kind.toString()))
+                    put("kind${kind.getFilter()}", listOf(kind.getFilterValue()))
                 }
                 if (creator != null) {
-                    put("creator", listOf(creator.toString()))
+                    put("creator${creator.getFilter()}", listOf(creator.getFilterValue()))
                 }
                 if (manager != null) {
-                    put("manager", listOf(manager.toString()))
+                    put("manager${manager.getFilter()}", listOf(manager.getFilterValue()))
                 }
                 if (`delegate` != null) {
-                    put("delegate", listOf(`delegate`.toString()))
+                    put("delegate${delegate.getFilter()}", listOf(`delegate`.getFilterValue()))
                 }
                 if (balance != null) {
-                    put("balance", listOf(balance.toString()))
+                    put("balance${balance.getFilter()}", listOf(balance.getFilterValue()))
                 }
                 if (lastActivity != null) {
-                    put("lastActivity", listOf(lastActivity.toString()))
+                    put("lastActivity${lastActivity.getFilter()}", listOf(lastActivity.getFilterValue()))
                 }
                 if (typeHash != null) {
-                    put("typeHash", listOf(typeHash.toString()))
+                    put("typeHash${typeHash.getFilter()}", listOf(typeHash.getFilterValue()))
                 }
                 if (codeHash != null) {
-                    put("codeHash", listOf(codeHash.toString()))
+                    put("codeHash${codeHash.getFilter()}", listOf(codeHash.getFilterValue()))
                 }
                 if (select != null) {
-                    put("select", listOf(select.toString()))
+                    put("select${select.getFilter()}", listOf(select.getFilterValue()))
                 }
                 if (sort != null) {
-                    put("sort", listOf(sort.toString()))
+                    put("sort${sort.getFilter()}", listOf(sort.getFilterValue()))
                 }
                 if (offset != null) {
-                    put("offset", listOf(offset.toString()))
+                    put("offset${offset.getFilter()}", listOf(offset.getFilterValue()))
                 }
                 if (limit != null) {
                     put("limit", listOf(limit.toString()))
@@ -469,7 +469,7 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun contractsGetBigMapByNameKeys(address: kotlin.String, name: kotlin.String, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, lastLevel: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : kotlin.collections.List<BigMapKey> {
+    fun contractsGetBigMapByNameKeys(address: kotlin.String, name: kotlin.String, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, lastLevel: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : kotlin.collections.List<BigMapKey> {
         val localVarResponse = contractsGetBigMapByNameKeysWithHttpInfo(address = address, name = name, active = active, key = key, `value` = `value`, lastLevel = lastLevel, select = select, sort = sort, offset = offset, limit = limit, micheline = micheline)
 
         return when (localVarResponse.responseType) {
@@ -507,7 +507,7 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun contractsGetBigMapByNameKeysWithHttpInfo(address: kotlin.String, name: kotlin.String, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, lastLevel: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : ApiResponse<kotlin.collections.List<BigMapKey>?> {
+    fun contractsGetBigMapByNameKeysWithHttpInfo(address: kotlin.String, name: kotlin.String, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, lastLevel: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : ApiResponse<kotlin.collections.List<BigMapKey>?> {
         val localVariableConfig = contractsGetBigMapByNameKeysRequestConfig(address = address, name = name, active = active, key = key, `value` = `value`, lastLevel = lastLevel, select = select, sort = sort, offset = offset, limit = limit, micheline = micheline)
 
         return request<Unit, kotlin.collections.List<BigMapKey>>(
@@ -531,7 +531,7 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     * @param micheline Format of the bigmap key and value: &#x60;0&#x60; - JSON, &#x60;1&#x60; - JSON string, &#x60;2&#x60; - Micheline, &#x60;3&#x60; - Micheline string (optional)
     * @return RequestConfig
     */
-    fun contractsGetBigMapByNameKeysRequestConfig(address: kotlin.String, name: kotlin.String, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, lastLevel: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : RequestConfig<Unit> {
+    fun contractsGetBigMapByNameKeysRequestConfig(address: kotlin.String, name: kotlin.String, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, lastLevel: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -539,22 +539,22 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
                     put("active", listOf(active.toString()))
                 }
                 if (key != null) {
-                    put("key", listOf(key.toString()))
+                    put("key${key.getFilter()}", listOf(key.getFilterValue()))
                 }
                 if (`value` != null) {
-                    put("value", listOf(`value`.toString()))
+                    put("value${value.getFilter()}", listOf(`value`.getFilterValue()))
                 }
                 if (lastLevel != null) {
-                    put("lastLevel", listOf(lastLevel.toString()))
+                    put("lastLevel${lastLevel.getFilter()}", listOf(lastLevel.getFilterValue()))
                 }
                 if (select != null) {
-                    put("select", listOf(select.toString()))
+                    put("select${select.getFilter()}", listOf(select.getFilterValue()))
                 }
                 if (sort != null) {
-                    put("sort", listOf(sort.toString()))
+                    put("sort${sort.getFilter()}", listOf(sort.getFilterValue()))
                 }
                 if (offset != null) {
-                    put("offset", listOf(offset.toString()))
+                    put("offset${offset.getFilter()}", listOf(offset.getFilterValue()))
                 }
                 if (limit != null) {
                     put("limit", listOf(limit.toString()))
@@ -594,7 +594,7 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun contractsGetBigMaps(address: kotlin.String, tags: BigMapTagsParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : kotlin.collections.List<BigMap> {
+    fun contractsGetBigMaps(address: kotlin.String, tags: BigMapTagsParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : kotlin.collections.List<BigMap> {
         val localVarResponse = contractsGetBigMapsWithHttpInfo(address = address, tags = tags, select = select, sort = sort, offset = offset, limit = limit, micheline = micheline)
 
         return when (localVarResponse.responseType) {
@@ -628,7 +628,7 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun contractsGetBigMapsWithHttpInfo(address: kotlin.String, tags: BigMapTagsParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : ApiResponse<kotlin.collections.List<BigMap>?> {
+    fun contractsGetBigMapsWithHttpInfo(address: kotlin.String, tags: BigMapTagsParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : ApiResponse<kotlin.collections.List<BigMap>?> {
         val localVariableConfig = contractsGetBigMapsRequestConfig(address = address, tags = tags, select = select, sort = sort, offset = offset, limit = limit, micheline = micheline)
 
         return request<Unit, kotlin.collections.List<BigMap>>(
@@ -648,21 +648,21 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     * @param micheline Format of the bigmap key and value: &#x60;0&#x60; - JSON, &#x60;1&#x60; - JSON string, &#x60;2&#x60; - Micheline, &#x60;3&#x60; - Micheline string (optional)
     * @return RequestConfig
     */
-    fun contractsGetBigMapsRequestConfig(address: kotlin.String, tags: BigMapTagsParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : RequestConfig<Unit> {
+    fun contractsGetBigMapsRequestConfig(address: kotlin.String, tags: BigMapTagsParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
                 if (tags != null) {
-                    put("tags", listOf(tags.toString()))
+                    put("tags${tags.getFilter()}", listOf(tags.getFilterValue()))
                 }
                 if (select != null) {
-                    put("select", listOf(select.toString()))
+                    put("select${select.getFilter()}", listOf(select.getFilterValue()))
                 }
                 if (sort != null) {
-                    put("sort", listOf(sort.toString()))
+                    put("sort${sort.getFilter()}", listOf(sort.getFilterValue()))
                 }
                 if (offset != null) {
-                    put("offset", listOf(offset.toString()))
+                    put("offset${offset.getFilter()}", listOf(offset.getFilterValue()))
                 }
                 if (limit != null) {
                     put("limit", listOf(limit.toString()))
@@ -1079,7 +1079,7 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
                 if (kind != null) {
-                    put("kind", listOf(kind.toString()))
+                    put("kind${kind.getFilter()}", listOf(kind.getFilterValue()))
                 }
             }
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
@@ -1306,7 +1306,7 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun contractsGetHistoricalKeys(address: kotlin.String, name: kotlin.String, level: kotlin.Int, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : kotlin.collections.List<BigMapKeyHistorical> {
+    fun contractsGetHistoricalKeys(address: kotlin.String, name: kotlin.String, level: kotlin.Int, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : kotlin.collections.List<BigMapKeyHistorical> {
         val localVarResponse = contractsGetHistoricalKeysWithHttpInfo(address = address, name = name, level = level, active = active, key = key, `value` = `value`, select = select, sort = sort, offset = offset, limit = limit, micheline = micheline)
 
         return when (localVarResponse.responseType) {
@@ -1344,7 +1344,7 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun contractsGetHistoricalKeysWithHttpInfo(address: kotlin.String, name: kotlin.String, level: kotlin.Int, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : ApiResponse<kotlin.collections.List<BigMapKeyHistorical>?> {
+    fun contractsGetHistoricalKeysWithHttpInfo(address: kotlin.String, name: kotlin.String, level: kotlin.Int, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : ApiResponse<kotlin.collections.List<BigMapKeyHistorical>?> {
         val localVariableConfig = contractsGetHistoricalKeysRequestConfig(address = address, name = name, level = level, active = active, key = key, `value` = `value`, select = select, sort = sort, offset = offset, limit = limit, micheline = micheline)
 
         return request<Unit, kotlin.collections.List<BigMapKeyHistorical>>(
@@ -1368,7 +1368,7 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     * @param micheline Format of the bigmap key and value: &#x60;0&#x60; - JSON, &#x60;1&#x60; - JSON string, &#x60;2&#x60; - Micheline, &#x60;3&#x60; - Micheline string (optional)
     * @return RequestConfig
     */
-    fun contractsGetHistoricalKeysRequestConfig(address: kotlin.String, name: kotlin.String, level: kotlin.Int, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : RequestConfig<Unit> {
+    fun contractsGetHistoricalKeysRequestConfig(address: kotlin.String, name: kotlin.String, level: kotlin.Int, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -1728,10 +1728,10 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
                 if (sort != null) {
-                    put("sort", listOf(sort.toString()))
+                    put("sort${sort.getFilter()}", listOf(sort.getFilterValue()))
                 }
                 if (offset != null) {
-                    put("offset", listOf(offset.toString()))
+                    put("offset${offset.getFilter()}", listOf(offset.getFilterValue()))
                 }
                 if (limit != null) {
                     put("limit", listOf(limit.toString()))
@@ -2010,7 +2010,7 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun contractsGetSame(address: kotlin.String, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, includeStorage: kotlin.Boolean?) : kotlin.collections.List<Contract> {
+    fun contractsGetSame(address: kotlin.String, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, includeStorage: kotlin.Boolean?) : kotlin.collections.List<Contract> {
         val localVarResponse = contractsGetSameWithHttpInfo(address = address, select = select, sort = sort, offset = offset, limit = limit, includeStorage = includeStorage)
 
         return when (localVarResponse.responseType) {
@@ -2043,7 +2043,7 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun contractsGetSameWithHttpInfo(address: kotlin.String, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, includeStorage: kotlin.Boolean?) : ApiResponse<kotlin.collections.List<Contract>?> {
+    fun contractsGetSameWithHttpInfo(address: kotlin.String, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, includeStorage: kotlin.Boolean?) : ApiResponse<kotlin.collections.List<Contract>?> {
         val localVariableConfig = contractsGetSameRequestConfig(address = address, select = select, sort = sort, offset = offset, limit = limit, includeStorage = includeStorage)
 
         return request<Unit, kotlin.collections.List<Contract>>(
@@ -2062,18 +2062,18 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     * @param includeStorage Specifies whether to include contract storage value in response. (optional, default to false)
     * @return RequestConfig
     */
-    fun contractsGetSameRequestConfig(address: kotlin.String, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, includeStorage: kotlin.Boolean?) : RequestConfig<Unit> {
+    fun contractsGetSameRequestConfig(address: kotlin.String, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, includeStorage: kotlin.Boolean?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
                 if (select != null) {
-                    put("select", listOf(select.toString()))
+                    put("select${select.getFilter()}", listOf(select.getFilterValue()))
                 }
                 if (sort != null) {
-                    put("sort", listOf(sort.toString()))
+                    put("sort${sort.getFilter()}", listOf(sort.getFilterValue()))
                 }
                 if (offset != null) {
-                    put("offset", listOf(offset.toString()))
+                    put("offset${offset.getFilter()}", listOf(offset.getFilterValue()))
                 }
                 if (limit != null) {
                     put("limit", listOf(limit.toString()))
@@ -2112,7 +2112,7 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun contractsGetSimilar(address: kotlin.String, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, includeStorage: kotlin.Boolean?) : kotlin.collections.List<Contract> {
+    fun contractsGetSimilar(address: kotlin.String, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, includeStorage: kotlin.Boolean?) : kotlin.collections.List<Contract> {
         val localVarResponse = contractsGetSimilarWithHttpInfo(address = address, select = select, sort = sort, offset = offset, limit = limit, includeStorage = includeStorage)
 
         return when (localVarResponse.responseType) {
@@ -2145,7 +2145,7 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun contractsGetSimilarWithHttpInfo(address: kotlin.String, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, includeStorage: kotlin.Boolean?) : ApiResponse<kotlin.collections.List<Contract>?> {
+    fun contractsGetSimilarWithHttpInfo(address: kotlin.String, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, includeStorage: kotlin.Boolean?) : ApiResponse<kotlin.collections.List<Contract>?> {
         val localVariableConfig = contractsGetSimilarRequestConfig(address = address, select = select, sort = sort, offset = offset, limit = limit, includeStorage = includeStorage)
 
         return request<Unit, kotlin.collections.List<Contract>>(
@@ -2164,18 +2164,18 @@ class ContractsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePa
     * @param includeStorage Specifies whether to include contract storage value in response. (optional, default to false)
     * @return RequestConfig
     */
-    fun contractsGetSimilarRequestConfig(address: kotlin.String, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, includeStorage: kotlin.Boolean?) : RequestConfig<Unit> {
+    fun contractsGetSimilarRequestConfig(address: kotlin.String, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, includeStorage: kotlin.Boolean?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
                 if (select != null) {
-                    put("select", listOf(select.toString()))
+                    put("select${select.getFilter()}", listOf(select.getFilterValue()))
                 }
                 if (sort != null) {
-                    put("sort", listOf(sort.toString()))
+                    put("sort${sort.getFilter()}", listOf(sort.getFilterValue()))
                 }
                 if (offset != null) {
-                    put("offset", listOf(offset.toString()))
+                    put("offset${offset.getFilter()}", listOf(offset.getFilterValue()))
                 }
                 if (limit != null) {
                     put("limit", listOf(limit.toString()))

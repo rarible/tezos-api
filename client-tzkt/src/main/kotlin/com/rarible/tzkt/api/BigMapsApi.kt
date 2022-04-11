@@ -44,7 +44,7 @@ import com.rarible.tzkt.model.parameters.JsonParameter
 import com.rarible.tzkt.models.MichelineFormat
 import com.rarible.tzkt.models.MichelinePrim
 import com.rarible.tzkt.model.parameters.OffsetParameter
-import com.rarible.tzkt.model.parameters.SelectParameter
+import com.rarible.tzkt.model.parameters.SelectionParameter
 import com.rarible.tzkt.model.parameters.SortParameter
 import com.rarible.tzkt.model.parameters.StringParameter
 import com.rarible.tzkt.model.parameters.TimestampParameter
@@ -370,7 +370,7 @@ class BigMapsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun bigMapsGetBigMaps(contract: AccountParameter?, path: StringParameter?, tags: BigMapTagsParameter?, active: kotlin.Boolean?, lastLevel: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : kotlin.collections.List<BigMap> {
+    fun bigMapsGetBigMaps(contract: AccountParameter?, path: StringParameter?, tags: BigMapTagsParameter?, active: kotlin.Boolean?, lastLevel: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : kotlin.collections.List<BigMap> {
         val localVarResponse = bigMapsGetBigMapsWithHttpInfo(contract = contract, path = path, tags = tags, active = active, lastLevel = lastLevel, select = select, sort = sort, offset = offset, limit = limit, micheline = micheline)
 
         return when (localVarResponse.responseType) {
@@ -407,7 +407,7 @@ class BigMapsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun bigMapsGetBigMapsWithHttpInfo(contract: AccountParameter?, path: StringParameter?, tags: BigMapTagsParameter?, active: kotlin.Boolean?, lastLevel: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : ApiResponse<kotlin.collections.List<BigMap>?> {
+    fun bigMapsGetBigMapsWithHttpInfo(contract: AccountParameter?, path: StringParameter?, tags: BigMapTagsParameter?, active: kotlin.Boolean?, lastLevel: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : ApiResponse<kotlin.collections.List<BigMap>?> {
         val localVariableConfig = bigMapsGetBigMapsRequestConfig(contract = contract, path = path, tags = tags, active = active, lastLevel = lastLevel, select = select, sort = sort, offset = offset, limit = limit, micheline = micheline)
 
         return request<Unit, kotlin.collections.List<BigMap>>(
@@ -430,7 +430,7 @@ class BigMapsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath
     * @param micheline Format of the bigmap key and value type: &#x60;0&#x60; - JSON, &#x60;2&#x60; - Micheline (optional)
     * @return RequestConfig
     */
-    fun bigMapsGetBigMapsRequestConfig(contract: AccountParameter?, path: StringParameter?, tags: BigMapTagsParameter?, active: kotlin.Boolean?, lastLevel: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : RequestConfig<Unit> {
+    fun bigMapsGetBigMapsRequestConfig(contract: AccountParameter?, path: StringParameter?, tags: BigMapTagsParameter?, active: kotlin.Boolean?, lastLevel: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -566,7 +566,7 @@ class BigMapsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun bigMapsGetHistoricalKeys(id: kotlin.Int, level: kotlin.Int, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : kotlin.collections.List<BigMapKeyHistorical> {
+    fun bigMapsGetHistoricalKeys(id: kotlin.Int, level: kotlin.Int, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : kotlin.collections.List<BigMapKeyHistorical> {
         val localVarResponse = bigMapsGetHistoricalKeysWithHttpInfo(id = id, level = level, active = active, key = key, `value` = `value`, select = select, sort = sort, offset = offset, limit = limit, micheline = micheline)
 
         return when (localVarResponse.responseType) {
@@ -603,7 +603,7 @@ class BigMapsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun bigMapsGetHistoricalKeysWithHttpInfo(id: kotlin.Int, level: kotlin.Int, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : ApiResponse<kotlin.collections.List<BigMapKeyHistorical>?> {
+    fun bigMapsGetHistoricalKeysWithHttpInfo(id: kotlin.Int, level: kotlin.Int, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : ApiResponse<kotlin.collections.List<BigMapKeyHistorical>?> {
         val localVariableConfig = bigMapsGetHistoricalKeysRequestConfig(id = id, level = level, active = active, key = key, `value` = `value`, select = select, sort = sort, offset = offset, limit = limit, micheline = micheline)
 
         return request<Unit, kotlin.collections.List<BigMapKeyHistorical>>(
@@ -626,7 +626,7 @@ class BigMapsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath
     * @param micheline Format of the bigmap key and value: &#x60;0&#x60; - JSON, &#x60;1&#x60; - JSON string, &#x60;2&#x60; - Micheline, &#x60;3&#x60; - Micheline string (optional)
     * @return RequestConfig
     */
-    fun bigMapsGetHistoricalKeysRequestConfig(id: kotlin.Int, level: kotlin.Int, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : RequestConfig<Unit> {
+    fun bigMapsGetHistoricalKeysRequestConfig(id: kotlin.Int, level: kotlin.Int, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -953,7 +953,7 @@ class BigMapsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun bigMapsGetKeys(id: kotlin.Int, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, lastLevel: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : kotlin.collections.List<BigMapKey> {
+    fun bigMapsGetKeys(id: kotlin.Int, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, lastLevel: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : kotlin.collections.List<BigMapKey> {
         val localVarResponse = bigMapsGetKeysWithHttpInfo(id = id, active = active, key = key, `value` = `value`, lastLevel = lastLevel, select = select, sort = sort, offset = offset, limit = limit, micheline = micheline)
 
         return when (localVarResponse.responseType) {
@@ -990,7 +990,7 @@ class BigMapsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun bigMapsGetKeysWithHttpInfo(id: kotlin.Int, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, lastLevel: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : ApiResponse<kotlin.collections.List<BigMapKey>?> {
+    fun bigMapsGetKeysWithHttpInfo(id: kotlin.Int, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, lastLevel: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : ApiResponse<kotlin.collections.List<BigMapKey>?> {
         val localVariableConfig = bigMapsGetKeysRequestConfig(id = id, active = active, key = key, `value` = `value`, lastLevel = lastLevel, select = select, sort = sort, offset = offset, limit = limit, micheline = micheline)
 
         return request<Unit, kotlin.collections.List<BigMapKey>>(
@@ -1013,7 +1013,7 @@ class BigMapsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath
     * @param micheline Format of the bigmap key and value: &#x60;0&#x60; - JSON, &#x60;1&#x60; - JSON string, &#x60;2&#x60; - Micheline, &#x60;3&#x60; - Micheline string (optional)
     * @return RequestConfig
     */
-    fun bigMapsGetKeysRequestConfig(id: kotlin.Int, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, lastLevel: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : RequestConfig<Unit> {
+    fun bigMapsGetKeysRequestConfig(id: kotlin.Int, active: kotlin.Boolean?, key: JsonParameter?, `value`: JsonParameter?, lastLevel: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, micheline: MichelineFormat?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {

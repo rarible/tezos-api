@@ -24,7 +24,6 @@ import java.io.IOException
 
 import com.rarible.tzkt.model.parameters.DateTimeParameter
 import com.rarible.tzkt.model.parameters.OffsetParameter
-import com.rarible.tzkt.model.parameters.SelectParameter
 import com.rarible.tzkt.model.parameters.SortParameter
 import com.rarible.tzkt.models.Symbols
 import com.rarible.tzkt.model.parameters.TimestampParameter
@@ -42,6 +41,7 @@ import com.rarible.tzkt.infrastructure.RequestMethod
 import com.rarible.tzkt.infrastructure.ResponseType
 import com.rarible.tzkt.infrastructure.Success
 import com.rarible.tzkt.model.parameters.IntParameter
+import com.rarible.tzkt.model.parameters.SelectionParameter
 
 class StatisticsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath) {
     companion object {
@@ -70,7 +70,7 @@ class StatisticsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun statisticsGet(level: IntParameter?, timestamp: TimestampParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<Statistics> {
+    fun statisticsGet(level: IntParameter?, timestamp: TimestampParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<Statistics> {
         val localVarResponse = statisticsGetWithHttpInfo(level = level, timestamp = timestamp, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return when (localVarResponse.responseType) {
@@ -104,7 +104,7 @@ class StatisticsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun statisticsGetWithHttpInfo(level: IntParameter?, timestamp: TimestampParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<Statistics>?> {
+    fun statisticsGetWithHttpInfo(level: IntParameter?, timestamp: TimestampParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<Statistics>?> {
         val localVariableConfig = statisticsGetRequestConfig(level = level, timestamp = timestamp, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return request<Unit, kotlin.collections.List<Statistics>>(
@@ -124,7 +124,7 @@ class StatisticsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
     * @return RequestConfig
     */
-    fun statisticsGetRequestConfig(level: IntParameter?, timestamp: TimestampParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
+    fun statisticsGetRequestConfig(level: IntParameter?, timestamp: TimestampParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -176,7 +176,7 @@ class StatisticsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun statisticsGetCycles(select: SelectParameter?, quote: Symbols?) : Statistics {
+    fun statisticsGetCycles(select: SelectionParameter?, quote: Symbols?) : Statistics {
         val localVarResponse = statisticsGetCyclesWithHttpInfo(select = select, quote = quote)
 
         return when (localVarResponse.responseType) {
@@ -205,7 +205,7 @@ class StatisticsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun statisticsGetCyclesWithHttpInfo(select: SelectParameter?, quote: Symbols?) : ApiResponse<Statistics?> {
+    fun statisticsGetCyclesWithHttpInfo(select: SelectionParameter?, quote: Symbols?) : ApiResponse<Statistics?> {
         val localVariableConfig = statisticsGetCyclesRequestConfig(select = select, quote = quote)
 
         return request<Unit, Statistics>(
@@ -220,7 +220,7 @@ class StatisticsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
     * @return RequestConfig
     */
-    fun statisticsGetCyclesRequestConfig(select: SelectParameter?, quote: Symbols?) : RequestConfig<Unit> {
+    fun statisticsGetCyclesRequestConfig(select: SelectionParameter?, quote: Symbols?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -261,7 +261,7 @@ class StatisticsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun statisticsGetCyclesAll(cycle: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<Statistics> {
+    fun statisticsGetCyclesAll(cycle: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<Statistics> {
         val localVarResponse = statisticsGetCyclesAllWithHttpInfo(cycle = cycle, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return when (localVarResponse.responseType) {
@@ -294,7 +294,7 @@ class StatisticsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun statisticsGetCyclesAllWithHttpInfo(cycle: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<Statistics>?> {
+    fun statisticsGetCyclesAllWithHttpInfo(cycle: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<Statistics>?> {
         val localVariableConfig = statisticsGetCyclesAllRequestConfig(cycle = cycle, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return request<Unit, kotlin.collections.List<Statistics>>(
@@ -313,7 +313,7 @@ class StatisticsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
     * @return RequestConfig
     */
-    fun statisticsGetCyclesAllRequestConfig(cycle: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
+    fun statisticsGetCyclesAllRequestConfig(cycle: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
@@ -366,7 +366,7 @@ class StatisticsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun statisticsGetDaily(date: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<Statistics> {
+    fun statisticsGetDaily(date: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : kotlin.collections.List<Statistics> {
         val localVarResponse = statisticsGetDailyWithHttpInfo(date = date, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return when (localVarResponse.responseType) {
@@ -399,7 +399,7 @@ class StatisticsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun statisticsGetDailyWithHttpInfo(date: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<Statistics>?> {
+    fun statisticsGetDailyWithHttpInfo(date: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : ApiResponse<kotlin.collections.List<Statistics>?> {
         val localVariableConfig = statisticsGetDailyRequestConfig(date = date, select = select, sort = sort, offset = offset, limit = limit, quote = quote)
 
         return request<Unit, kotlin.collections.List<Statistics>>(
@@ -418,7 +418,7 @@ class StatisticsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(baseP
     * @param quote Comma-separated list of ticker symbols to inject historical prices into response (optional)
     * @return RequestConfig
     */
-    fun statisticsGetDailyRequestConfig(date: DateTimeParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
+    fun statisticsGetDailyRequestConfig(date: DateTimeParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?, quote: Symbols?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {

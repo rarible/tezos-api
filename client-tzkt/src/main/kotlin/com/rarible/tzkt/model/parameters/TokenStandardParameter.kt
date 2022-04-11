@@ -32,7 +32,7 @@ import com.rarible.tzkt.filters.EqualityFilterImpl
  */
 
 data class TokenStandardParameter (
-    val equalityFilterImpl: EqualityFilterImpl? = null
+    var equalityFilterImpl: EqualityFilterImpl? = null
 ){
     fun getFilter(): String {
         return equalityFilterImpl?.getFilter() ?: ""

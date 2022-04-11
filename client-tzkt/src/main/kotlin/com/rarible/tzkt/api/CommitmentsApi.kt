@@ -34,7 +34,7 @@ import com.rarible.tzkt.infrastructure.Success
 import com.rarible.tzkt.models.Commitment
 import com.rarible.tzkt.model.parameters.IntParameter
 import com.rarible.tzkt.model.parameters.OffsetParameter
-import com.rarible.tzkt.model.parameters.SelectParameter
+import com.rarible.tzkt.model.parameters.SelectionParameter
 import com.rarible.tzkt.model.parameters.SortParameter
 import java.io.IOException
 
@@ -136,7 +136,7 @@ class CommitmentsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(base
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class, UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun commitmentsGetAll(activated: kotlin.Boolean?, activationLevel: IntParameter?, balance: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : kotlin.collections.List<Commitment> {
+    fun commitmentsGetAll(activated: kotlin.Boolean?, activationLevel: IntParameter?, balance: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : kotlin.collections.List<Commitment> {
         val localVarResponse = commitmentsGetAllWithHttpInfo(activated = activated, activationLevel = activationLevel, balance = balance, select = select, sort = sort, offset = offset, limit = limit)
 
         return when (localVarResponse.responseType) {
@@ -170,7 +170,7 @@ class CommitmentsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(base
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(IllegalStateException::class, IOException::class)
-    fun commitmentsGetAllWithHttpInfo(activated: kotlin.Boolean?, activationLevel: IntParameter?, balance: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : ApiResponse<kotlin.collections.List<Commitment>?> {
+    fun commitmentsGetAllWithHttpInfo(activated: kotlin.Boolean?, activationLevel: IntParameter?, balance: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : ApiResponse<kotlin.collections.List<Commitment>?> {
         val localVariableConfig = commitmentsGetAllRequestConfig(activated = activated, activationLevel = activationLevel, balance = balance, select = select, sort = sort, offset = offset, limit = limit)
 
         return request<Unit, kotlin.collections.List<Commitment>>(
@@ -190,7 +190,7 @@ class CommitmentsApi(basePath: kotlin.String = defaultBasePath) : ApiClient(base
     * @param limit Maximum number of items to return (optional, default to 100)
     * @return RequestConfig
     */
-    fun commitmentsGetAllRequestConfig(activated: kotlin.Boolean?, activationLevel: IntParameter?, balance: IntParameter?, select: SelectParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : RequestConfig<Unit> {
+    fun commitmentsGetAllRequestConfig(activated: kotlin.Boolean?, activationLevel: IntParameter?, balance: IntParameter?, select: SelectionParameter?, sort: SortParameter?, offset: OffsetParameter?, limit: kotlin.Int?) : RequestConfig<Unit> {
         val localVariableBody = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
