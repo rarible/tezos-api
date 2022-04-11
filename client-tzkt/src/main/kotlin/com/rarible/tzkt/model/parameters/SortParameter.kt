@@ -32,7 +32,7 @@ import com.rarible.tzkt.filters.SortFilterImpl
  */
 
 data class SortParameter (
-    val sortFilterImpl: SortFilterImpl? = null
+    var sortFilterImpl: SortFilterImpl? = null
 ){
     fun getFilter(): String {
         return sortFilterImpl?.getFilter() ?: ""

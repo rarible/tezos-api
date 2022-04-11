@@ -1027,19 +1027,19 @@ class TokensApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath)
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, kotlin.collections.List<kotlin.String>>()
             .apply {
                 if (id != null) {
-                    put("id", listOf(id.toString()))
+                    put("id${id.getFilter()}", listOf(id.getFilterValue()))
                 }
                 if (level != null) {
-                    put("level", listOf(level.toString()))
+                    put("level${level.getFilter()}", listOf(level.getFilterValue()))
                 }
                 if (timestamp != null) {
-                    put("timestamp", listOf(timestamp.toString()))
+                    put("timestamp${timestamp.getFilter()}", listOf(timestamp.getFilterValue()))
                 }
                 if (tokenId != null) {
                     put("token.id${tokenId.getFilter()}", listOf(tokenId.getFilterValue()))
                 }
                 if (tokenContract != null) {
-                    put("token.contract", listOf(tokenContract.toString()))
+                    put("token.contract${tokenContract.getFilter()}", listOf(tokenContract.getFilterValue()))
                 }
                 if (tokenTokenId != null) {
                     put("token.tokenId${tokenTokenId.getFilter()}", listOf(tokenTokenId.getFilterValue()))
@@ -1048,7 +1048,7 @@ class TokensApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath)
                     put("token.standard${tokenStandard.getFilter()}", listOf(tokenStandard.getFilterValue()))
                 }
                 if (tokenMetadata != null) {
-                    put("token.metadata", listOf(tokenMetadata.toString()))
+                    put("token.metadata${tokenMetadata.getFilter()}", listOf(tokenMetadata.getFilterValue()))
                 }
                 if (tokenHasFilters != null) {
                     put("token.HasFilters", listOf(tokenHasFilters.toString()))
@@ -1057,34 +1057,34 @@ class TokensApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath)
                     put("anyof", listOf(anyof.toString()))
                 }
                 if (from != null) {
-                    put("from", listOf(from.toString()))
+                    put("from${from.getFilter()}", listOf(from.getFilterValue()))
                 }
                 if (to != null) {
-                    put("to", listOf(to.toString()))
+                    put("to${to.getFilter()}", listOf(to.getFilterValue()))
                 }
                 if (amount != null) {
-                    put("amount", listOf(amount.toString()))
+                    put("amount${amount.getFilter()}", listOf(amount.getFilterValue()))
                 }
                 if (transactionId != null) {
-                    put("transactionId", listOf(transactionId.toString()))
+                    put("transactionId${transactionId.getFilter()}", listOf(transactionId.getFilterValue()))
                 }
                 if (originationId != null) {
-                    put("originationId", listOf(originationId.toString()))
+                    put("originationId${originationId.getFilter()}", listOf(originationId.getFilterValue()))
                 }
                 if (migrationId != null) {
-                    put("migrationId", listOf(migrationId.toString()))
+                    put("migrationId${migrationId.getFilter()}", listOf(migrationId.getFilterValue()))
                 }
                 if (sort != null) {
-                    put("sort", listOf(sort.toString()))
+                    put("sort${sort.getFilter()}", listOf(sort.getFilterValue()))
                 }
                 if (offset != null) {
-                    put("offset", listOf(offset.toString()))
+                    put("offset${offset.getFilter()}", listOf(offset.getFilterValue()))
                 }
                 if (limit != null) {
                     put("limit", listOf(limit.toString()))
                 }
                 if (select != null) {
-                    put("select", listOf(select.toString()))
+                    put("select${select.getFilter()}", listOf(select.getFilterValue()))
                 }
             }
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
