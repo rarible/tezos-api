@@ -30,7 +30,7 @@ class TezosTzktClientAccountTests {
 
 		var accountTypeFilter = AccountTypeParameter()
 		var equalityFilterImpl = EqualityFilterImpl()
-		equalityFilterImpl.setEQ("user")
+		equalityFilterImpl.eq = "user"
 		accountTypeFilter.equalityFilterImpl = equalityFilterImpl
 
 		var accounts =	accountsApi.accountsGet(accountTypeFilter,null,null,null,null,null,null,null,null,null);
@@ -43,7 +43,7 @@ class TezosTzktClientAccountTests {
 
 		var contractKindParameter = ContractKindParameter()
 		var equalityFilterImpl = EqualityFilterImpl()
-		equalityFilterImpl.setEQ("smart_contract")
+		equalityFilterImpl.eq = "smart_contract"
 		contractKindParameter.equalityFilterImpl = equalityFilterImpl
 
 		var accountsEQ =	accountsApi.accountsGet(null,contractKindParameter,null,null,null,null,null,null,null,null);

@@ -12,15 +12,15 @@ class TezosTzktClientFilterTests {
 
 	@Test
 	fun equalityFilterTest(){
-		var equalityFilterImpl = EqualityFilterImpl()
-		equalityFilterImpl.setEQ("user")
-		assert(equalityFilterImpl.getFilter() == ".eq")
-		assert(equalityFilterImpl.getFilterValue() == "user")
-		assert(equalityFilterImpl.ne == null)
-		equalityFilterImpl.setNE("contract")
-		assert(equalityFilterImpl.getFilter() == ".ne")
-		assert(equalityFilterImpl.getFilterValue() == "contract")
-		assert(equalityFilterImpl.eq == null)
+		var equalityFilterImplEQ = EqualityFilterImpl()
+		equalityFilterImplEQ.eq = "user"
+		assert(equalityFilterImplEQ.getFilter() == ".eq")
+		assert(equalityFilterImplEQ.getFilterValue() == "user")
+
+		var equalityFilterImplNE = EqualityFilterImpl()
+		equalityFilterImplNE.ne = "contract"
+		assert(equalityFilterImplNE.getFilter() == ".ne")
+		assert(equalityFilterImplNE.getFilterValue() == "contract")
 	}
 
 	@Test

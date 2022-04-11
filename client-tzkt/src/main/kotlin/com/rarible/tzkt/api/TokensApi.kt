@@ -972,7 +972,7 @@ class TokensApi(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath)
                     put("id${id.getFilter()}", listOf(id.getFilterValue()))
                 }
                 if (contract != null) {
-                    put("contract${contract.getFilter()}", listOf(contract.toString()))
+                    put("contract${contract.getFilter()}", listOf(contract.getFilterValue()))
                 }
                 if (tokenId != null) {
                     put("tokenId${tokenId.getFilter()}", listOf(tokenId.getFilterValue()))
