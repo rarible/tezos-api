@@ -4,7 +4,7 @@ import com.rarible.tzkt.filters.AnyAllFilterImpl
 import com.rarible.tzkt.filters.EqualityFilterImpl
 import org.junit.jupiter.api.Test
 
-class TezosTzktClientFilterTests {
+class TzktClientFilterTests {
 
 	@Test
 	fun contextLoads() {

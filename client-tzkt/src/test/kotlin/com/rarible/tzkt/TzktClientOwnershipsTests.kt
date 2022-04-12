@@ -2,15 +2,11 @@ package com.rarible.tzkt
 
 import com.rarible.tzkt.api.TokensApi
 import com.rarible.tzkt.filters.EqualityFilterImpl
-import com.rarible.tzkt.filters.OffsetFilterImpl
 import com.rarible.tzkt.model.parameters.AccountParameter
 import com.rarible.tzkt.model.parameters.NatParameter
-import com.rarible.tzkt.model.parameters.OffsetParameter
-import com.rarible.tzkt.models.Token
-import com.rarible.tzkt.models.TokenBalance
 import org.junit.jupiter.api.Test
 
-class TezosTzktClientOwnershipsTests {
+class TzktClientOwnershipsTests {
 
     @Test
     fun contextLoads() {

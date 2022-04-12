@@ -5,7 +5,7 @@ import com.rarible.tzkt.filters.EqualityFilterImpl
 import com.rarible.tzkt.model.parameters.ContractKindParameter
 import org.junit.jupiter.api.Test
 
-class TezosTzktClientCollectionsTests {
+class TzktClientCollectionsTests {
 
     @Test
     fun contextLoads() {

@@ -8,7 +8,7 @@ import com.rarible.tzkt.model.parameters.AccountTypeParameter
 import com.rarible.tzkt.model.parameters.ContractKindParameter
 import com.rarible.tzkt.models.Contract
 import org.junit.jupiter.api.Test
-class TezosTzktClientAccountTests {
+class TzktClientAccountTests {
 
 	@Test
 	fun contextLoads() {

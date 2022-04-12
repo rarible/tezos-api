@@ -8,7 +8,7 @@ import com.rarible.tzkt.model.parameters.SortParameter
 import com.rarible.tzkt.models.TokenTransfer
 import org.junit.jupiter.api.Test
 
-class TezosTzktClientActivitiesTests {
+class TzktClientActivitiesTests {
 
     @Test
     fun contextLoads() {

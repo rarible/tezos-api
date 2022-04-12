@@ -9,7 +9,7 @@ import com.rarible.tzkt.model.parameters.OffsetParameter
 import com.rarible.tzkt.models.Token
 import org.junit.jupiter.api.Test
 
-class TezosTzktClientTokensTests {
+class TzktClientTokensTests {
 
     @Test
     fun contextLoads() {
