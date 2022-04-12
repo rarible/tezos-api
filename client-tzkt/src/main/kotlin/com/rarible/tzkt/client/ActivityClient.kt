@@ -3,22 +3,12 @@ package com.rarible.tzkt.client
 import com.rarible.tzkt.models.Token
 import org.springframework.web.reactive.function.client.WebClient
 
-class TokenClient(
+class ActivityClient(
     webClient: WebClient
 ) : BaseClient(webClient) {
 
-    val basePath = "v1/tokens"
-    suspend fun token(contract: String, id: String): Token {
-        val tokens = invoke<List<Token>> {
-            it.path(basePath)
-                .queryParam("contract", contract)
-                .queryParam("tokenId", id)
-                .queryParam("token.standard", "fa2")
-        }
-        return tokens.first()
-    }
-
-    suspend fun tokens(size: Int?, continuation: Long?, sortAsc: Boolean = true): List<Token> {
+    val basePath = "v1/tokens/transfers"
+    suspend fun activities(size: Int?, continuation: Long?, sortAsc: Boolean = true): List<Token> {
         val tokens = invoke<List<Token>> {
             it.path(basePath)
                 .queryParam("token.standard", "fa2")
