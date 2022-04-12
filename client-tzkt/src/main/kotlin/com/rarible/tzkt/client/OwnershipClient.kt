@@ -1,6 +1,6 @@
 package com.rarible.tzkt.client
 
-import com.rarible.tzkt.models.Token
+import com.rarible.tzkt.models.TokenBalance
 import org.springframework.web.reactive.function.client.WebClient
 
 class OwnershipClient(
@@ -8,13 +8,13 @@ class OwnershipClient(
 ) : BaseClient(webClient) {
 
     val basePath = "v1/tokens/balances"
-    suspend fun ownership(contract: String, tokenId: String, owner: String): Token {
-        val tokens = invoke<List<Token>> {
+    suspend fun ownership(contract: String, tokenId: String, owner: String): TokenBalance {
+        val ownership = invoke<List<TokenBalance>> {
             it.path(basePath)
                 .queryParam("account", owner)
                 .queryParam("token.contract", contract)
                 .queryParam("token.tokenId", tokenId)
         }
-        return tokens.first()
+        return ownership.first()
     }
 }
