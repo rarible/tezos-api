@@ -81,3 +81,35 @@ fun getOwnershipsByNFT(contract: String, tokenId: String): List<TokenBalance> {
         null
     );
 }
+
+fun getOwnershipsByOwner(owner: String): List<TokenBalance> {
+    var tokensAPI = TokensApi();
+
+    var ownerParameter = AccountParameter()
+
+    var ownerEqualityFilter = EqualityFilterImpl()
+
+    ownerEqualityFilter.eq = owner
+
+    ownerParameter.equalityFilterImpl = ownerEqualityFilter
+
+    return tokensAPI.tokensGetTokenBalances(
+        null,
+        ownerParameter,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+    );
+}

@@ -21,9 +21,9 @@ fun getAllCollections(size: Int?, continuation: Long?, sortAsc: Boolean = true):
     val kindEqualityFilter = EqualityFilterImpl()
 
     if (sortAsc)
-        sortFilter.asc = "id"
+        sortFilter.asc = "firstActivity"
     else
-        sortFilter.desc = "id"
+        sortFilter.desc = "firstActivity"
 
     offsetFilter.cr = continuation
     kindEqualityFilter.eq = "asset"
