@@ -1,9 +1,5 @@
-package org.rarible.tezos.client.tzkt.client
+package com.rarible.tzkt.client
 
-import com.rarible.tzkt.client.BaseClientTests
-import com.rarible.tzkt.client.TokenClient
-import com.rarible.tzkt.models.Token
-import com.rarible.tzkt.wrapper.getAllNFTs
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -437,7 +433,7 @@ class TokenClientTests : BaseClientTests() {
         prevId = 0
         val lastId = tokens.last().id!!.toLong()
         continuation = lastId
-        tokens = getAllNFTs(size, continuation)
+        tokens = tokenClient.tokens(size, continuation)
         tokens.forEach{
             assert(it.id!! > prevId)
             assertThat(it.standard).isEqualTo("fa2")
@@ -808,7 +804,7 @@ class TokenClientTests : BaseClientTests() {
         val lastId = tokens.last().id!!.toLong()
         continuation = lastId
         prevId = lastId
-        tokens = getAllNFTs(size, continuation, false)
+        tokens = tokenClient.tokens(size, continuation, false)
         tokens.forEach{
             assert(it.id!! < prevId)
             assertThat(it.standard).isEqualTo("fa2")

@@ -18,10 +18,10 @@
     "UnusedImport"
 )
 
-package com.rarible.tzkt.models
+package com.rarible.tzkt.model
 
-import com.rarible.tzkt.models.AccountMetadata
-import com.rarible.tzkt.models.SoftwareAlias
+import com.rarible.tzkt.model.AccountMetadata
+import com.rarible.tzkt.model.SoftwareAlias
 
 import com.squareup.moshi.Json
 

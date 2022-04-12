@@ -20,8 +20,7 @@
 
 package com.rarible.tzkt.models
 
-import com.rarible.tzkt.models.Alias
-import com.rarible.tzkt.models.TokenInfo
+import com.rarible.tzkt.model.Alias
 
 import com.squareup.moshi.Json
 

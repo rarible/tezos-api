@@ -18,7 +18,7 @@
     "UnusedImport"
 )
 
-package com.rarible.tzkt.models
+package com.rarible.tzkt.model
 
 
 import com.squareup.moshi.Json

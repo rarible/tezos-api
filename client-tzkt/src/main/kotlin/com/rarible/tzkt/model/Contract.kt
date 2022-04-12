@@ -20,12 +20,8 @@
 
 package com.rarible.tzkt.models
 
-import com.rarible.tzkt.models.Account
-import com.rarible.tzkt.models.AccountMetadata
-import com.rarible.tzkt.models.ContractAllOf
-import com.rarible.tzkt.models.CreatorInfo
-import com.rarible.tzkt.models.DelegateInfo
-import com.rarible.tzkt.models.ManagerInfo
+import com.rarible.tzkt.model.Account
+import com.rarible.tzkt.model.AccountMetadata
 
 import com.squareup.moshi.Json
 
