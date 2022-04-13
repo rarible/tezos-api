@@ -1,6 +1,6 @@
 package com.rarible.tzkt.client
 
-import com.rarible.tzkt.models.Token
+import com.rarible.tzkt.model.Token
 import org.springframework.web.reactive.function.client.WebClient
 
 class TokenClient(

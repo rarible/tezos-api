@@ -5,10 +5,10 @@ import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.rarible.tzkt.model.Account
 import com.rarible.tzkt.model.AccountTypes
-import com.rarible.tzkt.models.Contract
+import com.rarible.tzkt.model.Contract
 import com.rarible.tzkt.model.Delegate
-import com.rarible.tzkt.models.Ghost
-import com.rarible.tzkt.models.User
+import com.rarible.tzkt.model.Ghost
+import com.rarible.tzkt.model.User
 
 object Serializer {
     @JvmStatic

@@ -1,6 +1,6 @@
 package com.rarible.tzkt.client
 
-import com.rarible.tzkt.models.TokenBalance
+import com.rarible.tzkt.model.TokenBalance
 import org.springframework.web.reactive.function.client.WebClient
 
 class OwnershipClient(
