@@ -19,4 +19,6 @@ abstract class BaseClientTests {
                 .addHeader("Content-Type", APPLICATION_JSON.toString())
         )
     }
+
+    fun request() = mockServer.takeRequest()
 }

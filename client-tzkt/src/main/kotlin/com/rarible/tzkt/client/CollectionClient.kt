@@ -7,32 +7,28 @@ class CollectionClient(
     webClient: WebClient
 ) : BaseClient(webClient) {
 
-    val basePath = "v1/contracts"
     suspend fun collection(contract: String): Contract {
         val collection = invoke<Contract> {
-            it.path("$basePath/$contract")
+            it.path("$BASE_PATH/$contract")
         }
         return collection
     }
 
     suspend fun collections(size: Int?, continuation: Long?, sortAsc: Boolean = true): List<Contract> {
-        val collections = invoke<List<Contract>> {
-            it.path(basePath)
+        val collections = invoke<List<Contract>> { builder ->
+            builder.path(BASE_PATH)
                 .queryParam("kind", "asset")
                 .apply {
-                    if (size != null) {
-                        it.queryParam("limit", size)
-                    }
-                    if(continuation != null){
-                        it.queryParam("offset.cr", continuation)
-                    }
-                    if(!sortAsc){
-                        it.queryParam("sort.desc", "firstActivity")
-                    } else {
-                        it.queryParam("sort.asc", "firstActivity")
-                    }
+                    size?.let { queryParam("limit", it) }
+                    continuation?.let { queryParam("offset.cr", it) }
+                    val sorting = if (sortAsc) "sort.asc" else "sort.desc"
+                    queryParam(sorting, "firstActivity")
                 }
         }
         return collections
+    }
+
+    companion object {
+        const val BASE_PATH = "v1/contracts"
     }
 }

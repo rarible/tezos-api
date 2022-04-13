@@ -66,7 +66,8 @@ class TokenClientTests : BaseClientTests() {
         """.trimIndent())
 
         val token = tokenClient.token("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton", "157993")
-        
+        assertThat(request().path).isEqualTo("/v1/tokens?contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&tokenId=157993&token.standard=fa2")
+
         assertThat(token).isNotNull
         assertThat(token.standard).isEqualTo("fa2")
     }
@@ -424,9 +425,10 @@ class TokenClientTests : BaseClientTests() {
         val size = 10
         var continuation = 0L
         var tokens = tokenClient.tokens(size, continuation)
+        assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=0&sort.asc=id")
         var prevId = 0
         tokens.forEach{
-            assert(it.id!! > prevId)
+            assertThat(it.id).isGreaterThan(prevId)
             assertThat(it.standard).isEqualTo("fa2")
             prevId = it.id!!
         }
@@ -434,12 +436,13 @@ class TokenClientTests : BaseClientTests() {
         val lastId = tokens.last().id!!.toLong()
         continuation = lastId
         tokens = tokenClient.tokens(size, continuation)
+        assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=21&sort.asc=id")
         tokens.forEach{
-            assert(it.id!! > prevId)
+            assertThat(it.id).isGreaterThan(prevId)
             assertThat(it.standard).isEqualTo("fa2")
             prevId = it.id!!
         }
-        assert(tokens.first().id!!.toLong() > lastId)
+        assertThat(tokens.first().id?.toLong()).isGreaterThan(lastId)
     }
 
     @Test
@@ -795,9 +798,10 @@ class TokenClientTests : BaseClientTests() {
         val size = 10
         var continuation = 46L
         var tokens = tokenClient.tokens(size, continuation, false)
+        assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=46&sort.desc=id")
         var prevId = 46L
         tokens.forEach{
-            assert(it.id!! < prevId)
+            assertThat(it.id?.toLong()).isLessThan(prevId)
             assertThat(it.standard).isEqualTo("fa2")
             prevId = it.id!!.toLong()
         }
@@ -805,11 +809,12 @@ class TokenClientTests : BaseClientTests() {
         continuation = lastId
         prevId = lastId
         tokens = tokenClient.tokens(size, continuation, false)
+        assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=31&sort.desc=id")
         tokens.forEach{
-            assert(it.id!! < prevId)
+            assertThat(it.id?.toLong()).isLessThan(prevId)
             assertThat(it.standard).isEqualTo("fa2")
             prevId = it.id!!.toLong()
         }
-        assert(tokens.first().id!!.toLong() < lastId)
+        assertThat(tokens.first().id?.toLong()).isLessThan(lastId)
     }
 }

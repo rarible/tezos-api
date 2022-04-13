@@ -42,6 +42,7 @@ class CollectionClientTests : BaseClientTests() {
 
         val address = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
         val collection = collectionClient.collection(address)
+        assertThat(request().path).isEqualTo("/v1/contracts/KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton")
 
         assertThat(collection).isNotNull
         assertThat(collection.kind).isEqualTo("asset")
@@ -555,23 +556,25 @@ class CollectionClientTests : BaseClientTests() {
         val size = 10
         var continuation = 0L
         var collections = collectionClient.collections(size, continuation)
-        assert(collections.size == size)
+        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&limit=10&offset.cr=0&sort.asc=firstActivity")
+        assertThat(collections).hasSize(size)
         var prevId = 0
         collections.forEach{
-            assert(it.kind == "asset")
-            assert(it.firstActivity!! > prevId)
+            assertThat(it.kind).isEqualTo("asset")
+            assertThat(it.firstActivity).isGreaterThan(prevId)
             prevId = it.firstActivity!!
         }
         prevId = 0
         val lastId = collections.last().firstActivity!!.toLong()
         continuation = lastId
         collections = collectionClient.collections(size, continuation)
+        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&limit=10&offset.cr=1048494&sort.asc=firstActivity")
         collections.forEach{
-            assert(it.kind == "asset")
-            assert(it.firstActivity!! > prevId)
+            assertThat(it.kind).isEqualTo("asset")
+            assertThat(it.firstActivity).isGreaterThan(prevId)
             prevId = it.firstActivity!!
         }
-        assert(collections.first().firstActivity!!.toLong() > lastId)
+        assertThat(collections.first().firstActivity?.toLong()).isGreaterThan(lastId)
     }
 
     @Test
@@ -1071,22 +1074,24 @@ class CollectionClientTests : BaseClientTests() {
         val size = 10
         var continuation = 1302640L
         var collections = collectionClient.collections(size, continuation, false)
-        assert(collections.size == size)
+        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&limit=10&offset.cr=1302640&sort.desc=firstActivity")
+        assertThat(collections).hasSize(size)
         var prevId = continuation
         collections.forEach{
-            assert(it.kind == "asset")
-            assert(it.firstActivity!! < prevId)
+            assertThat(it.kind).isEqualTo("asset")
+            assertThat(it.firstActivity?.toLong()).isLessThan(prevId)
             prevId = it.firstActivity!!.toLong()
         }
         prevId = continuation
         val lastId = collections.last().firstActivity!!.toLong()
         continuation = lastId
         collections = collectionClient.collections(size, continuation, false)
+        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&limit=10&offset.cr=1288709&sort.desc=firstActivity")
         collections.forEach{
-            assert(it.kind == "asset")
-            assert(it.firstActivity!! < prevId)
+            assertThat(it.kind).isEqualTo("asset")
+            assertThat(it.firstActivity?.toLong()).isLessThan(prevId)
             prevId = it.firstActivity!!.toLong()
         }
-        assert(collections.first().firstActivity!!.toLong() < lastId)
+        assertThat(collections.first().firstActivity?.toLong()).isLessThan(lastId)
     }
 }

@@ -2,6 +2,7 @@ package com.rarible.tzkt.client
 
 import com.rarible.tzkt.model.TokenTransfer
 import kotlinx.coroutines.runBlocking
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class ActivityClientTests : BaseClientTests() {
@@ -513,21 +514,23 @@ class ActivityClientTests : BaseClientTests() {
         val size = 10
         var continuation = 0L
         var activities = activityClient.activities(size, continuation)
+        assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.standard=fa2&limit=10&offset.cr=0&sort.asc=id")
         var prevId = 0
         activities.forEach {
-            assert(it::class.java == TokenTransfer::class.java)
-            assert(it.id!! > prevId)
+            assertThat(it).isInstanceOf(TokenTransfer::class.java)
+            assertThat(it.id).isGreaterThan(prevId)
             prevId = it.id!!
         }
         val lastId = activities.last().id!!.toLong()
         continuation = lastId
         activities = activityClient.activities(size, continuation)
+        assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.standard=fa2&limit=10&offset.cr=23955219&sort.asc=id")
         activities.forEach {
-            assert(it::class.java == TokenTransfer::class.java)
-            assert(it.id!! > prevId)
+            assertThat(it).isInstanceOf(TokenTransfer::class.java)
+            assertThat(it.id).isGreaterThan(prevId)
             prevId = it.id!!
         }
-        assert(activities.first().id!!.toLong() > lastId)
+        assertThat(activities.first().id?.toLong()).isGreaterThan(lastId)
     }
 
     @Test
@@ -1054,22 +1057,85 @@ class ActivityClientTests : BaseClientTests() {
         val size = 10
         var continuation = 24878056L
         var activities = activityClient.activities(size, continuation, false)
+        assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.standard=fa2&limit=10&offset.cr=24878056&sort.desc=id")
         var prevId = 24878056L
         activities.forEach {
-            assert(it::class.java == TokenTransfer::class.java)
-            assert(it.id!! < prevId)
+            assertThat(it).isInstanceOf(TokenTransfer::class.java)
+            assertThat(it.id?.toLong()).isLessThan(prevId)
             prevId = it.id!!.toLong()
         }
         val lastId = activities.last().id!!.toLong()
         continuation = lastId
         activities = activityClient.activities(size, continuation, false)
+        assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.standard=fa2&limit=10&offset.cr=24778005&sort.desc=id")
         prevId = lastId
         activities.forEach {
-            assert(it::class.java == TokenTransfer::class.java)
-            assert(it.id!! < prevId)
+            assertThat(it).isInstanceOf(TokenTransfer::class.java)
+            assertThat(it.id?.toLong()).isLessThan(prevId)
             prevId = it.id!!.toLong()
         }
-        assert(activities.first().id!!.toLong() < lastId)
+        assertThat(activities.first().id?.toLong()).isLessThan(lastId)
     }
 
+    @Test
+    fun `should return NFT activities by id`() = runBlocking<Unit> {
+        mock("""[
+            {
+                "id": 23818305,
+                "level": 889166,
+                "timestamp": "2020-03-31T15:12:51Z",
+                "token": {
+                    "id": 1,
+                    "contract": {
+                        "alias": "tzBTC",
+                        "address": "KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn"
+                    },
+                    "tokenId": "0",
+                    "standard": "fa1.2",
+                    "metadata": {
+                        "name": "tzBTC",
+                        "symbol": "tzBTC",
+                        "decimals": "8"
+                    }
+                },
+                "to": {
+                    "address": "tz1ZAwyfujwED4yUhQAtc1eqm4gW5u2Xiw77"
+                },
+                "amount": "100000000",
+                "transactionId": 23818302
+            },
+            {
+                "id": 23820166,
+                "level": 889188,
+                "timestamp": "2020-03-31T15:34:51Z",
+                "token": {
+                    "id": 1,
+                    "contract": {
+                        "alias": "tzBTC",
+                        "address": "KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn"
+                    },
+                    "tokenId": "0",
+                    "standard": "fa1.2",
+                    "metadata": {
+                        "name": "tzBTC",
+                        "symbol": "tzBTC",
+                        "decimals": "8"
+                    }
+                },
+                "from": {
+                    "address": "tz1ZAwyfujwED4yUhQAtc1eqm4gW5u2Xiw77"
+                },
+                "to": {
+                    "address": "tz1d75oB6T4zUMexzkr5WscGktZ1Nss1JrT7"
+                },
+                "amount": "10000",
+                "transactionId": 23820160
+            }
+        ]""".trimIndent())
+
+        var activities = activityClient.activityByIds(listOf(23818305, 23820166))
+
+        assertThat(activities).hasSize(2)
+        assertThat(request().path).isEqualTo("/v1/tokens/transfers?id.in=23818305,23820166")
+    }
 }

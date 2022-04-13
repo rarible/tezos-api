@@ -7,10 +7,9 @@ class TokenClient(
     webClient: WebClient
 ) : BaseClient(webClient) {
 
-    val basePath = "v1/tokens"
     suspend fun token(contract: String, id: String): Token {
         val tokens = invoke<List<Token>> {
-            it.path(basePath)
+            it.path(BASE_PATH)
                 .queryParam("contract", contract)
                 .queryParam("tokenId", id)
                 .queryParam("token.standard", "fa2")
@@ -19,21 +18,20 @@ class TokenClient(
     }
 
     suspend fun tokens(size: Int?, continuation: Long?, sortAsc: Boolean = true): List<Token> {
-        val tokens = invoke<List<Token>> {
-            it.path(basePath)
+        val tokens = invoke<List<Token>> { builder ->
+            builder.path(BASE_PATH)
                 .queryParam("token.standard", "fa2")
                 .apply {
-                    if (size != null) {
-                        it.queryParam("limit", size)
-                    }
-                    if(continuation != null){
-                        it.queryParam("offset.cr", continuation)
-                    }
-                    if(!sortAsc){
-                        it.queryParam("sort.desc", "id")
-                    }
+                    size?.let { queryParam("limit", it) }
+                    continuation?.let { queryParam("offset.cr", it) }
+                    val sorting = if (sortAsc) "sort.asc" else "sort.desc"
+                    queryParam(sorting, "id")
                 }
         }
         return tokens
+    }
+
+    companion object {
+        const val BASE_PATH = "v1/tokens"
     }
 }

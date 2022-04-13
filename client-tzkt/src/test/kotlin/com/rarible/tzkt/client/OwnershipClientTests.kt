@@ -1,6 +1,7 @@
 package com.rarible.tzkt.client
 
 import kotlinx.coroutines.runBlocking
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class OwnershipClientTests : BaseClientTests() {
@@ -55,10 +56,11 @@ class OwnershipClientTests : BaseClientTests() {
         var owner = "tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88"
         val balance = "7"
         val ownership = ownershipClient.ownership(contract, tokenId, owner)
-        assert(ownership.account?.address == owner)
-        assert(ownership.token?.tokenId == tokenId)
-        assert(ownership.token?.contract?.address == contract)
-        assert(ownership.balance == balance)
+        assertThat(request().path).isEqualTo("/v1/tokens/balances?account=tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88&token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268")
+        assertThat(ownership.account?.address).isEqualTo(owner)
+        assertThat(ownership.token?.tokenId).isEqualTo(tokenId)
+        assertThat(ownership.token?.contract?.address).isEqualTo(contract)
+        assertThat(ownership.balance).isEqualTo(balance)
     }
 
 }
