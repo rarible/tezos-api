@@ -3,10 +3,12 @@ package com.rarible.tzkt.royalties
 import com.rarible.tzkt.client.BaseClientTests
 import com.rarible.tzkt.client.BigMapKeyClient
 import com.rarible.tzkt.client.IPFSClient
+import com.rarible.tzkt.client.TokenClient
 import com.rarible.tzkt.model.Part
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.springframework.web.reactive.function.client.WebClient
 
 class RoyaltiesTests : BaseClientTests() {
 
@@ -421,6 +423,31 @@ class RoyaltiesTests : BaseClientTests() {
                 Part("tz1fRXMLR27hWoD49tdtKunHyfy3CQb5XZst", 1000),
             )
         )
+    }
+
+    @Test
+    fun `should verify that royalties are parsed for all tokens`() = runBlocking<Unit> {
+        val localTzkt = "https://api.tzkt.io"
+        val bmClient = BigMapKeyClient(WebClient.create(localTzkt))
+        val tokenClient = TokenClient(WebClient.create(localTzkt))
+        val ipfs = IPFSClient(WebClient.create("https://rarible.mypinata.cloud/"))
+        val limit = 100
+        val continuation = 0L
+        val handler = RoyaltiesHandler(bmClient, ipfs)
+        var tokens = tokenClient.tokens(limit, continuation)
+        while(tokens.isNotEmpty()){
+            val lastId = tokens.last().id!!.toLong()
+            tokens.forEach{
+                val id = "${it.contract?.address}:${it.tokenId}"
+                val parts = handler.processRoyalties(id)
+                if(parts.isNullOrEmpty()){
+                    println("KO-$id")
+                } else {
+                    println("OK-$id")
+                }
+            }
+            tokens = tokenClient.tokens(limit, lastId)
+        }
 
     }
 }
