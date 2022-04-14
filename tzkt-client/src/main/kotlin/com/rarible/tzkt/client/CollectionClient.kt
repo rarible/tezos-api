@@ -1,6 +1,9 @@
 package com.rarible.tzkt.client
 
 import com.rarible.tzkt.model.Contract
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import org.springframework.web.reactive.function.client.WebClient
 
 class CollectionClient(
@@ -24,6 +27,15 @@ class CollectionClient(
                     val sorting = if (sortAsc) "sort.asc" else "sort.desc"
                     queryParam(sorting, "firstActivity")
                 }
+        }
+        return collections
+    }
+
+    suspend fun collections(addresses: List<String>): List<Contract> {
+        val collections = coroutineScope {
+            addresses
+                .map { async { collection(it) } }
+                .awaitAll()
         }
         return collections
     }

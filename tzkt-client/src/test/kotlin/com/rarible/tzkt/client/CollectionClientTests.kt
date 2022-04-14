@@ -1094,4 +1094,76 @@ class CollectionClientTests : BaseClientTests() {
         }
         assertThat(collections.first().firstActivity?.toLong()).isLessThan(lastId)
     }
+
+    @Test
+    fun `should return collections by ids`() = runBlocking<Unit> {
+        mock("""{
+            "type": "contract",
+            "address": "KT1QuofAgnsWffHzLA7D78rxytJruGHDe7XG",
+            "kind": "smart_contract",
+            "alias": "Vested funds 11",
+            "balance": 597134936637,
+            "manager": {
+                "alias": "Null-address",
+                "address": "tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU"
+            },
+            "delegate": {
+                "alias": "Foundation Baker 1",
+                "address": "tz3RDC3Jdn4j15J7bBHZd29EUee9gVB1CxD9",
+                "active": true
+            },
+            "delegationLevel": 1,
+            "delegationTime": "2018-06-30T17:39:57Z",
+            "numContracts": 0,
+            "activeTokensCount": 0,
+            "tokenBalancesCount": 0,
+            "tokenTransfersCount": 0,
+            "numDelegations": 0,
+            "numOriginations": 0,
+            "numTransactions": 60,
+            "numReveals": 0,
+            "numMigrations": 2,
+            "firstActivity": 1,
+            "firstActivityTime": "2018-06-30T17:39:57Z",
+            "lastActivity": 2219799,
+            "lastActivityTime": "2022-03-23T08:16:54Z",
+            "typeHash": 605223826,
+            "codeHash": -2016262351
+        }""")
+        mock("""{
+            "type": "contract",
+            "address": "KT1CSKPf2jeLpMmrgKquN2bCjBTkAcAdRVDy",
+            "kind": "smart_contract",
+            "alias": "Vested funds 29",
+            "balance": 597134936637,
+            "manager": {
+                "alias": "Null-address",
+                "address": "tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU"
+            },
+            "delegate": {
+                "alias": "Foundation baker 2",
+                "address": "tz3bvNMQ95vfAYtG8193ymshqjSvmxiCUuR5",
+                "active": true
+            },
+            "delegationLevel": 1,
+            "delegationTime": "2018-06-30T17:39:57Z",
+            "numContracts": 0,
+            "activeTokensCount": 0,
+            "tokenBalancesCount": 0,
+            "tokenTransfersCount": 0,
+            "numDelegations": 0,
+            "numOriginations": 0,
+            "numTransactions": 69,
+            "numReveals": 0,
+            "numMigrations": 2,
+            "firstActivity": 1,
+            "firstActivityTime": "2018-06-30T17:39:57Z",
+            "lastActivity": 2219803,
+            "lastActivityTime": "2022-03-23T08:18:54Z",
+            "typeHash": 605223826,
+            "codeHash": -2016262351
+        }""")
+        val collections = collectionClient.collections(listOf("KT1QuofAgnsWffHzLA7D78rxytJruGHDe7XG", "KT1CSKPf2jeLpMmrgKquN2bCjBTkAcAdRVDy"))
+        assertThat(collections).hasSize(2)
+    }
 }

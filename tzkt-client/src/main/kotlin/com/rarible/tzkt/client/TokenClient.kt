@@ -1,6 +1,9 @@
 package com.rarible.tzkt.client
 
 import com.rarible.tzkt.model.Token
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import org.springframework.web.reactive.function.client.WebClient
 
 class TokenClient(
@@ -27,6 +30,18 @@ class TokenClient(
                     val sorting = if (sortAsc) "sort.asc" else "sort.desc"
                     queryParam(sorting, "id")
                 }
+        }
+        return tokens
+    }
+
+    suspend fun tokens(ids: List<String>): List<Token> {
+        val tokens = coroutineScope {
+            ids
+                .map {
+                    val raw = it.split(":")
+                    async { token(raw[0], raw[1]) }
+                }
+                .awaitAll()
         }
         return tokens
     }

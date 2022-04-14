@@ -817,4 +817,55 @@ class TokenClientTests : BaseClientTests() {
         }
         assertThat(tokens.first().id?.toLong()).isLessThan(lastId)
     }
+
+    @Test
+    fun `should return tokens by ids`() = runBlocking<Unit> {
+        mock("""[{
+            "id": 1,
+            "contract": {
+                "alias": "tzBTC",
+                "address": "KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn"
+            },
+            "tokenId": "0",
+            "standard": "fa1.2",
+            "firstLevel": 889166,
+            "firstTime": "2020-03-31T15:12:51Z",
+            "lastLevel": 2280800,
+            "lastTime": "2022-04-14T16:51:14Z",
+            "transfersCount": 97188,
+            "balancesCount": 3029,
+            "holdersCount": 1179,
+            "totalMinted": "107615636205",
+            "totalBurned": "0",
+            "totalSupply": "107615636205",
+            "metadata": {
+                "name": "tzBTC",
+                "symbol": "tzBTC",
+                "decimals": "8"
+            }
+        }]""")
+        mock("""[{
+            "id": 2,
+            "contract": {
+                "alias": "StakerDAO",
+                "address": "KT1EctCuorV2NfVb1XTQgvzJ88MQtWP8cMMv"
+            },
+            "tokenId": "0",
+            "standard": "fa1.2",
+            "firstLevel": 767840,
+            "firstTime": "2020-01-06T03:46:32Z",
+            "lastLevel": 1098868,
+            "lastTime": "2020-08-25T00:50:26Z",
+            "transfersCount": 25,
+            "balancesCount": 22,
+            "holdersCount": 20,
+            "totalMinted": "1500000",
+            "totalBurned": "0",
+            "totalSupply": "1500000"
+        }]""")
+        val tokens = tokenClient.tokens(listOf("KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn:0", "KT1EctCuorV2NfVb1XTQgvzJ88MQtWP8cMMv:0"))
+
+        assertThat(tokens).hasSize(2)
+        assertThat(tokens.first().standard).isEqualTo("fa1.2")
+    }
 }
