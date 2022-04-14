@@ -12,7 +12,6 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         const val KALAMINT = "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"
         const val FXHASH = "KT1KEa8z6vWXDJrVqtMrAeDVzsvxat3kHaCE"
         const val VERSUM = "KT1LjmAdYQCLBjwv4S2oFkEzyHVkomAf5MrW"
-        const val RARIBLE = "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS"
     }
 
     suspend fun processRoyalties(id: String): List<Part> {
