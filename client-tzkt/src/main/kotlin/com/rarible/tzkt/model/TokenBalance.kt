@@ -41,39 +41,30 @@ import com.squareup.moshi.Json
 data class TokenBalance (
 
     /* Internal TzKT id.   **[sortable]** */
-    @Json(name = "id")
     val id: Int? = null,
 
     /* Owner account.   Click on the field to expand more details. */
-    @Json(name = "account")
     val account: Alias? = null,
 
     /* Token info.   Click on the field to expand more details. */
-    @Json(name = "token")
     val token: TokenInfo? = null,
 
     /* Balance (raw value, not divided by `decimals`).   **[sortable]** */
-    @Json(name = "balance")
     val balance: String? = null,
 
     /* Total number of transfers, affecting the token balance.   **[sortable]** */
-    @Json(name = "transfersCount")
     val transfersCount: Int? = null,
 
     /* Level of the block where the token balance was first changed.   **[sortable]** */
-    @Json(name = "firstLevel")
     val firstLevel: Int? = null,
 
     /* Timestamp of the block where the token balance was first changed. */
-    @Json(name = "firstTime")
     val firstTime: java.time.OffsetDateTime? = null,
 
     /* Level of the block where the token balance was last changed.   **[sortable]** */
-    @Json(name = "lastLevel")
     val lastLevel: Int? = null,
 
     /* Timestamp of the block where the token balance was last changed. */
-    @Json(name = "lastTime")
     val lastTime: java.time.OffsetDateTime? = null
 
 )

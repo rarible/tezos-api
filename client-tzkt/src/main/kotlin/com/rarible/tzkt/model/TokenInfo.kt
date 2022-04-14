@@ -37,23 +37,18 @@ import com.squareup.moshi.Json
 data class TokenInfo (
 
     /* Internal TzKT id (not the same as `tokenId`). */
-    @Json(name = "id")
     val id: Int? = null,
 
     /* Contract, created the token. */
-    @Json(name = "contract")
     val contract: Alias? = null,
 
     /* Token id, unique within the contract. */
-    @Json(name = "tokenId")
     val tokenId: String? = null,
 
     /* Token standard (either `fa1.2` or `fa2`). */
-    @Json(name = "standard")
     val standard: String? = null,
 
     /* Token metadata.   **[sortable]** */
-    @Json(name = "metadata")
     val metadata: Any? = null
 
 )

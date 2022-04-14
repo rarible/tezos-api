@@ -39,36 +39,28 @@ import com.squareup.moshi.Json
 data class BigMapKey (
 
     /* Internal Id, can be used for pagination */
-    @Json(name = "id")
-    val id: kotlin.Int? = null,
+    val id: Int? = null,
 
     /* Bigmap key status (`true` - active, `false` - removed) */
-    @Json(name = "active")
-    val active: kotlin.Boolean? = null,
+    val active: Boolean? = null,
 
     /* Key hash */
-    @Json(name = "hash")
-    val hash: kotlin.String? = null,
+    val hash: String? = null,
 
     /* Key in JSON or Micheline format, depending on the `micheline` query parameter. */
-    @Json(name = "key")
-    val key: kotlin.Any? = null,
+    val key: Any? = null,
 
     /* Value in JSON or Micheline format, depending on the `micheline` query parameter. Note, if the key is inactive (removed) it will contain the last non-null value. */
-    @Json(name = "value")
-    val `value`: kotlin.Any? = null,
+    val `value`: Any? = null,
 
     /* Level of the block where the bigmap key was seen first time */
-    @Json(name = "firstLevel")
-    val firstLevel: kotlin.Int? = null,
+    val firstLevel: Int? = null,
 
     /* Level of the block where the bigmap key was seen last time */
-    @Json(name = "lastLevel")
-    val lastLevel: kotlin.Int? = null,
+    val lastLevel: Int? = null,
 
     /* Total number of actions with the bigmap key */
-    @Json(name = "updates")
-    val updates: kotlin.Int? = null
+    val updates: Int? = null
 
 )
 

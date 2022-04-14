@@ -33,11 +33,9 @@ import com.squareup.moshi.Json
 data class SoftwareAlias (
 
     /* Software version (commit tag) */
-    @Json(name = "version")
     val version: String? = null,
 
     /* Date of the commit or when the software was first seen */
-    @Json(name = "date")
     val date: java.time.OffsetDateTime? = null
 
 )

@@ -31,7 +31,6 @@ import com.squareup.moshi.Json
 
 interface Account {
 
-    @Json(name = "type")
     val type: String
 }
 

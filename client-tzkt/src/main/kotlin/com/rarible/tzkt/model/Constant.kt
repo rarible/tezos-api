@@ -40,35 +40,27 @@ import com.squareup.moshi.Json
 data class Constant (
 
     /* Global address (expression hash) */
-    @Json(name = "address")
     val address: String? = null,
 
     /* Constant value (either micheline, michelson or bytes, depending on the `format` parameter) */
-    @Json(name = "value")
     val `value`: Any? = null,
 
     /* Constant size in bytes */
-    @Json(name = "size")
     val propertySize: Int? = null,
 
     /* Number of contracts referencing this constant */
-    @Json(name = "refs")
     val refs: Int? = null,
 
     /* Account registered this constant */
-    @Json(name = "creator")
     val creator: Alias? = null,
 
     /* Level of the first block baked with this software */
-    @Json(name = "creationLevel")
     val creationLevel: Int? = null,
 
     /* Datetime of the first block baked with this software */
-    @Json(name = "creationTime")
     val creationTime: java.time.OffsetDateTime? = null,
 
     /* Offchain metadata */
-    @Json(name = "metadata")
     val metadata: Object? = null
 
 )

@@ -33,12 +33,10 @@ import com.squareup.moshi.Json
 data class Alias (
 
     /* Account alias name (offchain metadata). */
-    @Json(name = "alias")
-    val alias: kotlin.String? = null,
+    val alias: String? = null,
 
     /* Account address (public key hash). */
-    @Json(name = "address")
-    val address: kotlin.String? = null
+    val address: String? = null
 
 )
 

@@ -34,15 +34,12 @@ import com.squareup.moshi.Json
 data class DelegateInfo (
 
     /* Name of the baking service */
-    @Json(name = "alias")
     val alias: String? = null,
 
     /* Public key hash of the delegate (baker) */
-    @Json(name = "address")
     val address: String? = null,
 
     /* Delegation status (`true` - active, `false` - deactivated) */
-    @Json(name = "active")
     val active: Boolean? = null
 
 )

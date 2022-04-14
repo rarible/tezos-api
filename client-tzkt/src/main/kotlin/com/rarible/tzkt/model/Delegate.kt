@@ -72,171 +72,129 @@ import com.squareup.moshi.Json
 data class Delegate (
 
     /* Type of the account, `delegate` - account, registered as a delegate (baker) */
-    @Json(name = "type")
     override val type: String,
 
     /* Public key hash of the delegate (baker) */
-    @Json(name = "address")
     val address: String? = null,
 
     /* Delegation status (`true` - active, `false` - deactivated) */
-    @Json(name = "active")
     val active: Boolean? = null,
 
     /* Name of the baking service */
-    @Json(name = "alias")
     val alias: String? = null,
 
     /* Public key of the delegate (baker) */
-    @Json(name = "publicKey")
     val publicKey: String? = null,
 
     /* Public key revelation status. Unrevealed account can't send manager operation (transaction, origination etc.) */
-    @Json(name = "revealed")
     val revealed: Boolean? = null,
 
     /* Total balance of the delegate (baker), including spendable and frozen funds (micro tez) */
-    @Json(name = "balance")
     val balance: Long? = null,
 
     /* Amount of security deposit, currently locked for baked (produced) blocks and (or) given endorsements (micro tez) */
-    @Json(name = "frozenDeposits")
     val frozenDeposits: Long? = null,
 
     /* Amount of currently frozen baking rewards (micro tez) */
-    @Json(name = "frozenRewards")
     val frozenRewards: Long? = null,
 
     /* Amount of currently frozen fees paid by operations inside blocks, baked (produced) by the delegate (micro tez) */
-    @Json(name = "frozenFees")
     val frozenFees: Long? = null,
 
     /* An account nonce which is used to prevent operation replay */
-    @Json(name = "counter")
     val counter: Int? = null,
 
     /* Block height when delegate (baker) was registered as a baker last time */
-    @Json(name = "activationLevel")
     val activationLevel: Int? = null,
 
     /* Block datetime when delegate (baker) was registered as a baker last time (ISO 8601, e.g. 2019-11-31) */
-    @Json(name = "activationTime")
     val activationTime: java.time.OffsetDateTime? = null,
 
     /* Block height when delegate (baker) was deactivated as a baker because of lack of funds or inactivity */
-    @Json(name = "deactivationLevel")
     val deactivationLevel: Int? = null,
 
     /* Block datetime when delegate (baker) was deactivated as a baker because of lack of funds or inactivity (ISO 8601, e.g. 2019-11-31) */
-    @Json(name = "deactivationTime")
     val deactivationTime: java.time.OffsetDateTime? = null,
 
     /* Sum of delegate (baker) balance and delegated funds minus frozen rewards (micro tez) */
-    @Json(name = "stakingBalance")
     val stakingBalance: Long? = null,
 
     /* Number of contracts, created (originated) and/or managed by the delegate (baker) */
-    @Json(name = "numContracts")
     val numContracts: Int? = null,
 
     /* Number of account tokens with non-zero balances */
-    @Json(name = "activeTokensCount")
     val activeTokensCount: Int? = null,
 
     /* Number of tokens the account ever had */
-    @Json(name = "tokenBalancesCount")
     val tokenBalancesCount: Int? = null,
 
     /* Number of token transfers from/to the account */
-    @Json(name = "tokenTransfersCount")
     val tokenTransfersCount: Int? = null,
 
     /* Number of current delegators (accounts, delegated their funds) of the delegate (baker) */
-    @Json(name = "numDelegators")
     val numDelegators: Int? = null,
 
     /* Number of baked (validated) blocks all the time by the delegate (baker) */
-    @Json(name = "numBlocks")
     val numBlocks: Int? = null,
 
     /* Number of given endorsements (approvals) by the delegate (baker) */
-    @Json(name = "numEndorsements")
     val numEndorsements: Int? = null,
 
     /* Number of submitted by the delegate ballots during a voting period */
-    @Json(name = "numBallots")
     val numBallots: Int? = null,
 
     /* Number of submitted (upvoted) by the delegate proposals during a proposal period */
-    @Json(name = "numProposals")
     val numProposals: Int? = null,
 
     /* Number of account activation operations. Are used to activate accounts that were recommended allocations of tezos tokens for donations to the Tezos Foundation’s fundraiser */
-    @Json(name = "numActivations")
     val numActivations: Int? = null,
 
     /* Number of double baking (baking two different blocks at the same height) evidence operations, included in blocks, baked (validated) by the delegate */
-    @Json(name = "numDoubleBaking")
     val numDoubleBaking: Int? = null,
 
     /* Number of double endorsement (endorsing two different blocks at the same block height) evidence operations, included in blocks, baked (validated) by the delegate */
-    @Json(name = "numDoubleEndorsing")
     val numDoubleEndorsing: Int? = null,
 
     /* Number of seed nonce revelation (are used by the blockchain to create randomness) operations provided by the delegate */
-    @Json(name = "numNonceRevelations")
     val numNonceRevelations: Int? = null,
 
     /* Number of operations for all time in which rewards were lost due to unrevealed seed nonces by the delegate (synthetic type) */
-    @Json(name = "numRevelationPenalties")
     val numRevelationPenalties: Int? = null,
 
     /* Number of all delegation related operations (new delegator, left delegator, registration as a baker), related to the delegate (baker)  */
-    @Json(name = "numDelegations")
     val numDelegations: Int? = null,
 
     /* Number of all origination (deployment / contract creation) operations, related to the delegate (baker) */
-    @Json(name = "numOriginations")
     val numOriginations: Int? = null,
 
     /* Number of all transaction (tez transfer) operations, related to the delegate (baker) */
-    @Json(name = "numTransactions")
     val numTransactions: Int? = null,
 
     /* Number of reveal (is used to reveal the public key associated with an account) operations of the delegate (baker) */
-    @Json(name = "numReveals")
     val numReveals: Int? = null,
 
     /* Number of register global constant operations of the delegate (baker) */
-    @Json(name = "numRegisterConstants")
     val numRegisterConstants: Int? = null,
 
     /* Number of migration (result of the context (database) migration during a protocol update) operations, related to the delegate (synthetic type)  */
-    @Json(name = "numMigrations")
     val numMigrations: Int? = null,
 
     /* Block height of the first operation, related to the delegate (baker) */
-    @Json(name = "firstActivity")
     val firstActivity: Int? = null,
 
     /* Block datetime of the first operation, related to the delegate (ISO 8601, e.g. `2020-02-20T02:40:57Z`) */
-    @Json(name = "firstActivityTime")
     val firstActivityTime: java.time.OffsetDateTime? = null,
 
     /* Height of the block in which the account state was changed last time */
-    @Json(name = "lastActivity")
     val lastActivity: Int? = null,
 
     /* Datetime of the block in which the account state was changed last time (ISO 8601, e.g. `2020-02-20T02:40:57Z`) */
-    @Json(name = "lastActivityTime")
     val lastActivityTime: java.time.OffsetDateTime? = null,
 
     /* Metadata of the delegate (alias, logo, website, contacts, etc) */
-    @Json(name = "metadata")
     val metadata: AccountMetadata? = null,
 
     /* Last seen baker's software */
-    @Json(name = "software")
     val software: SoftwareAlias? = null
 
 ) : Account

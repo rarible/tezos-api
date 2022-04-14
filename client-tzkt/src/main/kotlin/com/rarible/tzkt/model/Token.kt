@@ -47,63 +47,48 @@ import com.squareup.moshi.Json
 data class Token (
 
     /* Internal TzKT id (not the same as `tokenId`).   **[sortable]** */
-    @Json(name = "id")
     val id: Int? = null,
 
     /* Contract, created the token. */
-    @Json(name = "contract")
     val contract: Alias? = null,
 
     /* Token id, unique within the contract.   **[sortable]** */
-    @Json(name = "tokenId")
     val tokenId: String? = null,
 
     /* Token standard (`fa1.2` or `fa2`). */
-    @Json(name = "standard")
     val standard: String? = null,
 
     /* Level of the block where the token was first seen.   **[sortable]** */
-    @Json(name = "firstLevel")
     val firstLevel: Int? = null,
 
     /* Timestamp of the block where the token was first seen. */
-    @Json(name = "firstTime")
     val firstTime: java.time.OffsetDateTime? = null,
 
     /* Level of the block where the token was last seen.   **[sortable]** */
-    @Json(name = "lastLevel")
     val lastLevel: Int? = null,
 
     /* Timestamp of the block where the token was last seen. */
-    @Json(name = "lastTime")
     val lastTime: java.time.OffsetDateTime? = null,
 
     /* Total number of transfers.   **[sortable]** */
-    @Json(name = "transfersCount")
     val transfersCount: Int? = null,
 
     /* Total number of holders ever seen.   **[sortable]** */
-    @Json(name = "balancesCount")
     val balancesCount: Int? = null,
 
     /* Total number of current holders.   **[sortable]** */
-    @Json(name = "holdersCount")
     val holdersCount: Int? = null,
 
     /* Total number of minted tokens (raw value, not divided by `decimals`). */
-    @Json(name = "totalMinted")
     val totalMinted: String? = null,
 
     /* Total number of burned tokens (raw value, not divided by `decimals`). */
-    @Json(name = "totalBurned")
     val totalBurned: String? = null,
 
     /* Total number of existing tokens (raw value, not divided by `decimals`). */
-    @Json(name = "totalSupply")
     val totalSupply: String? = null,
 
     /* Token metadata.   **[sortable]** */
-    @Json(name = "metadata")
     val metadata: Any? = null
 
 )

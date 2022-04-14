@@ -44,47 +44,36 @@ import com.squareup.moshi.Json
 data class Ghost (
 
     /* Type of the account, `ghost` - contract that has been met among token holders, but hasn't been originated */
-    @Json(name = "type")
     override val type: String,
 
     /* Address of the contract */
-    @Json(name = "address")
     val address: String? = null,
 
     /* Name of the ghost contract */
-    @Json(name = "alias")
     val alias: String? = null,
 
     /* Number of account tokens with non-zero balances */
-    @Json(name = "activeTokensCount")
     val activeTokensCount: Int? = null,
 
     /* Number of tokens the account ever had */
-    @Json(name = "tokenBalancesCount")
     val tokenBalancesCount: Int? = null,
 
     /* Number of token transfers from/to the account */
-    @Json(name = "tokenTransfersCount")
     val tokenTransfersCount: Int? = null,
 
     /* Block height at which the ghost contract appeared first time */
-    @Json(name = "firstActivity")
     val firstActivity: Int? = null,
 
     /* Block datetime at which the ghost contract appeared first time (ISO 8601, e.g. `2020-02-20T02:40:57Z`) */
-    @Json(name = "firstActivityTime")
     val firstActivityTime: java.time.OffsetDateTime? = null,
 
     /* Height of the block in which the ghost contract state was changed last time */
-    @Json(name = "lastActivity")
     val lastActivity: Int? = null,
 
     /* Datetime of the block in which the ghost contract state was changed last time (ISO 8601, e.g. `2020-02-20T02:40:57Z`) */
-    @Json(name = "lastActivityTime")
     val lastActivityTime: java.time.OffsetDateTime? = null,
 
     /* Metadata of the ghost contract (alias, logo, website, contacts, etc) */
-    @Json(name = "metadata")
     val metadata: AccountMetadata? = null
 
 ) : Account
