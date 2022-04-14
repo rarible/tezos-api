@@ -344,4 +344,97 @@ class RoyaltiesTests : BaseClientTests() {
             )
         )
     }
+
+    @Test
+    fun `should correctly fetch and parse SWEET IO royalties`() = runBlocking<Unit> {
+        mock404()
+        mock(
+            """
+            {
+            	"id": 22644487,
+            	"active": true,
+            	"hash": "expruDuAZnFKqmLoisJqUGqrNzXTvw7PJM2rYk97JErM5FHCerQqgn",
+            	"key": "2",
+            	"value": {
+            		"token_id": "2",
+            		"token_info": {
+            			"": "697066733a2f2f516d504c434d56437a6a4b54555233757a6d78366345686735657577666e4a576870574245414b6b3275655a5052"
+            		}
+            	},
+            	"firstLevel": 2261353,
+            	"lastLevel": 2261353,
+            	"updates": 1
+            }
+        """.trimIndent()
+        )
+        mock(
+            """
+            {
+            	"artifactUri": "ipfs://Qmd6QwCcSFpo8ZM1QKgqtPf9aMkikNLDtRq1j68dEHutuz",
+            	"attributes": [{
+            		"name": "rarity",
+            		"type": "integer",
+            		"value": "4"
+            	}, {
+            		"name": "display_type",
+            		"type": "string",
+            		"value": "video"
+            	}, {
+            		"name": "seller_fee_basis_points",
+            		"type": "integer",
+            		"value": "1000"
+            	}, {
+            		"name": "fee_recipient",
+            		"type": "string",
+            		"value": "tz1fRXMLR27hWoD49tdtKunHyfy3CQb5XZst"
+            	}],
+            	"creators": ["SocialSweet Inc."],
+            	"date": "2022-04-07T17:52:37",
+            	"decimals": 0,
+            	"description": "\u201cRacing in Melbourne is special, you can\u2019t beat that home crowd support especially after a three year absence. I can\u2019t wait to hit the track!\u201d  - Daniel Ricciardo, 2022.  After three years away, F1 finally returns to Australia!  This limited-edition digital collectible celebrates Daniel Ricciardo\u2019s first home race since the last F1 GP held at Melbourne\u2019s Albert Park in 2019.  In addition to being a special race for Daniel, the Australian GP has been a historically successful event for McLaren Racing with the team taking 12 wins there.  The first Australian GP was held in 1928, but the event didn\u2019t become part of the F1 World Championship until 1985.  Beginning in Adelaide, the GP was moved to its current venue of Albert Park in 1996 where it has remained ever since.",
+            	"displayUri": "ipfs://Qmd6QwCcSFpo8ZM1QKgqtPf9aMkikNLDtRq1j68dEHutuz",
+            	"externalUri": "https://collectible.sweet.io/series/1428/2",
+            	"formats": [{
+            		"hash": "sha256://5c85b7ca208094bf69152a69a0af017926fe9af90c44d6cb8ebc88ce0667d3c8",
+            		"mimeType": "image/png",
+            		"uri": "ipfs://Qmd6QwCcSFpo8ZM1QKgqtPf9aMkikNLDtRq1j68dEHutuz"
+            	}, {
+            		"hash": "sha256://cfe4d52c63a90538e2c66e3b71cc0f778a9cb9ccc3032c13ffb85a26bcceab4d",
+            		"mimeType": "application/json",
+            		"uri": "ipfs://Qmbv1hWdH1NzUk9Fcjy7rX2ZzWVhoSpTCN7ojxKzEUT54b"
+            	}, {
+            		"hash": null,
+            		"mimeType": "text/html",
+            		"uri": "https://collectible.sweet.io/series/1428/2"
+            	}],
+            	"homepage": "https://collectible.sweet.io/series/1428/2",
+            	"interfaces": ["TZIP-012", "TZIP-016", "TZIP-021"],
+            	"isBooleanAmount": true,
+            	"minter": "SocialSweet Inc.",
+            	"name": "Danny Ric Comes Home No. 2",
+            	"rightsUri": "https://collectible.sweet.io/static/terms-and-conditions-mar2021.txt",
+            	"symbol": "SWEDC",
+            	"tags": [],
+            	"thumbnailUri": "ipfs://Qmd6QwCcSFpo8ZM1QKgqtPf9aMkikNLDtRq1j68dEHutuz",
+            	"version": "1"
+            }
+        """.trimIndent()
+        )
+
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
+        var tokenId = "2"
+        val id = "$contract:$tokenId"
+        val parts = handler.processRoyalties(listOf(id))
+        assertThat(parts).isEqualTo(
+            mapOf(
+                Pair(
+                    id,
+                    listOf(
+                        Part("tz1fRXMLR27hWoD49tdtKunHyfy3CQb5XZst", 1000),
+                    )
+                )
+            )
+        )
+    }
 }

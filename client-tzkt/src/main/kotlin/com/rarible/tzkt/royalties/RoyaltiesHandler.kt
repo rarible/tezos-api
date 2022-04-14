@@ -1,5 +1,6 @@
 package com.rarible.tzkt.royalties
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.rarible.tzkt.client.BigMapKeyClient
 import com.rarible.tzkt.client.IPFSClient
@@ -46,12 +47,11 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
             if (!allRoyalties[it].isNullOrEmpty()) {
                 return@forEach
             }
+
             //fetch metadata from ipfs
             //check ipfs pattern
-            //check for "Royalties" in token metadata
             runBlocking {
                 try {
-                    val tempParts = mutableListOf<Part>()
                     val tokenMetadata = bigMapKeyClient.bigMapKeyWithName(contract, "token_metadata", tokenId)
                     val metadataMap = tokenMetadata.value as LinkedHashMap<String, String>
                     val metadata = metadataMap["token_info"] as LinkedHashMap<String, String>
@@ -68,23 +68,8 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
                     }
 
                     if (ipfsData.has("attributes")) {
-                        var recipient = ""
-                        var share = ""
-                        val attributes = ipfsData["attributes"] as ArrayList<JsonObject>
-                        attributes.forEach {
-                            if (it["name"].asString == "seller_fee_basis_points") {
-                                recipient = it["value"] as String
-                            }
-                            if (it["fee_recipient"].asString == "seller_fee_basis_points") {
-                                share = it["value"] as String
-                            }
-                        }
-                        if (recipient.isNotEmpty() && share.isNotEmpty()) {
-                            tempParts.add(Part(recipient, share.toLong()))
-                        }
+                        allRoyalties[it] = getSweetIORoyalties(ipfsData)
                     }
-
-                    allRoyalties[it] = tempParts
                 } catch (e: NoSuchElementException) {
                     allRoyalties[it] = null
                 }
@@ -95,68 +80,109 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
 
     fun getHENRoyalties(tokenId: String): List<Part> {
         var royaltiesMap: LinkedHashMap<String, String>
-        runBlocking {
-            val key = bigMapKeyClient.bigMapKeyWithId("522", tokenId)
-            royaltiesMap = key.value as LinkedHashMap<String, String>
-        }
-        return listOf(Part(royaltiesMap["issuer"]!!, royaltiesMap["royalties"]!!.toLong() * 10))
+        val parts = mutableListOf<Part>()
+        try {
+            runBlocking {
+                val key = bigMapKeyClient.bigMapKeyWithId("522", tokenId)
+                royaltiesMap = key.value as LinkedHashMap<String, String>
+                parts.add(Part(royaltiesMap["issuer"]!!, royaltiesMap["royalties"]!!.toLong() * 10))
+            }
+        } catch(e: Exception){}
+        return parts
     }
 
     fun getKalamintRoyalties(tokenId: String): List<Part> {
         var royaltiesMap: LinkedHashMap<String, String>
-        runBlocking {
-            val key = bigMapKeyClient.bigMapKeyWithId("861", tokenId)
-            royaltiesMap = key.value as LinkedHashMap<String, String>
-        }
-        return listOf(Part(royaltiesMap["creator"]!!, royaltiesMap["creator_royalty"]!!.toLong() * 100))
+        val parts = mutableListOf<Part>()
+        try {
+            runBlocking {
+                val key = bigMapKeyClient.bigMapKeyWithId("861", tokenId)
+                royaltiesMap = key.value as LinkedHashMap<String, String>
+                parts.add(Part(royaltiesMap["creator"]!!, royaltiesMap["creator_royalty"]!!.toLong() * 100))
+            }
+        } catch (e: Exception){}
+        return parts
     }
 
     fun getFxHashRoyalties(tokenId: String): List<Part> {
         var royaltiesMap: LinkedHashMap<String, String>
         var authorMap: LinkedHashMap<String, String>
-
-        runBlocking {
-            val royaltiesKey = bigMapKeyClient.bigMapKeyWithId("22788", tokenId)
-            royaltiesMap = royaltiesKey.value as LinkedHashMap<String, String>
-            val authorKey = bigMapKeyClient.bigMapKeyWithId("70072", royaltiesMap["issuer_id"]!!)
-            authorMap = authorKey.value as LinkedHashMap<String, String>
-        }
-        return listOf(Part(authorMap["author"]!!, royaltiesMap["royalties"]!!.toLong() * 10))
+        val parts = mutableListOf<Part>()
+        try {
+            runBlocking {
+                val royaltiesKey = bigMapKeyClient.bigMapKeyWithId("22788", tokenId)
+                royaltiesMap = royaltiesKey.value as LinkedHashMap<String, String>
+                val authorKey = bigMapKeyClient.bigMapKeyWithId("70072", royaltiesMap["issuer_id"]!!)
+                authorMap = authorKey.value as LinkedHashMap<String, String>
+                parts.add(Part(authorMap["author"]!!, royaltiesMap["royalties"]!!.toLong() * 10))
+            }
+        }catch (e: Exception){}
+        return parts
     }
 
     //TODO: need to verify if splits need to be handled for royalties in VERSUM
     fun getVersumRoyalties(tokenId: String): List<Part> {
         var royaltiesMap: LinkedHashMap<String, String>
-        runBlocking {
-            val key = bigMapKeyClient.bigMapKeyWithId("75555", tokenId)
-            royaltiesMap = key.value as LinkedHashMap<String, String>
-        }
-        return listOf(Part(royaltiesMap["minter"]!!, royaltiesMap["royalty"]!!.toLong() * 10))
+        val parts = mutableListOf<Part>()
+        try {
+            runBlocking {
+                val key = bigMapKeyClient.bigMapKeyWithId("75555", tokenId)
+                royaltiesMap = key.value as LinkedHashMap<String, String>
+                parts.add(Part(royaltiesMap["minter"]!!, royaltiesMap["royalty"]!!.toLong() * 10))
+            }
+        } catch (e: Exception){}
+        return parts
     }
 
     fun getRaribleRoyalties(contract: String, tokenId: String): List<Part> {
         val parts = mutableListOf<Part>()
-        var royaltiesMap: LinkedHashMap<String, String>
-        runBlocking {
-            val key = bigMapKeyClient.bigMapKeyWithName(contract, "royalties", tokenId)
-            val royaltiesMap = key.value as List<LinkedHashMap<String, String>>
-            royaltiesMap.forEach { part ->
-                parts.add(Part(part["partAccount"]!!, part["partValue"]!!.toLong()))
+        try{
+            runBlocking {
+                val key = bigMapKeyClient.bigMapKeyWithName(contract, "royalties", tokenId)
+                val royaltiesMap = key.value as List<LinkedHashMap<String, String>>
+                royaltiesMap.forEach { part ->
+                    parts.add(Part(part["partAccount"]!!, part["partValue"]!!.toLong()))
+                }
             }
-        }
+        } catch (e: Exception){}
         return parts
     }
 
     fun getObjktRoyalties(data: JsonObject): List<Part> {
         var partList: MutableList<Part> = ArrayList()
-        val shares = data["shares"] as JsonObject
-        shares.keySet().forEach {
-            partList.add(
-                Part(
-                    it, shares[it].asLong * 10
+        try{
+            val shares = data["shares"] as JsonObject
+            shares.keySet().forEach {
+                partList.add(
+                    Part(
+                        it, shares[it].asLong * 10
+                    )
                 )
-            )
-        }
+            }
+        } catch (e: Exception){}
+        return partList
+    }
+
+    fun getSweetIORoyalties(data: JsonObject): List<Part> {
+        var partList: MutableList<Part> = ArrayList()
+        var recipient = ""
+        var share = ""
+        try {
+            val attributes = data["attributes"].asJsonArray
+            attributes.forEach {
+                val item = it.asJsonObject
+                if (item.has("name") && item["name"].asString == "fee_recipient") {
+                    recipient = item["value"].asString
+                }
+                if (item.has("name") && item["name"].asString == "seller_fee_basis_points") {
+                    share = item["value"].asString
+                }
+            }
+            if (recipient.isNotEmpty() && share.isNotEmpty()) {
+                partList.add(Part(recipient, share.toLong()))
+            }
+        } catch (e: Exception){}
+
         return partList
     }
 }
