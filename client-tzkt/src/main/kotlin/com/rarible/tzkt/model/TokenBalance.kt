@@ -42,7 +42,7 @@ data class TokenBalance (
 
     /* Internal TzKT id.   **[sortable]** */
     @Json(name = "id")
-    val id: kotlin.Int? = null,
+    val id: Int? = null,
 
     /* Owner account.   Click on the field to expand more details. */
     @Json(name = "account")

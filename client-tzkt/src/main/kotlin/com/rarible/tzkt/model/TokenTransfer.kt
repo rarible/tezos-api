@@ -43,11 +43,11 @@ data class TokenTransfer (
 
     /* Internal TzKT id.   **[sortable]** */
     @Json(name = "id")
-    val id: kotlin.Int? = null,
+    val id: Int? = null,
 
     /* Level of the block, at which the token transfer was made.   **[sortable]** */
     @Json(name = "level")
-    val level: kotlin.Int? = null,
+    val level: Int? = null,
 
     /* Timestamp of the block, at which the token transfer was made. */
     @Json(name = "timestamp")
@@ -67,19 +67,19 @@ data class TokenTransfer (
 
     /* Amount of tokens transferred (raw value, not divided by `decimals`).   **[sortable]** */
     @Json(name = "amount")
-    val amount: kotlin.String? = null,
+    val amount: String? = null,
 
     /* Internal TzKT id of the transaction operation, caused the token transfer. */
     @Json(name = "transactionId")
-    val transactionId: kotlin.Int? = null,
+    val transactionId: Int? = null,
 
     /* Internal TzKT id of the origination operation, caused the token transfer. */
     @Json(name = "originationId")
-    val originationId: kotlin.Int? = null,
+    val originationId: Int? = null,
 
     /* Internal TzKT id of the migration operation, caused the token transfer. */
     @Json(name = "migrationId")
-    val migrationId: kotlin.Int? = null
+    val migrationId: Int? = null
 
 )
 

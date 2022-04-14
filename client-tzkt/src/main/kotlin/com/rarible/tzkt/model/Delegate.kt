@@ -77,23 +77,23 @@ data class Delegate (
 
     /* Public key hash of the delegate (baker) */
     @Json(name = "address")
-    val address: kotlin.String? = null,
+    val address: String? = null,
 
     /* Delegation status (`true` - active, `false` - deactivated) */
     @Json(name = "active")
-    val active: kotlin.Boolean? = null,
+    val active: Boolean? = null,
 
     /* Name of the baking service */
     @Json(name = "alias")
-    val alias: kotlin.String? = null,
+    val alias: String? = null,
 
     /* Public key of the delegate (baker) */
     @Json(name = "publicKey")
-    val publicKey: kotlin.String? = null,
+    val publicKey: String? = null,
 
     /* Public key revelation status. Unrevealed account can't send manager operation (transaction, origination etc.) */
     @Json(name = "revealed")
-    val revealed: kotlin.Boolean? = null,
+    val revealed: Boolean? = null,
 
     /* Total balance of the delegate (baker), including spendable and frozen funds (micro tez) */
     @Json(name = "balance")

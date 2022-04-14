@@ -35,15 +35,15 @@ data class DelegateInfo (
 
     /* Name of the baking service */
     @Json(name = "alias")
-    val alias: kotlin.String? = null,
+    val alias: String? = null,
 
     /* Public key hash of the delegate (baker) */
     @Json(name = "address")
-    val address: kotlin.String? = null,
+    val address: String? = null,
 
     /* Delegation status (`true` - active, `false` - deactivated) */
     @Json(name = "active")
-    val active: kotlin.Boolean? = null
+    val active: Boolean? = null
 
 )
 

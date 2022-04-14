@@ -34,11 +34,11 @@ data class CreatorInfo (
 
     /* Name of the project behind the account or account description */
     @Json(name = "alias")
-    val alias: kotlin.String? = null,
+    val alias: String? = null,
 
     /* Public key hash of the account */
     @Json(name = "address")
-    val address: kotlin.String? = null
+    val address: String? = null
 
 )
 

@@ -66,23 +66,23 @@ data class Contract (
 
     /* Public key hash of the contract */
     @Json(name = "address")
-    val address: kotlin.String? = null,
+    val address: String? = null,
 
     /* Kind of the contract (`delegator_contract` or `smart_contract`), where `delegator_contract` - manager.tz smart contract for delegation purpose only */
     @Json(name = "kind")
-    val kind: kotlin.String? = null,
+    val kind: String? = null,
 
     /* List of implemented standards (TZIPs) */
     @Json(name = "tzips")
-    val tzips: kotlin.collections.List<kotlin.String>? = null,
+    val tzips: List<String>? = null,
 
     /* Name of the project behind the contract or contract description */
     @Json(name = "alias")
-    val alias: kotlin.String? = null,
+    val alias: String? = null,
 
     /* Contract balance (micro tez) */
     @Json(name = "balance")
-    val balance: kotlin.Long? = null,
+    val balance: Long? = null,
 
     /* Information about the account, which has deployed the contract to the blockchain */
     @Json(name = "creator")
@@ -98,7 +98,7 @@ data class Contract (
 
     /* Block height of latest delegation. `null` if it's not delegated */
     @Json(name = "delegationLevel")
-    val delegationLevel: kotlin.Int? = null,
+    val delegationLevel: Int? = null,
 
     /* Block datetime of latest delegation (ISO 8601, e.g. `2020-02-20T02:40:57Z`). `null` if it's not delegated */
     @Json(name = "delegationTime")
@@ -106,19 +106,19 @@ data class Contract (
 
     /* Number of contracts, created (originated) and/or managed by the contract */
     @Json(name = "numContracts")
-    val numContracts: kotlin.Int? = null,
+    val numContracts: Int? = null,
 
     /* Number of account tokens with non-zero balances */
     @Json(name = "activeTokensCount")
-    val activeTokensCount: kotlin.Int? = null,
+    val activeTokensCount: Int? = null,
 
     /* Number of tokens the account ever had */
     @Json(name = "tokenBalancesCount")
-    val tokenBalancesCount: kotlin.Int? = null,
+    val tokenBalancesCount: Int? = null,
 
     /* Number of token transfers from/to the account */
     @Json(name = "tokenTransfersCount")
-    val tokenTransfersCount: kotlin.Int? = null,
+    val tokenTransfersCount: Int? = null,
 
     /* Number of delegation operations of the contract */
     @Json(name = "numDelegations")

@@ -49,27 +49,27 @@ data class Ghost (
 
     /* Address of the contract */
     @Json(name = "address")
-    val address: kotlin.String? = null,
+    val address: String? = null,
 
     /* Name of the ghost contract */
     @Json(name = "alias")
-    val alias: kotlin.String? = null,
+    val alias: String? = null,
 
     /* Number of account tokens with non-zero balances */
     @Json(name = "activeTokensCount")
-    val activeTokensCount: kotlin.Int? = null,
+    val activeTokensCount: Int? = null,
 
     /* Number of tokens the account ever had */
     @Json(name = "tokenBalancesCount")
-    val tokenBalancesCount: kotlin.Int? = null,
+    val tokenBalancesCount: Int? = null,
 
     /* Number of token transfers from/to the account */
     @Json(name = "tokenTransfersCount")
-    val tokenTransfersCount: kotlin.Int? = null,
+    val tokenTransfersCount: Int? = null,
 
     /* Block height at which the ghost contract appeared first time */
     @Json(name = "firstActivity")
-    val firstActivity: kotlin.Int? = null,
+    val firstActivity: Int? = null,
 
     /* Block datetime at which the ghost contract appeared first time (ISO 8601, e.g. `2020-02-20T02:40:57Z`) */
     @Json(name = "firstActivityTime")
@@ -77,7 +77,7 @@ data class Ghost (
 
     /* Height of the block in which the ghost contract state was changed last time */
     @Json(name = "lastActivity")
-    val lastActivity: kotlin.Int? = null,
+    val lastActivity: Int? = null,
 
     /* Datetime of the block in which the ghost contract state was changed last time (ISO 8601, e.g. `2020-02-20T02:40:57Z`) */
     @Json(name = "lastActivityTime")

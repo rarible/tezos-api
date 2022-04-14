@@ -47,40 +47,40 @@ import com.squareup.moshi.Json
 data class AccountMetadata (
 
     @Json(name = "kind")
-    val kind: kotlin.String? = null,
+    val kind: String? = null,
 
     @Json(name = "alias")
-    val alias: kotlin.String? = null,
+    val alias: String? = null,
 
     @Json(name = "description")
-    val description: kotlin.String? = null,
+    val description: String? = null,
 
     @Json(name = "site")
-    val site: kotlin.String? = null,
+    val site: String? = null,
 
     @Json(name = "support")
-    val support: kotlin.String? = null,
+    val support: String? = null,
 
     @Json(name = "email")
-    val email: kotlin.String? = null,
+    val email: String? = null,
 
     @Json(name = "twitter")
-    val twitter: kotlin.String? = null,
+    val twitter: String? = null,
 
     @Json(name = "telegram")
-    val telegram: kotlin.String? = null,
+    val telegram: String? = null,
 
     @Json(name = "discord")
-    val discord: kotlin.String? = null,
+    val discord: String? = null,
 
     @Json(name = "reddit")
-    val reddit: kotlin.String? = null,
+    val reddit: String? = null,
 
     @Json(name = "slack")
-    val slack: kotlin.String? = null,
+    val slack: String? = null,
 
     @Json(name = "github")
-    val github: kotlin.String? = null,
+    val github: String? = null,
 
     @Json(name = "gitlab")
     val gitlab: kotlin.String? = null,

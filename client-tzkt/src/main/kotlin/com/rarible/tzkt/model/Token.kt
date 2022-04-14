@@ -48,7 +48,7 @@ data class Token (
 
     /* Internal TzKT id (not the same as `tokenId`).   **[sortable]** */
     @Json(name = "id")
-    val id: kotlin.Int? = null,
+    val id: Int? = null,
 
     /* Contract, created the token. */
     @Json(name = "contract")
@@ -56,15 +56,15 @@ data class Token (
 
     /* Token id, unique within the contract.   **[sortable]** */
     @Json(name = "tokenId")
-    val tokenId: kotlin.String? = null,
+    val tokenId: String? = null,
 
     /* Token standard (`fa1.2` or `fa2`). */
     @Json(name = "standard")
-    val standard: kotlin.String? = null,
+    val standard: String? = null,
 
     /* Level of the block where the token was first seen.   **[sortable]** */
     @Json(name = "firstLevel")
-    val firstLevel: kotlin.Int? = null,
+    val firstLevel: Int? = null,
 
     /* Timestamp of the block where the token was first seen. */
     @Json(name = "firstTime")
@@ -72,7 +72,7 @@ data class Token (
 
     /* Level of the block where the token was last seen.   **[sortable]** */
     @Json(name = "lastLevel")
-    val lastLevel: kotlin.Int? = null,
+    val lastLevel: Int? = null,
 
     /* Timestamp of the block where the token was last seen. */
     @Json(name = "lastTime")
@@ -80,31 +80,31 @@ data class Token (
 
     /* Total number of transfers.   **[sortable]** */
     @Json(name = "transfersCount")
-    val transfersCount: kotlin.Int? = null,
+    val transfersCount: Int? = null,
 
     /* Total number of holders ever seen.   **[sortable]** */
     @Json(name = "balancesCount")
-    val balancesCount: kotlin.Int? = null,
+    val balancesCount: Int? = null,
 
     /* Total number of current holders.   **[sortable]** */
     @Json(name = "holdersCount")
-    val holdersCount: kotlin.Int? = null,
+    val holdersCount: Int? = null,
 
     /* Total number of minted tokens (raw value, not divided by `decimals`). */
     @Json(name = "totalMinted")
-    val totalMinted: kotlin.String? = null,
+    val totalMinted: String? = null,
 
     /* Total number of burned tokens (raw value, not divided by `decimals`). */
     @Json(name = "totalBurned")
-    val totalBurned: kotlin.String? = null,
+    val totalBurned: String? = null,
 
     /* Total number of existing tokens (raw value, not divided by `decimals`). */
     @Json(name = "totalSupply")
-    val totalSupply: kotlin.String? = null,
+    val totalSupply: String? = null,
 
     /* Token metadata.   **[sortable]** */
     @Json(name = "metadata")
-    val metadata: kotlin.Any? = null
+    val metadata: Any? = null
 
 )
 
