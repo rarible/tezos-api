@@ -1,978 +1,1537 @@
-# This file was generated based on ".graphqlconfig". Do not edit manually.
+"""
+Boolean expression to compare columns of type "Boolean". All fields are combined with logical 'AND'.
+"""
+input Boolean_comparison_exp {
+  _eq: Boolean
 
-schema {
-    query: query_root
-    subscription: subscription_root
+  _gt: Boolean
+
+  _gte: Boolean
+
+  _in: [Boolean!]
+
+  _is_null: Boolean
+
+  _lt: Boolean
+
+  _lte: Boolean
+
+  _neq: Boolean
+
+  _nin: [Boolean!]
 }
 
-"whether this query should be cached (Hasura Cloud only)"
-directive @cached(
-        "refresh the cache entry"
-        refresh: Boolean! = false,
-        "measured in seconds"
-        ttl: Int! = 60
-    ) on QUERY
+"""
+Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'.
+"""
+input Int_comparison_exp {
+  _eq: Int
 
-"columns and relationships of \"dipdup_contract\""
-type dipdup_contract {
-    address: String!
-    created_at: timestamptz!
-    name: String!
-    typename: String
-    updated_at: timestamptz!
+  _gt: Int
+
+  _gte: Int
+
+  _in: [Int!]
+
+  _is_null: Boolean
+
+  _lt: Int
+
+  _lte: Int
+
+  _neq: Int
+
+  _nin: [Int!]
 }
 
-"columns and relationships of \"dipdup_contract_metadata\""
-type dipdup_contract_metadata {
-    contract: String!
-    created_at: timestamptz!
-    id: Int!
-    metadata(
-        "JSON select path"
-        path: String
-    ): jsonb!
-    network: String!
-    update_id: Int!
-    updated_at: timestamptz!
-}
+"""
+Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'.
+"""
+input String_comparison_exp {
+  _eq: String
 
-"columns and relationships of \"dipdup_head\""
-type dipdup_head {
-    created_at: timestamptz!
-    hash: String!
-    level: Int!
-    name: String!
-    timestamp: timestamptz!
-    updated_at: timestamptz!
-}
+  _gt: String
 
-"columns and relationships of \"dipdup_head_status\""
-type dipdup_head_status {
-    name: String
-    status: String
-}
+  _gte: String
 
-"columns and relationships of \"dipdup_index\""
-type dipdup_index {
-    config_hash: String!
-    created_at: timestamptz!
-    level: Int!
-    name: String!
-    "NEW: NEW\\nSYNCING: SYNCING\\nREALTIME: REALTIME\\nROLLBACK: ROLLBACK\\nONESHOT: ONESHOT"
-    status: String!
-    template: String
-    template_values(
-        "JSON select path"
-        path: String
-    ): jsonb
-    "operation: operation\\nbig_map: big_map\\nhead: head"
-    type: String!
-    updated_at: timestamptz!
-}
+  """
+  does the column match the given case-insensitive pattern
+  """
+  _ilike: String
 
-"columns and relationships of \"dipdup_schema\""
-type dipdup_schema {
-    created_at: timestamptz!
-    hash: String!
-    name: String!
-    "MANUAL: triggered manually from callback\\nMIGRATION: applied migration requires reindexing\\nROLLBACK: reorg message received and can't be processed\\nCONFIG_HASH_MISMATCH: index config has been modified\\nSCHEMA_HASH_MISMATCH: database schema has been modified\\nBLOCK_HASH_MISMATCH: block hash mismatch, missed rollback when DipDup was stopped\\nMISSING_INDEX_TEMPLATE: index template is missing, can't restore index state"
-    reindex: String
-    updated_at: timestamptz!
-}
+  _in: [String!]
 
-"columns and relationships of \"dipdup_token_metadata\""
-type dipdup_token_metadata {
-    contract: String!
-    created_at: timestamptz!
-    id: Int!
-    metadata(
-        "JSON select path"
-        path: String
-    ): jsonb!
-    network: String!
-    token_id: String!
-    update_id: Int!
-    updated_at: timestamptz!
-}
+  """
+  does the column match the given POSIX regular expression, case insensitive
+  """
+  _iregex: String
 
-"columns and relationships of \"marketplace_activity\""
-type marketplace_activity {
-    amount: numeric!
-    contract: String!
-    id: bigint!
-    internal_order_id: String!
-    maker: String!
-    network: String!
-    operation_hash: String!
-    operation_level: Int!
-    operation_timestamp: timestamptz!
-    "HEN: Hen\\nOBJKT: Objkt\\nOBJKT_V2: Objkt_v2\\nRARIBLE: Rarible"
-    platform: String!
-    sell_price: numeric!
-    token_id: String!
-    "LIST: list\\nCANCEL: cancel\\nMATCH: match"
-    type: String!
-}
+  _is_null: Boolean
 
-"columns and relationships of \"marketplace_order\""
-type marketplace_order {
-    cancelled: Boolean!
-    created_at: timestamptz!
-    ended_at: timestamptz
-    fill: numeric!
-    id: bigint!
-    internal_order_id: String!
-    last_updated_at: timestamptz!
-    make_contract: String!
-    make_price: numeric!
-    make_stock: numeric!
-    make_token_id: String!
-    make_value: numeric!
-    maker: String!
-    network: String!
-    "HEN: Hen\\nOBJKT: Objkt\\nOBJKT_V2: Objkt_v2\\nRARIBLE: Rarible"
-    platform: String!
-    started_at: timestamptz!
-    "ACTIVE: ACTIVE\\nFILLED: FILLED\\nHISTORICAL: HISTORICAL\\nINACTIVE: INACTIVE\\nCANCELLED: CANCELLED"
-    status: String!
-}
+  """
+  does the column match the given pattern
+  """
+  _like: String
 
-type query_root {
-    "fetch data from the table: \"dipdup_contract\""
-    dipdup_contract(
-        "distinct select on columns"
-        distinct_on: [dipdup_contract_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [dipdup_contract_order_by!],
-        "filter the rows returned"
-        where: dipdup_contract_bool_exp
-    ): [dipdup_contract!]!
-    "fetch data from the table: \"dipdup_contract\" using primary key columns"
-    dipdup_contract_by_pk(name: String!): dipdup_contract
-    "fetch data from the table: \"dipdup_contract_metadata\""
-    dipdup_contract_metadata(
-        "distinct select on columns"
-        distinct_on: [dipdup_contract_metadata_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [dipdup_contract_metadata_order_by!],
-        "filter the rows returned"
-        where: dipdup_contract_metadata_bool_exp
-    ): [dipdup_contract_metadata!]!
-    "fetch data from the table: \"dipdup_contract_metadata\" using primary key columns"
-    dipdup_contract_metadata_by_pk(id: Int!): dipdup_contract_metadata
-    "fetch data from the table: \"dipdup_head\""
-    dipdup_head(
-        "distinct select on columns"
-        distinct_on: [dipdup_head_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [dipdup_head_order_by!],
-        "filter the rows returned"
-        where: dipdup_head_bool_exp
-    ): [dipdup_head!]!
-    "fetch data from the table: \"dipdup_head\" using primary key columns"
-    dipdup_head_by_pk(name: String!): dipdup_head
-    "fetch data from the table: \"dipdup_head_status\""
-    dipdup_head_status(
-        "distinct select on columns"
-        distinct_on: [dipdup_head_status_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [dipdup_head_status_order_by!],
-        "filter the rows returned"
-        where: dipdup_head_status_bool_exp
-    ): [dipdup_head_status!]!
-    "fetch data from the table: \"dipdup_index\""
-    dipdup_index(
-        "distinct select on columns"
-        distinct_on: [dipdup_index_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [dipdup_index_order_by!],
-        "filter the rows returned"
-        where: dipdup_index_bool_exp
-    ): [dipdup_index!]!
-    "fetch data from the table: \"dipdup_index\" using primary key columns"
-    dipdup_index_by_pk(name: String!): dipdup_index
-    "fetch data from the table: \"dipdup_schema\""
-    dipdup_schema(
-        "distinct select on columns"
-        distinct_on: [dipdup_schema_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [dipdup_schema_order_by!],
-        "filter the rows returned"
-        where: dipdup_schema_bool_exp
-    ): [dipdup_schema!]!
-    "fetch data from the table: \"dipdup_schema\" using primary key columns"
-    dipdup_schema_by_pk(name: String!): dipdup_schema
-    "fetch data from the table: \"dipdup_token_metadata\""
-    dipdup_token_metadata(
-        "distinct select on columns"
-        distinct_on: [dipdup_token_metadata_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [dipdup_token_metadata_order_by!],
-        "filter the rows returned"
-        where: dipdup_token_metadata_bool_exp
-    ): [dipdup_token_metadata!]!
-    "fetch data from the table: \"dipdup_token_metadata\" using primary key columns"
-    dipdup_token_metadata_by_pk(id: Int!): dipdup_token_metadata
-    "fetch data from the table: \"marketplace_activity\""
-    marketplace_activity(
-        "distinct select on columns"
-        distinct_on: [marketplace_activity_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [marketplace_activity_order_by!],
-        "filter the rows returned"
-        where: marketplace_activity_bool_exp
-    ): [marketplace_activity!]!
-    "fetch data from the table: \"marketplace_activity\" using primary key columns"
-    marketplace_activity_by_pk(id: bigint!): marketplace_activity
-    "fetch data from the table: \"marketplace_order\""
-    marketplace_order(
-        "distinct select on columns"
-        distinct_on: [marketplace_order_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [marketplace_order_order_by!],
-        "filter the rows returned"
-        where: marketplace_order_bool_exp
-    ): [marketplace_order!]!
-    "fetch data from the table: \"marketplace_order\" using primary key columns"
-    marketplace_order_by_pk(id: bigint!): marketplace_order
-}
+  _lt: String
 
-type subscription_root {
-    "fetch data from the table: \"dipdup_contract\""
-    dipdup_contract(
-        "distinct select on columns"
-        distinct_on: [dipdup_contract_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [dipdup_contract_order_by!],
-        "filter the rows returned"
-        where: dipdup_contract_bool_exp
-    ): [dipdup_contract!]!
-    "fetch data from the table: \"dipdup_contract\" using primary key columns"
-    dipdup_contract_by_pk(name: String!): dipdup_contract
-    "fetch data from the table: \"dipdup_contract_metadata\""
-    dipdup_contract_metadata(
-        "distinct select on columns"
-        distinct_on: [dipdup_contract_metadata_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [dipdup_contract_metadata_order_by!],
-        "filter the rows returned"
-        where: dipdup_contract_metadata_bool_exp
-    ): [dipdup_contract_metadata!]!
-    "fetch data from the table: \"dipdup_contract_metadata\" using primary key columns"
-    dipdup_contract_metadata_by_pk(id: Int!): dipdup_contract_metadata
-    "fetch data from the table: \"dipdup_head\""
-    dipdup_head(
-        "distinct select on columns"
-        distinct_on: [dipdup_head_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [dipdup_head_order_by!],
-        "filter the rows returned"
-        where: dipdup_head_bool_exp
-    ): [dipdup_head!]!
-    "fetch data from the table: \"dipdup_head\" using primary key columns"
-    dipdup_head_by_pk(name: String!): dipdup_head
-    "fetch data from the table: \"dipdup_head_status\""
-    dipdup_head_status(
-        "distinct select on columns"
-        distinct_on: [dipdup_head_status_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [dipdup_head_status_order_by!],
-        "filter the rows returned"
-        where: dipdup_head_status_bool_exp
-    ): [dipdup_head_status!]!
-    "fetch data from the table: \"dipdup_index\""
-    dipdup_index(
-        "distinct select on columns"
-        distinct_on: [dipdup_index_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [dipdup_index_order_by!],
-        "filter the rows returned"
-        where: dipdup_index_bool_exp
-    ): [dipdup_index!]!
-    "fetch data from the table: \"dipdup_index\" using primary key columns"
-    dipdup_index_by_pk(name: String!): dipdup_index
-    "fetch data from the table: \"dipdup_schema\""
-    dipdup_schema(
-        "distinct select on columns"
-        distinct_on: [dipdup_schema_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [dipdup_schema_order_by!],
-        "filter the rows returned"
-        where: dipdup_schema_bool_exp
-    ): [dipdup_schema!]!
-    "fetch data from the table: \"dipdup_schema\" using primary key columns"
-    dipdup_schema_by_pk(name: String!): dipdup_schema
-    "fetch data from the table: \"dipdup_token_metadata\""
-    dipdup_token_metadata(
-        "distinct select on columns"
-        distinct_on: [dipdup_token_metadata_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [dipdup_token_metadata_order_by!],
-        "filter the rows returned"
-        where: dipdup_token_metadata_bool_exp
-    ): [dipdup_token_metadata!]!
-    "fetch data from the table: \"dipdup_token_metadata\" using primary key columns"
-    dipdup_token_metadata_by_pk(id: Int!): dipdup_token_metadata
-    "fetch data from the table: \"marketplace_activity\""
-    marketplace_activity(
-        "distinct select on columns"
-        distinct_on: [marketplace_activity_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [marketplace_activity_order_by!],
-        "filter the rows returned"
-        where: marketplace_activity_bool_exp
-    ): [marketplace_activity!]!
-    "fetch data from the table: \"marketplace_activity\" using primary key columns"
-    marketplace_activity_by_pk(id: bigint!): marketplace_activity
-    "fetch data from the table: \"marketplace_order\""
-    marketplace_order(
-        "distinct select on columns"
-        distinct_on: [marketplace_order_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [marketplace_order_order_by!],
-        "filter the rows returned"
-        where: marketplace_order_bool_exp
-    ): [marketplace_order!]!
-    "fetch data from the table: \"marketplace_order\" using primary key columns"
-    marketplace_order_by_pk(id: bigint!): marketplace_order
-}
+  _lte: String
 
-"select columns of table \"dipdup_contract_metadata\""
-enum dipdup_contract_metadata_select_column {
-    "column name"
-    contract
-    "column name"
-    created_at
-    "column name"
-    id
-    "column name"
-    metadata
-    "column name"
-    network
-    "column name"
-    update_id
-    "column name"
-    updated_at
-}
+  _neq: String
 
-"select columns of table \"dipdup_contract\""
-enum dipdup_contract_select_column {
-    "column name"
-    address
-    "column name"
-    created_at
-    "column name"
-    name
-    "column name"
-    typename
-    "column name"
-    updated_at
-}
+  """
+  does the column NOT match the given case-insensitive pattern
+  """
+  _nilike: String
 
-"select columns of table \"dipdup_head\""
-enum dipdup_head_select_column {
-    "column name"
-    created_at
-    "column name"
-    hash
-    "column name"
-    level
-    "column name"
-    name
-    "column name"
-    timestamp
-    "column name"
-    updated_at
-}
+  _nin: [String!]
 
-"select columns of table \"dipdup_head_status\""
-enum dipdup_head_status_select_column {
-    "column name"
-    name
-    "column name"
-    status
-}
+  """
+  does the column NOT match the given POSIX regular expression, case insensitive
+  """
+  _niregex: String
 
-"select columns of table \"dipdup_index\""
-enum dipdup_index_select_column {
-    "column name"
-    config_hash
-    "column name"
-    created_at
-    "column name"
-    level
-    "column name"
-    name
-    "column name"
-    status
-    "column name"
-    template
-    "column name"
-    template_values
-    "column name"
-    type
-    "column name"
-    updated_at
-}
+  """
+  does the column NOT match the given pattern
+  """
+  _nlike: String
 
-"select columns of table \"dipdup_schema\""
-enum dipdup_schema_select_column {
-    "column name"
-    created_at
-    "column name"
-    hash
-    "column name"
-    name
-    "column name"
-    reindex
-    "column name"
-    updated_at
-}
+  """
+  does the column NOT match the given POSIX regular expression, case sensitive
+  """
+  _nregex: String
 
-"select columns of table \"dipdup_token_metadata\""
-enum dipdup_token_metadata_select_column {
-    "column name"
-    contract
-    "column name"
-    created_at
-    "column name"
-    id
-    "column name"
-    metadata
-    "column name"
-    network
-    "column name"
-    token_id
-    "column name"
-    update_id
-    "column name"
-    updated_at
-}
+  """
+  does the column NOT match the given SQL regular expression
+  """
+  _nsimilar: String
 
-"select columns of table \"marketplace_activity\""
-enum marketplace_activity_select_column {
-    "column name"
-    amount
-    "column name"
-    contract
-    "column name"
-    id
-    "column name"
-    internal_order_id
-    "column name"
-    maker
-    "column name"
-    network
-    "column name"
-    operation_hash
-    "column name"
-    operation_level
-    "column name"
-    operation_timestamp
-    "column name"
-    platform
-    "column name"
-    sell_price
-    "column name"
-    token_id
-    "column name"
-    type
-}
+  """
+  does the column match the given POSIX regular expression, case sensitive
+  """
+  _regex: String
 
-"select columns of table \"marketplace_order\""
-enum marketplace_order_select_column {
-    "column name"
-    cancelled
-    "column name"
-    created_at
-    "column name"
-    ended_at
-    "column name"
-    fill
-    "column name"
-    id
-    "column name"
-    internal_order_id
-    "column name"
-    last_updated_at
-    "column name"
-    make_contract
-    "column name"
-    make_price
-    "column name"
-    make_stock
-    "column name"
-    make_token_id
-    "column name"
-    make_value
-    "column name"
-    maker
-    "column name"
-    network
-    "column name"
-    platform
-    "column name"
-    started_at
-    "column name"
-    status
-}
-
-"column ordering options"
-enum order_by {
-    "in ascending order, nulls last"
-    asc
-    "in ascending order, nulls first"
-    asc_nulls_first
-    "in ascending order, nulls last"
-    asc_nulls_last
-    "in descending order, nulls first"
-    desc
-    "in descending order, nulls first"
-    desc_nulls_first
-    "in descending order, nulls last"
-    desc_nulls_last
+  """
+  does the column match the given SQL regular expression
+  """
+  _similar: String
 }
 
 scalar bigint
 
+"""
+Boolean expression to compare columns of type "bigint". All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+
+  _gt: bigint
+
+  _gte: bigint
+
+  _in: [bigint!]
+
+  _is_null: Boolean
+
+  _lt: bigint
+
+  _lte: bigint
+
+  _neq: bigint
+
+  _nin: [bigint!]
+}
+
+"""
+columns and relationships of "dipdup_contract"
+"""
+type dipdup_contract {
+  address: String!
+
+  created_at: timestamptz!
+
+  name: String!
+
+  typename: String
+
+  updated_at: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "dipdup_contract". All fields are combined with a logical 'AND'.
+"""
+input dipdup_contract_bool_exp {
+  _and: [dipdup_contract_bool_exp!]
+
+  _not: dipdup_contract_bool_exp
+
+  _or: [dipdup_contract_bool_exp!]
+
+  address: String_comparison_exp
+
+  created_at: timestamptz_comparison_exp
+
+  name: String_comparison_exp
+
+  typename: String_comparison_exp
+
+  updated_at: timestamptz_comparison_exp
+}
+
+"""
+columns and relationships of "dipdup_contract_metadata"
+"""
+type dipdup_contract_metadata {
+  contract: String!
+
+  created_at: timestamptz!
+
+  id: Int!
+
+  metadata("JSON select path" path: String): jsonb!
+
+  network: String!
+
+  update_id: Int!
+
+  updated_at: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "dipdup_contract_metadata". All fields are combined with a logical 'AND'.
+"""
+input dipdup_contract_metadata_bool_exp {
+  _and: [dipdup_contract_metadata_bool_exp!]
+
+  _not: dipdup_contract_metadata_bool_exp
+
+  _or: [dipdup_contract_metadata_bool_exp!]
+
+  contract: String_comparison_exp
+
+  created_at: timestamptz_comparison_exp
+
+  id: Int_comparison_exp
+
+  metadata: jsonb_comparison_exp
+
+  network: String_comparison_exp
+
+  update_id: Int_comparison_exp
+
+  updated_at: timestamptz_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "dipdup_contract_metadata".
+"""
+input dipdup_contract_metadata_order_by {
+  contract: order_by
+
+  created_at: order_by
+
+  id: order_by
+
+  metadata: order_by
+
+  network: order_by
+
+  update_id: order_by
+
+  updated_at: order_by
+}
+
+"""
+select columns of table "dipdup_contract_metadata"
+"""
+enum dipdup_contract_metadata_select_column {
+  """
+  column name
+  """
+  contract
+
+  """
+  column name
+  """
+  created_at
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  metadata
+
+  """
+  column name
+  """
+  network
+
+  """
+  column name
+  """
+  update_id
+
+  """
+  column name
+  """
+  updated_at
+}
+
+"""
+Ordering options when selecting data from "dipdup_contract".
+"""
+input dipdup_contract_order_by {
+  address: order_by
+
+  created_at: order_by
+
+  name: order_by
+
+  typename: order_by
+
+  updated_at: order_by
+}
+
+"""
+select columns of table "dipdup_contract"
+"""
+enum dipdup_contract_select_column {
+  """
+  column name
+  """
+  address
+
+  """
+  column name
+  """
+  created_at
+
+  """
+  column name
+  """
+  name
+
+  """
+  column name
+  """
+  typename
+
+  """
+  column name
+  """
+  updated_at
+}
+
+"""
+columns and relationships of "dipdup_head"
+"""
+type dipdup_head {
+  created_at: timestamptz!
+
+  hash: String!
+
+  level: Int!
+
+  name: String!
+
+  timestamp: timestamptz!
+
+  updated_at: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "dipdup_head". All fields are combined with a logical 'AND'.
+"""
+input dipdup_head_bool_exp {
+  _and: [dipdup_head_bool_exp!]
+
+  _not: dipdup_head_bool_exp
+
+  _or: [dipdup_head_bool_exp!]
+
+  created_at: timestamptz_comparison_exp
+
+  hash: String_comparison_exp
+
+  level: Int_comparison_exp
+
+  name: String_comparison_exp
+
+  timestamp: timestamptz_comparison_exp
+
+  updated_at: timestamptz_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "dipdup_head".
+"""
+input dipdup_head_order_by {
+  created_at: order_by
+
+  hash: order_by
+
+  level: order_by
+
+  name: order_by
+
+  timestamp: order_by
+
+  updated_at: order_by
+}
+
+"""
+select columns of table "dipdup_head"
+"""
+enum dipdup_head_select_column {
+  """
+  column name
+  """
+  created_at
+
+  """
+  column name
+  """
+  hash
+
+  """
+  column name
+  """
+  level
+
+  """
+  column name
+  """
+  name
+
+  """
+  column name
+  """
+  timestamp
+
+  """
+  column name
+  """
+  updated_at
+}
+
+"""
+columns and relationships of "dipdup_head_status"
+"""
+type dipdup_head_status {
+  name: String
+
+  status: String
+}
+
+"""
+Boolean expression to filter rows from the table "dipdup_head_status". All fields are combined with a logical 'AND'.
+"""
+input dipdup_head_status_bool_exp {
+  _and: [dipdup_head_status_bool_exp!]
+
+  _not: dipdup_head_status_bool_exp
+
+  _or: [dipdup_head_status_bool_exp!]
+
+  name: String_comparison_exp
+
+  status: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "dipdup_head_status".
+"""
+input dipdup_head_status_order_by {
+  name: order_by
+
+  status: order_by
+}
+
+"""
+select columns of table "dipdup_head_status"
+"""
+enum dipdup_head_status_select_column {
+  """
+  column name
+  """
+  name
+
+  """
+  column name
+  """
+  status
+}
+
+"""
+columns and relationships of "dipdup_index"
+"""
+type dipdup_index {
+  config_hash: String!
+
+  created_at: timestamptz!
+
+  level: Int!
+
+  name: String!
+
+  """
+  NEW: NEW\nSYNCING: SYNCING\nREALTIME: REALTIME\nROLLBACK: ROLLBACK\nONESHOT: ONESHOT
+  """
+  status: String!
+
+  template: String
+
+  template_values("JSON select path" path: String): jsonb
+
+  """
+  operation: operation\nbig_map: big_map\nhead: head
+  """
+  type: String!
+
+  updated_at: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "dipdup_index". All fields are combined with a logical 'AND'.
+"""
+input dipdup_index_bool_exp {
+  _and: [dipdup_index_bool_exp!]
+
+  _not: dipdup_index_bool_exp
+
+  _or: [dipdup_index_bool_exp!]
+
+  config_hash: String_comparison_exp
+
+  created_at: timestamptz_comparison_exp
+
+  level: Int_comparison_exp
+
+  name: String_comparison_exp
+
+  status: String_comparison_exp
+
+  template: String_comparison_exp
+
+  template_values: jsonb_comparison_exp
+
+  type: String_comparison_exp
+
+  updated_at: timestamptz_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "dipdup_index".
+"""
+input dipdup_index_order_by {
+  config_hash: order_by
+
+  created_at: order_by
+
+  level: order_by
+
+  name: order_by
+
+  status: order_by
+
+  template: order_by
+
+  template_values: order_by
+
+  type: order_by
+
+  updated_at: order_by
+}
+
+"""
+select columns of table "dipdup_index"
+"""
+enum dipdup_index_select_column {
+  """
+  column name
+  """
+  config_hash
+
+  """
+  column name
+  """
+  created_at
+
+  """
+  column name
+  """
+  level
+
+  """
+  column name
+  """
+  name
+
+  """
+  column name
+  """
+  status
+
+  """
+  column name
+  """
+  template
+
+  """
+  column name
+  """
+  template_values
+
+  """
+  column name
+  """
+  type
+
+  """
+  column name
+  """
+  updated_at
+}
+
+"""
+columns and relationships of "dipdup_schema"
+"""
+type dipdup_schema {
+  created_at: timestamptz!
+
+  hash: String!
+
+  name: String!
+
+  """
+  manual: manual\nmigration: migration\nrollback: rollback\nconfig_modified: config_modified\nschema_modified: schema_modified
+  """
+  reindex: String
+
+  updated_at: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "dipdup_schema". All fields are combined with a logical 'AND'.
+"""
+input dipdup_schema_bool_exp {
+  _and: [dipdup_schema_bool_exp!]
+
+  _not: dipdup_schema_bool_exp
+
+  _or: [dipdup_schema_bool_exp!]
+
+  created_at: timestamptz_comparison_exp
+
+  hash: String_comparison_exp
+
+  name: String_comparison_exp
+
+  reindex: String_comparison_exp
+
+  updated_at: timestamptz_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "dipdup_schema".
+"""
+input dipdup_schema_order_by {
+  created_at: order_by
+
+  hash: order_by
+
+  name: order_by
+
+  reindex: order_by
+
+  updated_at: order_by
+}
+
+"""
+select columns of table "dipdup_schema"
+"""
+enum dipdup_schema_select_column {
+  """
+  column name
+  """
+  created_at
+
+  """
+  column name
+  """
+  hash
+
+  """
+  column name
+  """
+  name
+
+  """
+  column name
+  """
+  reindex
+
+  """
+  column name
+  """
+  updated_at
+}
+
+"""
+columns and relationships of "dipdup_token_metadata"
+"""
+type dipdup_token_metadata {
+  contract: String!
+
+  created_at: timestamptz!
+
+  id: Int!
+
+  metadata("JSON select path" path: String): jsonb!
+
+  network: String!
+
+  token_id: String!
+
+  update_id: Int!
+
+  updated_at: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "dipdup_token_metadata". All fields are combined with a logical 'AND'.
+"""
+input dipdup_token_metadata_bool_exp {
+  _and: [dipdup_token_metadata_bool_exp!]
+
+  _not: dipdup_token_metadata_bool_exp
+
+  _or: [dipdup_token_metadata_bool_exp!]
+
+  contract: String_comparison_exp
+
+  created_at: timestamptz_comparison_exp
+
+  id: Int_comparison_exp
+
+  metadata: jsonb_comparison_exp
+
+  network: String_comparison_exp
+
+  token_id: String_comparison_exp
+
+  update_id: Int_comparison_exp
+
+  updated_at: timestamptz_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "dipdup_token_metadata".
+"""
+input dipdup_token_metadata_order_by {
+  contract: order_by
+
+  created_at: order_by
+
+  id: order_by
+
+  metadata: order_by
+
+  network: order_by
+
+  token_id: order_by
+
+  update_id: order_by
+
+  updated_at: order_by
+}
+
+"""
+select columns of table "dipdup_token_metadata"
+"""
+enum dipdup_token_metadata_select_column {
+  """
+  column name
+  """
+  contract
+
+  """
+  column name
+  """
+  created_at
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  metadata
+
+  """
+  column name
+  """
+  network
+
+  """
+  column name
+  """
+  token_id
+
+  """
+  column name
+  """
+  update_id
+
+  """
+  column name
+  """
+  updated_at
+}
+
 scalar jsonb
+
+"""
+Boolean expression to compare columns of type "jsonb". All fields are combined with logical 'AND'.
+"""
+input jsonb_comparison_exp {
+  """
+  is the column contained in the given json value
+  """
+  _contained_in: jsonb
+
+  """
+  does the column contain the given json value at the top level
+  """
+  _contains: jsonb
+
+  _eq: jsonb
+
+  _gt: jsonb
+
+  _gte: jsonb
+
+  """
+  does the string exist as a top-level key in the column
+  """
+  _has_key: String
+
+  """
+  do all of these strings exist as top-level keys in the column
+  """
+  _has_keys_all: [String!]
+
+  """
+  do any of these strings exist as top-level keys in the column
+  """
+  _has_keys_any: [String!]
+
+  _in: [jsonb!]
+
+  _is_null: Boolean
+
+  _lt: jsonb
+
+  _lte: jsonb
+
+  _neq: jsonb
+
+  _nin: [jsonb!]
+}
+
+"""
+columns and relationships of "marketplace_activity"
+"""
+type marketplace_activity {
+  amount: numeric!
+
+  contract: String!
+
+  id: bigint!
+
+  internal_order_id: String!
+
+  maker: String!
+
+  network: String!
+
+  operation_hash: String!
+
+  operation_level: Int!
+
+  operation_timestamp: timestamptz!
+
+  """
+  HEN: Hen\nOBJKT: Objkt\nOBJKT_V2: Objkt_v2\nRARIBLE: Rarible
+  """
+  platform: String!
+
+  sell_price: numeric!
+
+  taker: String
+
+  token_id: String!
+
+  """
+  LIST: list\nCANCEL: cancel\nMATCH: match
+  """
+  type: String!
+}
+
+"""
+Boolean expression to filter rows from the table "marketplace_activity". All fields are combined with a logical 'AND'.
+"""
+input marketplace_activity_bool_exp {
+  _and: [marketplace_activity_bool_exp!]
+
+  _not: marketplace_activity_bool_exp
+
+  _or: [marketplace_activity_bool_exp!]
+
+  amount: numeric_comparison_exp
+
+  contract: String_comparison_exp
+
+  id: bigint_comparison_exp
+
+  internal_order_id: String_comparison_exp
+
+  maker: String_comparison_exp
+
+  network: String_comparison_exp
+
+  operation_hash: String_comparison_exp
+
+  operation_level: Int_comparison_exp
+
+  operation_timestamp: timestamptz_comparison_exp
+
+  platform: String_comparison_exp
+
+  sell_price: numeric_comparison_exp
+
+  taker: String_comparison_exp
+
+  token_id: String_comparison_exp
+
+  type: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "marketplace_activity".
+"""
+input marketplace_activity_order_by {
+  amount: order_by
+
+  contract: order_by
+
+  id: order_by
+
+  internal_order_id: order_by
+
+  maker: order_by
+
+  network: order_by
+
+  operation_hash: order_by
+
+  operation_level: order_by
+
+  operation_timestamp: order_by
+
+  platform: order_by
+
+  sell_price: order_by
+
+  taker: order_by
+
+  token_id: order_by
+
+  type: order_by
+}
+
+"""
+select columns of table "marketplace_activity"
+"""
+enum marketplace_activity_select_column {
+  """
+  column name
+  """
+  amount
+
+  """
+  column name
+  """
+  contract
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  internal_order_id
+
+  """
+  column name
+  """
+  maker
+
+  """
+  column name
+  """
+  network
+
+  """
+  column name
+  """
+  operation_hash
+
+  """
+  column name
+  """
+  operation_level
+
+  """
+  column name
+  """
+  operation_timestamp
+
+  """
+  column name
+  """
+  platform
+
+  """
+  column name
+  """
+  sell_price
+
+  """
+  column name
+  """
+  taker
+
+  """
+  column name
+  """
+  token_id
+
+  """
+  column name
+  """
+  type
+}
+
+"""
+columns and relationships of "marketplace_order"
+"""
+type marketplace_order {
+  cancelled: Boolean!
+
+  created_at: timestamptz!
+
+  ended_at: timestamptz
+
+  fill: numeric!
+
+  id: bigint!
+
+  internal_order_id: String!
+
+  last_updated_at: timestamptz!
+
+  make_contract: String!
+
+  make_price: numeric!
+
+  make_stock: numeric!
+
+  make_token_id: String!
+
+  make_value: numeric!
+
+  maker: String!
+
+  network: String!
+
+  """
+  HEN: Hen\nOBJKT: Objkt\nOBJKT_V2: Objkt_v2\nRARIBLE: Rarible
+  """
+  platform: String!
+
+  salt: bigint!
+
+  started_at: timestamptz!
+
+  """
+  ACTIVE: ACTIVE\nFILLED: FILLED\nHISTORICAL: HISTORICAL\nINACTIVE: INACTIVE\nCANCELLED: CANCELLED
+  """
+  status: String!
+
+  taker: String
+}
+
+"""
+Boolean expression to filter rows from the table "marketplace_order". All fields are combined with a logical 'AND'.
+"""
+input marketplace_order_bool_exp {
+  _and: [marketplace_order_bool_exp!]
+
+  _not: marketplace_order_bool_exp
+
+  _or: [marketplace_order_bool_exp!]
+
+  cancelled: Boolean_comparison_exp
+
+  created_at: timestamptz_comparison_exp
+
+  ended_at: timestamptz_comparison_exp
+
+  fill: numeric_comparison_exp
+
+  id: bigint_comparison_exp
+
+  internal_order_id: String_comparison_exp
+
+  last_updated_at: timestamptz_comparison_exp
+
+  make_contract: String_comparison_exp
+
+  make_price: numeric_comparison_exp
+
+  make_stock: numeric_comparison_exp
+
+  make_token_id: String_comparison_exp
+
+  make_value: numeric_comparison_exp
+
+  maker: String_comparison_exp
+
+  network: String_comparison_exp
+
+  platform: String_comparison_exp
+
+  salt: bigint_comparison_exp
+
+  started_at: timestamptz_comparison_exp
+
+  status: String_comparison_exp
+
+  taker: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "marketplace_order".
+"""
+input marketplace_order_order_by {
+  cancelled: order_by
+
+  created_at: order_by
+
+  ended_at: order_by
+
+  fill: order_by
+
+  id: order_by
+
+  internal_order_id: order_by
+
+  last_updated_at: order_by
+
+  make_contract: order_by
+
+  make_price: order_by
+
+  make_stock: order_by
+
+  make_token_id: order_by
+
+  make_value: order_by
+
+  maker: order_by
+
+  network: order_by
+
+  platform: order_by
+
+  salt: order_by
+
+  started_at: order_by
+
+  status: order_by
+
+  taker: order_by
+}
+
+"""
+select columns of table "marketplace_order"
+"""
+enum marketplace_order_select_column {
+  """
+  column name
+  """
+  cancelled
+
+  """
+  column name
+  """
+  created_at
+
+  """
+  column name
+  """
+  ended_at
+
+  """
+  column name
+  """
+  fill
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  internal_order_id
+
+  """
+  column name
+  """
+  last_updated_at
+
+  """
+  column name
+  """
+  make_contract
+
+  """
+  column name
+  """
+  make_price
+
+  """
+  column name
+  """
+  make_stock
+
+  """
+  column name
+  """
+  make_token_id
+
+  """
+  column name
+  """
+  make_value
+
+  """
+  column name
+  """
+  maker
+
+  """
+  column name
+  """
+  network
+
+  """
+  column name
+  """
+  platform
+
+  """
+  column name
+  """
+  salt
+
+  """
+  column name
+  """
+  started_at
+
+  """
+  column name
+  """
+  status
+
+  """
+  column name
+  """
+  taker
+}
 
 scalar numeric
 
+"""
+Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'.
+"""
+input numeric_comparison_exp {
+  _eq: numeric
+
+  _gt: numeric
+
+  _gte: numeric
+
+  _in: [numeric!]
+
+  _is_null: Boolean
+
+  _lt: numeric
+
+  _lte: numeric
+
+  _neq: numeric
+
+  _nin: [numeric!]
+}
+
+"""
+column ordering options
+"""
+enum order_by {
+  """
+  in ascending order, nulls last
+  """
+  asc
+
+  """
+  in ascending order, nulls first
+  """
+  asc_nulls_first
+
+  """
+  in ascending order, nulls last
+  """
+  asc_nulls_last
+
+  """
+  in descending order, nulls first
+  """
+  desc
+
+  """
+  in descending order, nulls first
+  """
+  desc_nulls_first
+
+  """
+  in descending order, nulls last
+  """
+  desc_nulls_last
+}
+
+type query_root {
+  """
+  fetch data from the table: "dipdup_contract"
+  """
+  dipdup_contract("distinct select on columns" distinct_on: [dipdup_contract_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_contract_order_by!], "filter the rows returned" where: dipdup_contract_bool_exp): [dipdup_contract!]!
+
+  """
+  fetch data from the table: "dipdup_contract" using primary key columns
+  """
+  dipdup_contract_by_pk(name: String!): dipdup_contract
+
+  """
+  fetch data from the table: "dipdup_contract_metadata"
+  """
+  dipdup_contract_metadata("distinct select on columns" distinct_on: [dipdup_contract_metadata_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_contract_metadata_order_by!], "filter the rows returned" where: dipdup_contract_metadata_bool_exp): [dipdup_contract_metadata!]!
+
+  """
+  fetch data from the table: "dipdup_contract_metadata" using primary key columns
+  """
+  dipdup_contract_metadata_by_pk(id: Int!): dipdup_contract_metadata
+
+  """
+  fetch data from the table: "dipdup_head"
+  """
+  dipdup_head("distinct select on columns" distinct_on: [dipdup_head_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_head_order_by!], "filter the rows returned" where: dipdup_head_bool_exp): [dipdup_head!]!
+
+  """
+  fetch data from the table: "dipdup_head" using primary key columns
+  """
+  dipdup_head_by_pk(name: String!): dipdup_head
+
+  """
+  fetch data from the table: "dipdup_head_status"
+  """
+  dipdup_head_status("distinct select on columns" distinct_on: [dipdup_head_status_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_head_status_order_by!], "filter the rows returned" where: dipdup_head_status_bool_exp): [dipdup_head_status!]!
+
+  """
+  fetch data from the table: "dipdup_index"
+  """
+  dipdup_index("distinct select on columns" distinct_on: [dipdup_index_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_index_order_by!], "filter the rows returned" where: dipdup_index_bool_exp): [dipdup_index!]!
+
+  """
+  fetch data from the table: "dipdup_index" using primary key columns
+  """
+  dipdup_index_by_pk(name: String!): dipdup_index
+
+  """
+  fetch data from the table: "dipdup_schema"
+  """
+  dipdup_schema("distinct select on columns" distinct_on: [dipdup_schema_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_schema_order_by!], "filter the rows returned" where: dipdup_schema_bool_exp): [dipdup_schema!]!
+
+  """
+  fetch data from the table: "dipdup_schema" using primary key columns
+  """
+  dipdup_schema_by_pk(name: String!): dipdup_schema
+
+  """
+  fetch data from the table: "dipdup_token_metadata"
+  """
+  dipdup_token_metadata("distinct select on columns" distinct_on: [dipdup_token_metadata_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_token_metadata_order_by!], "filter the rows returned" where: dipdup_token_metadata_bool_exp): [dipdup_token_metadata!]!
+
+  """
+  fetch data from the table: "dipdup_token_metadata" using primary key columns
+  """
+  dipdup_token_metadata_by_pk(id: Int!): dipdup_token_metadata
+
+  """
+  fetch data from the table: "marketplace_activity"
+  """
+  marketplace_activity("distinct select on columns" distinct_on: [marketplace_activity_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [marketplace_activity_order_by!], "filter the rows returned" where: marketplace_activity_bool_exp): [marketplace_activity!]!
+
+  """
+  fetch data from the table: "marketplace_activity" using primary key columns
+  """
+  marketplace_activity_by_pk(id: bigint!): marketplace_activity
+
+  """
+  fetch data from the table: "marketplace_order"
+  """
+  marketplace_order("distinct select on columns" distinct_on: [marketplace_order_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [marketplace_order_order_by!], "filter the rows returned" where: marketplace_order_bool_exp): [marketplace_order!]!
+
+  """
+  fetch data from the table: "marketplace_order" using primary key columns
+  """
+  marketplace_order_by_pk(id: bigint!): marketplace_order
+}
+
+type subscription_root {
+  """
+  fetch data from the table: "dipdup_contract"
+  """
+  dipdup_contract("distinct select on columns" distinct_on: [dipdup_contract_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_contract_order_by!], "filter the rows returned" where: dipdup_contract_bool_exp): [dipdup_contract!]!
+
+  """
+  fetch data from the table: "dipdup_contract" using primary key columns
+  """
+  dipdup_contract_by_pk(name: String!): dipdup_contract
+
+  """
+  fetch data from the table: "dipdup_contract_metadata"
+  """
+  dipdup_contract_metadata("distinct select on columns" distinct_on: [dipdup_contract_metadata_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_contract_metadata_order_by!], "filter the rows returned" where: dipdup_contract_metadata_bool_exp): [dipdup_contract_metadata!]!
+
+  """
+  fetch data from the table: "dipdup_contract_metadata" using primary key columns
+  """
+  dipdup_contract_metadata_by_pk(id: Int!): dipdup_contract_metadata
+
+  """
+  fetch data from the table: "dipdup_head"
+  """
+  dipdup_head("distinct select on columns" distinct_on: [dipdup_head_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_head_order_by!], "filter the rows returned" where: dipdup_head_bool_exp): [dipdup_head!]!
+
+  """
+  fetch data from the table: "dipdup_head" using primary key columns
+  """
+  dipdup_head_by_pk(name: String!): dipdup_head
+
+  """
+  fetch data from the table: "dipdup_head_status"
+  """
+  dipdup_head_status("distinct select on columns" distinct_on: [dipdup_head_status_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_head_status_order_by!], "filter the rows returned" where: dipdup_head_status_bool_exp): [dipdup_head_status!]!
+
+  """
+  fetch data from the table: "dipdup_index"
+  """
+  dipdup_index("distinct select on columns" distinct_on: [dipdup_index_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_index_order_by!], "filter the rows returned" where: dipdup_index_bool_exp): [dipdup_index!]!
+
+  """
+  fetch data from the table: "dipdup_index" using primary key columns
+  """
+  dipdup_index_by_pk(name: String!): dipdup_index
+
+  """
+  fetch data from the table: "dipdup_schema"
+  """
+  dipdup_schema("distinct select on columns" distinct_on: [dipdup_schema_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_schema_order_by!], "filter the rows returned" where: dipdup_schema_bool_exp): [dipdup_schema!]!
+
+  """
+  fetch data from the table: "dipdup_schema" using primary key columns
+  """
+  dipdup_schema_by_pk(name: String!): dipdup_schema
+
+  """
+  fetch data from the table: "dipdup_token_metadata"
+  """
+  dipdup_token_metadata("distinct select on columns" distinct_on: [dipdup_token_metadata_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_token_metadata_order_by!], "filter the rows returned" where: dipdup_token_metadata_bool_exp): [dipdup_token_metadata!]!
+
+  """
+  fetch data from the table: "dipdup_token_metadata" using primary key columns
+  """
+  dipdup_token_metadata_by_pk(id: Int!): dipdup_token_metadata
+
+  """
+  fetch data from the table: "marketplace_activity"
+  """
+  marketplace_activity("distinct select on columns" distinct_on: [marketplace_activity_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [marketplace_activity_order_by!], "filter the rows returned" where: marketplace_activity_bool_exp): [marketplace_activity!]!
+
+  """
+  fetch data from the table: "marketplace_activity" using primary key columns
+  """
+  marketplace_activity_by_pk(id: bigint!): marketplace_activity
+
+  """
+  fetch data from the table: "marketplace_order"
+  """
+  marketplace_order("distinct select on columns" distinct_on: [marketplace_order_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [marketplace_order_order_by!], "filter the rows returned" where: marketplace_order_bool_exp): [marketplace_order!]!
+
+  """
+  fetch data from the table: "marketplace_order" using primary key columns
+  """
+  marketplace_order_by_pk(id: bigint!): marketplace_order
+}
+
 scalar timestamptz
 
-"Boolean expression to compare columns of type \"Boolean\". All fields are combined with logical 'AND'."
-input Boolean_comparison_exp {
-    _eq: Boolean
-    _gt: Boolean
-    _gte: Boolean
-    _in: [Boolean!]
-    _is_null: Boolean
-    _lt: Boolean
-    _lte: Boolean
-    _neq: Boolean
-    _nin: [Boolean!]
-}
-
-"Boolean expression to compare columns of type \"Int\". All fields are combined with logical 'AND'."
-input Int_comparison_exp {
-    _eq: Int
-    _gt: Int
-    _gte: Int
-    _in: [Int!]
-    _is_null: Boolean
-    _lt: Int
-    _lte: Int
-    _neq: Int
-    _nin: [Int!]
-}
-
-"Boolean expression to compare columns of type \"String\". All fields are combined with logical 'AND'."
-input String_comparison_exp {
-    _eq: String
-    _gt: String
-    _gte: String
-    "does the column match the given case-insensitive pattern"
-    _ilike: String
-    _in: [String!]
-    "does the column match the given POSIX regular expression, case insensitive"
-    _iregex: String
-    _is_null: Boolean
-    "does the column match the given pattern"
-    _like: String
-    _lt: String
-    _lte: String
-    _neq: String
-    "does the column NOT match the given case-insensitive pattern"
-    _nilike: String
-    _nin: [String!]
-    "does the column NOT match the given POSIX regular expression, case insensitive"
-    _niregex: String
-    "does the column NOT match the given pattern"
-    _nlike: String
-    "does the column NOT match the given POSIX regular expression, case sensitive"
-    _nregex: String
-    "does the column NOT match the given SQL regular expression"
-    _nsimilar: String
-    "does the column match the given POSIX regular expression, case sensitive"
-    _regex: String
-    "does the column match the given SQL regular expression"
-    _similar: String
-}
-
-"Boolean expression to compare columns of type \"bigint\". All fields are combined with logical 'AND'."
-input bigint_comparison_exp {
-    _eq: bigint
-    _gt: bigint
-    _gte: bigint
-    _in: [bigint!]
-    _is_null: Boolean
-    _lt: bigint
-    _lte: bigint
-    _neq: bigint
-    _nin: [bigint!]
-}
-
-"Boolean expression to filter rows from the table \"dipdup_contract\". All fields are combined with a logical 'AND'."
-input dipdup_contract_bool_exp {
-    _and: [dipdup_contract_bool_exp!]
-    _not: dipdup_contract_bool_exp
-    _or: [dipdup_contract_bool_exp!]
-    address: String_comparison_exp
-    created_at: timestamptz_comparison_exp
-    name: String_comparison_exp
-    typename: String_comparison_exp
-    updated_at: timestamptz_comparison_exp
-}
-
-"Boolean expression to filter rows from the table \"dipdup_contract_metadata\". All fields are combined with a logical 'AND'."
-input dipdup_contract_metadata_bool_exp {
-    _and: [dipdup_contract_metadata_bool_exp!]
-    _not: dipdup_contract_metadata_bool_exp
-    _or: [dipdup_contract_metadata_bool_exp!]
-    contract: String_comparison_exp
-    created_at: timestamptz_comparison_exp
-    id: Int_comparison_exp
-    metadata: jsonb_comparison_exp
-    network: String_comparison_exp
-    update_id: Int_comparison_exp
-    updated_at: timestamptz_comparison_exp
-}
-
-"Ordering options when selecting data from \"dipdup_contract_metadata\"."
-input dipdup_contract_metadata_order_by {
-    contract: order_by
-    created_at: order_by
-    id: order_by
-    metadata: order_by
-    network: order_by
-    update_id: order_by
-    updated_at: order_by
-}
-
-"Ordering options when selecting data from \"dipdup_contract\"."
-input dipdup_contract_order_by {
-    address: order_by
-    created_at: order_by
-    name: order_by
-    typename: order_by
-    updated_at: order_by
-}
-
-"Boolean expression to filter rows from the table \"dipdup_head\". All fields are combined with a logical 'AND'."
-input dipdup_head_bool_exp {
-    _and: [dipdup_head_bool_exp!]
-    _not: dipdup_head_bool_exp
-    _or: [dipdup_head_bool_exp!]
-    created_at: timestamptz_comparison_exp
-    hash: String_comparison_exp
-    level: Int_comparison_exp
-    name: String_comparison_exp
-    timestamp: timestamptz_comparison_exp
-    updated_at: timestamptz_comparison_exp
-}
-
-"Ordering options when selecting data from \"dipdup_head\"."
-input dipdup_head_order_by {
-    created_at: order_by
-    hash: order_by
-    level: order_by
-    name: order_by
-    timestamp: order_by
-    updated_at: order_by
-}
-
-"Boolean expression to filter rows from the table \"dipdup_head_status\". All fields are combined with a logical 'AND'."
-input dipdup_head_status_bool_exp {
-    _and: [dipdup_head_status_bool_exp!]
-    _not: dipdup_head_status_bool_exp
-    _or: [dipdup_head_status_bool_exp!]
-    name: String_comparison_exp
-    status: String_comparison_exp
-}
-
-"Ordering options when selecting data from \"dipdup_head_status\"."
-input dipdup_head_status_order_by {
-    name: order_by
-    status: order_by
-}
-
-"Boolean expression to filter rows from the table \"dipdup_index\". All fields are combined with a logical 'AND'."
-input dipdup_index_bool_exp {
-    _and: [dipdup_index_bool_exp!]
-    _not: dipdup_index_bool_exp
-    _or: [dipdup_index_bool_exp!]
-    config_hash: String_comparison_exp
-    created_at: timestamptz_comparison_exp
-    level: Int_comparison_exp
-    name: String_comparison_exp
-    status: String_comparison_exp
-    template: String_comparison_exp
-    template_values: jsonb_comparison_exp
-    type: String_comparison_exp
-    updated_at: timestamptz_comparison_exp
-}
-
-"Ordering options when selecting data from \"dipdup_index\"."
-input dipdup_index_order_by {
-    config_hash: order_by
-    created_at: order_by
-    level: order_by
-    name: order_by
-    status: order_by
-    template: order_by
-    template_values: order_by
-    type: order_by
-    updated_at: order_by
-}
-
-"Boolean expression to filter rows from the table \"dipdup_schema\". All fields are combined with a logical 'AND'."
-input dipdup_schema_bool_exp {
-    _and: [dipdup_schema_bool_exp!]
-    _not: dipdup_schema_bool_exp
-    _or: [dipdup_schema_bool_exp!]
-    created_at: timestamptz_comparison_exp
-    hash: String_comparison_exp
-    name: String_comparison_exp
-    reindex: String_comparison_exp
-    updated_at: timestamptz_comparison_exp
-}
-
-"Ordering options when selecting data from \"dipdup_schema\"."
-input dipdup_schema_order_by {
-    created_at: order_by
-    hash: order_by
-    name: order_by
-    reindex: order_by
-    updated_at: order_by
-}
-
-"Boolean expression to filter rows from the table \"dipdup_token_metadata\". All fields are combined with a logical 'AND'."
-input dipdup_token_metadata_bool_exp {
-    _and: [dipdup_token_metadata_bool_exp!]
-    _not: dipdup_token_metadata_bool_exp
-    _or: [dipdup_token_metadata_bool_exp!]
-    contract: String_comparison_exp
-    created_at: timestamptz_comparison_exp
-    id: Int_comparison_exp
-    metadata: jsonb_comparison_exp
-    network: String_comparison_exp
-    token_id: String_comparison_exp
-    update_id: Int_comparison_exp
-    updated_at: timestamptz_comparison_exp
-}
-
-"Ordering options when selecting data from \"dipdup_token_metadata\"."
-input dipdup_token_metadata_order_by {
-    contract: order_by
-    created_at: order_by
-    id: order_by
-    metadata: order_by
-    network: order_by
-    token_id: order_by
-    update_id: order_by
-    updated_at: order_by
-}
-
-"Boolean expression to compare columns of type \"jsonb\". All fields are combined with logical 'AND'."
-input jsonb_comparison_exp {
-    "is the column contained in the given json value"
-    _contained_in: jsonb
-    "does the column contain the given json value at the top level"
-    _contains: jsonb
-    _eq: jsonb
-    _gt: jsonb
-    _gte: jsonb
-    "does the string exist as a top-level key in the column"
-    _has_key: String
-    "do all of these strings exist as top-level keys in the column"
-    _has_keys_all: [String!]
-    "do any of these strings exist as top-level keys in the column"
-    _has_keys_any: [String!]
-    _in: [jsonb!]
-    _is_null: Boolean
-    _lt: jsonb
-    _lte: jsonb
-    _neq: jsonb
-    _nin: [jsonb!]
-}
-
-"Boolean expression to filter rows from the table \"marketplace_activity\". All fields are combined with a logical 'AND'."
-input marketplace_activity_bool_exp {
-    _and: [marketplace_activity_bool_exp!]
-    _not: marketplace_activity_bool_exp
-    _or: [marketplace_activity_bool_exp!]
-    amount: numeric_comparison_exp
-    contract: String_comparison_exp
-    id: bigint_comparison_exp
-    internal_order_id: String_comparison_exp
-    maker: String_comparison_exp
-    network: String_comparison_exp
-    operation_hash: String_comparison_exp
-    operation_level: Int_comparison_exp
-    operation_timestamp: timestamptz_comparison_exp
-    platform: String_comparison_exp
-    sell_price: numeric_comparison_exp
-    token_id: String_comparison_exp
-    type: String_comparison_exp
-}
-
-"Ordering options when selecting data from \"marketplace_activity\"."
-input marketplace_activity_order_by {
-    amount: order_by
-    contract: order_by
-    id: order_by
-    internal_order_id: order_by
-    maker: order_by
-    network: order_by
-    operation_hash: order_by
-    operation_level: order_by
-    operation_timestamp: order_by
-    platform: order_by
-    sell_price: order_by
-    token_id: order_by
-    type: order_by
-}
-
-"Boolean expression to filter rows from the table \"marketplace_order\". All fields are combined with a logical 'AND'."
-input marketplace_order_bool_exp {
-    _and: [marketplace_order_bool_exp!]
-    _not: marketplace_order_bool_exp
-    _or: [marketplace_order_bool_exp!]
-    cancelled: Boolean_comparison_exp
-    created_at: timestamptz_comparison_exp
-    ended_at: timestamptz_comparison_exp
-    fill: numeric_comparison_exp
-    id: bigint_comparison_exp
-    internal_order_id: String_comparison_exp
-    last_updated_at: timestamptz_comparison_exp
-    make_contract: String_comparison_exp
-    make_price: numeric_comparison_exp
-    make_stock: numeric_comparison_exp
-    make_token_id: String_comparison_exp
-    make_value: numeric_comparison_exp
-    maker: String_comparison_exp
-    network: String_comparison_exp
-    platform: String_comparison_exp
-    started_at: timestamptz_comparison_exp
-    status: String_comparison_exp
-}
-
-"Ordering options when selecting data from \"marketplace_order\"."
-input marketplace_order_order_by {
-    cancelled: order_by
-    created_at: order_by
-    ended_at: order_by
-    fill: order_by
-    id: order_by
-    internal_order_id: order_by
-    last_updated_at: order_by
-    make_contract: order_by
-    make_price: order_by
-    make_stock: order_by
-    make_token_id: order_by
-    make_value: order_by
-    maker: order_by
-    network: order_by
-    platform: order_by
-    started_at: order_by
-    status: order_by
-}
-
-"Boolean expression to compare columns of type \"numeric\". All fields are combined with logical 'AND'."
-input numeric_comparison_exp {
-    _eq: numeric
-    _gt: numeric
-    _gte: numeric
-    _in: [numeric!]
-    _is_null: Boolean
-    _lt: numeric
-    _lte: numeric
-    _neq: numeric
-    _nin: [numeric!]
-}
-
-"Boolean expression to compare columns of type \"timestamptz\". All fields are combined with logical 'AND'."
+"""
+Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'.
+"""
 input timestamptz_comparison_exp {
-    _eq: timestamptz
-    _gt: timestamptz
-    _gte: timestamptz
-    _in: [timestamptz!]
-    _is_null: Boolean
-    _lt: timestamptz
-    _lte: timestamptz
-    _neq: timestamptz
-    _nin: [timestamptz!]
+  _eq: timestamptz
+
+  _gt: timestamptz
+
+  _gte: timestamptz
+
+  _in: [timestamptz!]
+
+  _is_null: Boolean
+
+  _lt: timestamptz
+
+  _lte: timestamptz
+
+  _neq: timestamptz
+
+  _nin: [timestamptz!]
+}
+
+schema {
+  query: query_root
+  subscription: subscription_root
 }

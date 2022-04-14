@@ -48,7 +48,7 @@ class ActivityClientFt : BaseClientFt() {
                 }
             }""")
 
-        val activities = activityClient.getActivities("1", 10)
+        val activities = activityClient.getActivities(10, "1")
         assertThat(activities).hasSize(2)
     }
 }

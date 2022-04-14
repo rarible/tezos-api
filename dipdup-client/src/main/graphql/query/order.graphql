@@ -21,6 +21,8 @@ query GetOrders($limit: Int!, $prevId: bigint!) {
         platform
         started_at
         status
+        salt
+        taker
     }
 }
 
@@ -43,6 +45,8 @@ query GetOrderById($id: bigint!) {
         platform
         started_at
         status
+        salt
+        taker
     }
 }
 
@@ -68,6 +72,8 @@ query GetOrdersByIds($ids: [bigint!]!) {
         platform
         started_at
         status
+        salt
+        taker
     }
 }
 
@@ -98,5 +104,7 @@ query GetOrdersByItem($makeContract: String!, $makeTokenId: String!, $limit: Int
         platform
         started_at
         status
+        salt
+        taker
     }
 }

@@ -1,19 +1,17 @@
-package com.rarible.dipdup.listener.model.event
+package com.rarible.dipdup.client.core.model
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import com.rarible.dipdup.client.core.model.Asset
-import com.rarible.dipdup.client.core.model.TezosPlatform
 import java.math.BigDecimal
 import java.time.OffsetDateTime
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = DipDupActivityEvent.TYPE)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = DipDupActivity.TYPE)
 @JsonSubTypes(
-    JsonSubTypes.Type(value = DipDupOrderListActivityEvent::class, name = DipDupActivityEvent.LIST),
-    JsonSubTypes.Type(value = DipDupOrderCancelActivityEvent::class, name = DipDupActivityEvent.CANCEL),
-    JsonSubTypes.Type(value = DipDupOrderSellActivityEvent::class, name = DipDupActivityEvent.SELL)
+    JsonSubTypes.Type(value = DipDupOrderListActivity::class, name = DipDupActivity.LIST),
+    JsonSubTypes.Type(value = DipDupOrderCancelActivity::class, name = DipDupActivity.CANCEL),
+    JsonSubTypes.Type(value = DipDupOrderSellActivity::class, name = DipDupActivity.SELL)
 )
-sealed class DipDupActivityEvent {
+sealed class DipDupActivity {
     abstract val id: String
     abstract val date: OffsetDateTime
     abstract val reverted: Boolean
@@ -26,7 +24,7 @@ sealed class DipDupActivityEvent {
     }
 }
 
-data class DipDupOrderListActivityEvent(
+data class DipDupOrderListActivity(
     override val id: String,
     override val date: OffsetDateTime,
     override val reverted: Boolean,
@@ -36,9 +34,9 @@ data class DipDupOrderListActivityEvent(
     val make: Asset,
     val take: Asset,
     val price: BigDecimal
-) : DipDupActivityEvent()
+) : DipDupActivity()
 
-data class DipDupOrderCancelActivityEvent(
+data class DipDupOrderCancelActivity(
     override val id: String,
     override val date: OffsetDateTime,
     override val reverted: Boolean,
@@ -47,9 +45,9 @@ data class DipDupOrderCancelActivityEvent(
     val maker: String,
     val make: Asset,
     val take: Asset,
-) : DipDupActivityEvent()
+) : DipDupActivity()
 
-data class DipDupOrderSellActivityEvent(
+data class DipDupOrderSellActivity(
     override val id: String,
     override val date: OffsetDateTime,
     override val reverted: Boolean,
@@ -60,4 +58,4 @@ data class DipDupOrderSellActivityEvent(
     val payment: Asset,
     val buyer: String,
     val price: BigDecimal
-) : DipDupActivityEvent()
+) : DipDupActivity()

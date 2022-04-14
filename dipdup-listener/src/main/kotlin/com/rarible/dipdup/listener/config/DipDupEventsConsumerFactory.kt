@@ -2,8 +2,8 @@ package com.rarible.dipdup.listener.config
 
 import com.rarible.core.kafka.RaribleKafkaConsumer
 import com.rarible.core.kafka.json.JsonDeserializer
-import com.rarible.dipdup.listener.model.event.DipDupActivityEvent
-import com.rarible.dipdup.listener.model.event.DipDupOrderEvent
+import com.rarible.dipdup.client.core.model.DipDupActivity
+import com.rarible.dipdup.client.core.model.DipDupOrder
 
 import java.util.*
 
@@ -24,11 +24,11 @@ class DipDupEventsConsumerFactory(
                 "username=\"$username\" password=\"$password\";"
     ) else emptyMap()
 
-    fun createOrderConsumer(consumerGroup: String): RaribleKafkaConsumer<DipDupOrderEvent> {
+    fun createOrderConsumer(consumerGroup: String): RaribleKafkaConsumer<DipDupOrder> {
         return RaribleKafkaConsumer(
             clientId = "$clientIdPrefix.tezos-order-consumer",
             valueDeserializerClass = JsonDeserializer::class.java,
-            valueClass = DipDupOrderEvent::class.java,
+            valueClass = DipDupOrder::class.java,
             consumerGroup = consumerGroup,
             defaultTopic = DipDupTopicProvider.ORDER,
             bootstrapServers = brokerReplicaSet,
@@ -36,11 +36,11 @@ class DipDupEventsConsumerFactory(
         )
     }
 
-    fun createActivityConsumer(consumerGroup: String): RaribleKafkaConsumer<DipDupActivityEvent> {
+    fun createActivityConsumer(consumerGroup: String): RaribleKafkaConsumer<DipDupActivity> {
         return RaribleKafkaConsumer(
             clientId = "$clientIdPrefix.tezos-activity-consumer",
             valueDeserializerClass = JsonDeserializer::class.java,
-            valueClass = DipDupActivityEvent::class.java,
+            valueClass = DipDupActivity::class.java,
             consumerGroup = consumerGroup,
             defaultTopic = DipDupTopicProvider.ACTIVITY,
             bootstrapServers = brokerReplicaSet,

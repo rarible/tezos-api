@@ -1,19 +1,16 @@
-package com.rarible.dipdup.listener.model.event
+package com.rarible.dipdup.client.core.model
 
-import com.rarible.dipdup.client.core.model.Asset
-import com.rarible.dipdup.client.core.model.Status
-import com.rarible.dipdup.client.core.model.TezosPlatform
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.time.OffsetDateTime
 
-data class DipDupOrderEvent(
+data class DipDupOrder(
     val id: String,
     val fill: BigDecimal,
-    val makeStock: BigDecimal,
+    val makeStock: BigInteger,
     val platform: TezosPlatform,
     val cancelled: Boolean,
-    val status: Status,
+    val status: OrderStatus,
     val startedAt: OffsetDateTime?,
     val endedAt: OffsetDateTime?,
     val createdAt: OffsetDateTime,

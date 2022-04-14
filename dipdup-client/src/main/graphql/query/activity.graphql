@@ -1,6 +1,6 @@
-query GetActivities($id: bigint!, $limit: Int!) {
+query GetActivities($limit: Int!, $prevId: bigint!) {
     marketplace_activity(
-        where: {id: {_gt: $id}},
+        where: {id: {_gt: $prevId}},
         order_by: {id: asc},
         limit: $limit
     ) {
@@ -9,6 +9,29 @@ query GetActivities($id: bigint!, $limit: Int!) {
         id
         internal_order_id
         maker
+        taker
+        network
+        operation_hash
+        operation_level
+        operation_timestamp
+        platform
+        sell_price
+        token_id
+        type
+    }
+}
+
+query GetActivitiesByIds($ids: [bigint!]!) {
+    marketplace_activity(
+        where: {id: {_in: $ids}},
+        order_by: {id: asc}
+    ) {
+        amount
+        contract
+        id
+        internal_order_id
+        maker
+        taker
         network
         operation_hash
         operation_level

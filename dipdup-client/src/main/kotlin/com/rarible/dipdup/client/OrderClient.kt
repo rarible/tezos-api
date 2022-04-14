@@ -5,8 +5,8 @@ import com.rarible.dipdup.client.converter.convert
 import com.rarible.dipdup.client.converter.convertAll
 import com.rarible.dipdup.client.converter.convertByIds
 import com.rarible.dipdup.client.converter.convertByItem
+import com.rarible.dipdup.client.core.model.DipDupOrder
 import com.rarible.dipdup.client.exception.NotFound
-import com.rarible.dipdup.client.model.DipDupOrder
 import java.math.BigInteger
 
 class OrderClient(
