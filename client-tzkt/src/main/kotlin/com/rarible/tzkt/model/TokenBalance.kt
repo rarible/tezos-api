@@ -42,7 +42,7 @@ data class TokenBalance (
 
     /* Internal TzKT id.   **[sortable]** */
     @Json(name = "id")
-    val id: kotlin.Int? = null,
+    val id: Int? = null,
 
     /* Owner account.   Click on the field to expand more details. */
     @Json(name = "account")
@@ -54,15 +54,15 @@ data class TokenBalance (
 
     /* Balance (raw value, not divided by `decimals`).   **[sortable]** */
     @Json(name = "balance")
-    val balance: kotlin.String? = null,
+    val balance: String? = null,
 
     /* Total number of transfers, affecting the token balance.   **[sortable]** */
     @Json(name = "transfersCount")
-    val transfersCount: kotlin.Int? = null,
+    val transfersCount: Int? = null,
 
     /* Level of the block where the token balance was first changed.   **[sortable]** */
     @Json(name = "firstLevel")
-    val firstLevel: kotlin.Int? = null,
+    val firstLevel: Int? = null,
 
     /* Timestamp of the block where the token balance was first changed. */
     @Json(name = "firstTime")
@@ -70,7 +70,7 @@ data class TokenBalance (
 
     /* Level of the block where the token balance was last changed.   **[sortable]** */
     @Json(name = "lastLevel")
-    val lastLevel: kotlin.Int? = null,
+    val lastLevel: Int? = null,
 
     /* Timestamp of the block where the token balance was last changed. */
     @Json(name = "lastTime")

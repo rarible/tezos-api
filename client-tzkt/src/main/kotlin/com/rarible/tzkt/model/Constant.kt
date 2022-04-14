@@ -41,19 +41,19 @@ data class Constant (
 
     /* Global address (expression hash) */
     @Json(name = "address")
-    val address: kotlin.String? = null,
+    val address: String? = null,
 
     /* Constant value (either micheline, michelson or bytes, depending on the `format` parameter) */
     @Json(name = "value")
-    val `value`: kotlin.Any? = null,
+    val `value`: Any? = null,
 
     /* Constant size in bytes */
     @Json(name = "size")
-    val propertySize: kotlin.Int? = null,
+    val propertySize: Int? = null,
 
     /* Number of contracts referencing this constant */
     @Json(name = "refs")
-    val refs: kotlin.Int? = null,
+    val refs: Int? = null,
 
     /* Account registered this constant */
     @Json(name = "creator")
@@ -61,7 +61,7 @@ data class Constant (
 
     /* Level of the first block baked with this software */
     @Json(name = "creationLevel")
-    val creationLevel: kotlin.Int? = null,
+    val creationLevel: Int? = null,
 
     /* Datetime of the first block baked with this software */
     @Json(name = "creationTime")

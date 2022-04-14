@@ -66,23 +66,23 @@ data class Contract (
 
     /* Public key hash of the contract */
     @Json(name = "address")
-    val address: kotlin.String? = null,
+    val address: String? = null,
 
     /* Kind of the contract (`delegator_contract` or `smart_contract`), where `delegator_contract` - manager.tz smart contract for delegation purpose only */
     @Json(name = "kind")
-    val kind: kotlin.String? = null,
+    val kind: String? = null,
 
     /* List of implemented standards (TZIPs) */
     @Json(name = "tzips")
-    val tzips: kotlin.collections.List<kotlin.String>? = null,
+    val tzips: List<String>? = null,
 
     /* Name of the project behind the contract or contract description */
     @Json(name = "alias")
-    val alias: kotlin.String? = null,
+    val alias: String? = null,
 
     /* Contract balance (micro tez) */
     @Json(name = "balance")
-    val balance: kotlin.Long? = null,
+    val balance: Long? = null,
 
     /* Information about the account, which has deployed the contract to the blockchain */
     @Json(name = "creator")
@@ -98,7 +98,7 @@ data class Contract (
 
     /* Block height of latest delegation. `null` if it's not delegated */
     @Json(name = "delegationLevel")
-    val delegationLevel: kotlin.Int? = null,
+    val delegationLevel: Int? = null,
 
     /* Block datetime of latest delegation (ISO 8601, e.g. `2020-02-20T02:40:57Z`). `null` if it's not delegated */
     @Json(name = "delegationTime")
@@ -106,43 +106,43 @@ data class Contract (
 
     /* Number of contracts, created (originated) and/or managed by the contract */
     @Json(name = "numContracts")
-    val numContracts: kotlin.Int? = null,
+    val numContracts: Int? = null,
 
     /* Number of account tokens with non-zero balances */
     @Json(name = "activeTokensCount")
-    val activeTokensCount: kotlin.Int? = null,
+    val activeTokensCount: Int? = null,
 
     /* Number of tokens the account ever had */
     @Json(name = "tokenBalancesCount")
-    val tokenBalancesCount: kotlin.Int? = null,
+    val tokenBalancesCount: Int? = null,
 
     /* Number of token transfers from/to the account */
     @Json(name = "tokenTransfersCount")
-    val tokenTransfersCount: kotlin.Int? = null,
+    val tokenTransfersCount: Int? = null,
 
     /* Number of delegation operations of the contract */
     @Json(name = "numDelegations")
-    val numDelegations: kotlin.Int? = null,
+    val numDelegations: Int? = null,
 
     /* Number of origination (deployment / contract creation) operations, related the contract */
     @Json(name = "numOriginations")
-    val numOriginations: kotlin.Int? = null,
+    val numOriginations: Int? = null,
 
     /* Number of transaction (transfer) operations, related to the contract */
     @Json(name = "numTransactions")
-    val numTransactions: kotlin.Int? = null,
+    val numTransactions: Int? = null,
 
     /* Number of reveal (is used to reveal the public key associated with an account) operations of the contract */
     @Json(name = "numReveals")
-    val numReveals: kotlin.Int? = null,
+    val numReveals: Int? = null,
 
     /* Number of migration (result of the context (database) migration during a protocol update) operations related to the contract (synthetic type) */
     @Json(name = "numMigrations")
-    val numMigrations: kotlin.Int? = null,
+    val numMigrations: Int? = null,
 
     /* Block height of the contract creation */
     @Json(name = "firstActivity")
-    val firstActivity: kotlin.Int? = null,
+    val firstActivity: Int? = null,
 
     /* Block datetime of the contract creation (ISO 8601, e.g. `2020-02-20T02:40:57Z`) */
     @Json(name = "firstActivityTime")
@@ -150,7 +150,7 @@ data class Contract (
 
     /* Height of the block in which the account state was changed last time */
     @Json(name = "lastActivity")
-    val lastActivity: kotlin.Int? = null,
+    val lastActivity: Int? = null,
 
     /* Datetime of the block in which the account state was changed last time (ISO 8601, e.g. `2020-02-20T02:40:57Z`) */
     @Json(name = "lastActivityTime")
@@ -158,15 +158,15 @@ data class Contract (
 
     /* Contract storage value. Omitted by default. Use `?includeStorage=true` to include it in response. */
     @Json(name = "storage")
-    val storage: kotlin.Any? = null,
+    val storage: Any? = null,
 
     /* 32-bit hash of the contract parameter and storage types. This field can be used for searching similar contracts (which have the same interface). */
     @Json(name = "typeHash")
-    val typeHash: kotlin.Int? = null,
+    val typeHash: Int? = null,
 
     /* 32-bit hash of the contract code. This field can be used for searching same contracts (which have the same script). */
     @Json(name = "codeHash")
-    val codeHash: kotlin.Int? = null,
+    val codeHash: Int? = null,
 
     /* Metadata of the contract (alias, logo, website, contacts, etc) */
     @Json(name = "metadata")

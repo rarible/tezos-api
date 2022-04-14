@@ -34,7 +34,7 @@ data class SoftwareAlias (
 
     /* Software version (commit tag) */
     @Json(name = "version")
-    val version: kotlin.String? = null,
+    val version: String? = null,
 
     /* Date of the commit or when the software was first seen */
     @Json(name = "date")

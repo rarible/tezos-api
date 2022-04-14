@@ -63,27 +63,27 @@ data class User (
 
     /* Public key hash of the account */
     @Json(name = "address")
-    val address: kotlin.String? = null,
+    val address: String? = null,
 
     /* Name of the project behind the account or account description */
     @Json(name = "alias")
-    val alias: kotlin.String? = null,
+    val alias: String? = null,
 
     /* Base58 representation of account's public key, revealed by the account */
     @Json(name = "publicKey")
-    val publicKey: kotlin.String? = null,
+    val publicKey: String? = null,
 
     /* Public key revelation status. Unrevealed account can't send manager operation (transaction, origination etc.) */
     @Json(name = "revealed")
-    val revealed: kotlin.Boolean? = null,
+    val revealed: Boolean? = null,
 
     /* Account balance */
     @Json(name = "balance")
-    val balance: kotlin.Long? = null,
+    val balance: Long? = null,
 
     /* An account nonce which is used to prevent operation replay */
     @Json(name = "counter")
-    val counter: kotlin.Int? = null,
+    val counter: Int? = null,
 
     /* Information about the current delegate of the account. `null` if it's not delegated */
     @Json(name = "delegate")
@@ -91,7 +91,7 @@ data class User (
 
     /* Block height of latest delegation. `null` if it's not delegated */
     @Json(name = "delegationLevel")
-    val delegationLevel: kotlin.Int? = null,
+    val delegationLevel: Int? = null,
 
     /* Block datetime of latest delegation (ISO 8601, e.g. `2020-02-20T02:40:57Z`). `null` if it's not delegated */
     @Json(name = "delegationTime")
@@ -99,51 +99,51 @@ data class User (
 
     /* Number of contracts, created (originated) and/or managed by the contract */
     @Json(name = "numContracts")
-    val numContracts: kotlin.Int? = null,
+    val numContracts: Int? = null,
 
     /* Number of account tokens with non-zero balances */
     @Json(name = "activeTokensCount")
-    val activeTokensCount: kotlin.Int? = null,
+    val activeTokensCount: Int? = null,
 
     /* Number of tokens the account ever had */
     @Json(name = "tokenBalancesCount")
-    val tokenBalancesCount: kotlin.Int? = null,
+    val tokenBalancesCount: Int? = null,
 
     /* Number of token transfers from/to the account */
     @Json(name = "tokenTransfersCount")
-    val tokenTransfersCount: kotlin.Int? = null,
+    val tokenTransfersCount: Int? = null,
 
     /* Number of account activation operations. Are used to activate accounts that were recommended allocations of tezos tokens for donations to the Tezos Foundation’s fundraiser */
     @Json(name = "numActivations")
-    val numActivations: kotlin.Int? = null,
+    val numActivations: Int? = null,
 
     /* Number of delegation operations, related to the account */
     @Json(name = "numDelegations")
-    val numDelegations: kotlin.Int? = null,
+    val numDelegations: Int? = null,
 
     /* Number of all origination (deployment / contract creation) operations, related to the account */
     @Json(name = "numOriginations")
-    val numOriginations: kotlin.Int? = null,
+    val numOriginations: Int? = null,
 
     /* Number of all transaction (tez transfer) operations, related to the account */
     @Json(name = "numTransactions")
-    val numTransactions: kotlin.Int? = null,
+    val numTransactions: Int? = null,
 
     /* Number of reveal (is used to reveal the public key associated with an account) operations of the contract */
     @Json(name = "numReveals")
-    val numReveals: kotlin.Int? = null,
+    val numReveals: Int? = null,
 
     /* Number of register global constant operations of the delegate (baker) */
     @Json(name = "numRegisterConstants")
-    val numRegisterConstants: kotlin.Int? = null,
+    val numRegisterConstants: Int? = null,
 
     /* Number of migration (result of the context (database) migration during a protocol update) operations, related to the account (synthetic type)  */
     @Json(name = "numMigrations")
-    val numMigrations: kotlin.Int? = null,
+    val numMigrations: Int? = null,
 
     /* Block height of the first operation, related to the account */
     @Json(name = "firstActivity")
-    val firstActivity: kotlin.Int? = null,
+    val firstActivity: Int? = null,
 
     /* Block datetime of the first operation, related to the account (ISO 8601, e.g. `2020-02-20T02:40:57Z`) */
     @Json(name = "firstActivityTime")
@@ -151,7 +151,7 @@ data class User (
 
     /* Height of the block in which the account state was changed last time */
     @Json(name = "lastActivity")
-    val lastActivity: kotlin.Int? = null,
+    val lastActivity: Int? = null,
 
     /* Datetime of the block in which the account state was changed last time (ISO 8601, e.g. `2020-02-20T02:40:57Z`) */
     @Json(name = "lastActivityTime")

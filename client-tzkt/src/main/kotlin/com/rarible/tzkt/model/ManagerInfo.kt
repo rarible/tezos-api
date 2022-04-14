@@ -35,15 +35,15 @@ data class ManagerInfo (
 
     /* Name of the project behind the account or account description */
     @Json(name = "alias")
-    val alias: kotlin.String? = null,
+    val alias: String? = null,
 
     /* Public key hash of the account */
     @Json(name = "address")
-    val address: kotlin.String? = null,
+    val address: String? = null,
 
     /* Base58 representation of account's public key, revealed by the account */
     @Json(name = "publicKey")
-    val publicKey: kotlin.String? = null
+    val publicKey: String? = null
 
 )
 
