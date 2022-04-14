@@ -1,4 +1,0 @@
-dipdup:
-  client:
-    enable: true
-    host: "http://localhost:8080"
