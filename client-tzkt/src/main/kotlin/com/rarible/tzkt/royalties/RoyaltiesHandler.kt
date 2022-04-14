@@ -133,7 +133,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
             val authorKey = bigMapKeyClient.bigMapKeyWithId("70072", royaltiesMap["issuer_id"]!!)
             authorMap = authorKey.value as LinkedHashMap<String, String>
         }
-        return listOf(Part(authorMap["author"]!!, royaltiesMap["royalties"]!!.toLong()))
+        return listOf(Part(authorMap["author"]!!, royaltiesMap["royalties"]!!.toLong()*10))
     }
 
     //TODO: need to verify if splits need to be handled for royalties in VERSUM
@@ -153,7 +153,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
             val key = bigMapKeyClient.bigMapKeyWithId("55541", tokenId)
             royaltiesMap = key.value as List<LinkedHashMap<String, String>>
             royaltiesMap.forEach {
-                partList.add(Part(it["partValue"]!!, it["partAccount"]!!.toLong()))
+                partList.add(Part(it["partAccount"]!!, it["partValue"]!!.toLong()))
             }
         }
         return partList
