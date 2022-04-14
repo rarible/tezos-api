@@ -1,6 +1,6 @@
 package com.rarible.tzkt.royalties
 
-import com.google.gson.JsonObject
+import com.fasterxml.jackson.databind.JsonNode
 import com.rarible.tzkt.client.BigMapKeyClient
 import com.rarible.tzkt.client.IPFSClient
 import com.rarible.tzkt.model.Part
@@ -58,7 +58,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
                     val ipfsData = ipfsClient.data(hash[1])
 
                     if (ipfsData.has("royalties")) {
-                        val royalties = ipfsData["royalties"] as JsonObject
+                        val royalties = ipfsData["royalties"] as JsonNode
                         if (royalties.has("shares") && royalties.has("decimals")) {
                             part = getObjktRoyalties(royalties)
                             return@runBlocking
@@ -143,14 +143,14 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         return parts
     }
 
-    fun getObjktRoyalties(data: JsonObject): List<Part> {
+    fun getObjktRoyalties(data: JsonNode): List<Part> {
         var partList: MutableList<Part> = ArrayList()
         try{
-            val shares = data["shares"] as JsonObject
-            shares.keySet().forEach {
+            val shares = data["shares"].fieldNames()
+            shares.forEach {
                 partList.add(
                     Part(
-                        it, shares[it].asLong * 10
+                        it, data["shares"][it].asLong() * 10
                     )
                 )
             }
@@ -158,19 +158,18 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         return partList
     }
 
-    fun getSweetIORoyalties(data: JsonObject): List<Part> {
+    fun getSweetIORoyalties(data: JsonNode): List<Part> {
         var partList: MutableList<Part> = ArrayList()
         var recipient = ""
         var share = ""
         try {
-            val attributes = data["attributes"].asJsonArray
+            val attributes = data["attributes"].asIterable()
             attributes.forEach {
-                val item = it.asJsonObject
-                if (item.has("name") && item["name"].asString == "fee_recipient") {
-                    recipient = item["value"].asString
+                if (it.has("name") && it["name"].asText() == "fee_recipient") {
+                    recipient = it["value"].asText()
                 }
-                if (item.has("name") && item["name"].asString == "seller_fee_basis_points") {
-                    share = item["value"].asString
+                if (it.has("name") && it["name"].asText() == "seller_fee_basis_points") {
+                    share = it["value"].asText()
                 }
             }
             if (recipient.isNotEmpty() && share.isNotEmpty()) {

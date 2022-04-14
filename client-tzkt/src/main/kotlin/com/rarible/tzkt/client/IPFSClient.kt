@@ -1,16 +1,16 @@
 package com.rarible.tzkt.client
 
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.web.reactive.function.client.WebClient
 
 class IPFSClient (
     webClient: WebClient
 ) : BaseClient(webClient) {
-    suspend fun data(hash: String): JsonObject {
+    suspend fun data(hash: String): JsonNode {
         val content = invoke<String> {
             it.path(hash)
         }
-        return JsonParser.parseString(content).asJsonObject
+        return ObjectMapper().readTree(content)
     }
 }
