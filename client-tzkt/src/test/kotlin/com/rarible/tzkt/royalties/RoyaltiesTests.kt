@@ -37,8 +37,8 @@ class RoyaltiesTests : BaseClientTests() {
         var contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
         var tokenId = "717867"
         val id = "$contract:$tokenId"
-        val parts = handler.processRoyalties(listOf(id))
-        assertThat(parts).isEqualTo(mapOf(Pair(id, listOf(Part("tz1ZqdrwVRUs8H1Vts2pFvmR1PLikE8eBVZv", 150 * 10)))))
+        val parts = handler.processRoyalties(id)
+        assertThat(parts).isEqualTo(listOf(Part("tz1ZqdrwVRUs8H1Vts2pFvmR1PLikE8eBVZv", 150 * 10)))
     }
 
     @Test
@@ -83,8 +83,8 @@ class RoyaltiesTests : BaseClientTests() {
         var contract = "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"
         var tokenId = "53057"
         val id = "$contract:$tokenId"
-        val parts = handler.processRoyalties(listOf(id))
-        assertThat(parts).isEqualTo(mapOf(Pair(id, listOf(Part("tz1gSCfWiPL8e6us331gtHCvJr9Cuf3jX8g6", 10 * 100)))))
+        val parts = handler.processRoyalties(id)
+        assertThat(parts).isEqualTo(listOf(Part("tz1gSCfWiPL8e6us331gtHCvJr9Cuf3jX8g6", 10 * 100)))
     }
 
     @Test
@@ -139,8 +139,8 @@ class RoyaltiesTests : BaseClientTests() {
         var contract = "KT1KEa8z6vWXDJrVqtMrAeDVzsvxat3kHaCE"
         var tokenId = "522648"
         val id = "$contract:$tokenId"
-        val parts = handler.processRoyalties(listOf(id))
-        assertThat(parts).isEqualTo(mapOf(Pair(id, listOf(Part("tz1b8GULAVKS1oHpYLJbwuTKvUegXtRbxH82", 10 * 150)))))
+        val parts = handler.processRoyalties(id)
+        assertThat(parts).isEqualTo(listOf(Part("tz1b8GULAVKS1oHpYLJbwuTKvUegXtRbxH82", 10 * 150)))
     }
 
     @Test
@@ -177,8 +177,8 @@ class RoyaltiesTests : BaseClientTests() {
         var contract = "KT1LjmAdYQCLBjwv4S2oFkEzyHVkomAf5MrW"
         var tokenId = "19471"
         val id = "$contract:$tokenId"
-        val parts = handler.processRoyalties(listOf(id))
-        assertThat(parts).isEqualTo(mapOf(Pair(id, listOf(Part("tz1VNAyq17Xpz8QpbxMepbfdrcqNkomeKP35", 250 * 10)))))
+        val parts = handler.processRoyalties(id)
+        assertThat(parts).isEqualTo(listOf(Part("tz1VNAyq17Xpz8QpbxMepbfdrcqNkomeKP35", 250 * 10)))
     }
 
     @Test
@@ -205,8 +205,8 @@ class RoyaltiesTests : BaseClientTests() {
         var contract = "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS"
         var tokenId = "54686"
         val id = "$contract:$tokenId"
-        val parts = handler.processRoyalties(listOf(id))
-        assertThat(parts).isEqualTo(mapOf(Pair(id, listOf(Part("tz2G4MMCYStTP9eUU35WQCqMSSJGtjJRZx9g", 1000)))))
+        val parts = handler.processRoyalties(id)
+        assertThat(parts).isEqualTo(listOf(Part("tz2G4MMCYStTP9eUU35WQCqMSSJGtjJRZx9g", 1000)))
     }
 
     @Test
@@ -294,16 +294,11 @@ class RoyaltiesTests : BaseClientTests() {
         var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
         var tokenId = "0"
         val id = "$contract:$tokenId"
-        val parts = handler.processRoyalties(listOf(id))
+        val parts = handler.processRoyalties(id)
         assertThat(parts).isEqualTo(
-            mapOf(
-                Pair(
-                    id,
-                    listOf(
-                        Part("tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88", 1000),
-                        Part("tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP89", 1000)
-                    )
-                )
+            listOf(
+                Part("tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88", 1000),
+                Part("tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP89", 1000)
             )
         )
     }
@@ -332,15 +327,10 @@ class RoyaltiesTests : BaseClientTests() {
         var contract = "KT19dDquUBH73ifo1M2jt7vvk8XyirTbUsih"
         var tokenId = "2"
         val id = "$contract:$tokenId"
-        val parts = handler.processRoyalties(listOf(id))
+        val parts = handler.processRoyalties(id)
         assertThat(parts).isEqualTo(
-            mapOf(
-                Pair(
-                    id,
-                    listOf(
-                        Part("tz1NRh1vTn3b38m7Gg2qP81dqb5Kr2BAjwJV", 1200)
-                    )
-                )
+            listOf(
+                Part("tz1NRh1vTn3b38m7Gg2qP81dqb5Kr2BAjwJV", 1200)
             )
         )
     }
@@ -425,16 +415,12 @@ class RoyaltiesTests : BaseClientTests() {
         var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
         var tokenId = "2"
         val id = "$contract:$tokenId"
-        val parts = handler.processRoyalties(listOf(id))
+        val parts = handler.processRoyalties(id)
         assertThat(parts).isEqualTo(
-            mapOf(
-                Pair(
-                    id,
-                    listOf(
-                        Part("tz1fRXMLR27hWoD49tdtKunHyfy3CQb5XZst", 1000),
-                    )
-                )
+            listOf(
+                Part("tz1fRXMLR27hWoD49tdtKunHyfy3CQb5XZst", 1000),
             )
         )
+
     }
 }

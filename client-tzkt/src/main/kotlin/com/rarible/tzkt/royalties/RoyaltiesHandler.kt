@@ -1,6 +1,5 @@
 package com.rarible.tzkt.royalties
 
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.rarible.tzkt.client.BigMapKeyClient
 import com.rarible.tzkt.client.IPFSClient
@@ -17,35 +16,34 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         const val RARIBLE = "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS"
     }
 
-    fun processRoyalties(ids: List<String>): Map<String, List<Part>?> {
+    fun processRoyalties(id: String): List<Part> {
         //check if address is known
         //check storage
-        var allRoyalties = mutableMapOf<String, List<Part>?>()
-        ids.forEach { it ->
-            val contract = it.split(":")[0]
-            val tokenId = it.split(":")[1]
+            val contract = id.split(":")[0]
+            val tokenId = id.split(":")[1]
+            var part: List<Part>
             if (contract == HEN) {
-                allRoyalties[it] = getHENRoyalties(tokenId)
-                return@forEach
+                part = getHENRoyalties(tokenId)
+                return part
             }
             if (contract == KALAMINT) {
-                allRoyalties[it] = getKalamintRoyalties(tokenId)
-                return@forEach
+                part = getKalamintRoyalties(tokenId)
+                return part
             }
             if (contract == FXHASH) {
-                allRoyalties[it] = getFxHashRoyalties(tokenId)
-                return@forEach
+                part = getFxHashRoyalties(tokenId)
+                return part
             }
             if (contract == VERSUM) {
-                allRoyalties[it] = getVersumRoyalties(tokenId)
-                return@forEach
+                part = getVersumRoyalties(tokenId)
+                return part
             }
 
             //check rarible pattern in generated contract storage
-            allRoyalties[it] = getRaribleRoyalties(contract, tokenId)
+            part = getRaribleRoyalties(contract, tokenId)
 
-            if (!allRoyalties[it].isNullOrEmpty()) {
-                return@forEach
+            if (!part.isNullOrEmpty()) {
+                return part
             }
 
             //fetch metadata from ipfs
@@ -62,20 +60,17 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
                     if (ipfsData.has("royalties")) {
                         val royalties = ipfsData["royalties"] as JsonObject
                         if (royalties.has("shares") && royalties.has("decimals")) {
-                            allRoyalties[it] = getObjktRoyalties(royalties)
+                            part = getObjktRoyalties(royalties)
                             return@runBlocking
                         }
                     }
 
                     if (ipfsData.has("attributes")) {
-                        allRoyalties[it] = getSweetIORoyalties(ipfsData)
+                        part = getSweetIORoyalties(ipfsData)
                     }
-                } catch (e: NoSuchElementException) {
-                    allRoyalties[it] = null
-                }
-            }
+                } catch (e: Exception) {}
         }
-        return allRoyalties
+        return part
     }
 
     fun getHENRoyalties(tokenId: String): List<Part> {
