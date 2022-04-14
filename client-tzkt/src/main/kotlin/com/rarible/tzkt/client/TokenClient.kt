@@ -26,6 +26,7 @@ class TokenClient(
                     continuation?.let { queryParam("offset.cr", it) }
                     val sorting = if (sortAsc) "sort.asc" else "sort.desc"
                     queryParam(sorting, "id")
+                    queryParam("metadata.artifactUri.null", "false")
                 }
         }
         return tokens

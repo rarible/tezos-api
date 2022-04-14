@@ -76,356 +76,649 @@ class TokenClientTests : BaseClientTests() {
     fun `should return tokens by with size, continuation and sorted by ASC`() = runBlocking<Unit> {
         mock("""
             [{
-            	"id": 11,
+            	"id": 60,
             	"contract": {
-            		"address": "KT1FaKvzjgVGZtiA7yyx97txY8J5cE5qpjQ1"
+            		"address": "KT1S95Dyj2QrJpSnAbHRUSUZr7DhuFqssrog"
             	},
-            	"tokenId": "1",
+            	"tokenId": "0",
             	"standard": "fa2",
-            	"firstLevel": 1212043,
-            	"firstTime": "2020-11-12T06:41:22Z",
-            	"lastLevel": 1212043,
-            	"lastTime": "2020-11-12T06:41:22Z",
-            	"transfersCount": 1,
-            	"balancesCount": 1,
-            	"holdersCount": 1,
-            	"totalMinted": "5000000",
-            	"totalBurned": "0",
-            	"totalSupply": "5000000"
-            }, {
-            	"id": 12,
-            	"contract": {
-            		"address": "KT1Ex8LrDbCrZuTgmWin8eEo7HFw74jAqTvz"
-            	},
-            	"tokenId": "1",
-            	"standard": "fa2",
-            	"firstLevel": 1212700,
-            	"firstTime": "2020-11-12T18:10:46Z",
-            	"lastLevel": 1321635,
-            	"lastTime": "2021-01-29T02:17:40Z",
-            	"transfersCount": 4,
-            	"balancesCount": 3,
-            	"holdersCount": 3,
-            	"totalMinted": "22000000",
-            	"totalBurned": "0",
-            	"totalSupply": "22000000"
-            }, {
-            	"id": 13,
-            	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
-            	},
-            	"tokenId": "1",
-            	"standard": "fa2",
-            	"firstLevel": 1218174,
-            	"firstTime": "2020-11-16T16:18:10Z",
-            	"lastLevel": 1218665,
-            	"lastTime": "2020-11-17T00:39:10Z",
-            	"transfersCount": 14,
-            	"balancesCount": 9,
-            	"holdersCount": 8,
-            	"totalMinted": "10",
-            	"totalBurned": "0",
-            	"totalSupply": "10"
-            }, {
-            	"id": 14,
-            	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
-            	},
-            	"tokenId": "2",
-            	"standard": "fa2",
-            	"firstLevel": 1219058,
-            	"firstTime": "2020-11-17T07:18:50Z",
-            	"lastLevel": 1219085,
-            	"lastTime": "2020-11-17T07:45:50Z",
+            	"firstLevel": 1328122,
+            	"firstTime": "2021-02-02T19:17:52Z",
+            	"lastLevel": 1390772,
+            	"lastTime": "2021-03-19T00:29:18Z",
             	"transfersCount": 2,
-            	"balancesCount": 1,
+            	"balancesCount": 2,
             	"holdersCount": 1,
-            	"totalMinted": "10",
+            	"totalMinted": "1",
             	"totalBurned": "0",
-            	"totalSupply": "10"
+            	"totalSupply": "1",
+            	"metadata": {
+            		"Date": "02-02-2021",
+            		"name": "Alone Together",
+            		"genres": "art",
+            		"Creator": "Chris Mischief",
+            		"decimals": "0",
+            		"displayUri": "https://cloudflare-ipfs.com/ipfs/QmUnPB2pBFHv3MyRDQcmMGkpDNKNqeX57xASa9cx4Xomn1",
+            		"artifactUri": "https://cloudflare-ipfs.com/ipfs/QmUnPB2pBFHv3MyRDQcmMGkpDNKNqeX57xASa9cx4Xomn1",
+            		"description": "I painted this over the course of the entire first 2020 NYC lockdown. I would leave the canvas only to return to scribble down new observations on the canvas. Days turned into night which turned into weeks which turned into months. We were all alone together.  ",
+            		"booleanAmount": "true"
+            	}
             }, {
-            	"id": 15,
+            	"id": 61,
             	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
+            		"address": "KT1S95Dyj2QrJpSnAbHRUSUZr7DhuFqssrog"
             	},
-            	"tokenId": "3",
+            	"tokenId": "1",
             	"standard": "fa2",
-            	"firstLevel": 1219062,
-            	"firstTime": "2020-11-17T07:22:50Z",
-            	"lastLevel": 1219062,
-            	"lastTime": "2020-11-17T07:22:50Z",
+            	"firstLevel": 1330915,
+            	"firstTime": "2021-02-04T19:46:23Z",
+            	"lastLevel": 1633245,
+            	"lastTime": "2021-08-24T00:03:56Z",
+            	"transfersCount": 2,
+            	"balancesCount": 2,
+            	"holdersCount": 1,
+            	"totalMinted": "1",
+            	"totalBurned": "0",
+            	"totalSupply": "1",
+            	"metadata": {
+            		"name": "Mischief Genesis ",
+            		"creator": "Chris Mischief",
+            		"decimals": "0",
+            		"displayUri": "https://cloudflare-ipfs.com/ipfs/QmaTLw6SRSZBgbsfjNhkhkTQmw9XMvt6YiPRHwZ3YN9X4a",
+            		"artifactUri": "https://cloudflare-ipfs.com/ipfs/QmaTLw6SRSZBgbsfjNhkhkTQmw9XMvt6YiPRHwZ3YN9X4a",
+            		"description": "After many years of hanging out with graffiti artists, assisting in art studios, painting, showing and selling my own works, I picked up an iPad Pro and wondered if I could make art on it. This was my very first attempt and sealed my fate as a digital artist. ",
+            		"booleanAmount": "true",
+            		"serial number": "AP"
+            	}
+            }, {
+            	"id": 70,
+            	"contract": {
+            		"address": "KT1UNMbjyPSY8hbHYCxyM1LMbHMzv5EbFFN3"
+            	},
+            	"tokenId": "0",
+            	"standard": "fa2",
+            	"firstLevel": 1332416,
+            	"firstTime": "2021-02-05T21:55:47Z",
+            	"lastLevel": 1332416,
+            	"lastTime": "2021-02-05T21:55:47Z",
             	"transfersCount": 1,
             	"balancesCount": 1,
             	"holdersCount": 1,
             	"totalMinted": "1",
             	"totalBurned": "0",
-            	"totalSupply": "1"
+            	"totalSupply": "1",
+            	"metadata": {
+            		"name": "Mischief Genesis ",
+            		"creator": "Chris Mischief",
+            		"decimals": "0",
+            		"displayUri": "ipfs://QmaTLw6SRSZBgbsfjNhkhkTQmw9XMvt6YiPRHwZ3YN9X4a",
+            		"artifactUri": "ipfs://QmaTLw6SRSZBgbsfjNhkhkTQmw9XMvt6YiPRHwZ3YN9X4a",
+            		"description": "After many years of hanging out with graffiti artists, assisting in art studios, painting, showing and selling my own works, I picked up an iPad Pro and wondered if I could make art on it. This was my very first attempt and sealed my fate as a digital artist. ",
+            		"thumbnailUri": "ipfs://QmTBAYu12gkhTzZCL7vqN1mr4SjA95UJqDgqxpMCrfjsWP",
+            		"booleanAmount": true,
+            		"serial number": "AP2"
+            	}
             }, {
-            	"id": 16,
+            	"id": 71,
             	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
-            	},
-            	"tokenId": "4",
-            	"standard": "fa2",
-            	"firstLevel": 1219077,
-            	"firstTime": "2020-11-17T07:37:50Z",
-            	"lastLevel": 1219086,
-            	"lastTime": "2020-11-17T07:46:50Z",
-            	"transfersCount": 3,
-            	"balancesCount": 1,
-            	"holdersCount": 1,
-            	"totalMinted": "1",
-            	"totalBurned": "0",
-            	"totalSupply": "1"
-            }, {
-            	"id": 18,
-            	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
-            	},
-            	"tokenId": "5",
-            	"standard": "fa2",
-            	"firstLevel": 1219151,
-            	"firstTime": "2020-11-17T08:53:50Z",
-            	"lastLevel": 1219151,
-            	"lastTime": "2020-11-17T08:53:50Z",
-            	"transfersCount": 1,
-            	"balancesCount": 1,
-            	"holdersCount": 1,
-            	"totalMinted": "5",
-            	"totalBurned": "0",
-            	"totalSupply": "5"
-            }, {
-            	"id": 19,
-            	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
-            	},
-            	"tokenId": "6",
-            	"standard": "fa2",
-            	"firstLevel": 1219218,
-            	"firstTime": "2020-11-17T10:01:30Z",
-            	"lastLevel": 1219218,
-            	"lastTime": "2020-11-17T10:01:30Z",
-            	"transfersCount": 1,
-            	"balancesCount": 1,
-            	"holdersCount": 1,
-            	"totalMinted": "5",
-            	"totalBurned": "0",
-            	"totalSupply": "5"
-            }, {
-            	"id": 20,
-            	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
             	},
             	"tokenId": "7",
             	"standard": "fa2",
-            	"firstLevel": 1222149,
-            	"firstTime": "2020-11-19T11:56:50Z",
-            	"lastLevel": 1222149,
-            	"lastTime": "2020-11-19T11:56:50Z",
+            	"firstLevel": 1332523,
+            	"firstTime": "2021-02-05T23:48:07Z",
+            	"lastLevel": 1332523,
+            	"lastTime": "2021-02-05T23:48:07Z",
             	"transfersCount": 1,
             	"balancesCount": 1,
             	"holdersCount": 1,
-            	"totalMinted": "1",
+            	"totalMinted": "2",
             	"totalBurned": "0",
-            	"totalSupply": "1"
+            	"totalSupply": "2",
+            	"metadata": {
+            		"name": "ung",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmevGKa3g6hFWNV9wviNb1qWUKFE8mygcrU7hEuDxfP33r",
+            			"mimeType": "image/png"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmevGKa3g6hFWNV9wviNb1qWUKFE8mygcrU7hEuDxfP33r",
+            		"description": "",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": true
+            	}
             }, {
-            	"id": 21,
+            	"id": 72,
             	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
             	},
             	"tokenId": "8",
             	"standard": "fa2",
-            	"firstLevel": 1225935,
-            	"firstTime": "2020-11-22T04:49:24Z",
-            	"lastLevel": 1225935,
-            	"lastTime": "2020-11-22T04:49:24Z",
+            	"firstLevel": 1332773,
+            	"firstTime": "2021-02-06T04:08:47Z",
+            	"lastLevel": 1332773,
+            	"lastTime": "2021-02-06T04:08:47Z",
             	"transfersCount": 1,
             	"balancesCount": 1,
             	"holdersCount": 1,
-            	"totalMinted": "73000000",
+            	"totalMinted": "1000",
             	"totalBurned": "0",
-            	"totalSupply": "73000000"
+            	"totalSupply": "1000",
+            	"metadata": {
+            		"name": "la jetee",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmURPaTHnDnA36jeuAVyFYMP8utCciCJY2cB42du1hs9hC",
+            			"mimeType": "video/mp4"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmURPaTHnDnA36jeuAVyFYMP8utCciCJY2cB42du1hs9hC",
+            		"description": "",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": true
+            	}
+            }, {
+            	"id": 73,
+            	"contract": {
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+            	},
+            	"tokenId": "9",
+            	"standard": "fa2",
+            	"firstLevel": 1332897,
+            	"firstTime": "2021-02-06T06:19:27Z",
+            	"lastLevel": 1332897,
+            	"lastTime": "2021-02-06T06:19:27Z",
+            	"transfersCount": 1,
+            	"balancesCount": 1,
+            	"holdersCount": 1,
+            	"totalMinted": "10",
+            	"totalBurned": "0",
+            	"totalSupply": "10",
+            	"metadata": {
+            		"name": "UNG",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/Qmf6KqanvCYkyJkCLJ3UAei8oavZytWBL9SNEnNTa58M1X",
+            			"mimeType": "image/png"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/Qmf6KqanvCYkyJkCLJ3UAei8oavZytWBL9SNEnNTa58M1X",
+            		"description": "",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": true
+            	}
+            }, {
+            	"id": 74,
+            	"contract": {
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+            	},
+            	"tokenId": "10",
+            	"standard": "fa2",
+            	"firstLevel": 1333040,
+            	"firstTime": "2021-02-06T08:48:35Z",
+            	"lastLevel": 1333040,
+            	"lastTime": "2021-02-06T08:48:35Z",
+            	"transfersCount": 1,
+            	"balancesCount": 1,
+            	"holdersCount": 1,
+            	"totalMinted": "10",
+            	"totalBurned": "0",
+            	"totalSupply": "10",
+            	"metadata": {
+            		"name": "UNG",
+            		"tags": [],
+            		"media": [{
+            			"hash": "QmZYBf2MbVGzusnq311Jn7WQ6rQqoaxqu6hq6CpDgWGN5A",
+            			"path": "QmZYBf2MbVGzusnq311Jn7WQ6rQqoaxqu6hq6CpDgWGN5A",
+            			"size": "29368"
+            		}],
+            		"symbol": "OBJKT",
+            		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+            		"formats": [{
+            			"uri": "",
+            			"mimeType": "image/png"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "",
+            		"description": "",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": true
+            	}
+            }, {
+            	"id": 75,
+            	"contract": {
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+            	},
+            	"tokenId": "11",
+            	"standard": "fa2",
+            	"firstLevel": 1333049,
+            	"firstTime": "2021-02-06T08:58:15Z",
+            	"lastLevel": 1333049,
+            	"lastTime": "2021-02-06T08:58:15Z",
+            	"transfersCount": 1,
+            	"balancesCount": 1,
+            	"holdersCount": 1,
+            	"totalMinted": "22",
+            	"totalBurned": "0",
+            	"totalSupply": "22",
+            	"metadata": {
+            		"name": "fadfa",
+            		"tags": [],
+            		"media": "https://ipfs.io/ipfs/QmZYBf2MbVGzusnq311Jn7WQ6rQqoaxqu6hq6CpDgWGN5A",
+            		"symbol": "OBJKT",
+            		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+            		"formats": [{
+            			"uri": "",
+            			"mimeType": "image/png"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "",
+            		"description": "",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": true
+            	}
+            }, {
+            	"id": 76,
+            	"contract": {
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+            	},
+            	"tokenId": "12",
+            	"standard": "fa2",
+            	"firstLevel": 1333069,
+            	"firstTime": "2021-02-06T09:19:35Z",
+            	"lastLevel": 1333761,
+            	"lastTime": "2021-02-06T21:14:15Z",
+            	"transfersCount": 2,
+            	"balancesCount": 2,
+            	"holdersCount": 2,
+            	"totalMinted": "20",
+            	"totalBurned": "0",
+            	"totalSupply": "20",
+            	"metadata": {
+            		"name": "ung",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmZYBf2MbVGzusnq311Jn7WQ6rQqoaxqu6hq6CpDgWGN5A",
+            			"mimeType": "image/png"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmZYBf2MbVGzusnq311Jn7WQ6rQqoaxqu6hq6CpDgWGN5A",
+            		"description": "",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": true
+            	}
+            }, {
+            	"id": 77,
+            	"contract": {
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+            	},
+            	"tokenId": "13",
+            	"standard": "fa2",
+            	"firstLevel": 1335564,
+            	"firstTime": "2021-02-08T04:51:59Z",
+            	"lastLevel": 1335564,
+            	"lastTime": "2021-02-08T04:51:59Z",
+            	"transfersCount": 1,
+            	"balancesCount": 1,
+            	"holdersCount": 1,
+            	"totalMinted": "100",
+            	"totalBurned": "0",
+            	"totalSupply": "100",
+            	"metadata": {
+            		"name": "hDAO",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmULY1poQwAzgcwoHGBugKdKv1742x6UYDsQ3vBSQkm8LP",
+            			"mimeType": "image/png"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmULY1poQwAzgcwoHGBugKdKv1742x6UYDsQ3vBSQkm8LP",
+            		"description": "",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": true
+            	}
             }]
         """.trimIndent())
 
         mock("""
             [{
-            	"id": 22,
+            	"id": 78,
             	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
-            	},
-            	"tokenId": "9",
-            	"standard": "fa2",
-            	"firstLevel": 1225970,
-            	"firstTime": "2020-11-22T05:26:24Z",
-            	"lastLevel": 1225970,
-            	"lastTime": "2020-11-22T05:26:24Z",
-            	"transfersCount": 1,
-            	"balancesCount": 1,
-            	"holdersCount": 1,
-            	"totalMinted": "1000000",
-            	"totalBurned": "0",
-            	"totalSupply": "1000000"
-            }, {
-            	"id": 23,
-            	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
-            	},
-            	"tokenId": "10",
-            	"standard": "fa2",
-            	"firstLevel": 1226003,
-            	"firstTime": "2020-11-22T06:00:44Z",
-            	"lastLevel": 1226003,
-            	"lastTime": "2020-11-22T06:00:44Z",
-            	"transfersCount": 1,
-            	"balancesCount": 1,
-            	"holdersCount": 1,
-            	"totalMinted": "1000000",
-            	"totalBurned": "0",
-            	"totalSupply": "1000000"
-            }, {
-            	"id": 24,
-            	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
-            	},
-            	"tokenId": "11",
-            	"standard": "fa2",
-            	"firstLevel": 1237504,
-            	"firstTime": "2020-11-30T07:37:32Z",
-            	"lastLevel": 1237504,
-            	"lastTime": "2020-11-30T07:37:32Z",
-            	"transfersCount": 1,
-            	"balancesCount": 1,
-            	"holdersCount": 1,
-            	"totalMinted": "1",
-            	"totalBurned": "0",
-            	"totalSupply": "1"
-            }, {
-            	"id": 25,
-            	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
-            	},
-            	"tokenId": "12",
-            	"standard": "fa2",
-            	"firstLevel": 1237516,
-            	"firstTime": "2020-11-30T07:49:32Z",
-            	"lastLevel": 1237516,
-            	"lastTime": "2020-11-30T07:49:32Z",
-            	"transfersCount": 1,
-            	"balancesCount": 1,
-            	"holdersCount": 1,
-            	"totalMinted": "1",
-            	"totalBurned": "0",
-            	"totalSupply": "1"
-            }, {
-            	"id": 26,
-            	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
-            	},
-            	"tokenId": "13",
-            	"standard": "fa2",
-            	"firstLevel": 1238169,
-            	"firstTime": "2020-11-30T18:47:20Z",
-            	"lastLevel": 1238821,
-            	"lastTime": "2020-12-01T05:44:05Z",
-            	"transfersCount": 5,
-            	"balancesCount": 4,
-            	"holdersCount": 3,
-            	"totalMinted": "73000000",
-            	"totalBurned": "0",
-            	"totalSupply": "73000000"
-            }, {
-            	"id": 27,
-            	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
             	},
             	"tokenId": "14",
             	"standard": "fa2",
-            	"firstLevel": 1238743,
-            	"firstTime": "2020-12-01T04:25:25Z",
-            	"lastLevel": 1238743,
-            	"lastTime": "2020-12-01T04:25:25Z",
-            	"transfersCount": 1,
-            	"balancesCount": 1,
+            	"firstLevel": 1335891,
+            	"firstTime": "2021-02-08T10:32:19Z",
+            	"lastLevel": 1412149,
+            	"lastTime": "2021-04-02T23:34:43Z",
+            	"transfersCount": 3,
+            	"balancesCount": 2,
             	"holdersCount": 1,
-            	"totalMinted": "1",
+            	"totalMinted": "2",
             	"totalBurned": "0",
-            	"totalSupply": "1"
+            	"totalSupply": "2",
+            	"metadata": {
+            		"name": "Farm house by Qartsi",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1PYqfNnkpZydtSY2Tn3Rv8mjkgUpHJpFXC",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmejBuFzM2YKQnQ2kdfiCwYaHBidMiECZYdzh1hAbqZqWc",
+            			"mimeType": "image/jpeg"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmejBuFzM2YKQnQ2kdfiCwYaHBidMiECZYdzh1hAbqZqWc",
+            		"description": "Farm house - watercolor with digital enhancement by Qartsi",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": true
+            	}
             }, {
-            	"id": 28,
+            	"id": 79,
             	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
             	},
             	"tokenId": "15",
             	"standard": "fa2",
-            	"firstLevel": 1243119,
-            	"firstTime": "2020-12-04T05:46:07Z",
-            	"lastLevel": 1243119,
-            	"lastTime": "2020-12-04T05:46:07Z",
+            	"firstLevel": 1336229,
+            	"firstTime": "2021-02-08T16:24:35Z",
+            	"lastLevel": 1336229,
+            	"lastTime": "2021-02-08T16:24:35Z",
             	"transfersCount": 1,
             	"balancesCount": 1,
             	"holdersCount": 1,
             	"totalMinted": "1",
             	"totalBurned": "0",
-            	"totalSupply": "1"
+            	"totalSupply": "1",
+            	"metadata": {
+            		"name": "XTZ News",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1Rux3pGrp2KpZUBKvg3VQ4edRYVJsapr4z",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmSrifEeCTpZ5RcSLRdX5wWRbmxjD4LeSpx3ZQi25cXSd4",
+            			"mimeType": "image/jpeg"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmSrifEeCTpZ5RcSLRdX5wWRbmxjD4LeSpx3ZQi25cXSd4",
+            		"description": "XTZ News Logo",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": false
+            	}
             }, {
-            	"id": 29,
+            	"id": 80,
             	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
             	},
             	"tokenId": "16",
             	"standard": "fa2",
-            	"firstLevel": 1243271,
-            	"firstTime": "2020-12-04T08:18:47Z",
-            	"lastLevel": 1243271,
-            	"lastTime": "2020-12-04T08:18:47Z",
+            	"firstLevel": 1336349,
+            	"firstTime": "2021-02-08T18:30:35Z",
+            	"lastLevel": 1336349,
+            	"lastTime": "2021-02-08T18:30:35Z",
             	"transfersCount": 1,
             	"balancesCount": 1,
             	"holdersCount": 1,
-            	"totalMinted": "1",
+            	"totalMinted": "10",
             	"totalBurned": "0",
-            	"totalSupply": "1"
+            	"totalSupply": "10",
+            	"metadata": {
+            		"name": "Enigma",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1SBxNvpDFC4bjW23CtQfVLqN5cBATVf68B",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmZwx9rB1myiPsonKmhyprZuCLnQmemxgztjGXN5GpMPPg",
+            			"mimeType": "image/jpeg"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmZwx9rB1myiPsonKmhyprZuCLnQmemxgztjGXN5GpMPPg",
+            		"description": "",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": true
+            	}
             }, {
-            	"id": 30,
+            	"id": 81,
             	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
             	},
             	"tokenId": "17",
             	"standard": "fa2",
-            	"firstLevel": 1243295,
-            	"firstTime": "2020-12-04T08:42:47Z",
-            	"lastLevel": 1243295,
-            	"lastTime": "2020-12-04T08:42:47Z",
-            	"transfersCount": 1,
-            	"balancesCount": 1,
+            	"firstLevel": 1336464,
+            	"firstTime": "2021-02-08T20:29:03Z",
+            	"lastLevel": 1367712,
+            	"lastTime": "2021-03-02T21:07:23Z",
+            	"transfersCount": 2,
+            	"balancesCount": 2,
             	"holdersCount": 1,
             	"totalMinted": "1",
             	"totalBurned": "0",
-            	"totalSupply": "1"
+            	"totalSupply": "1",
+            	"metadata": {
+            		"name": "Donut",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1PeC7WEA3Mas8UA3sARTW5xkh3K52azqnF",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmdVw9FCBMi2uKxBSLmTkhSWfzojRjw9V2SLcKrCv5PYu3",
+            			"mimeType": "image/png"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmdVw9FCBMi2uKxBSLmTkhSWfzojRjw9V2SLcKrCv5PYu3",
+            		"description": "Donut",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": false
+            	}
             }, {
-            	"id": 31,
+            	"id": 82,
             	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
             	},
             	"tokenId": "18",
             	"standard": "fa2",
-            	"firstLevel": 1243303,
-            	"firstTime": "2020-12-04T08:50:47Z",
-            	"lastLevel": 1243303,
-            	"lastTime": "2020-12-04T08:50:47Z",
+            	"firstLevel": 1336550,
+            	"firstTime": "2021-02-08T21:57:03Z",
+            	"lastLevel": 1336550,
+            	"lastTime": "2021-02-08T21:57:03Z",
             	"transfersCount": 1,
             	"balancesCount": 1,
             	"holdersCount": 1,
             	"totalMinted": "1",
             	"totalBurned": "0",
-            	"totalSupply": "1"
+            	"totalSupply": "1",
+            	"metadata": {
+            		"name": "TEZCOINART",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1ae2d1BJt7YUqaaec6Xenh3mBqS7VjSZtK",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmZyaqACDN5UpzA835BRXi46VGBnsHS6vWqjNvLsYgmEQL",
+            			"mimeType": "image/jpeg"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmZyaqACDN5UpzA835BRXi46VGBnsHS6vWqjNvLsYgmEQL",
+            		"description": "TezChainStronk",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": false
+            	}
+            }, {
+            	"id": 83,
+            	"contract": {
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+            	},
+            	"tokenId": "19",
+            	"standard": "fa2",
+            	"firstLevel": 1336564,
+            	"firstTime": "2021-02-08T22:11:03Z",
+            	"lastLevel": 1336564,
+            	"lastTime": "2021-02-08T22:11:03Z",
+            	"transfersCount": 1,
+            	"balancesCount": 1,
+            	"holdersCount": 1,
+            	"totalMinted": "1",
+            	"totalBurned": "0",
+            	"totalSupply": "1",
+            	"metadata": {
+            		"name": "Fluids swimming",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1LMNQj22tZH9q1gZkpJwENi73Np5tns8fn",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmcQymWhiSKuGw9SyELUbFwbxKvQJy7tVcvQkMw2ZNE8ky",
+            			"mimeType": "image/jpeg"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmcQymWhiSKuGw9SyELUbFwbxKvQJy7tVcvQkMw2ZNE8ky",
+            		"description": "I made this one night hacking around with fluid dynamics simulations. ",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": false
+            	}
+            }, {
+            	"id": 84,
+            	"contract": {
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+            	},
+            	"tokenId": "20",
+            	"standard": "fa2",
+            	"firstLevel": 1336565,
+            	"firstTime": "2021-02-08T22:12:03Z",
+            	"lastLevel": 1336565,
+            	"lastTime": "2021-02-08T22:12:03Z",
+            	"transfersCount": 1,
+            	"balancesCount": 1,
+            	"holdersCount": 1,
+            	"totalMinted": "1",
+            	"totalBurned": "0",
+            	"totalSupply": "1",
+            	"metadata": {
+            		"name": "Fluids swimming",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1LMNQj22tZH9q1gZkpJwENi73Np5tns8fn",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmcQymWhiSKuGw9SyELUbFwbxKvQJy7tVcvQkMw2ZNE8ky",
+            			"mimeType": "image/jpeg"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmcQymWhiSKuGw9SyELUbFwbxKvQJy7tVcvQkMw2ZNE8ky",
+            		"description": "I made this one night hacking around with fluid dynamics simulations. ",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": false
+            	}
+            }, {
+            	"id": 86,
+            	"contract": {
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+            	},
+            	"tokenId": "21",
+            	"standard": "fa2",
+            	"firstLevel": 1337626,
+            	"firstTime": "2021-02-09T16:48:39Z",
+            	"lastLevel": 1337626,
+            	"lastTime": "2021-02-09T16:48:39Z",
+            	"transfersCount": 1,
+            	"balancesCount": 1,
+            	"holdersCount": 1,
+            	"totalMinted": "1",
+            	"totalBurned": "0",
+            	"totalSupply": "1",
+            	"metadata": {
+            		"name": "TzMoonMan",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1ae2d1BJt7YUqaaec6Xenh3mBqS7VjSZtK",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmT1fKn8Wu9shqWBwAYHK3qQxkspCaUcskjoeNJh8kjpF5",
+            			"mimeType": "image/jpeg"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmT1fKn8Wu9shqWBwAYHK3qQxkspCaUcskjoeNJh8kjpF5",
+            		"description": "A Tezos Astronaut Riding A Unicycle On The Moon",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": false
+            	}
+            }, {
+            	"id": 87,
+            	"contract": {
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+            	},
+            	"tokenId": "22",
+            	"standard": "fa2",
+            	"firstLevel": 1337694,
+            	"firstTime": "2021-02-09T17:59:59Z",
+            	"lastLevel": 1407650,
+            	"lastTime": "2021-03-30T19:56:52Z",
+            	"transfersCount": 3,
+            	"balancesCount": 2,
+            	"holdersCount": 1,
+            	"totalMinted": "1",
+            	"totalBurned": "0",
+            	"totalSupply": "1",
+            	"metadata": {
+            		"name": "HalluTzinate",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1ae2d1BJt7YUqaaec6Xenh3mBqS7VjSZtK",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmQapWLELmzn3HZupi2NaHBdncb2MJruN8bCuz52GExxAC",
+            			"mimeType": "image/jpeg"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmQapWLELmzn3HZupi2NaHBdncb2MJruN8bCuz52GExxAC",
+            		"description": "Trippy Tezos Design",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": false
+            	}
+            }, {
+            	"id": 88,
+            	"contract": {
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+            	},
+            	"tokenId": "23",
+            	"standard": "fa2",
+            	"firstLevel": 1337802,
+            	"firstTime": "2021-02-09T19:50:39Z",
+            	"lastLevel": 1337802,
+            	"lastTime": "2021-02-09T19:50:39Z",
+            	"transfersCount": 1,
+            	"balancesCount": 1,
+            	"holdersCount": 1,
+            	"totalMinted": "1",
+            	"totalBurned": "0",
+            	"totalSupply": "1",
+            	"metadata": {
+            		"name": "RADION FM",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1TAcRvXuUxX9vDvvvkDeoiHxeFjCnFu3Yn",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/Qme3gkZSV2rsBWB2eMpVXAQ2AFfxUe8HFvZxw8mMHFobae",
+            			"mimeType": "audio/mpeg"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/Qme3gkZSV2rsBWB2eMpVXAQ2AFfxUe8HFvZxw8mMHFobae",
+            		"description": "MP3 COMMERCIAL",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": false
+            	}
             }]
         """.trimIndent())
 
         val size = 10
         var continuation = 0L
         var tokens = tokenClient.tokens(size, continuation)
-        assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=0&sort.asc=id")
+        assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=0&sort.asc=id&metadata.artifactUri.null=false")
         var prevId = 0
         tokens.forEach{
             assertThat(it.id).isGreaterThan(prevId)
@@ -436,7 +729,7 @@ class TokenClientTests : BaseClientTests() {
         val lastId = tokens.last().id!!.toLong()
         continuation = lastId
         tokens = tokenClient.tokens(size, continuation)
-        assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=21&sort.asc=id")
+        assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=77&sort.asc=id&metadata.artifactUri.null=false")
         tokens.forEach{
             assertThat(it.id).isGreaterThan(prevId)
             assertThat(it.standard).isEqualTo("fa2")
@@ -449,357 +742,618 @@ class TokenClientTests : BaseClientTests() {
     fun `should return tokens by with size, continuation and sorted by DESC`() = runBlocking<Unit> {
         mock("""
             [{
-            	"id": 45,
+            	"id": 87,
             	"contract": {
-            		"address": "KT197cMAmydiH3QH7Xjqqrf8PgX7Xq5FyDat"
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
             	},
-            	"tokenId": "1",
+            	"tokenId": "22",
             	"standard": "fa2",
-            	"firstLevel": 1292852,
-            	"firstTime": "2021-01-08T06:03:42Z",
-            	"lastLevel": 1292852,
-            	"lastTime": "2021-01-08T06:03:42Z",
-            	"transfersCount": 1,
-            	"balancesCount": 1,
-            	"holdersCount": 1,
-            	"totalMinted": "2",
-            	"totalBurned": "0",
-            	"totalSupply": "2"
-            }, {
-            	"id": 40,
-            	"contract": {
-            		"address": "KT1KTPdVqmnU1F6v2Q14nmKqyd37t4zsWFUa"
-            	},
-            	"tokenId": "1",
-            	"standard": "fa2",
-            	"firstLevel": 1262533,
-            	"firstTime": "2020-12-17T19:14:50Z",
-            	"lastLevel": 1262541,
-            	"lastTime": "2020-12-17T19:22:50Z",
-            	"transfersCount": 2,
+            	"firstLevel": 1337694,
+            	"firstTime": "2021-02-09T17:59:59Z",
+            	"lastLevel": 1407650,
+            	"lastTime": "2021-03-30T19:56:52Z",
+            	"transfersCount": 3,
             	"balancesCount": 2,
             	"holdersCount": 1,
             	"totalMinted": "1",
             	"totalBurned": "0",
-            	"totalSupply": "1"
+            	"totalSupply": "1",
+            	"metadata": {
+            		"name": "HalluTzinate",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1ae2d1BJt7YUqaaec6Xenh3mBqS7VjSZtK",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmQapWLELmzn3HZupi2NaHBdncb2MJruN8bCuz52GExxAC",
+            			"mimeType": "image/jpeg"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmQapWLELmzn3HZupi2NaHBdncb2MJruN8bCuz52GExxAC",
+            		"description": "Trippy Tezos Design",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": false
+            	}
             }, {
-            	"id": 39,
+            	"id": 86,
             	"contract": {
-            		"address": "KT1KTPdVqmnU1F6v2Q14nmKqyd37t4zsWFUa"
-            	},
-            	"tokenId": "0",
-            	"standard": "fa2",
-            	"firstLevel": 1261053,
-            	"firstTime": "2020-12-16T18:26:40Z",
-            	"lastLevel": 1261241,
-            	"lastTime": "2020-12-16T21:35:20Z",
-            	"transfersCount": 2,
-            	"balancesCount": 2,
-            	"holdersCount": 1,
-            	"totalMinted": "1",
-            	"totalBurned": "0",
-            	"totalSupply": "1"
-            }, {
-            	"id": 38,
-            	"contract": {
-            		"address": "KT19949GQgb9e11oXGrC2iMjABnUzRRP6UfZ"
-            	},
-            	"tokenId": "0",
-            	"standard": "fa2",
-            	"firstLevel": 1259709,
-            	"firstTime": "2020-12-15T19:48:32Z",
-            	"lastLevel": 1259709,
-            	"lastTime": "2020-12-15T19:48:32Z",
-            	"transfersCount": 1,
-            	"balancesCount": 1,
-            	"holdersCount": 1,
-            	"totalMinted": "1",
-            	"totalBurned": "0",
-            	"totalSupply": "1"
-            }, {
-            	"id": 37,
-            	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
             	},
             	"tokenId": "21",
             	"standard": "fa2",
-            	"firstLevel": 1258796,
-            	"firstTime": "2020-12-15T04:30:04Z",
-            	"lastLevel": 1259278,
-            	"lastTime": "2020-12-15T12:34:52Z",
-            	"transfersCount": 2,
-            	"balancesCount": 2,
-            	"holdersCount": 2,
-            	"totalMinted": "10",
+            	"firstLevel": 1337626,
+            	"firstTime": "2021-02-09T16:48:39Z",
+            	"lastLevel": 1337626,
+            	"lastTime": "2021-02-09T16:48:39Z",
+            	"transfersCount": 1,
+            	"balancesCount": 1,
+            	"holdersCount": 1,
+            	"totalMinted": "1",
             	"totalBurned": "0",
-            	"totalSupply": "10"
+            	"totalSupply": "1",
+            	"metadata": {
+            		"name": "TzMoonMan",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1ae2d1BJt7YUqaaec6Xenh3mBqS7VjSZtK",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmT1fKn8Wu9shqWBwAYHK3qQxkspCaUcskjoeNJh8kjpF5",
+            			"mimeType": "image/jpeg"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmT1fKn8Wu9shqWBwAYHK3qQxkspCaUcskjoeNJh8kjpF5",
+            		"description": "A Tezos Astronaut Riding A Unicycle On The Moon",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": false
+            	}
             }, {
-            	"id": 35,
+            	"id": 84,
             	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
             	},
             	"tokenId": "20",
             	"standard": "fa2",
-            	"firstLevel": 1255382,
-            	"firstTime": "2020-12-12T19:10:33Z",
-            	"lastLevel": 1255382,
-            	"lastTime": "2020-12-12T19:10:33Z",
+            	"firstLevel": 1336565,
+            	"firstTime": "2021-02-08T22:12:03Z",
+            	"lastLevel": 1336565,
+            	"lastTime": "2021-02-08T22:12:03Z",
             	"transfersCount": 1,
             	"balancesCount": 1,
             	"holdersCount": 1,
             	"totalMinted": "1",
             	"totalBurned": "0",
-            	"totalSupply": "1"
+            	"totalSupply": "1",
+            	"metadata": {
+            		"name": "Fluids swimming",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1LMNQj22tZH9q1gZkpJwENi73Np5tns8fn",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmcQymWhiSKuGw9SyELUbFwbxKvQJy7tVcvQkMw2ZNE8ky",
+            			"mimeType": "image/jpeg"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmcQymWhiSKuGw9SyELUbFwbxKvQJy7tVcvQkMw2ZNE8ky",
+            		"description": "I made this one night hacking around with fluid dynamics simulations. ",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": false
+            	}
             }, {
-            	"id": 34,
+            	"id": 83,
             	"contract": {
-            		"address": "KT1Gx5FUi9yxjhivFEYaYd2QyWhTQnXPcwCv"
-            	},
-            	"tokenId": "0",
-            	"standard": "fa2",
-            	"firstLevel": 1249682,
-            	"firstTime": "2020-12-08T19:43:28Z",
-            	"lastLevel": 1270427,
-            	"lastTime": "2020-12-23T07:38:01Z",
-            	"transfersCount": 13,
-            	"balancesCount": 13,
-            	"holdersCount": 13,
-            	"totalMinted": "5000",
-            	"totalBurned": "0",
-            	"totalSupply": "5000"
-            }, {
-            	"id": 33,
-            	"contract": {
-            		"address": "KT1EhTDnyFoRs3J6giL9gWJJEsPKY6uJ6asZ"
-            	},
-            	"tokenId": "0",
-            	"standard": "fa2",
-            	"firstLevel": 1249673,
-            	"firstTime": "2020-12-08T19:34:28Z",
-            	"lastLevel": 1249673,
-            	"lastTime": "2020-12-08T19:34:28Z",
-            	"transfersCount": 1,
-            	"balancesCount": 1,
-            	"holdersCount": 1,
-            	"totalMinted": "5000",
-            	"totalBurned": "0",
-            	"totalSupply": "5000"
-            }, {
-            	"id": 32,
-            	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
             	},
             	"tokenId": "19",
             	"standard": "fa2",
-            	"firstLevel": 1243320,
-            	"firstTime": "2020-12-04T09:07:47Z",
-            	"lastLevel": 1243320,
-            	"lastTime": "2020-12-04T09:07:47Z",
+            	"firstLevel": 1336564,
+            	"firstTime": "2021-02-08T22:11:03Z",
+            	"lastLevel": 1336564,
+            	"lastTime": "2021-02-08T22:11:03Z",
             	"transfersCount": 1,
             	"balancesCount": 1,
             	"holdersCount": 1,
             	"totalMinted": "1",
             	"totalBurned": "0",
-            	"totalSupply": "1"
+            	"totalSupply": "1",
+            	"metadata": {
+            		"name": "Fluids swimming",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1LMNQj22tZH9q1gZkpJwENi73Np5tns8fn",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmcQymWhiSKuGw9SyELUbFwbxKvQJy7tVcvQkMw2ZNE8ky",
+            			"mimeType": "image/jpeg"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmcQymWhiSKuGw9SyELUbFwbxKvQJy7tVcvQkMw2ZNE8ky",
+            		"description": "I made this one night hacking around with fluid dynamics simulations. ",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": false
+            	}
             }, {
-            	"id": 31,
+            	"id": 82,
             	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
             	},
             	"tokenId": "18",
             	"standard": "fa2",
-            	"firstLevel": 1243303,
-            	"firstTime": "2020-12-04T08:50:47Z",
-            	"lastLevel": 1243303,
-            	"lastTime": "2020-12-04T08:50:47Z",
+            	"firstLevel": 1336550,
+            	"firstTime": "2021-02-08T21:57:03Z",
+            	"lastLevel": 1336550,
+            	"lastTime": "2021-02-08T21:57:03Z",
             	"transfersCount": 1,
             	"balancesCount": 1,
             	"holdersCount": 1,
             	"totalMinted": "1",
             	"totalBurned": "0",
-            	"totalSupply": "1"
+            	"totalSupply": "1",
+            	"metadata": {
+            		"name": "TEZCOINART",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1ae2d1BJt7YUqaaec6Xenh3mBqS7VjSZtK",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmZyaqACDN5UpzA835BRXi46VGBnsHS6vWqjNvLsYgmEQL",
+            			"mimeType": "image/jpeg"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmZyaqACDN5UpzA835BRXi46VGBnsHS6vWqjNvLsYgmEQL",
+            		"description": "TezChainStronk",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": false
+            	}
+            }, {
+            	"id": 81,
+            	"contract": {
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+            	},
+            	"tokenId": "17",
+            	"standard": "fa2",
+            	"firstLevel": 1336464,
+            	"firstTime": "2021-02-08T20:29:03Z",
+            	"lastLevel": 1367712,
+            	"lastTime": "2021-03-02T21:07:23Z",
+            	"transfersCount": 2,
+            	"balancesCount": 2,
+            	"holdersCount": 1,
+            	"totalMinted": "1",
+            	"totalBurned": "0",
+            	"totalSupply": "1",
+            	"metadata": {
+            		"name": "Donut",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1PeC7WEA3Mas8UA3sARTW5xkh3K52azqnF",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmdVw9FCBMi2uKxBSLmTkhSWfzojRjw9V2SLcKrCv5PYu3",
+            			"mimeType": "image/png"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmdVw9FCBMi2uKxBSLmTkhSWfzojRjw9V2SLcKrCv5PYu3",
+            		"description": "Donut",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": false
+            	}
+            }, {
+            	"id": 80,
+            	"contract": {
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+            	},
+            	"tokenId": "16",
+            	"standard": "fa2",
+            	"firstLevel": 1336349,
+            	"firstTime": "2021-02-08T18:30:35Z",
+            	"lastLevel": 1336349,
+            	"lastTime": "2021-02-08T18:30:35Z",
+            	"transfersCount": 1,
+            	"balancesCount": 1,
+            	"holdersCount": 1,
+            	"totalMinted": "10",
+            	"totalBurned": "0",
+            	"totalSupply": "10",
+            	"metadata": {
+            		"name": "Enigma",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1SBxNvpDFC4bjW23CtQfVLqN5cBATVf68B",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmZwx9rB1myiPsonKmhyprZuCLnQmemxgztjGXN5GpMPPg",
+            			"mimeType": "image/jpeg"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmZwx9rB1myiPsonKmhyprZuCLnQmemxgztjGXN5GpMPPg",
+            		"description": "",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": true
+            	}
+            }, {
+            	"id": 79,
+            	"contract": {
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+            	},
+            	"tokenId": "15",
+            	"standard": "fa2",
+            	"firstLevel": 1336229,
+            	"firstTime": "2021-02-08T16:24:35Z",
+            	"lastLevel": 1336229,
+            	"lastTime": "2021-02-08T16:24:35Z",
+            	"transfersCount": 1,
+            	"balancesCount": 1,
+            	"holdersCount": 1,
+            	"totalMinted": "1",
+            	"totalBurned": "0",
+            	"totalSupply": "1",
+            	"metadata": {
+            		"name": "XTZ News",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1Rux3pGrp2KpZUBKvg3VQ4edRYVJsapr4z",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmSrifEeCTpZ5RcSLRdX5wWRbmxjD4LeSpx3ZQi25cXSd4",
+            			"mimeType": "image/jpeg"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmSrifEeCTpZ5RcSLRdX5wWRbmxjD4LeSpx3ZQi25cXSd4",
+            		"description": "XTZ News Logo",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": false
+            	}
+            }, {
+            	"id": 78,
+            	"contract": {
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+            	},
+            	"tokenId": "14",
+            	"standard": "fa2",
+            	"firstLevel": 1335891,
+            	"firstTime": "2021-02-08T10:32:19Z",
+            	"lastLevel": 1412149,
+            	"lastTime": "2021-04-02T23:34:43Z",
+            	"transfersCount": 3,
+            	"balancesCount": 2,
+            	"holdersCount": 1,
+            	"totalMinted": "2",
+            	"totalBurned": "0",
+            	"totalSupply": "2",
+            	"metadata": {
+            		"name": "Farm house by Qartsi",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1PYqfNnkpZydtSY2Tn3Rv8mjkgUpHJpFXC",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmejBuFzM2YKQnQ2kdfiCwYaHBidMiECZYdzh1hAbqZqWc",
+            			"mimeType": "image/jpeg"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmejBuFzM2YKQnQ2kdfiCwYaHBidMiECZYdzh1hAbqZqWc",
+            		"description": "Farm house - watercolor with digital enhancement by Qartsi",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": true
+            	}
+            }, {
+            	"id": 77,
+            	"contract": {
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+            	},
+            	"tokenId": "13",
+            	"standard": "fa2",
+            	"firstLevel": 1335564,
+            	"firstTime": "2021-02-08T04:51:59Z",
+            	"lastLevel": 1335564,
+            	"lastTime": "2021-02-08T04:51:59Z",
+            	"transfersCount": 1,
+            	"balancesCount": 1,
+            	"holdersCount": 1,
+            	"totalMinted": "100",
+            	"totalBurned": "0",
+            	"totalSupply": "100",
+            	"metadata": {
+            		"name": "hDAO",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmULY1poQwAzgcwoHGBugKdKv1742x6UYDsQ3vBSQkm8LP",
+            			"mimeType": "image/png"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmULY1poQwAzgcwoHGBugKdKv1742x6UYDsQ3vBSQkm8LP",
+            		"description": "",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": true
+            	}
             }]
         """.trimIndent())
 
         mock("""
             [{
-            	"id": 30,
+            	"id": 76,
             	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
-            	},
-            	"tokenId": "17",
-            	"standard": "fa2",
-            	"firstLevel": 1243295,
-            	"firstTime": "2020-12-04T08:42:47Z",
-            	"lastLevel": 1243295,
-            	"lastTime": "2020-12-04T08:42:47Z",
-            	"transfersCount": 1,
-            	"balancesCount": 1,
-            	"holdersCount": 1,
-            	"totalMinted": "1",
-            	"totalBurned": "0",
-            	"totalSupply": "1"
-            }, {
-            	"id": 29,
-            	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
-            	},
-            	"tokenId": "16",
-            	"standard": "fa2",
-            	"firstLevel": 1243271,
-            	"firstTime": "2020-12-04T08:18:47Z",
-            	"lastLevel": 1243271,
-            	"lastTime": "2020-12-04T08:18:47Z",
-            	"transfersCount": 1,
-            	"balancesCount": 1,
-            	"holdersCount": 1,
-            	"totalMinted": "1",
-            	"totalBurned": "0",
-            	"totalSupply": "1"
-            }, {
-            	"id": 28,
-            	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
-            	},
-            	"tokenId": "15",
-            	"standard": "fa2",
-            	"firstLevel": 1243119,
-            	"firstTime": "2020-12-04T05:46:07Z",
-            	"lastLevel": 1243119,
-            	"lastTime": "2020-12-04T05:46:07Z",
-            	"transfersCount": 1,
-            	"balancesCount": 1,
-            	"holdersCount": 1,
-            	"totalMinted": "1",
-            	"totalBurned": "0",
-            	"totalSupply": "1"
-            }, {
-            	"id": 27,
-            	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
-            	},
-            	"tokenId": "14",
-            	"standard": "fa2",
-            	"firstLevel": 1238743,
-            	"firstTime": "2020-12-01T04:25:25Z",
-            	"lastLevel": 1238743,
-            	"lastTime": "2020-12-01T04:25:25Z",
-            	"transfersCount": 1,
-            	"balancesCount": 1,
-            	"holdersCount": 1,
-            	"totalMinted": "1",
-            	"totalBurned": "0",
-            	"totalSupply": "1"
-            }, {
-            	"id": 26,
-            	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
-            	},
-            	"tokenId": "13",
-            	"standard": "fa2",
-            	"firstLevel": 1238169,
-            	"firstTime": "2020-11-30T18:47:20Z",
-            	"lastLevel": 1238821,
-            	"lastTime": "2020-12-01T05:44:05Z",
-            	"transfersCount": 5,
-            	"balancesCount": 4,
-            	"holdersCount": 3,
-            	"totalMinted": "73000000",
-            	"totalBurned": "0",
-            	"totalSupply": "73000000"
-            }, {
-            	"id": 25,
-            	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
             	},
             	"tokenId": "12",
             	"standard": "fa2",
-            	"firstLevel": 1237516,
-            	"firstTime": "2020-11-30T07:49:32Z",
-            	"lastLevel": 1237516,
-            	"lastTime": "2020-11-30T07:49:32Z",
-            	"transfersCount": 1,
-            	"balancesCount": 1,
-            	"holdersCount": 1,
-            	"totalMinted": "1",
+            	"firstLevel": 1333069,
+            	"firstTime": "2021-02-06T09:19:35Z",
+            	"lastLevel": 1333761,
+            	"lastTime": "2021-02-06T21:14:15Z",
+            	"transfersCount": 2,
+            	"balancesCount": 2,
+            	"holdersCount": 2,
+            	"totalMinted": "20",
             	"totalBurned": "0",
-            	"totalSupply": "1"
+            	"totalSupply": "20",
+            	"metadata": {
+            		"name": "ung",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmZYBf2MbVGzusnq311Jn7WQ6rQqoaxqu6hq6CpDgWGN5A",
+            			"mimeType": "image/png"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmZYBf2MbVGzusnq311Jn7WQ6rQqoaxqu6hq6CpDgWGN5A",
+            		"description": "",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": true
+            	}
             }, {
-            	"id": 24,
+            	"id": 75,
             	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
             	},
             	"tokenId": "11",
             	"standard": "fa2",
-            	"firstLevel": 1237504,
-            	"firstTime": "2020-11-30T07:37:32Z",
-            	"lastLevel": 1237504,
-            	"lastTime": "2020-11-30T07:37:32Z",
+            	"firstLevel": 1333049,
+            	"firstTime": "2021-02-06T08:58:15Z",
+            	"lastLevel": 1333049,
+            	"lastTime": "2021-02-06T08:58:15Z",
+            	"transfersCount": 1,
+            	"balancesCount": 1,
+            	"holdersCount": 1,
+            	"totalMinted": "22",
+            	"totalBurned": "0",
+            	"totalSupply": "22",
+            	"metadata": {
+            		"name": "fadfa",
+            		"tags": [],
+            		"media": "https://ipfs.io/ipfs/QmZYBf2MbVGzusnq311Jn7WQ6rQqoaxqu6hq6CpDgWGN5A",
+            		"symbol": "OBJKT",
+            		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+            		"formats": [{
+            			"uri": "",
+            			"mimeType": "image/png"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "",
+            		"description": "",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": true
+            	}
+            }, {
+            	"id": 74,
+            	"contract": {
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+            	},
+            	"tokenId": "10",
+            	"standard": "fa2",
+            	"firstLevel": 1333040,
+            	"firstTime": "2021-02-06T08:48:35Z",
+            	"lastLevel": 1333040,
+            	"lastTime": "2021-02-06T08:48:35Z",
+            	"transfersCount": 1,
+            	"balancesCount": 1,
+            	"holdersCount": 1,
+            	"totalMinted": "10",
+            	"totalBurned": "0",
+            	"totalSupply": "10",
+            	"metadata": {
+            		"name": "UNG",
+            		"tags": [],
+            		"media": [{
+            			"hash": "QmZYBf2MbVGzusnq311Jn7WQ6rQqoaxqu6hq6CpDgWGN5A",
+            			"path": "QmZYBf2MbVGzusnq311Jn7WQ6rQqoaxqu6hq6CpDgWGN5A",
+            			"size": "29368"
+            		}],
+            		"symbol": "OBJKT",
+            		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+            		"formats": [{
+            			"uri": "",
+            			"mimeType": "image/png"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "",
+            		"description": "",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": true
+            	}
+            }, {
+            	"id": 73,
+            	"contract": {
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+            	},
+            	"tokenId": "9",
+            	"standard": "fa2",
+            	"firstLevel": 1332897,
+            	"firstTime": "2021-02-06T06:19:27Z",
+            	"lastLevel": 1332897,
+            	"lastTime": "2021-02-06T06:19:27Z",
+            	"transfersCount": 1,
+            	"balancesCount": 1,
+            	"holdersCount": 1,
+            	"totalMinted": "10",
+            	"totalBurned": "0",
+            	"totalSupply": "10",
+            	"metadata": {
+            		"name": "UNG",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/Qmf6KqanvCYkyJkCLJ3UAei8oavZytWBL9SNEnNTa58M1X",
+            			"mimeType": "image/png"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/Qmf6KqanvCYkyJkCLJ3UAei8oavZytWBL9SNEnNTa58M1X",
+            		"description": "",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": true
+            	}
+            }, {
+            	"id": 72,
+            	"contract": {
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+            	},
+            	"tokenId": "8",
+            	"standard": "fa2",
+            	"firstLevel": 1332773,
+            	"firstTime": "2021-02-06T04:08:47Z",
+            	"lastLevel": 1332773,
+            	"lastTime": "2021-02-06T04:08:47Z",
+            	"transfersCount": 1,
+            	"balancesCount": 1,
+            	"holdersCount": 1,
+            	"totalMinted": "1000",
+            	"totalBurned": "0",
+            	"totalSupply": "1000",
+            	"metadata": {
+            		"name": "la jetee",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmURPaTHnDnA36jeuAVyFYMP8utCciCJY2cB42du1hs9hC",
+            			"mimeType": "video/mp4"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmURPaTHnDnA36jeuAVyFYMP8utCciCJY2cB42du1hs9hC",
+            		"description": "",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": true
+            	}
+            }, {
+            	"id": 71,
+            	"contract": {
+            		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+            	},
+            	"tokenId": "7",
+            	"standard": "fa2",
+            	"firstLevel": 1332523,
+            	"firstTime": "2021-02-05T23:48:07Z",
+            	"lastLevel": 1332523,
+            	"lastTime": "2021-02-05T23:48:07Z",
+            	"transfersCount": 1,
+            	"balancesCount": 1,
+            	"holdersCount": 1,
+            	"totalMinted": "2",
+            	"totalBurned": "0",
+            	"totalSupply": "2",
+            	"metadata": {
+            		"name": "ung",
+            		"tags": [],
+            		"symbol": "OBJKT",
+            		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+            		"formats": [{
+            			"uri": "https://ipfs.io/ipfs/QmevGKa3g6hFWNV9wviNb1qWUKFE8mygcrU7hEuDxfP33r",
+            			"mimeType": "image/png"
+            		}],
+            		"decimals": "0",
+            		"artifactUri": "https://ipfs.io/ipfs/QmevGKa3g6hFWNV9wviNb1qWUKFE8mygcrU7hEuDxfP33r",
+            		"description": "",
+            		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+            		"booleanAmount": true
+            	}
+            }, {
+            	"id": 70,
+            	"contract": {
+            		"address": "KT1UNMbjyPSY8hbHYCxyM1LMbHMzv5EbFFN3"
+            	},
+            	"tokenId": "0",
+            	"standard": "fa2",
+            	"firstLevel": 1332416,
+            	"firstTime": "2021-02-05T21:55:47Z",
+            	"lastLevel": 1332416,
+            	"lastTime": "2021-02-05T21:55:47Z",
             	"transfersCount": 1,
             	"balancesCount": 1,
             	"holdersCount": 1,
             	"totalMinted": "1",
             	"totalBurned": "0",
-            	"totalSupply": "1"
+            	"totalSupply": "1",
+            	"metadata": {
+            		"name": "Mischief Genesis ",
+            		"creator": "Chris Mischief",
+            		"decimals": "0",
+            		"displayUri": "ipfs://QmaTLw6SRSZBgbsfjNhkhkTQmw9XMvt6YiPRHwZ3YN9X4a",
+            		"artifactUri": "ipfs://QmaTLw6SRSZBgbsfjNhkhkTQmw9XMvt6YiPRHwZ3YN9X4a",
+            		"description": "After many years of hanging out with graffiti artists, assisting in art studios, painting, showing and selling my own works, I picked up an iPad Pro and wondered if I could make art on it. This was my very first attempt and sealed my fate as a digital artist. ",
+            		"thumbnailUri": "ipfs://QmTBAYu12gkhTzZCL7vqN1mr4SjA95UJqDgqxpMCrfjsWP",
+            		"booleanAmount": true,
+            		"serial number": "AP2"
+            	}
             }, {
-            	"id": 23,
+            	"id": 61,
             	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
+            		"address": "KT1S95Dyj2QrJpSnAbHRUSUZr7DhuFqssrog"
             	},
-            	"tokenId": "10",
+            	"tokenId": "1",
             	"standard": "fa2",
-            	"firstLevel": 1226003,
-            	"firstTime": "2020-11-22T06:00:44Z",
-            	"lastLevel": 1226003,
-            	"lastTime": "2020-11-22T06:00:44Z",
-            	"transfersCount": 1,
-            	"balancesCount": 1,
+            	"firstLevel": 1330915,
+            	"firstTime": "2021-02-04T19:46:23Z",
+            	"lastLevel": 1633245,
+            	"lastTime": "2021-08-24T00:03:56Z",
+            	"transfersCount": 2,
+            	"balancesCount": 2,
             	"holdersCount": 1,
-            	"totalMinted": "1000000",
+            	"totalMinted": "1",
             	"totalBurned": "0",
-            	"totalSupply": "1000000"
+            	"totalSupply": "1",
+            	"metadata": {
+            		"name": "Mischief Genesis ",
+            		"creator": "Chris Mischief",
+            		"decimals": "0",
+            		"displayUri": "https://cloudflare-ipfs.com/ipfs/QmaTLw6SRSZBgbsfjNhkhkTQmw9XMvt6YiPRHwZ3YN9X4a",
+            		"artifactUri": "https://cloudflare-ipfs.com/ipfs/QmaTLw6SRSZBgbsfjNhkhkTQmw9XMvt6YiPRHwZ3YN9X4a",
+            		"description": "After many years of hanging out with graffiti artists, assisting in art studios, painting, showing and selling my own works, I picked up an iPad Pro and wondered if I could make art on it. This was my very first attempt and sealed my fate as a digital artist. ",
+            		"booleanAmount": "true",
+            		"serial number": "AP"
+            	}
             }, {
-            	"id": 22,
+            	"id": 60,
             	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
+            		"address": "KT1S95Dyj2QrJpSnAbHRUSUZr7DhuFqssrog"
             	},
-            	"tokenId": "9",
+            	"tokenId": "0",
             	"standard": "fa2",
-            	"firstLevel": 1225970,
-            	"firstTime": "2020-11-22T05:26:24Z",
-            	"lastLevel": 1225970,
-            	"lastTime": "2020-11-22T05:26:24Z",
-            	"transfersCount": 1,
-            	"balancesCount": 1,
+            	"firstLevel": 1328122,
+            	"firstTime": "2021-02-02T19:17:52Z",
+            	"lastLevel": 1390772,
+            	"lastTime": "2021-03-19T00:29:18Z",
+            	"transfersCount": 2,
+            	"balancesCount": 2,
             	"holdersCount": 1,
-            	"totalMinted": "1000000",
+            	"totalMinted": "1",
             	"totalBurned": "0",
-            	"totalSupply": "1000000"
-            }, {
-            	"id": 21,
-            	"contract": {
-            		"address": "KT1CZGNkppGBiEQRXbs1JyRSz7jEDNNBQFo9"
-            	},
-            	"tokenId": "8",
-            	"standard": "fa2",
-            	"firstLevel": 1225935,
-            	"firstTime": "2020-11-22T04:49:24Z",
-            	"lastLevel": 1225935,
-            	"lastTime": "2020-11-22T04:49:24Z",
-            	"transfersCount": 1,
-            	"balancesCount": 1,
-            	"holdersCount": 1,
-            	"totalMinted": "73000000",
-            	"totalBurned": "0",
-            	"totalSupply": "73000000"
+            	"totalSupply": "1",
+            	"metadata": {
+            		"Date": "02-02-2021",
+            		"name": "Alone Together",
+            		"genres": "art",
+            		"Creator": "Chris Mischief",
+            		"decimals": "0",
+            		"displayUri": "https://cloudflare-ipfs.com/ipfs/QmUnPB2pBFHv3MyRDQcmMGkpDNKNqeX57xASa9cx4Xomn1",
+            		"artifactUri": "https://cloudflare-ipfs.com/ipfs/QmUnPB2pBFHv3MyRDQcmMGkpDNKNqeX57xASa9cx4Xomn1",
+            		"description": "I painted this over the course of the entire first 2020 NYC lockdown. I would leave the canvas only to return to scribble down new observations on the canvas. Days turned into night which turned into weeks which turned into months. We were all alone together.  ",
+            		"booleanAmount": "true"
+            	}
             }]
         """.trimIndent())
 
         val size = 10
-        var continuation = 46L
+        var continuation = 88L
         var tokens = tokenClient.tokens(size, continuation, false)
-        assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=46&sort.desc=id")
-        var prevId = 46L
+        assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=88&sort.desc=id&metadata.artifactUri.null=false")
+        var prevId = 88L
         tokens.forEach{
             assertThat(it.id?.toLong()).isLessThan(prevId)
             assertThat(it.standard).isEqualTo("fa2")
@@ -809,7 +1363,7 @@ class TokenClientTests : BaseClientTests() {
         continuation = lastId
         prevId = lastId
         tokens = tokenClient.tokens(size, continuation, false)
-        assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=31&sort.desc=id")
+        assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=77&sort.desc=id&metadata.artifactUri.null=false")
         tokens.forEach{
             assertThat(it.id?.toLong()).isLessThan(prevId)
             assertThat(it.standard).isEqualTo("fa2")
