@@ -88,7 +88,7 @@ class OrderClientFt : BaseClientFt() {
               }
             }""")
 
-        val orders = orderClient.getOrders("1", 10)
+        val orders = orderClient.getOrders(10, "1")
         assertThat(orders).hasSize(2)
     }
 
@@ -123,7 +123,7 @@ class OrderClientFt : BaseClientFt() {
                             "created_at": "2022-02-10T13:01:54+00:00",
                             "ended_at": "2022-02-10T13:13:24+00:00",
                             "fill": 0.000000000000000000000000000000000000,
-                            "id": 2,
+                            "id": 10,
                             "internal_order_id": "1000001",
                             "last_updated_at": "2022-02-10T13:13:24+00:00",
                             "make_contract": "KT1Q8JB2bdphCHhEBKc1PMsjArLPcAezGBVK",
@@ -141,7 +141,42 @@ class OrderClientFt : BaseClientFt() {
                 }
             }""")
 
-        val orders = orderClient.getOrdersByIds(listOf("1", "2"))
+        val orders = orderClient.getOrdersByIds(listOf("1", "10"))
         assertThat(orders).hasSize(2)
+    }
+
+    @Test
+    fun `get orders by item`() = runBlocking<Unit> {
+        mock("""
+            {
+              "data": {
+                "marketplace_order": [
+                  {
+                    "id": 92597459,
+                    "fill": 0,
+                    "internal_order_id": "32186",
+                    "last_updated_at": "2021-09-22T14:01:54+00:00",
+                    "make_contract": "KT1H8sxNSgnkCeZsij4z76pkXu8BCZNvPZEx",
+                    "make_price": 30,
+                    "make_stock": 1,
+                    "make_token_id": "3",
+                    "make_value": 1,
+                    "maker": "tz1XudBX7sBhkMxqGay7zdRLaeWn9rRxzVFD",
+                    "network": "mainnet",
+                    "platform": "Objkt",
+                    "started_at": "2021-09-22T13:31:54+00:00",
+                    "status": "CANCELLED",
+                    "ended_at": "2021-09-22T14:01:54+00:00",
+                    "created_at": "2021-09-22T13:31:54+00:00",
+                    "cancelled": true
+                  }]}}
+        """.trimIndent())
+        val orders = orderClient.getOrdersByItem(
+            contract = "KT1H8sxNSgnkCeZsij4z76pkXu8BCZNvPZEx",
+            id = "3",
+            limit = 10,
+            prevId = "1"
+        )
+        assertThat(orders).hasSize(1)
     }
 }
