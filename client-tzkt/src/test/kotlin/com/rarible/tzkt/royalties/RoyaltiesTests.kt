@@ -5,15 +5,19 @@ import com.rarible.tzkt.client.BigMapKeyClient
 import com.rarible.tzkt.client.IPFSClient
 import com.rarible.tzkt.client.TokenClient
 import com.rarible.tzkt.model.Part
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.slf4j.LoggerFactory
 import org.springframework.web.reactive.function.client.WebClient
+import java.io.File
 
 class RoyaltiesTests : BaseClientTests() {
 
     val bigMapKeyClient = BigMapKeyClient(client)
     val ipfsClient = IPFSClient(client)
+    val logger = LoggerFactory.getLogger(javaClass)
 
     @Test
     fun `should correctly fetch and parse HEN royalties`() = runBlocking<Unit> {
@@ -428,26 +432,43 @@ class RoyaltiesTests : BaseClientTests() {
     @Test
     fun `should verify that royalties are parsed for all tokens`() = runBlocking<Unit> {
         val localTzkt = "https://api.tzkt.io"
-        val bmClient = BigMapKeyClient(WebClient.create(localTzkt))
-        val tokenClient = TokenClient(WebClient.create(localTzkt))
+        val clientBuilder = WebClient.builder().baseUrl(localTzkt)
+            .codecs { configurer -> configurer.defaultCodecs().maxInMemorySize(2 * 1024 * 1024) }.build()
+        val bmClient = BigMapKeyClient(clientBuilder)
+        val tokenClient = TokenClient(clientBuilder)
         val ipfs = IPFSClient(WebClient.create("https://rarible.mypinata.cloud/"))
-        val limit = 100
+        val limit = 20
         val continuation = 0L
         val handler = RoyaltiesHandler(bmClient, ipfs)
         var tokens = tokenClient.tokens(limit, continuation)
-        while(tokens.isNotEmpty()){
+        var totalOK = 0
+        var totalKO = 0
+        val filePath = "/Users/florianpautot/Desktop/logs/errors.txt"
+        File(filePath).writeText("==================\nStarting Run\n==================\n")
+
+        while (tokens.isNotEmpty()) {
             val lastId = tokens.last().id!!.toLong()
-            tokens.forEach{
-                val id = "${it.contract?.address}:${it.tokenId}"
-                val parts = handler.processRoyalties(id)
-                if(parts.isNullOrEmpty()){
-                    println("KO-$id")
-                } else {
-                    println("OK-$id")
+            runBlocking {
+                tokens.forEach {
+                    launch {
+                        val id = "${it.contract?.address}:${it.tokenId}"
+                        val parts = handler.processRoyalties(id)
+                        if (parts.isNullOrEmpty()) {
+                            logger.error("Error parsing royalties for $id")
+                            File(filePath).appendText("$id\n")
+                            totalKO++
+                        } else {
+                            totalOK++
+                        }
+                    }
                 }
             }
             tokens = tokenClient.tokens(limit, lastId)
         }
+        logger.info("Total OK = $totalOK")
+        File(filePath).appendText("Total OK = $totalOK")
+        logger.info("Total KO = $totalKO")
+        File(filePath).appendText("Total KO = $totalKO")
 
     }
 }
