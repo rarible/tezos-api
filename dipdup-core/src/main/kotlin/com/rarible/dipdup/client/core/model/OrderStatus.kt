@@ -3,6 +3,8 @@ package com.rarible.dipdup.client.core.model
 enum class OrderStatus(val value: String) {
     ACTIVE("ACTIVE"),
     FILLED("FILLED"),
+    INACTIVE("INACTIVE"),
+    HISTORICAL("HISTORICAL"),
     CANCELLED("CANCELLED");
 
     companion object {

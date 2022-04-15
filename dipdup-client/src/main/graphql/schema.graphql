@@ -849,13 +849,20 @@ input jsonb_comparison_exp {
 columns and relationships of "marketplace_activity"
 """
 type marketplace_activity {
-  amount: numeric!
-
-  contract: String!
-
   id: bigint!
 
   internal_order_id: String!
+
+  """
+  ETH: ETH\nXTZ: XTZ\nFUNGIBLE_TOKEN: TEZOS_FT\nNON_FUNGIBLE_TOKEN: TEZOS_NFT\nMULTI_TOKEN: TEZOS_MT\nERC20: ERC20\nERC721: ERC721\nERC1155: ERC1155\nERC721_LAZY: ERC721_LAZY\nERC1155_LAZY: ERC1155_LAZY\nCOLLECTION: COLLECTION\nGEN_ART: GEN_ART
+  """
+  make_asset_class: String!
+
+  make_contract: String
+
+  make_token_id: String
+
+  make_value: numeric!
 
   maker: String!
 
@@ -874,12 +881,21 @@ type marketplace_activity {
 
   sell_price: numeric!
 
+  """
+  ETH: ETH\nXTZ: XTZ\nFUNGIBLE_TOKEN: TEZOS_FT\nNON_FUNGIBLE_TOKEN: TEZOS_NFT\nMULTI_TOKEN: TEZOS_MT\nERC20: ERC20\nERC721: ERC721\nERC1155: ERC1155\nERC721_LAZY: ERC721_LAZY\nERC1155_LAZY: ERC1155_LAZY\nCOLLECTION: COLLECTION\nGEN_ART: GEN_ART
+  """
+  take_asset_class: String
+
+  take_contract: String
+
+  take_token_id: String
+
+  take_value: numeric
+
   taker: String
 
-  token_id: String!
-
   """
-  LIST: list\nCANCEL: cancel\nMATCH: match
+  LIST: LIST\nMATCH: SELL\nCANCEL: CANCEL_LIST
   """
   type: String!
 }
@@ -894,13 +910,17 @@ input marketplace_activity_bool_exp {
 
   _or: [marketplace_activity_bool_exp!]
 
-  amount: numeric_comparison_exp
-
-  contract: String_comparison_exp
-
   id: bigint_comparison_exp
 
   internal_order_id: String_comparison_exp
+
+  make_asset_class: String_comparison_exp
+
+  make_contract: String_comparison_exp
+
+  make_token_id: String_comparison_exp
+
+  make_value: numeric_comparison_exp
 
   maker: String_comparison_exp
 
@@ -916,9 +936,15 @@ input marketplace_activity_bool_exp {
 
   sell_price: numeric_comparison_exp
 
-  taker: String_comparison_exp
+  take_asset_class: String_comparison_exp
 
-  token_id: String_comparison_exp
+  take_contract: String_comparison_exp
+
+  take_token_id: String_comparison_exp
+
+  take_value: numeric_comparison_exp
+
+  taker: String_comparison_exp
 
   type: String_comparison_exp
 }
@@ -927,13 +953,17 @@ input marketplace_activity_bool_exp {
 Ordering options when selecting data from "marketplace_activity".
 """
 input marketplace_activity_order_by {
-  amount: order_by
-
-  contract: order_by
-
   id: order_by
 
   internal_order_id: order_by
+
+  make_asset_class: order_by
+
+  make_contract: order_by
+
+  make_token_id: order_by
+
+  make_value: order_by
 
   maker: order_by
 
@@ -949,9 +979,15 @@ input marketplace_activity_order_by {
 
   sell_price: order_by
 
-  taker: order_by
+  take_asset_class: order_by
 
-  token_id: order_by
+  take_contract: order_by
+
+  take_token_id: order_by
+
+  take_value: order_by
+
+  taker: order_by
 
   type: order_by
 }
@@ -963,22 +999,32 @@ enum marketplace_activity_select_column {
   """
   column name
   """
-  amount
-
-  """
-  column name
-  """
-  contract
-
-  """
-  column name
-  """
   id
 
   """
   column name
   """
   internal_order_id
+
+  """
+  column name
+  """
+  make_asset_class
+
+  """
+  column name
+  """
+  make_contract
+
+  """
+  column name
+  """
+  make_token_id
+
+  """
+  column name
+  """
+  make_value
 
   """
   column name
@@ -1018,12 +1064,27 @@ enum marketplace_activity_select_column {
   """
   column name
   """
-  taker
+  take_asset_class
 
   """
   column name
   """
-  token_id
+  take_contract
+
+  """
+  column name
+  """
+  take_token_id
+
+  """
+  column name
+  """
+  take_value
+
+  """
+  column name
+  """
+  taker
 
   """
   column name
@@ -1049,13 +1110,18 @@ type marketplace_order {
 
   last_updated_at: timestamptz!
 
-  make_contract: String!
+  """
+  ETH: ETH\nXTZ: XTZ\nFUNGIBLE_TOKEN: TEZOS_FT\nNON_FUNGIBLE_TOKEN: TEZOS_NFT\nMULTI_TOKEN: TEZOS_MT\nERC20: ERC20\nERC721: ERC721\nERC1155: ERC1155\nERC721_LAZY: ERC721_LAZY\nERC1155_LAZY: ERC1155_LAZY\nCOLLECTION: COLLECTION\nGEN_ART: GEN_ART
+  """
+  make_asset_class: String!
+
+  make_contract: String
 
   make_price: numeric!
 
   make_stock: numeric!
 
-  make_token_id: String!
+  make_token_id: String
 
   make_value: numeric!
 
@@ -1076,6 +1142,17 @@ type marketplace_order {
   ACTIVE: ACTIVE\nFILLED: FILLED\nHISTORICAL: HISTORICAL\nINACTIVE: INACTIVE\nCANCELLED: CANCELLED
   """
   status: String!
+
+  """
+  ETH: ETH\nXTZ: XTZ\nFUNGIBLE_TOKEN: TEZOS_FT\nNON_FUNGIBLE_TOKEN: TEZOS_NFT\nMULTI_TOKEN: TEZOS_MT\nERC20: ERC20\nERC721: ERC721\nERC1155: ERC1155\nERC721_LAZY: ERC721_LAZY\nERC1155_LAZY: ERC1155_LAZY\nCOLLECTION: COLLECTION\nGEN_ART: GEN_ART
+  """
+  take_asset_class: String
+
+  take_contract: String
+
+  take_token_id: String
+
+  take_value: numeric
 
   taker: String
 }
@@ -1104,6 +1181,8 @@ input marketplace_order_bool_exp {
 
   last_updated_at: timestamptz_comparison_exp
 
+  make_asset_class: String_comparison_exp
+
   make_contract: String_comparison_exp
 
   make_price: numeric_comparison_exp
@@ -1126,6 +1205,14 @@ input marketplace_order_bool_exp {
 
   status: String_comparison_exp
 
+  take_asset_class: String_comparison_exp
+
+  take_contract: String_comparison_exp
+
+  take_token_id: String_comparison_exp
+
+  take_value: numeric_comparison_exp
+
   taker: String_comparison_exp
 }
 
@@ -1146,6 +1233,8 @@ input marketplace_order_order_by {
   internal_order_id: order_by
 
   last_updated_at: order_by
+
+  make_asset_class: order_by
 
   make_contract: order_by
 
@@ -1168,6 +1257,14 @@ input marketplace_order_order_by {
   started_at: order_by
 
   status: order_by
+
+  take_asset_class: order_by
+
+  take_contract: order_by
+
+  take_token_id: order_by
+
+  take_value: order_by
 
   taker: order_by
 }
@@ -1210,6 +1307,11 @@ enum marketplace_order_select_column {
   column name
   """
   last_updated_at
+
+  """
+  column name
+  """
+  make_asset_class
 
   """
   column name
@@ -1265,6 +1367,26 @@ enum marketplace_order_select_column {
   column name
   """
   status
+
+  """
+  column name
+  """
+  take_asset_class
+
+  """
+  column name
+  """
+  take_contract
+
+  """
+  column name
+  """
+  take_token_id
+
+  """
+  column name
+  """
+  take_value
 
   """
   column name

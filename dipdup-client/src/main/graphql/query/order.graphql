@@ -6,11 +6,12 @@ query GetOrders($limit: Int!, $prevId: bigint!) {
     ) {
         cancelled
         created_at
-        ended_at
         fill
+        ended_at
         id
         internal_order_id
         last_updated_at
+        make_asset_class
         make_contract
         make_price
         make_stock
@@ -20,8 +21,12 @@ query GetOrders($limit: Int!, $prevId: bigint!) {
         network
         platform
         started_at
-        status
         salt
+        status
+        take_asset_class
+        take_contract
+        take_token_id
+        take_value
         taker
     }
 }
@@ -35,6 +40,7 @@ query GetOrderById($id: bigint!) {
         id
         internal_order_id
         last_updated_at
+        make_asset_class
         make_contract
         make_price
         make_stock
@@ -43,9 +49,13 @@ query GetOrderById($id: bigint!) {
         maker
         network
         platform
+        salt
         started_at
         status
-        salt
+        take_asset_class
+        take_contract
+        take_token_id
+        take_value
         taker
     }
 }
@@ -57,11 +67,12 @@ query GetOrdersByIds($ids: [bigint!]!) {
     ) {
         cancelled
         created_at
-        ended_at
         fill
+        ended_at
         id
         internal_order_id
         last_updated_at
+        make_asset_class
         make_contract
         make_price
         make_stock
@@ -71,8 +82,12 @@ query GetOrdersByIds($ids: [bigint!]!) {
         network
         platform
         started_at
-        status
         salt
+        status
+        take_asset_class
+        take_contract
+        take_token_id
+        take_value
         taker
     }
 }
@@ -89,11 +104,12 @@ query GetOrdersByItem($makeContract: String!, $makeTokenId: String!, $limit: Int
     ) {
         cancelled
         created_at
-        ended_at
         fill
+        ended_at
         id
         internal_order_id
         last_updated_at
+        make_asset_class
         make_contract
         make_price
         make_stock
@@ -103,8 +119,12 @@ query GetOrdersByItem($makeContract: String!, $makeTokenId: String!, $limit: Int
         network
         platform
         started_at
-        status
         salt
+        status
+        take_asset_class
+        take_contract
+        take_token_id
+        take_value
         taker
     }
 }

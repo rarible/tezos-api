@@ -25,9 +25,9 @@ data class Asset(
     data class FT(val assetClass: String = FT_NAME, val contract: String, val tokenId: BigInteger) : AssetType()
 
     companion object {
-        const val FT_NAME = "FT"
-        const val NFT_NAME = "NFT"
-        const val MT_NAME = "MT"
+        const val FT_NAME = "TEZOS_FT"
+        const val NFT_NAME = "TEZOS_NFT"
+        const val MT_NAME = "TEZOS_MT"
         const val XTZ_NAME = "XTZ"
     }
 

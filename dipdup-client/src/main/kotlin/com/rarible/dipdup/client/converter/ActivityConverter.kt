@@ -20,8 +20,8 @@ fun convert(source: GetActivitiesQuery.Marketplace_activity) = activityEvent(
     source = TezosPlatform.get(source.platform),
     maker = source.maker,
     taker = source.taker,
-    make = makeFTAsset(source.contract, source.token_id, source.amount),
-    take = takeXTZAsset(source.sell_price),
+    make = getAsset(source.make_asset_class, source.make_contract, source.make_token_id, source.make_value),
+    take = getAsset(source.take_asset_class, source.take_contract, source.take_token_id, source.take_value),
     price = source.sell_price
 )
 
@@ -34,8 +34,8 @@ fun convert(source: GetActivitiesByIdsQuery.Marketplace_activity) = activityEven
     source = TezosPlatform.get(source.platform),
     maker = source.maker,
     taker = source.taker,
-    make = makeFTAsset(source.contract, source.token_id, source.amount),
-    take = takeXTZAsset(source.sell_price),
+    make = getAsset(source.make_asset_class, source.make_contract, source.make_token_id, source.make_value),
+    take = getAsset(source.take_asset_class, source.take_contract, source.take_token_id, source.take_value),
     price = source.sell_price
 )
 
@@ -60,7 +60,7 @@ fun activityEvent(
     price: Any
 ): DipDupActivity {
     return when (type) {
-        "list" -> DipDupOrderListActivity(
+        "LIST" -> DipDupOrderListActivity(
             id = id,
             date = date,
             reverted = reverted,
@@ -71,7 +71,7 @@ fun activityEvent(
             take = take,
             price = BigDecimal(price.toString())
         )
-        "match" -> DipDupOrderSellActivity(
+        "SELL" -> DipDupOrderSellActivity(
             id = id,
             date = date,
             reverted = reverted,
@@ -83,7 +83,7 @@ fun activityEvent(
             seller = maker,
             price = BigDecimal(price.toString())
         )
-        "cancel" -> DipDupOrderCancelActivity(
+        "CANCEL_LIST" -> DipDupOrderCancelActivity(
             id = id,
             date = date,
             reverted = reverted,
