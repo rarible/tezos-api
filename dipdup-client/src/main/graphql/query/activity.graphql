@@ -1,0 +1,54 @@
+query GetActivities($limit: Int!, $prevId: bigint!) {
+    marketplace_activity(
+        where: {id: {_gt: $prevId}},
+        order_by: {id: asc},
+        limit: $limit
+    ) {
+        type
+        id
+        internal_order_id
+        make_asset_class
+        make_contract
+        make_token_id
+        make_value
+        maker
+        network
+        operation_hash
+        operation_level
+        operation_timestamp
+        platform
+        sell_price
+        take_asset_class
+        take_contract
+        take_token_id
+        take_value
+        taker
+    }
+}
+
+query GetActivitiesByIds($ids: [bigint!]!) {
+    marketplace_activity(
+        where: {id: {_in: $ids}},
+        order_by: {id: asc}
+    ) {
+        type
+        id
+        internal_order_id
+        make_asset_class
+        make_contract
+        make_token_id
+        make_value
+        maker
+        network
+        operation_hash
+        operation_level
+        operation_timestamp
+        platform
+        sell_price
+        take_asset_class
+        take_contract
+        take_token_id
+        take_value
+        taker
+    }
+}
