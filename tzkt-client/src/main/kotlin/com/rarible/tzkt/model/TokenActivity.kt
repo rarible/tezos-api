@@ -28,39 +28,37 @@ package com.rarible.tzkt.model
  * @param migrationId Internal TzKT id of the migration operation, caused the token transfer.
  */
 
-data class TokenTransfer (
+open class TokenActivity (
 
     /* Internal TzKT id.   **[sortable]** */
-    val id: Int? = null,
-
-    var type: ActivityType? = null,
+    open val id: Int? = null,
 
     /* Level of the block, at which the token transfer was made.   **[sortable]** */
-    val level: Int? = null,
+    open val level: Int? = null,
 
     /* Timestamp of the block, at which the token transfer was made. */
-    val timestamp: java.time.OffsetDateTime? = null,
+    open val timestamp: java.time.OffsetDateTime? = null,
 
     /* Token info.   Click on the field to expand more details. */
-    val token: TokenInfo? = null,
+    open val token: TokenInfo? = null,
 
     /* Sender account.   Click on the field to expand more details. */
-    val from: Alias? = null,
+    open val from: Alias? = null,
 
     /* Target account.   Click on the field to expand more details. */
-    val to: Alias? = null,
+    open val to: Alias? = null,
 
     /* Amount of tokens transferred (raw value, not divided by `decimals`).   **[sortable]** */
-    val amount: String? = null,
+    open val amount: String? = null,
 
     /* Internal TzKT id of the transaction operation, caused the token transfer. */
-    val transactionId: Int? = null,
+    open val transactionId: Int? = null,
 
     /* Internal TzKT id of the origination operation, caused the token transfer. */
-    val originationId: Int? = null,
+    open val originationId: Int? = null,
 
     /* Internal TzKT id of the migration operation, caused the token transfer. */
-    val migrationId: Int? = null
+    open val migrationId: Int? = null
 
 )
 

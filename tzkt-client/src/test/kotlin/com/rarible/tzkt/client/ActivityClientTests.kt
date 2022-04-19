@@ -1,7 +1,7 @@
 package com.rarible.tzkt.client
 
 import com.rarible.tzkt.model.ActivityType
-import com.rarible.tzkt.model.TokenTransfer
+import com.rarible.tzkt.model.TokenActivity
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -518,7 +518,7 @@ class ActivityClientTests : BaseClientTests() {
         assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=10&offset.cr=0&sort.asc=id")
         var prevId = 0
         activities.forEach {
-            assertThat(it).isInstanceOf(TokenTransfer::class.java)
+            assertThat(it).isInstanceOf(TokenActivity::class.java)
             assertThat(it.id).isGreaterThan(prevId)
             prevId = it.id!!
         }
@@ -527,7 +527,7 @@ class ActivityClientTests : BaseClientTests() {
         activities = activityClient.activities(size, continuation)
         assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=10&offset.cr=23955219&sort.asc=id")
         activities.forEach {
-            assertThat(it).isInstanceOf(TokenTransfer::class.java)
+            assertThat(it).isInstanceOf(TokenActivity::class.java)
             assertThat(it.id).isGreaterThan(prevId)
             prevId = it.id!!
         }
@@ -1061,7 +1061,7 @@ class ActivityClientTests : BaseClientTests() {
         assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=10&offset.cr=24878056&sort.desc=id")
         var prevId = 24878056L
         activities.forEach {
-            assertThat(it).isInstanceOf(TokenTransfer::class.java)
+            assertThat(it).isInstanceOf(TokenActivity::class.java)
             assertThat(it.id?.toLong()).isLessThan(prevId)
             prevId = it.id!!.toLong()
         }
@@ -1071,7 +1071,7 @@ class ActivityClientTests : BaseClientTests() {
         assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=10&offset.cr=24778005&sort.desc=id")
         prevId = lastId
         activities.forEach {
-            assertThat(it).isInstanceOf(TokenTransfer::class.java)
+            assertThat(it).isInstanceOf(TokenActivity::class.java)
             assertThat(it.id?.toLong()).isLessThan(prevId)
             prevId = it.id!!.toLong()
         }
