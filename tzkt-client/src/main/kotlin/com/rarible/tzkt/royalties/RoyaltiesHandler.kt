@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.rarible.tzkt.client.BigMapKeyClient
 import com.rarible.tzkt.client.IPFSClient
 import com.rarible.tzkt.model.Part
+import com.rarible.tzkt.royalties.RoyaltiesHandler.KnownAddresses.FXHASH
+import com.rarible.tzkt.royalties.RoyaltiesHandler.KnownAddresses.HEN
 import okio.ByteString.Companion.decodeHex
 import org.slf4j.LoggerFactory
 
@@ -24,25 +26,28 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         val contract = id.split(":")[0]
         val tokenId = id.split(":")[1]
         var part: List<Part>
-        if (contract == HEN) {
-            logger.info("Token $id royalties pattern is HEN")
-            part = getHENRoyalties(tokenId)
-            return part
-        }
-        if (contract == KALAMINT) {
-            logger.info("Token $id royalties pattern is KALAMINT")
-            part = getKalamintRoyalties(tokenId)
-            return part
-        }
-        if (contract == FXHASH) {
-            logger.info("Token $id royalties pattern is FXHASH")
-            part = getFxHashRoyalties(tokenId)
-            return part
-        }
-        if (contract == VERSUM) {
-            logger.info("Token $id royalties pattern is VERSUM")
-            part = getVersumRoyalties(tokenId)
-            return part
+
+        when (contract){
+            HEN -> {
+                logger.info("Token $id royalties pattern is HEN")
+                part = getHENRoyalties(tokenId)
+                return part
+            }
+            KALAMINT -> {
+                logger.info("Token $id royalties pattern is KALAMINT")
+                part = getKalamintRoyalties(tokenId)
+                return part
+            }
+            FXHASH -> {
+                logger.info("Token $id royalties pattern is FXHASH")
+                part = getFxHashRoyalties(tokenId)
+                return part
+            }
+            VERSUM -> {
+                logger.info("Token $id royalties pattern is VERSUM")
+                part = getVersumRoyalties(tokenId)
+                return part
+            }
         }
 
         //check rarible pattern in generated contract storage
