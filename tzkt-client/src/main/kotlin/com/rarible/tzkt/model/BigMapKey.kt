@@ -16,17 +16,41 @@ package com.rarible.tzkt.model
 /**
  * 
  *
- * @param alias Account alias name (offchain metadata).
- * @param address Account address (public key hash).
+ * @param id Internal Id, can be used for pagination
+ * @param active Bigmap key status (`true` - active, `false` - removed)
+ * @param hash Key hash
+ * @param key Key in JSON or Micheline format, depending on the `micheline` query parameter.
+ * @param `value` Value in JSON or Micheline format, depending on the `micheline` query parameter. Note, if the key is inactive (removed) it will contain the last non-null value.
+ * @param firstLevel Level of the block where the bigmap key was seen first time
+ * @param lastLevel Level of the block where the bigmap key was seen last time
+ * @param updates Total number of actions with the bigmap key
  */
 
-data class Alias (
+data class BigMapKey (
 
-    /* Account alias name (offchain metadata). */
-    val alias: String? = null,
+    /* Internal Id, can be used for pagination */
+    val id: Int? = null,
 
-    /* Account address (public key hash). */
-    val address: String? = null
+    /* Bigmap key status (`true` - active, `false` - removed) */
+    val active: Boolean? = null,
+
+    /* Key hash */
+    val hash: String? = null,
+
+    /* Key in JSON or Micheline format, depending on the `micheline` query parameter. */
+    val key: Any? = null,
+
+    /* Value in JSON or Micheline format, depending on the `micheline` query parameter. Note, if the key is inactive (removed) it will contain the last non-null value. */
+    val `value`: Any? = null,
+
+    /* Level of the block where the bigmap key was seen first time */
+    val firstLevel: Int? = null,
+
+    /* Level of the block where the bigmap key was seen last time */
+    val lastLevel: Int? = null,
+
+    /* Total number of actions with the bigmap key */
+    val updates: Int? = null
 
 )
 

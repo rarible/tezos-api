@@ -20,5 +20,12 @@ abstract class BaseClientTests {
         )
     }
 
+    fun mock404() {
+        mockServer.enqueue(
+            MockResponse()
+                .setResponseCode(404)
+        )
+    }
+
     fun request() = mockServer.takeRequest()
 }
