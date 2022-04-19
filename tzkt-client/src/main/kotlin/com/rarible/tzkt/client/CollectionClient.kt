@@ -21,6 +21,7 @@ class CollectionClient(
         val collections = invoke<List<Contract>> { builder ->
             builder.path(BASE_PATH)
                 .queryParam("kind", "asset")
+                .queryParam("tzips.all", "fa2")
                 .apply {
                     size?.let { queryParam("limit", it) }
                     continuation?.let { queryParam("offset.cr", it) }
