@@ -1196,9 +1196,11 @@ class ActivityClientTests : BaseClientTests() {
             }]
         """.trimIndent())
 
-        var activities = activityClient.activityByItem("KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn", "0")
+        val size = 10
+        var continuation = 0L
+        var activities = activityClient.activityByItem("KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn", "0", size, continuation)
 
         assertThat(activities).hasSize(2)
-        assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0")
+        assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=10&offset.cr=0&sort.asc=id")
     }
 }

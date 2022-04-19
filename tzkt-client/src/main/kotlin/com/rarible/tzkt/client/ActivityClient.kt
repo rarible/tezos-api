@@ -28,11 +28,18 @@ class ActivityClient(
         return tokens
     }
 
-    suspend fun activityByItem(contract: String, tokenId: String): List<TokenTransfer> {
+    // add continuation
+    suspend fun activityByItem(contract: String, tokenId: String, size: Int?, continuation: Long?, sortAsc: Boolean = true): List<TokenTransfer> {
         val tokens = invoke<List<TokenTransfer>> { builder ->
             builder.path(BASE_PATH)
                 .queryParam("token.contract", contract)
                 .queryParam("token.tokenId", tokenId)
+                .apply {
+                    size?.let { queryParam("limit", it) }
+                    continuation?.let { queryParam("offset.cr", it) }
+                    val sorting = if (sortAsc) "sort.asc" else "sort.desc"
+                    queryParam(sorting, "id")
+                }
         }
         return tokens
     }
