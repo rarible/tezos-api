@@ -28,6 +28,15 @@ class ActivityClient(
         return tokens
     }
 
+    suspend fun activityByItem(contract: String, tokenId: String): List<TokenTransfer> {
+        val tokens = invoke<List<TokenTransfer>> { builder ->
+            builder.path(BASE_PATH)
+                .queryParam("token.contract", contract)
+                .queryParam("token.tokenId", tokenId)
+        }
+        return tokens
+    }
+
     companion object {
         const val BASE_PATH = "v1/tokens/transfers"
     }
