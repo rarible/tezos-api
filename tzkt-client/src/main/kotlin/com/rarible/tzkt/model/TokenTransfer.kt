@@ -33,6 +33,8 @@ data class TokenTransfer (
     /* Internal TzKT id.   **[sortable]** */
     val id: Int? = null,
 
+    var type: ActivityType? = null,
+
     /* Level of the block, at which the token transfer was made.   **[sortable]** */
     val level: Int? = null,
 
