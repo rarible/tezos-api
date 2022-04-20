@@ -1,6 +1,8 @@
 package com.rarible.tzkt.client
 
+import com.rarible.tzkt.meta.MetaService
 import com.rarible.tzkt.model.Token
+import com.rarible.tzkt.model.TokenMeta
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -10,6 +12,8 @@ class TokenClient(
     webClient: WebClient
 ) : BaseClient(webClient) {
 
+    val metaService = MetaService()
+
     suspend fun token(contract: String, id: String): Token {
         val tokens = invoke<List<Token>> {
             it.path(BASE_PATH)
@@ -18,6 +22,16 @@ class TokenClient(
                 .queryParam("token.standard", "fa2")
         }
         return tokens.first()
+    }
+
+    suspend fun tokenMeta(contract: String, id: String): TokenMeta {
+        val tokens = invoke<List<Token>> {
+            it.path(BASE_PATH)
+                .queryParam("contract", contract)
+                .queryParam("tokenId", id)
+        }
+        val token = tokens.first()
+        return metaService.meta(token)
     }
 
     suspend fun tokens(size: Int?, continuation: Long?, sortAsc: Boolean = true): List<Token> {

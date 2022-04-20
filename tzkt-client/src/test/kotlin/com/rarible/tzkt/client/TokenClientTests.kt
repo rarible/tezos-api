@@ -1422,4 +1422,66 @@ class TokenClientTests : BaseClientTests() {
         assertThat(tokens).hasSize(2)
         assertThat(tokens.first().standard).isEqualTo("fa1.2")
     }
+
+    @Test
+    fun `should return meta`() = runBlocking<Unit> {
+        mock("""[{
+            "id": 2453767,
+            "contract": {
+                "alias": "hic et nunc NFTs",
+                "address": "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
+            },
+            "tokenId": "703680",
+            "standard": "fa2",
+            "firstLevel": 2221324,
+            "firstTime": "2022-03-23T21:47:14Z",
+            "lastLevel": 2296981,
+            "lastTime": "2022-04-20T11:58:29Z",
+            "transfersCount": 36,
+            "balancesCount": 20,
+            "holdersCount": 14,
+            "totalMinted": "30",
+            "totalBurned": "0",
+            "totalSupply": "30",
+            "metadata": {
+                "name": "Smoking area 07",
+                "tags": [
+                    "pixelart",
+                    "gif",
+                    "goodvibe",
+                    "environment",
+                    "landscape",
+                    "turkey",
+                    "cappadocia",
+                    "balloons",
+                    "lofi",
+                    "cat"
+                ],
+                "symbol": "OBJKT",
+                "formats": [
+                    {
+                        "uri": "ipfs://QmUfR1S71rA7krc8YZTZbSwHEToJ2ZjNsbcQuTLfLyfLH2",
+                        "mimeType": "image/gif"
+                    }
+                ],
+                "creators": [
+                    "tz1iMpEwmHDMCAydU3xTuzCNo6KV8RwdUNur"
+                ],
+                "decimals": "0",
+                "displayUri": "ipfs://QmUfR1S71rA7krc8YZTZbSwHEToJ2ZjNsbcQuTLfLyfLH2",
+                "artifactUri": "ipfs://QmUfR1S71rA7krc8YZTZbSwHEToJ2ZjNsbcQuTLfLyfLH2",
+                "description": "Cappadocia, I miss you! What a magical place. Let's have some cay, Turkish delight, baklava and enjoy the balloon ride. ",
+                "thumbnailUri": "ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+                "isBooleanAmount": false,
+                "shouldPreferSymbol": false
+            }
+        }]""")
+
+        val meta = tokenClient.tokenMeta("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton", "2453767")
+
+        assertThat(meta.name).isEqualTo("Smoking area 07")
+        assertThat(meta.attributes).hasSize(10)
+        assertThat(meta.image).isEqualTo("ipfs://QmUfR1S71rA7krc8YZTZbSwHEToJ2ZjNsbcQuTLfLyfLH2")
+        assertThat(meta.description).isEqualTo("Cappadocia, I miss you! What a magical place. Let's have some cay, Turkish delight, baklava and enjoy the balloon ride. ")
+    }
 }
