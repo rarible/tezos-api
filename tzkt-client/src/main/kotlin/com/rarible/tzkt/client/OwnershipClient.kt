@@ -7,7 +7,7 @@ class OwnershipClient(
     webClient: WebClient
 ) : BaseClient(webClient) {
 
-    suspend fun ownership(contract: String, tokenId: String, owner: String): TokenBalance {
+    suspend fun ownershipById(contract: String, tokenId: String, owner: String): TokenBalance {
         val ownership = invoke<List<TokenBalance>> { builder ->
             builder.path(BASE_PATH)
                 .queryParam("account", owner)
@@ -15,6 +15,15 @@ class OwnershipClient(
                 .queryParam("token.tokenId", tokenId)
         }
         return ownership.first()
+    }
+
+    suspend fun ownershipsByToken(contract: String, tokenId: String): List<TokenBalance> {
+        val ownership = invoke<List<TokenBalance>> { builder ->
+            builder.path(BASE_PATH)
+                .queryParam("token.contract", contract)
+                .queryParam("token.tokenId", tokenId)
+        }
+        return ownership
     }
 
     companion object {
