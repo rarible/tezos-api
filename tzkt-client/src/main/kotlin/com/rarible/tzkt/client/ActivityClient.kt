@@ -40,46 +40,18 @@ class ActivityClient(
                     }
                 }
         }
-        val result = mutableListOf<TypedTokenActivity>()
-        activities.forEach {
-            val type = if (it.from == null) {
-                ActivityType.MINT
-            } else if (it.to?.address == BURN_ADDRESS
-                || it.to?.address == NULL_ADDRESS
-                || it.to == null
-            ) {
-                ActivityType.BURN
-            } else {
-                ActivityType.TRANSFER
-            }
-            result.add(TypedTokenActivity(
-                id = it.id,
-                type = type,
-                level = it.level,
-                timestamp = it.timestamp,
-                token = it.token,
-                from = it.from,
-                to = it.to,
-                amount = it.amount,
-                transactionId = it.transactionId,
-                originationId = it.originationId,
-                migrationId = it.migrationId
-            )
-            )
-        }
-        return result
+        return activities.map(this::mapActivity)
     }
 
     suspend fun activityByIds(ids: List<Long>): List<TokenActivity> {
         val activities = invoke<List<TokenActivity>> { builder ->
             builder.path(BASE_PATH).queryParam("id.in", ids.joinToString(","))
         }
-        return activities
+        return activities.map(this::mapActivity)
     }
 
-    // add continuation
     suspend fun activityByItem(contract: String, tokenId: String, size: Int?, continuation: Long?, sortAsc: Boolean = true): List<TokenActivity> {
-        val tokens = invoke<List<TokenActivity>> { builder ->
+        val activities = invoke<List<TokenActivity>> { builder ->
             builder.path(BASE_PATH)
                 .queryParam("token.contract", contract)
                 .queryParam("token.tokenId", tokenId)
@@ -90,7 +62,16 @@ class ActivityClient(
                     queryParam(sorting, "id")
                 }
         }
-        return tokens
+        return activities.map(this::mapActivity)
+    }
+
+    private fun mapActivity(tokenActivity: TokenActivity): TypedTokenActivity {
+        val type = when {
+            tokenActivity.from == null -> ActivityType.MINT
+            listOf(BURN_ADDRESS, NULL_ADDRESS, null).contains(tokenActivity.to?.address) -> ActivityType.BURN
+            else -> ActivityType.TRANSFER
+        }
+        return TypedTokenActivity(type = type, tokenActivity)
     }
 
     companion object {
