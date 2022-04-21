@@ -1,16 +1,18 @@
 package com.rarible.tzkt.client
 
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class TokenClientTests : BaseClientTests() {
 
-    val tokenClient = TokenClient(client)
+    val tokenClient = TokenClient(client, mockk(), mockk())
 
     @Test
     fun `should return token by contract and token id`() = runBlocking<Unit> {
-        mock("""
+        mock(
+            """
             [
                 {
                     "id": 238284,
@@ -63,7 +65,8 @@ class TokenClientTests : BaseClientTests() {
                     }
                 }
             ]
-        """.trimIndent())
+        """.trimIndent()
+        )
 
         val token = tokenClient.token("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton", "157993")
         assertThat(request().path).isEqualTo("/v1/tokens?contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&tokenId=157993&token.standard=fa2")
@@ -74,7 +77,8 @@ class TokenClientTests : BaseClientTests() {
 
     @Test
     fun `should return tokens by with size, continuation and sorted by ASC`() = runBlocking<Unit> {
-        mock("""
+        mock(
+            """
             [{
             	"id": 60,
             	"contract": {
@@ -389,9 +393,11 @@ class TokenClientTests : BaseClientTests() {
             		"booleanAmount": true
             	}
             }]
-        """.trimIndent())
+        """.trimIndent()
+        )
 
-        mock("""
+        mock(
+            """
             [{
             	"id": 78,
             	"contract": {
@@ -713,14 +719,15 @@ class TokenClientTests : BaseClientTests() {
             		"booleanAmount": false
             	}
             }]
-        """.trimIndent())
+        """.trimIndent()
+        )
 
         val size = 10
         var continuation = 0L
         var tokens = tokenClient.tokens(size, continuation)
         assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=0&sort.asc=id&metadata.artifactUri.null=false")
         var prevId = 0
-        tokens.forEach{
+        tokens.forEach {
             assertThat(it.id).isGreaterThan(prevId)
             assertThat(it.standard).isEqualTo("fa2")
             prevId = it.id!!
@@ -730,7 +737,7 @@ class TokenClientTests : BaseClientTests() {
         continuation = lastId
         tokens = tokenClient.tokens(size, continuation)
         assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=77&sort.asc=id&metadata.artifactUri.null=false")
-        tokens.forEach{
+        tokens.forEach {
             assertThat(it.id).isGreaterThan(prevId)
             assertThat(it.standard).isEqualTo("fa2")
             prevId = it.id!!
@@ -740,7 +747,8 @@ class TokenClientTests : BaseClientTests() {
 
     @Test
     fun `should return tokens by with size, continuation and sorted by DESC`() = runBlocking<Unit> {
-        mock("""
+        mock(
+            """
             [{
             	"id": 87,
             	"contract": {
@@ -1062,9 +1070,11 @@ class TokenClientTests : BaseClientTests() {
             		"booleanAmount": true
             	}
             }]
-        """.trimIndent())
+        """.trimIndent()
+        )
 
-        mock("""
+        mock(
+            """
             [{
             	"id": 76,
             	"contract": {
@@ -1347,14 +1357,15 @@ class TokenClientTests : BaseClientTests() {
             		"booleanAmount": "true"
             	}
             }]
-        """.trimIndent())
+        """.trimIndent()
+        )
 
         val size = 10
         var continuation = 88L
         var tokens = tokenClient.tokens(size, continuation, false)
         assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=88&sort.desc=id&metadata.artifactUri.null=false")
         var prevId = 88L
-        tokens.forEach{
+        tokens.forEach {
             assertThat(it.id?.toLong()).isLessThan(prevId)
             assertThat(it.standard).isEqualTo("fa2")
             prevId = it.id!!.toLong()
@@ -1364,7 +1375,7 @@ class TokenClientTests : BaseClientTests() {
         prevId = lastId
         tokens = tokenClient.tokens(size, continuation, false)
         assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=77&sort.desc=id&metadata.artifactUri.null=false")
-        tokens.forEach{
+        tokens.forEach {
             assertThat(it.id?.toLong()).isLessThan(prevId)
             assertThat(it.standard).isEqualTo("fa2")
             prevId = it.id!!.toLong()
@@ -1374,7 +1385,8 @@ class TokenClientTests : BaseClientTests() {
 
     @Test
     fun `should return tokens by ids`() = runBlocking<Unit> {
-        mock("""[{
+        mock(
+            """[{
             "id": 1,
             "contract": {
                 "alias": "tzBTC",
@@ -1397,8 +1409,10 @@ class TokenClientTests : BaseClientTests() {
                 "symbol": "tzBTC",
                 "decimals": "8"
             }
-        }]""")
-        mock("""[{
+        }]"""
+        )
+        mock(
+            """[{
             "id": 2,
             "contract": {
                 "alias": "StakerDAO",
@@ -1416,72 +1430,16 @@ class TokenClientTests : BaseClientTests() {
             "totalMinted": "1500000",
             "totalBurned": "0",
             "totalSupply": "1500000"
-        }]""")
-        val tokens = tokenClient.tokens(listOf("KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn:0", "KT1EctCuorV2NfVb1XTQgvzJ88MQtWP8cMMv:0"))
+        }]"""
+        )
+        val tokens = tokenClient.tokens(
+            listOf(
+                "KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn:0",
+                "KT1EctCuorV2NfVb1XTQgvzJ88MQtWP8cMMv:0"
+            )
+        )
 
         assertThat(tokens).hasSize(2)
         assertThat(tokens.first().standard).isEqualTo("fa1.2")
-    }
-
-    @Test
-    fun `should return meta`() = runBlocking<Unit> {
-        mock("""[{
-            "id": 2453767,
-            "contract": {
-                "alias": "hic et nunc NFTs",
-                "address": "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
-            },
-            "tokenId": "703680",
-            "standard": "fa2",
-            "firstLevel": 2221324,
-            "firstTime": "2022-03-23T21:47:14Z",
-            "lastLevel": 2296981,
-            "lastTime": "2022-04-20T11:58:29Z",
-            "transfersCount": 36,
-            "balancesCount": 20,
-            "holdersCount": 14,
-            "totalMinted": "30",
-            "totalBurned": "0",
-            "totalSupply": "30",
-            "metadata": {
-                "name": "Smoking area 07",
-                "tags": [
-                    "pixelart",
-                    "gif",
-                    "goodvibe",
-                    "environment",
-                    "landscape",
-                    "turkey",
-                    "cappadocia",
-                    "balloons",
-                    "lofi",
-                    "cat"
-                ],
-                "symbol": "OBJKT",
-                "formats": [
-                    {
-                        "uri": "ipfs://QmUfR1S71rA7krc8YZTZbSwHEToJ2ZjNsbcQuTLfLyfLH2",
-                        "mimeType": "image/gif"
-                    }
-                ],
-                "creators": [
-                    "tz1iMpEwmHDMCAydU3xTuzCNo6KV8RwdUNur"
-                ],
-                "decimals": "0",
-                "displayUri": "ipfs://QmUfR1S71rA7krc8YZTZbSwHEToJ2ZjNsbcQuTLfLyfLH2",
-                "artifactUri": "ipfs://QmUfR1S71rA7krc8YZTZbSwHEToJ2ZjNsbcQuTLfLyfLH2",
-                "description": "Cappadocia, I miss you! What a magical place. Let's have some cay, Turkish delight, baklava and enjoy the balloon ride. ",
-                "thumbnailUri": "ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
-                "isBooleanAmount": false,
-                "shouldPreferSymbol": false
-            }
-        }]""")
-
-        val meta = tokenClient.tokenMeta("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton", "2453767")
-
-        assertThat(meta.name).isEqualTo("Smoking area 07")
-        assertThat(meta.attributes).hasSize(10)
-        assertThat(meta.image).isEqualTo("ipfs://QmUfR1S71rA7krc8YZTZbSwHEToJ2ZjNsbcQuTLfLyfLH2")
-        assertThat(meta.description).isEqualTo("Cappadocia, I miss you! What a magical place. Let's have some cay, Turkish delight, baklava and enjoy the balloon ride. ")
     }
 }

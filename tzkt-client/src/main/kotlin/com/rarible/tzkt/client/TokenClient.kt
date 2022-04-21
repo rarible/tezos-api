@@ -1,18 +1,21 @@
 package com.rarible.tzkt.client
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.rarible.tzkt.meta.MetaService
+import com.rarible.tzkt.model.Part
 import com.rarible.tzkt.model.Token
 import com.rarible.tzkt.model.TokenMeta
+import com.rarible.tzkt.royalties.RoyaltiesHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import org.springframework.web.reactive.function.client.WebClient
 
 class TokenClient(
-    webClient: WebClient
+    webClient: WebClient,
+    val metaService: MetaService,
+    val royaltyHander: RoyaltiesHandler
 ) : BaseClient(webClient) {
-
-    val metaService = MetaService()
 
     suspend fun token(contract: String, id: String): Token {
         val tokens = invoke<List<Token>> {
@@ -59,6 +62,10 @@ class TokenClient(
                 .awaitAll()
         }
         return tokens
+    }
+
+    suspend fun royalty(contract: String, id: String): List<Part> {
+        return royaltyHander.processRoyalties(contract, id)
     }
 
     companion object {

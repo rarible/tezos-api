@@ -5,6 +5,7 @@ import com.rarible.tzkt.client.BigMapKeyClient
 import com.rarible.tzkt.client.IPFSClient
 import com.rarible.tzkt.client.TokenClient
 import com.rarible.tzkt.model.Part
+import io.mockk.mockk
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
@@ -17,7 +18,7 @@ import java.io.File
 class RoyaltiesTests : BaseClientTests() {
 
     val bigMapKeyClient = BigMapKeyClient(client)
-    val ipfsClient = IPFSClient(client)
+    val ipfsClient = IPFSClient(client, mapper)
     val logger = LoggerFactory.getLogger(javaClass)
 
     @Test
@@ -631,8 +632,8 @@ class RoyaltiesTests : BaseClientTests() {
         val clientBuilder = WebClient.builder().baseUrl(localTzkt)
             .codecs { configurer -> configurer.defaultCodecs().maxInMemorySize(2 * 1024 * 1024) }.build()
         val bmClient = BigMapKeyClient(clientBuilder)
-        val tokenClient = TokenClient(clientBuilder)
-        val ipfs = IPFSClient(WebClient.create("https://rarible.mypinata.cloud/"))
+        val tokenClient = TokenClient(clientBuilder, mockk(), mockk())
+        val ipfs = IPFSClient(WebClient.create("https://rarible.mypinata.cloud/"), mapper)
         val limit = 20
         val continuation = 0L
         val handler = RoyaltiesHandler(bmClient, ipfs)
