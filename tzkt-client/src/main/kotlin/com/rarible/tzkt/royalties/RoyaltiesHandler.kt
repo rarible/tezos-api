@@ -4,16 +4,17 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.rarible.tzkt.client.BigMapKeyClient
 import com.rarible.tzkt.client.IPFSClient
 import com.rarible.tzkt.model.Part
-import com.rarible.tzkt.royalties.RoyaltiesHandler.KnownAddresses.FXHASH
-import com.rarible.tzkt.royalties.RoyaltiesHandler.KnownAddresses.HEN
 import okio.ByteString.Companion.decodeHex
 import org.slf4j.LoggerFactory
 
 class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPFSClient) {
     companion object KnownAddresses {
         const val HEN = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
+        const val HEN_ROYALTIES = "KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9"
         const val KALAMINT = "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"
-        const val FXHASH = "KT1KEa8z6vWXDJrVqtMrAeDVzsvxat3kHaCE"
+        const val FXHASH_V1 = "KT1KEa8z6vWXDJrVqtMrAeDVzsvxat3kHaCE"
+        const val FXHASH_MANAGER_LEGACY_V1 = "KT1XCoGnfupWk7Sp8536EfrxcP73LmT68Nyr"
+        const val FXHASH_V2 = "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
         const val VERSUM = "KT1LjmAdYQCLBjwv4S2oFkEzyHVkomAf5MrW"
     }
 
@@ -38,9 +39,14 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
                 part = getKalamintRoyalties(tokenId)
                 return part
             }
-            FXHASH -> {
-                logger.info("Token $id royalties pattern is FXHASH")
-                part = getFxHashRoyalties(tokenId)
+            FXHASH_V1 -> {
+                logger.info("Token $id royalties pattern is FXHASH_V1")
+                part = getFxHashV1Royalties(tokenId)
+                return part
+            }
+            FXHASH_V2 -> {
+                logger.info("Token $id royalties pattern is FXHASH_V2")
+                part = getFxHashV2Royalties(tokenId)
                 return part
             }
             VERSUM -> {
@@ -91,7 +97,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         var royaltiesMap: LinkedHashMap<String, String>
         val parts = mutableListOf<Part>()
         try {
-            val key = bigMapKeyClient.bigMapKeyWithId("522", tokenId)
+            val key = bigMapKeyClient.bigMapKeyWithName(HEN_ROYALTIES, "royalties", tokenId)
             royaltiesMap = key.value as LinkedHashMap<String, String>
             parts.add(Part(royaltiesMap["issuer"]!!, royaltiesMap["royalties"]!!.toLong() * 10))
         } catch (e: Exception) {
@@ -104,7 +110,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         var royaltiesMap: LinkedHashMap<String, String>
         val parts = mutableListOf<Part>()
         try {
-            val key = bigMapKeyClient.bigMapKeyWithId("861", tokenId)
+            val key = bigMapKeyClient.bigMapKeyWithName(KALAMINT, "tokens", tokenId)
             royaltiesMap = key.value as LinkedHashMap<String, String>
             parts.add(Part(royaltiesMap["creator"]!!, royaltiesMap["creator_royalty"]!!.toLong() * 100))
         } catch (e: Exception) {
@@ -113,16 +119,35 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         return parts
     }
 
-    private suspend fun getFxHashRoyalties(tokenId: String): List<Part> {
+    private suspend fun getFxHashV1Royalties(tokenId: String): List<Part> {
         var royaltiesMap: LinkedHashMap<String, String>
         var authorMap: LinkedHashMap<String, String>
         val parts = mutableListOf<Part>()
         try {
-            val royaltiesKey = bigMapKeyClient.bigMapKeyWithId("22788", tokenId)
+            val royaltiesKey = bigMapKeyClient.bigMapKeyWithName(FXHASH_V1, "token_data", tokenId)
             royaltiesMap = royaltiesKey.value as LinkedHashMap<String, String>
-            val authorKey = bigMapKeyClient.bigMapKeyWithId("70072", royaltiesMap["issuer_id"]!!)
+            val authorKey = bigMapKeyClient.bigMapKeyWithName(FXHASH_MANAGER_LEGACY_V1, "ledger", royaltiesMap["issuer_id"]!!)
             authorMap = authorKey.value as LinkedHashMap<String, String>
             parts.add(Part(authorMap["author"]!!, royaltiesMap["royalties"]!!.toLong() * 10))
+        } catch (e: Exception) {
+            logger.warn("Could not parse royalties for token $tokenId with FXHASH pattern: ${e.message}")
+        }
+        return parts
+    }
+
+    private suspend fun getFxHashV2Royalties(tokenId: String): List<Part> {
+        var royaltiesMap: LinkedHashMap<String, String>
+        var authorMap: LinkedHashMap<String, String>
+        val parts = mutableListOf<Part>()
+        try {
+            val royaltiesKey = bigMapKeyClient.bigMapKeyWithName(FXHASH_V2, "token_data", tokenId)
+            royaltiesMap = royaltiesKey.value as LinkedHashMap<String, String>
+            val royaltiesAmount = royaltiesMap["royalties"]!!.toLong()
+            val percentages = royaltiesMap["royalties_split"] as ArrayList<LinkedHashMap<String, String>>
+            percentages.forEach {
+                parts.add(Part(it["address"]!!, royaltiesAmount * it["pct"]!!.toLong() / 100))
+            }
+            //parts.add(Part(authorMap["author"]!!, royaltiesMap["royalties"]!!.toLong() * 10))
         } catch (e: Exception) {
             logger.warn("Could not parse royalties for token $tokenId with FXHASH pattern: ${e.message}")
         }

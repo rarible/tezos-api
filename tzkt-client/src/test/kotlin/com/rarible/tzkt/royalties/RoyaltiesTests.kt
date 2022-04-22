@@ -95,7 +95,7 @@ class RoyaltiesTests : BaseClientTests() {
     }
 
     @Test
-    fun `should correctly fetch and parse FXHASH royalties`() = runBlocking<Unit> {
+    fun `should correctly fetch and parse FXHASH_V1 royalties`() = runBlocking<Unit> {
         mock(
             """
             {
@@ -148,6 +148,44 @@ class RoyaltiesTests : BaseClientTests() {
         val id = "$contract:$tokenId"
         val parts = handler.processRoyalties(id)
         assertThat(parts).isEqualTo(listOf(Part("tz1b8GULAVKS1oHpYLJbwuTKvUegXtRbxH82", 10 * 150)))
+    }
+
+    @Test
+    fun `should correctly fetch and parse FXHASH_V2 royalties`() = runBlocking<Unit> {
+        mock(
+            """
+              {
+              	"id": 24307286,
+              	"active": true,
+              	"hash": "exprusuWs52aBfDXSpFNiutHZRyj45Lm39vySEiXHyb4UoVAdDbBjQ",
+              	"key": "638313",
+              	"value": {
+              		"minter": "tz1NpUTYsVB2Hdci6ycdWdTz66GvR5oLqQp8",
+              		"assigned": false,
+              		"issuer_id": "11681",
+              		"iteration": "121",
+              		"royalties": "110",
+              		"royalties_split": [{
+              			"pct": "500",
+              			"address": "tz1NpUTYsVB2Hdci6ycdWdTz66GvR5oLqQp8"
+              		}, {
+              			"pct": "500",
+              			"address": "tz1g1ZjehDWSJF9aGejq68rph4V24TTqCaRs"
+              		}]
+              	},
+              	"firstLevel": 2302891,
+              	"lastLevel": 2302891,
+              	"updates": 1
+              }
+        """.trimIndent()
+        )
+
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        var contract = "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
+        var tokenId = "638313"
+        val id = "$contract:$tokenId"
+        val parts = handler.processRoyalties(id)
+        assertThat(parts).isEqualTo(listOf(Part("tz1NpUTYsVB2Hdci6ycdWdTz66GvR5oLqQp8", 550), Part("tz1g1ZjehDWSJF9aGejq68rph4V24TTqCaRs", 550)))
     }
 
     @Test
@@ -455,7 +493,7 @@ class RoyaltiesTests : BaseClientTests() {
     }
 
     @Test
-    fun `should fetch empty royalties for failed first request with FXHASH`() = runBlocking<Unit> {
+    fun `should fetch empty royalties for failed first request with FXHASH_V1`() = runBlocking<Unit> {
         mock404()
 
         val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
@@ -467,7 +505,7 @@ class RoyaltiesTests : BaseClientTests() {
     }
 
     @Test
-    fun `should fetch empty royalties for failed second request with FXHASH`() = runBlocking<Unit> {
+    fun `should fetch empty royalties for failed second request with FXHASH_V1`() = runBlocking<Unit> {
         mock(
             """
             {
@@ -492,6 +530,18 @@ class RoyaltiesTests : BaseClientTests() {
 
         val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
         var contract = "KT1KEa8z6vWXDJrVqtMrAeDVzsvxat3kHaCE"
+        var tokenId = "522648"
+        val id = "$contract:$tokenId"
+        val parts = handler.processRoyalties(id)
+        assertThat(parts).isEqualTo(emptyList<Part>())
+    }
+
+    @Test
+    fun `should fetch empty royalties for failed first request with FXHASH_V2`() = runBlocking<Unit> {
+        mock404()
+
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        var contract = "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
         var tokenId = "522648"
         val id = "$contract:$tokenId"
         val parts = handler.processRoyalties(id)
