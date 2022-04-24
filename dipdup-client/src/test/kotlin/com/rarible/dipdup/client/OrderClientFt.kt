@@ -1,6 +1,7 @@
 package com.rarible.dipdup.client
 
 import com.rarible.dipdup.client.core.model.OrderStatus
+import com.rarible.dipdup.client.model.DipDupOrderSort
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -18,6 +19,7 @@ class OrderClientFt : BaseClientFt() {
         @JvmStatic
         fun allOrdersStatuses() = Stream.of(
             Arguments.of(OrderStatus.FILLED, """
+                        "__typename": "marketplace_order",
                         "cancelled": false,
                         "created_at": "2022-02-23T15:27:38+00:00",
                         "fill": 1,
@@ -43,6 +45,7 @@ class OrderClientFt : BaseClientFt() {
                         "take_value": 1,
                         "taker": null"""),
             Arguments.of(OrderStatus.ACTIVE, """
+                        "__typename": "marketplace_order",
                         "cancelled": false,
                         "created_at": "2022-02-23T15:32:24+00:00",
                         "fill": 0,
@@ -68,6 +71,7 @@ class OrderClientFt : BaseClientFt() {
                         "take_value": 1,
                         "taker": null"""),
             Arguments.of(OrderStatus.CANCELLED, """
+                        "__typename": "marketplace_order",
                         "cancelled": true,
                         "created_at": "2022-02-23T15:32:39+00:00",
                         "fill": 0,
@@ -100,7 +104,7 @@ class OrderClientFt : BaseClientFt() {
     fun `should return order`(status: OrderStatus, body: String) = runBlocking<Unit> {
         mock("""{"data": {"marketplace_order_by_pk":{$body}}}""")
 
-        val order = orderClient.getById("1")
+        val order = orderClient.getOrderById("1")
 
         assertThat(order).isNotNull
         assertThat(order.status).isEqualTo(status)
@@ -113,6 +117,7 @@ class OrderClientFt : BaseClientFt() {
               "data": {
                 "marketplace_order": [
                   {
+                        "__typename": "marketplace_order",
                         "cancelled": false,
                         "created_at": "2022-02-23T15:27:38+00:00",
                         "fill": 1,
@@ -139,6 +144,7 @@ class OrderClientFt : BaseClientFt() {
                         "taker": null
                   },
                   {
+                        "__typename": "marketplace_order",
                         "cancelled": false,
                         "created_at": "2022-02-23T15:27:38+00:00",
                         "fill": 1,
@@ -168,8 +174,14 @@ class OrderClientFt : BaseClientFt() {
               }
             }""")
 
-        val orders = orderClient.getOrders(10, "1")
-        assertThat(orders).hasSize(2)
+        val page = orderClient.getOrdersAll(
+            statuses = emptyList(),
+            sort = DipDupOrderSort.LAST_UPDATE_DESC,
+            size = 10,
+            continuation = null
+        )
+        assertThat(page.orders).hasSize(2)
+        assertThat(page.continuation).isNull()
     }
 
 
@@ -180,6 +192,7 @@ class OrderClientFt : BaseClientFt() {
                 "data": {
                     "marketplace_order": [
                         {
+                            "__typename": "marketplace_order",
                             "cancelled": false,
                             "created_at": "2022-02-23T15:27:38+00:00",
                             "fill": 1,
@@ -206,6 +219,7 @@ class OrderClientFt : BaseClientFt() {
                             "taker": null
                         },
                         {
+                            "__typename": "marketplace_order",
                             "cancelled": false,
                             "created_at": "2022-02-23T15:27:38+00:00",
                             "fill": 1,
@@ -246,6 +260,7 @@ class OrderClientFt : BaseClientFt() {
               "data": {
                 "marketplace_order": [
                   {
+                    "__typename": "marketplace_order",
                     "cancelled": false,
                     "created_at": "2022-02-23T15:27:38+00:00",
                     "fill": 1,
@@ -273,11 +288,13 @@ class OrderClientFt : BaseClientFt() {
                   }]}}
         """.trimIndent())
         val orders = orderClient.getOrdersByItem(
-            contract = "KT1H8sxNSgnkCeZsij4z76pkXu8BCZNvPZEx",
-            id = "3",
-            limit = 10,
-            prevId = "1"
+            contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton",
+            tokenId = "691915",
+            maker = null,
+            statuses = listOf(),
+            size = 2,
+            continuation = "1659577833_42737510-3635-53a9-85cc-c37c81c74cf6"
         )
-        assertThat(orders).hasSize(1)
+        assertThat(orders.orders).hasSize(1)
     }
 }

@@ -7,7 +7,7 @@ import java.time.OffsetDateTime
 data class DipDupOrder(
     val id: String,
     val fill: BigDecimal,
-    val makeStock: BigInteger,
+    val makeStock: BigDecimal,
     val platform: TezosPlatform,
     val cancelled: Boolean,
     val status: OrderStatus,

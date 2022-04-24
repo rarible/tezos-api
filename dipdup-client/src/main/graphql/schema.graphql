@@ -488,7 +488,7 @@ type dipdup_index {
   template_values("JSON select path" path: String): jsonb
 
   """
-  operation: operation\nbig_map: big_map\nhead: head
+  operation: operation\nbig_map: big_map\nhead: head\ntoken_transfer: token_transfer
   """
   type: String!
 
@@ -849,7 +849,7 @@ input jsonb_comparison_exp {
 columns and relationships of "marketplace_activity"
 """
 type marketplace_activity {
-  id: bigint!
+  id: uuid!
 
   internal_order_id: String!
 
@@ -868,11 +868,17 @@ type marketplace_activity {
 
   network: String!
 
+  operation_counter: Int!
+
   operation_hash: String!
 
   operation_level: Int!
 
+  operation_nonce: Int
+
   operation_timestamp: timestamptz!
+
+  order_id: uuid!
 
   """
   HEN: Hen\nOBJKT: Objkt\nOBJKT_V2: Objkt_v2\nRARIBLE: Rarible
@@ -910,7 +916,7 @@ input marketplace_activity_bool_exp {
 
   _or: [marketplace_activity_bool_exp!]
 
-  id: bigint_comparison_exp
+  id: uuid_comparison_exp
 
   internal_order_id: String_comparison_exp
 
@@ -926,11 +932,17 @@ input marketplace_activity_bool_exp {
 
   network: String_comparison_exp
 
+  operation_counter: Int_comparison_exp
+
   operation_hash: String_comparison_exp
 
   operation_level: Int_comparison_exp
 
+  operation_nonce: Int_comparison_exp
+
   operation_timestamp: timestamptz_comparison_exp
+
+  order_id: uuid_comparison_exp
 
   platform: String_comparison_exp
 
@@ -969,11 +981,17 @@ input marketplace_activity_order_by {
 
   network: order_by
 
+  operation_counter: order_by
+
   operation_hash: order_by
 
   operation_level: order_by
 
+  operation_nonce: order_by
+
   operation_timestamp: order_by
+
+  order_id: order_by
 
   platform: order_by
 
@@ -1039,6 +1057,11 @@ enum marketplace_activity_select_column {
   """
   column name
   """
+  operation_counter
+
+  """
+  column name
+  """
   operation_hash
 
   """
@@ -1049,7 +1072,17 @@ enum marketplace_activity_select_column {
   """
   column name
   """
+  operation_nonce
+
+  """
+  column name
+  """
   operation_timestamp
+
+  """
+  column name
+  """
+  order_id
 
   """
   column name
@@ -1104,7 +1137,7 @@ type marketplace_order {
 
   fill: numeric!
 
-  id: bigint!
+  id: uuid!
 
   internal_order_id: String!
 
@@ -1175,7 +1208,7 @@ input marketplace_order_bool_exp {
 
   fill: numeric_comparison_exp
 
-  id: bigint_comparison_exp
+  id: uuid_comparison_exp
 
   internal_order_id: String_comparison_exp
 
@@ -1528,7 +1561,7 @@ type query_root {
   """
   fetch data from the table: "marketplace_activity" using primary key columns
   """
-  marketplace_activity_by_pk(id: bigint!): marketplace_activity
+  marketplace_activity_by_pk(id: uuid!): marketplace_activity
 
   """
   fetch data from the table: "marketplace_order"
@@ -1538,7 +1571,7 @@ type query_root {
   """
   fetch data from the table: "marketplace_order" using primary key columns
   """
-  marketplace_order_by_pk(id: bigint!): marketplace_order
+  marketplace_order_by_pk(id: uuid!): marketplace_order
 }
 
 type subscription_root {
@@ -1615,7 +1648,7 @@ type subscription_root {
   """
   fetch data from the table: "marketplace_activity" using primary key columns
   """
-  marketplace_activity_by_pk(id: bigint!): marketplace_activity
+  marketplace_activity_by_pk(id: uuid!): marketplace_activity
 
   """
   fetch data from the table: "marketplace_order"
@@ -1625,7 +1658,7 @@ type subscription_root {
   """
   fetch data from the table: "marketplace_order" using primary key columns
   """
-  marketplace_order_by_pk(id: bigint!): marketplace_order
+  marketplace_order_by_pk(id: uuid!): marketplace_order
 }
 
 scalar timestamptz
@@ -1651,6 +1684,31 @@ input timestamptz_comparison_exp {
   _neq: timestamptz
 
   _nin: [timestamptz!]
+}
+
+scalar uuid
+
+"""
+Boolean expression to compare columns of type "uuid". All fields are combined with logical 'AND'.
+"""
+input uuid_comparison_exp {
+  _eq: uuid
+
+  _gt: uuid
+
+  _gte: uuid
+
+  _in: [uuid!]
+
+  _is_null: Boolean
+
+  _lt: uuid
+
+  _lte: uuid
+
+  _neq: uuid
+
+  _nin: [uuid!]
 }
 
 schema {
