@@ -287,6 +287,81 @@ class RoyaltiesTests : BaseClientTests() {
     }
 
     @Test
+    fun `should correctly fetch and parse Royalties Manager royalties for a whole collection`() = runBlocking<Unit> {
+        mock404()
+        mock404()
+        mock404()
+        mock(
+            """
+            {
+            	"id": 22207733,
+            	"active": true,
+            	"hash": "expru8351NLHUryTPgjr7HHsP5P2ZDWrXao1UmYLRM4f7paxTFrY5x",
+            	"key": {
+            		"nat": null,
+            		"address": "KT1KmwGzJvehhfk3pHMD6XBuarqDwiy2TJwu"
+            	},
+            	"value": [{
+            		"partValue": "700",
+            		"partAccount": "tz1TS2nBAzAtcnLg45fVZYHhJMdpieKVALwP"
+            	}],
+            	"firstLevel": 2242276,
+            	"lastLevel": 2242276,
+            	"updates": 1
+            }
+        """.trimIndent()
+        )
+
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        var contract = "KT1HNNrmCk1fpqveRDz8Fvww2GM4gPzmA7fo"
+        var tokenId = "2"
+        val id = "$contract:$tokenId"
+        val parts = handler.processRoyalties(id)
+        assertThat(parts).isEqualTo(
+            listOf(
+                Part("tz1TS2nBAzAtcnLg45fVZYHhJMdpieKVALwP", 700)
+            )
+        )
+    }
+
+    @Test
+    fun `should correctly fetch and parse Royalties Manager royalties for a specific token`() = runBlocking<Unit> {
+        mock404()
+        mock404()
+        mock(
+            """
+            {
+            	"id": 22207733,
+            	"active": true,
+            	"hash": "expru8351NLHUryTPgjr7HHsP5P2ZDWrXao1UmYLRM4f7paxTFrY5x",
+            	"key": {
+            		"nat": null,
+            		"address": "KT1KmwGzJvehhfk3pHMD6XBuarqDwiy2TJwu"
+            	},
+            	"value": [{
+            		"partValue": "700",
+            		"partAccount": "tz1TS2nBAzAtcnLg45fVZYHhJMdpieKVALwP"
+            	}],
+            	"firstLevel": 2242276,
+            	"lastLevel": 2242276,
+            	"updates": 1
+            }
+        """.trimIndent()
+        )
+
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        var contract = "KT1HNNrmCk1fpqveRDz8Fvww2GM4gPzmA7fo"
+        var tokenId = "2"
+        val id = "$contract:$tokenId"
+        val parts = handler.processRoyalties(id)
+        assertThat(parts).isEqualTo(
+            listOf(
+                Part("tz1TS2nBAzAtcnLg45fVZYHhJMdpieKVALwP", 700)
+            )
+        )
+    }
+
+    @Test
     fun `should correctly fetch and parse OBJKT royalties`() = runBlocking<Unit> {
         mock404()
         mock(
@@ -564,6 +639,9 @@ class RoyaltiesTests : BaseClientTests() {
     fun `should fetch empty royalties for failed first and second request with RARIBLE`() = runBlocking<Unit> {
         mock404()
         mock404()
+        mock404()
+        mock404()
+
         val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
         var contract = "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS"
         var tokenId = "54686"
@@ -574,6 +652,8 @@ class RoyaltiesTests : BaseClientTests() {
 
     @Test
     fun `should fetch empty royalties for failed first and second request with RARIBLE generated collection`() = runBlocking<Unit> {
+        mock404()
+        mock404()
         mock404()
         mock404()
 
@@ -587,6 +667,8 @@ class RoyaltiesTests : BaseClientTests() {
 
     @Test
     fun `should fetch empty royalties for failed first request with OBJKT`() = runBlocking<Unit> {
+        mock404()
+        mock404()
         mock404()
         mock404()
 
@@ -621,6 +703,9 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
         mock404()
+        mock404()
+        mock404()
+        mock404()
 
         val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
         var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
@@ -634,7 +719,8 @@ class RoyaltiesTests : BaseClientTests() {
     fun `should fetch empty royalties for failed first request with SWEET IO`() = runBlocking<Unit> {
         mock404()
         mock404()
-
+        mock404()
+        mock404()
         val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
         var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
         var tokenId = "2"
@@ -666,9 +752,26 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
         mock404()
+        mock404()
+        mock404()
 
         val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
         var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
+        var tokenId = "2"
+        val id = "$contract:$tokenId"
+        val parts = handler.processRoyalties(id)
+        assertThat(parts).isEqualTo(emptyList<Part>())
+    }
+
+    @Test
+    fun `should fetch empty royalties with all requests failed`() = runBlocking<Unit> {
+        mock404()
+        mock404()
+        mock404()
+        mock404()
+
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tX"
         var tokenId = "2"
         val id = "$contract:$tokenId"
         val parts = handler.processRoyalties(id)

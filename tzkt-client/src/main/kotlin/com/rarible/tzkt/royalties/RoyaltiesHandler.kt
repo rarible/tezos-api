@@ -6,6 +6,8 @@ import com.rarible.tzkt.client.IPFSClient
 import com.rarible.tzkt.model.Part
 import okio.ByteString.Companion.decodeHex
 import org.slf4j.LoggerFactory
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPFSClient) {
     companion object KnownAddresses {
@@ -16,6 +18,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         const val FXHASH_MANAGER_LEGACY_V1 = "KT1XCoGnfupWk7Sp8536EfrxcP73LmT68Nyr"
         const val FXHASH_V2 = "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
         const val VERSUM = "KT1LjmAdYQCLBjwv4S2oFkEzyHVkomAf5MrW"
+        const val ROYALTIES_MANAGER = "KT1HNNrmCk1fpqveRDz8Fvww2GM4gPzmA7fo"
     }
 
     val logger = LoggerFactory.getLogger(javaClass)
@@ -59,7 +62,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         //check rarible pattern in generated contract storage
         part = getRaribleRoyalties(contract, tokenId)
 
-        if (!part.isNullOrEmpty()) {
+        if (part.isNotEmpty()) {
             logger.info("Token $id royalties pattern is RARIBLE")
             return part
         }
@@ -71,6 +74,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
             val metadataMap = tokenMetadata.value as LinkedHashMap<String, String>
             val metadata = metadataMap["token_info"] as LinkedHashMap<String, String>
             val uri = metadata[""]?.decodeHex()?.utf8()
+            //TODO: handle other type of URLS, not only ipfs://
             val hash = uri!!.split("//")
             val ipfsData = ipfsClient.data(hash[1])
 
@@ -88,6 +92,10 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
             }
         } catch (e: Exception) {
             logger.warn("Could not parse royalties for token $id from IPFS metadata: ${e.message}")
+        }
+
+        if(part.isNullOrEmpty()) {
+            part = getRoyaltiesFromRoyaltiesManager(contract, tokenId)
         }
 
         return part
@@ -222,5 +230,31 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         }
 
         return partList
+    }
+
+    private suspend fun getRoyaltiesFromRoyaltiesManager(contract: String, tokenId: String): List<Part> {
+        val parts = mutableListOf<Part>()
+        var data: List<LinkedHashMap<String, String>>? = null
+        try {
+            val tokenKeyValue = "{\"address\":\"$contract\",\"nat\":$tokenId}"
+            val key = bigMapKeyClient.bigMapKeyWithName(ROYALTIES_MANAGER, "royalties", URLEncoder.encode(tokenKeyValue, StandardCharsets.UTF_8.toString()))
+            data = key.value as List<LinkedHashMap<String, String>>
+        } catch (e: Exception) {
+            logger.warn("Could not parse royalties for token $tokenId with Royalties Manager (with token id) pattern: ${e.message}")
+        }
+
+        if(data.isNullOrEmpty()){
+            try {
+                val tokenKeyValue = "{\"address\":\"$contract\",\"nat\":null}"
+                val key = bigMapKeyClient.bigMapKeyWithName(ROYALTIES_MANAGER, "royalties", URLEncoder.encode(tokenKeyValue, StandardCharsets.UTF_8.toString()))
+                data = key.value as List<LinkedHashMap<String, String>>
+            } catch (e: Exception) {
+                logger.warn("Could not parse royalties for token $tokenId with Royalties Manager (without token id) pattern: ${e.message}")
+            }
+        }
+        data?.forEach { part ->
+            parts.add(Part(part["partAccount"]!!, part["partValue"]!!.toLong()))
+        }
+        return parts
     }
 }
