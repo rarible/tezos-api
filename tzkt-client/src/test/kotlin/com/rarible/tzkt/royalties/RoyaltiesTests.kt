@@ -1,5 +1,6 @@
 package com.rarible.tzkt.royalties
 
+import com.fasterxml.jackson.databind.node.ArrayNode
 import com.rarible.tzkt.client.BaseClientTests
 import com.rarible.tzkt.client.BigMapKeyClient
 import com.rarible.tzkt.client.IPFSClient
@@ -8,7 +9,6 @@ import com.rarible.tzkt.model.Part
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Ignore
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.web.reactive.function.client.WebClient
@@ -778,23 +778,22 @@ class RoyaltiesTests : BaseClientTests() {
         assertThat(parts).isEqualTo(emptyList<Part>())
     }
 
-    @Ignore
+    @Test
     fun `should verify that royalties are parsed for all tokens`() = runBlocking<Unit> {
         val localTzkt = "https://api.tzkt.io"
         val clientBuilder = WebClient.builder().baseUrl(localTzkt)
             .codecs { configurer -> configurer.defaultCodecs().maxInMemorySize(2 * 1024 * 1024) }.build()
         val bmClient = BigMapKeyClient(clientBuilder)
         val tokenClient = TokenClient(clientBuilder)
-        val ipfs = IPFSClient(WebClient.create("https://rarible.mypinata.cloud/"))
+        val ipfs = IPFSClient(WebClient.create("https://ipfs.io/"))
         val limit = 20
-        val continuation = 0L
+        val continuation = 90951L
         val handler = RoyaltiesHandler(bmClient, ipfs)
         var tokens = tokenClient.tokens(limit, continuation)
         var totalOK = 0
         var totalKO = 0
         val filePath = "/Users/florianpautot/Desktop/logs/errors.txt"
         File(filePath).writeText("==================\nStarting Run\n==================\n")
-
         while (tokens.isNotEmpty()) {
             val lastId = tokens.last().id!!.toLong()
             runBlocking {
@@ -802,13 +801,29 @@ class RoyaltiesTests : BaseClientTests() {
                     launch {
                         val id = "${it.contract?.address}:${it.tokenId}"
                         val parts = handler.processRoyalties(id)
-                        if (parts.isNullOrEmpty()) {
+                        val legacyParts = mutableListOf<Part>()
+                        try {
+                            val legacyRoyalties = ipfsClient.data("https://tezos-api.rarible.org/v0.1/items/$id")
+                            if(legacyRoyalties.has("royalties")){
+                                val shares = legacyRoyalties["royalties"] as ArrayNode
+                                shares.forEach {
+                                    legacyParts.add(Part(it["account"]!!.textValue(), it["value"]!!.longValue()))
+                                }
+                            }
+                            if (parts.toList() != legacyParts.toList()) {
+                                logger.error("Error parsing royalties for $id")
+                                File(filePath).appendText("$id\n")
+                                totalKO++
+                            } else {
+                                totalOK++
+                            }
+                        } catch (e: Exception){
+                            logger.error("Error fetching data: ${e.message}")
                             logger.error("Error parsing royalties for $id")
                             File(filePath).appendText("$id\n")
                             totalKO++
-                        } else {
-                            totalOK++
                         }
+
                     }
                 }
             }

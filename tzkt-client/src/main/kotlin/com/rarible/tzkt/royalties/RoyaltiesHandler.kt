@@ -74,21 +74,19 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
             val metadataMap = tokenMetadata.value as LinkedHashMap<String, String>
             val metadata = metadataMap["token_info"] as LinkedHashMap<String, String>
             val uri = metadata[""]?.decodeHex()?.utf8()
-            //TODO: handle other type of URLS, not only ipfs://
-            val hash = uri!!.split("//")
-            val ipfsData = ipfsClient.data(hash[1])
-
-            if (ipfsData.has("royalties")) {
-                val royalties = ipfsData["royalties"] as JsonNode
-                if (royalties.has("shares") && royalties.has("decimals")) {
-                    logger.info("Token $id royalties pattern is OBJKT")
-                    part = getObjktRoyalties(royalties)
-                    return part
+            if(!uri.isNullOrEmpty()){
+                val ipfsData = fetchIpfsData(uri)
+                if (ipfsData.has("royalties")) {
+                    val royalties = ipfsData["royalties"] as JsonNode
+                    if (royalties.has("shares") && royalties.has("decimals")) {
+                        logger.info("Token $id royalties pattern is OBJKT")
+                        part = getObjktRoyalties(royalties)
+                        return part
+                    }
                 }
-            }
-
-            if (ipfsData.has("attributes")) {
-                part = getSweetIORoyalties(ipfsData)
+                if (ipfsData.has("attributes")) {
+                    part = getSweetIORoyalties(ipfsData)
+                }
             }
         } catch (e: Exception) {
             logger.warn("Could not parse royalties for token $id from IPFS metadata: ${e.message}")
@@ -256,5 +254,14 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
             parts.add(Part(part["partAccount"]!!, part["partValue"]!!.toLong()))
         }
         return parts
+    }
+
+    private suspend fun fetchIpfsData(url: String): JsonNode{
+        return if(url.startsWith("ipfs://")){
+            val hash = url!!.split("//")
+            ipfsClient.ipfsData(hash[1])
+        } else {
+            ipfsClient.data(url)
+        }
     }
 }
