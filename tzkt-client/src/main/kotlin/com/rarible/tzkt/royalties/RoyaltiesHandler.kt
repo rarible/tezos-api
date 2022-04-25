@@ -9,18 +9,7 @@ import org.slf4j.LoggerFactory
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
-class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPFSClient) {
-    companion object KnownAddresses {
-        const val HEN = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
-        const val HEN_ROYALTIES = "KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9"
-        const val KALAMINT = "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"
-        const val FXHASH_V1 = "KT1KEa8z6vWXDJrVqtMrAeDVzsvxat3kHaCE"
-        const val FXHASH_MANAGER_LEGACY_V1 = "KT1XCoGnfupWk7Sp8536EfrxcP73LmT68Nyr"
-        const val FXHASH_V2 = "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
-        const val VERSUM = "KT1LjmAdYQCLBjwv4S2oFkEzyHVkomAf5MrW"
-        const val ROYALTIES_MANAGER = "KT1HNNrmCk1fpqveRDz8Fvww2GM4gPzmA7fo"
-    }
-
+class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPFSClient, val royaltiesConfig: RoyaltiesConfig) {
     val logger = LoggerFactory.getLogger(javaClass)
 
     suspend fun processRoyalties(id: String): List<Part> {
@@ -32,27 +21,27 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         var part: List<Part>
 
         when (contract){
-            HEN -> {
+            royaltiesConfig.hen -> {
                 logger.info("Token $id royalties pattern is HEN")
                 part = getHENRoyalties(tokenId)
                 return part
             }
-            KALAMINT -> {
+            royaltiesConfig.kalamint -> {
                 logger.info("Token $id royalties pattern is KALAMINT")
                 part = getKalamintRoyalties(tokenId)
                 return part
             }
-            FXHASH_V1 -> {
+            royaltiesConfig.fxhashV1 -> {
                 logger.info("Token $id royalties pattern is FXHASH_V1")
                 part = getFxHashV1Royalties(tokenId)
                 return part
             }
-            FXHASH_V2 -> {
+            royaltiesConfig.fxhashV2 -> {
                 logger.info("Token $id royalties pattern is FXHASH_V2")
                 part = getFxHashV2Royalties(tokenId)
                 return part
             }
-            VERSUM -> {
+            royaltiesConfig.versum -> {
                 logger.info("Token $id royalties pattern is VERSUM")
                 part = getVersumRoyalties(tokenId)
                 return part
@@ -103,7 +92,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         var royaltiesMap: LinkedHashMap<String, String>
         val parts = mutableListOf<Part>()
         try {
-            val key = bigMapKeyClient.bigMapKeyWithName(HEN_ROYALTIES, "royalties", tokenId)
+            val key = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.henRoyalties, "royalties", tokenId)
             royaltiesMap = key.value as LinkedHashMap<String, String>
             parts.add(Part(royaltiesMap["issuer"]!!, royaltiesMap["royalties"]!!.toLong() * 10))
         } catch (e: Exception) {
@@ -116,7 +105,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         var royaltiesMap: LinkedHashMap<String, String>
         val parts = mutableListOf<Part>()
         try {
-            val key = bigMapKeyClient.bigMapKeyWithName(KALAMINT, "tokens", tokenId)
+            val key = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.kalamint, "tokens", tokenId)
             royaltiesMap = key.value as LinkedHashMap<String, String>
             parts.add(Part(royaltiesMap["creator"]!!, royaltiesMap["creator_royalty"]!!.toLong() * 100))
         } catch (e: Exception) {
@@ -130,9 +119,9 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         var authorMap: LinkedHashMap<String, String>
         val parts = mutableListOf<Part>()
         try {
-            val royaltiesKey = bigMapKeyClient.bigMapKeyWithName(FXHASH_V1, "token_data", tokenId)
+            val royaltiesKey = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.fxhashV1, "token_data", tokenId)
             royaltiesMap = royaltiesKey.value as LinkedHashMap<String, String>
-            val authorKey = bigMapKeyClient.bigMapKeyWithName(FXHASH_MANAGER_LEGACY_V1, "ledger", royaltiesMap["issuer_id"]!!)
+            val authorKey = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.fxhashV1Manager, "ledger", royaltiesMap["issuer_id"]!!)
             authorMap = authorKey.value as LinkedHashMap<String, String>
             parts.add(Part(authorMap["author"]!!, royaltiesMap["royalties"]!!.toLong() * 10))
         } catch (e: Exception) {
@@ -146,7 +135,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         var authorMap: LinkedHashMap<String, String>
         val parts = mutableListOf<Part>()
         try {
-            val royaltiesKey = bigMapKeyClient.bigMapKeyWithName(FXHASH_V2, "token_data", tokenId)
+            val royaltiesKey = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.fxhashV2, "token_data", tokenId)
             royaltiesMap = royaltiesKey.value as LinkedHashMap<String, String>
             val royaltiesAmount = royaltiesMap["royalties"]!!.toLong()
             val percentages = royaltiesMap["royalties_split"] as ArrayList<LinkedHashMap<String, String>>
@@ -165,7 +154,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         var royaltiesMap: LinkedHashMap<String, String>
         val parts = mutableListOf<Part>()
         try {
-            val key = bigMapKeyClient.bigMapKeyWithId("75555", tokenId)
+            val key = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.versum,"token_extra_data", tokenId)
             royaltiesMap = key.value as LinkedHashMap<String, String>
             parts.add(Part(royaltiesMap["minter"]!!, royaltiesMap["royalty"]!!.toLong() * 10))
         } catch (e: Exception) {
@@ -235,7 +224,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         var data: List<LinkedHashMap<String, String>>? = null
         try {
             val tokenKeyValue = "{\"address\":\"$contract\",\"nat\":$tokenId}"
-            val key = bigMapKeyClient.bigMapKeyWithName(ROYALTIES_MANAGER, "royalties", URLEncoder.encode(tokenKeyValue, StandardCharsets.UTF_8.toString()))
+            val key = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.royaltiesManager, "royalties", URLEncoder.encode(tokenKeyValue, StandardCharsets.UTF_8.toString()))
             data = key.value as List<LinkedHashMap<String, String>>
         } catch (e: Exception) {
             logger.warn("Could not parse royalties for token $tokenId with Royalties Manager (with token id) pattern: ${e.message}")
@@ -244,7 +233,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         if(data.isNullOrEmpty()){
             try {
                 val tokenKeyValue = "{\"address\":\"$contract\",\"nat\":null}"
-                val key = bigMapKeyClient.bigMapKeyWithName(ROYALTIES_MANAGER, "royalties", URLEncoder.encode(tokenKeyValue, StandardCharsets.UTF_8.toString()))
+                val key = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.royaltiesManager, "royalties", URLEncoder.encode(tokenKeyValue, StandardCharsets.UTF_8.toString()))
                 data = key.value as List<LinkedHashMap<String, String>>
             } catch (e: Exception) {
                 logger.warn("Could not parse royalties for token $tokenId with Royalties Manager (without token id) pattern: ${e.message}")

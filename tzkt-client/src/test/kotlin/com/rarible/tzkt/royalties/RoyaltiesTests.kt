@@ -9,6 +9,7 @@ import com.rarible.tzkt.model.Part
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Ignore
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.web.reactive.function.client.WebClient
@@ -19,6 +20,26 @@ class RoyaltiesTests : BaseClientTests() {
     val bigMapKeyClient = BigMapKeyClient(client)
     val ipfsClient = IPFSClient(client)
     val logger = LoggerFactory.getLogger(javaClass)
+
+    val HEN = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
+    val HEN_ROYALTIES = "KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9"
+    val KALAMINT = "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"
+    val FXHASH_V1 = "KT1KEa8z6vWXDJrVqtMrAeDVzsvxat3kHaCE"
+    val FXHASH_MANAGER_LEGACY_V1 = "KT1XCoGnfupWk7Sp8536EfrxcP73LmT68Nyr"
+    val FXHASH_V2 = "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
+    val VERSUM = "KT1LjmAdYQCLBjwv4S2oFkEzyHVkomAf5MrW"
+    val ROYALTIES_MANAGER = "KT1HNNrmCk1fpqveRDz8Fvww2GM4gPzmA7fo"
+
+    val royaltiesConfig = RoyaltiesConfig(
+        hen = HEN,
+        henRoyalties = HEN_ROYALTIES,
+        kalamint = KALAMINT,
+        fxhashV1 = FXHASH_V1,
+        fxhashV1Manager = FXHASH_MANAGER_LEGACY_V1,
+        fxhashV2 = FXHASH_V2,
+        versum = VERSUM,
+        royaltiesManager = ROYALTIES_MANAGER
+    )
 
     @Test
     fun `should correctly fetch and parse HEN royalties`() = runBlocking<Unit> {
@@ -40,7 +61,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
         var tokenId = "717867"
         val id = "$contract:$tokenId"
@@ -86,7 +107,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"
         var tokenId = "53057"
         val id = "$contract:$tokenId"
@@ -142,7 +163,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1KEa8z6vWXDJrVqtMrAeDVzsvxat3kHaCE"
         var tokenId = "522648"
         val id = "$contract:$tokenId"
@@ -180,7 +201,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
         var tokenId = "638313"
         val id = "$contract:$tokenId"
@@ -218,7 +239,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1LjmAdYQCLBjwv4S2oFkEzyHVkomAf5MrW"
         var tokenId = "19471"
         val id = "$contract:$tokenId"
@@ -246,7 +267,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS"
         var tokenId = "54686"
         val id = "$contract:$tokenId"
@@ -274,7 +295,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT19dDquUBH73ifo1M2jt7vvk8XyirTbUsih"
         var tokenId = "2"
         val id = "$contract:$tokenId"
@@ -312,7 +333,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1HNNrmCk1fpqveRDz8Fvww2GM4gPzmA7fo"
         var tokenId = "2"
         val id = "$contract:$tokenId"
@@ -349,7 +370,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1HNNrmCk1fpqveRDz8Fvww2GM4gPzmA7fo"
         var tokenId = "2"
         val id = "$contract:$tokenId"
@@ -442,7 +463,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
         var tokenId = "0"
         val id = "$contract:$tokenId"
@@ -531,7 +552,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
         var tokenId = "2"
         val id = "$contract:$tokenId"
@@ -547,7 +568,7 @@ class RoyaltiesTests : BaseClientTests() {
     fun `should fetch empty royalties for failed request with HEN`() = runBlocking<Unit> {
         mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
         var tokenId = "717867"
         val id = "$contract:$tokenId"
@@ -559,7 +580,7 @@ class RoyaltiesTests : BaseClientTests() {
     fun `should fetch empty royalties for failed request with KALAMINT`() = runBlocking<Unit> {
         mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"
         var tokenId = "53057"
         val id = "$contract:$tokenId"
@@ -571,7 +592,7 @@ class RoyaltiesTests : BaseClientTests() {
     fun `should fetch empty royalties for failed first request with FXHASH_V1`() = runBlocking<Unit> {
         mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1KEa8z6vWXDJrVqtMrAeDVzsvxat3kHaCE"
         var tokenId = "522648"
         val id = "$contract:$tokenId"
@@ -603,7 +624,7 @@ class RoyaltiesTests : BaseClientTests() {
 
         mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1KEa8z6vWXDJrVqtMrAeDVzsvxat3kHaCE"
         var tokenId = "522648"
         val id = "$contract:$tokenId"
@@ -615,7 +636,7 @@ class RoyaltiesTests : BaseClientTests() {
     fun `should fetch empty royalties for failed first request with FXHASH_V2`() = runBlocking<Unit> {
         mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
         var tokenId = "522648"
         val id = "$contract:$tokenId"
@@ -627,7 +648,7 @@ class RoyaltiesTests : BaseClientTests() {
     fun `should fetch empty royalties for failed request with VERSUM`() = runBlocking<Unit> {
         mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1LjmAdYQCLBjwv4S2oFkEzyHVkomAf5MrW"
         var tokenId = "19471"
         val id = "$contract:$tokenId"
@@ -642,7 +663,7 @@ class RoyaltiesTests : BaseClientTests() {
         mock404()
         mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS"
         var tokenId = "54686"
         val id = "$contract:$tokenId"
@@ -657,7 +678,7 @@ class RoyaltiesTests : BaseClientTests() {
         mock404()
         mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT19dDquUBH73ifo1M2jt7vvk8XyirTbUsih"
         var tokenId = "2"
         val id = "$contract:$tokenId"
@@ -672,7 +693,7 @@ class RoyaltiesTests : BaseClientTests() {
         mock404()
         mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
         var tokenId = "0"
         val id = "$contract:$tokenId"
@@ -707,7 +728,7 @@ class RoyaltiesTests : BaseClientTests() {
         mock404()
         mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
         var tokenId = "0"
         val id = "$contract:$tokenId"
@@ -721,7 +742,7 @@ class RoyaltiesTests : BaseClientTests() {
         mock404()
         mock404()
         mock404()
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
         var tokenId = "2"
         val id = "$contract:$tokenId"
@@ -755,7 +776,7 @@ class RoyaltiesTests : BaseClientTests() {
         mock404()
         mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
         var tokenId = "2"
         val id = "$contract:$tokenId"
@@ -770,7 +791,7 @@ class RoyaltiesTests : BaseClientTests() {
         mock404()
         mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tX"
         var tokenId = "2"
         val id = "$contract:$tokenId"
@@ -778,7 +799,7 @@ class RoyaltiesTests : BaseClientTests() {
         assertThat(parts).isEqualTo(emptyList<Part>())
     }
 
-    @Test
+    @Ignore
     fun `should verify that royalties are parsed for all tokens`() = runBlocking<Unit> {
         val localTzkt = "https://api.tzkt.io"
         val clientBuilder = WebClient.builder().baseUrl(localTzkt)
@@ -788,7 +809,7 @@ class RoyaltiesTests : BaseClientTests() {
         val ipfs = IPFSClient(WebClient.create("https://ipfs.io/"))
         val limit = 20
         val continuation = 90951L
-        val handler = RoyaltiesHandler(bmClient, ipfs)
+        val handler = RoyaltiesHandler(bmClient, ipfs, royaltiesConfig)
         var tokens = tokenClient.tokens(limit, continuation)
         var totalOK = 0
         var totalKO = 0
