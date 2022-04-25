@@ -13,36 +13,38 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
     val logger = LoggerFactory.getLogger(javaClass)
 
     suspend fun processRoyalties(id: String): List<Part> {
-        logger.info("Checking royalties for token $id")
-        //check if address is known
-        //check storage
         val contract = id.split(":")[0]
         val tokenId = id.split(":")[1]
+        return processRoyalties(contract, tokenId)
+    }
+
+    suspend fun processRoyalties(contract: String, tokenId: String): List<Part> {
+        logger.info("Checking royalties for token $contract:$tokenId")
         var part: List<Part>
 
         when (contract){
             royaltiesConfig.hen -> {
-                logger.info("Token $id royalties pattern is HEN")
+                logger.info("Token $contract:$tokenId royalties pattern is HEN")
                 part = getHENRoyalties(tokenId)
                 return part
             }
             royaltiesConfig.kalamint -> {
-                logger.info("Token $id royalties pattern is KALAMINT")
+                logger.info("Token $contract:$tokenId royalties pattern is KALAMINT")
                 part = getKalamintRoyalties(tokenId)
                 return part
             }
             royaltiesConfig.fxhashV1 -> {
-                logger.info("Token $id royalties pattern is FXHASH_V1")
+                logger.info("Token $contract:$tokenId royalties pattern is FXHASH_V1")
                 part = getFxHashV1Royalties(tokenId)
                 return part
             }
             royaltiesConfig.fxhashV2 -> {
-                logger.info("Token $id royalties pattern is FXHASH_V2")
+                logger.info("Token $contract:$tokenId royalties pattern is FXHASH_V2")
                 part = getFxHashV2Royalties(tokenId)
                 return part
             }
             royaltiesConfig.versum -> {
-                logger.info("Token $id royalties pattern is VERSUM")
+                logger.info("Token $contract:$tokenId royalties pattern is VERSUM")
                 part = getVersumRoyalties(tokenId)
                 return part
             }
@@ -52,7 +54,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         part = getRaribleRoyalties(contract, tokenId)
 
         if (part.isNotEmpty()) {
-            logger.info("Token $id royalties pattern is RARIBLE")
+            logger.info("Token $contract:$tokenId royalties pattern is RARIBLE")
             return part
         }
 
@@ -68,7 +70,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
                 if (ipfsData.has("royalties")) {
                     val royalties = ipfsData["royalties"] as JsonNode
                     if (royalties.has("shares") && royalties.has("decimals")) {
-                        logger.info("Token $id royalties pattern is OBJKT")
+                        logger.info("Token $contract:$tokenId royalties pattern is OBJKT")
                         part = getObjktRoyalties(royalties)
                         return part
                     }
@@ -78,7 +80,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
                 }
             }
         } catch (e: Exception) {
-            logger.warn("Could not parse royalties for token $id from IPFS metadata: ${e.message}")
+            logger.warn("Could not parse royalties for token $contract:$tokenId from IPFS metadata: ${e.message}")
         }
 
         if(part.isNullOrEmpty()) {

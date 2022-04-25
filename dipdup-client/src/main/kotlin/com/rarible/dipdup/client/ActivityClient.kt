@@ -4,13 +4,14 @@ import com.apollographql.apollo3.ApolloClient
 import com.rarible.dipdup.client.converter.convertAll
 import com.rarible.dipdup.client.converter.convertByIds
 import com.rarible.dipdup.client.core.model.DipDupActivity
+import java.util.*
 
 class ActivityClient(
     client: ApolloClient
 ) : BaseClient(client) {
 
     suspend fun getActivities(limit: Int, prevId: String): List<DipDupActivity> {
-        val response = safeExecution(GetActivitiesQuery(limit = limit, prevId = prevId))
+        val response = safeExecution(GetActivitiesQuery(limit, prevId))
         return convertAll(response.marketplace_activity)
     }
 

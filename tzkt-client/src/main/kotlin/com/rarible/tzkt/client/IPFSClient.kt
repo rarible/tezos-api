@@ -6,17 +6,18 @@ import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBody
 
 class IPFSClient (
-    webClient: WebClient
+    webClient: WebClient,
+    val mapper: ObjectMapper
 ) : BaseClient(webClient) {
     suspend fun ipfsData(hash: String): JsonNode {
         val content = invoke<String> {
             it.path(hash)
         }
-        return ObjectMapper().readTree(content)
+        return mapper.readTree(content)
     }
 
     suspend fun data(url: String): JsonNode {
         val content = webClient.get().uri(url).retrieve().awaitBody<String>()
-        return ObjectMapper().readTree(content)
+        return mapper.readTree(content)
     }
 }

@@ -16,6 +16,11 @@ apollo {
     srcDir("src/main/graphql/query")
     schemaFile.set(file("src/main/graphql/schema.graphql"))
     packageName.set("com.rarible.dipdup.client")
+
+    generateAsInternal.set(false)
+    generateKotlinModels.set(false)
 }
 
-
+java.sourceSets["main"].java {
+    srcDir("build/generated/source/apollo")
+}

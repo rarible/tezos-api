@@ -1,5 +1,6 @@
 
 val mockHttpVersion: String by project
+val mockkVersion: String by project
 
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
@@ -13,4 +14,5 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("com.squareup.okhttp3:mockwebserver:$mockHttpVersion")
+    testImplementation("io.mockk:mockk:$mockkVersion")
 }

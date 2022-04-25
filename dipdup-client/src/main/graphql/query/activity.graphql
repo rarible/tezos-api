@@ -1,4 +1,4 @@
-query GetActivities($limit: Int!, $prevId: bigint!) {
+query GetActivities($limit: Int!, $prevId: uuid!) {
     marketplace_activity(
         where: {id: {_gt: $prevId}},
         order_by: {id: asc},
@@ -26,7 +26,7 @@ query GetActivities($limit: Int!, $prevId: bigint!) {
     }
 }
 
-query GetActivitiesByIds($ids: [bigint!]!) {
+query GetActivitiesByIds($ids: [uuid!]!) {
     marketplace_activity(
         where: {id: {_in: $ids}},
         order_by: {id: asc}
