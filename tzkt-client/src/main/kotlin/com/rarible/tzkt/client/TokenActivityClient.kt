@@ -5,7 +5,7 @@ import com.rarible.tzkt.model.TokenActivity
 import com.rarible.tzkt.model.TypedTokenActivity
 import org.springframework.web.reactive.function.client.WebClient
 
-class ActivityClient(
+class TokenActivityClient(
     webClient: WebClient
 ) : BaseClient(webClient) {
 

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 
 class ActivityClientFt : BaseClientFt() {
 
-    val activityClient = ActivityClient(client)
+    val activityClient = OrderActivityClient(client)
 
     @Test
     fun `should return activities`() = runBlocking<Unit> {

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class ActivityClientTests : BaseClientTests() {
 
-    val activityClient = ActivityClient(client)
+    val activityClient = TokenActivityClient(client)
 
     @Test
     fun `should return NFT activities with size, continuation, and sorting ASC`() = runBlocking<Unit> {

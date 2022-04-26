@@ -4,9 +4,8 @@ import com.apollographql.apollo3.ApolloClient
 import com.rarible.dipdup.client.converter.convertAll
 import com.rarible.dipdup.client.converter.convertByIds
 import com.rarible.dipdup.client.core.model.DipDupActivity
-import java.util.*
 
-class ActivityClient(
+class OrderActivityClient(
     client: ApolloClient
 ) : BaseClient(client) {
 
