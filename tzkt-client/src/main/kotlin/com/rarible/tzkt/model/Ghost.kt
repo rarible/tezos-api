@@ -35,31 +35,31 @@ data class Ghost (
     override val type: String,
 
     /* Address of the contract */
-    val address: String? = null,
+    val address: String,
 
     /* Name of the ghost contract */
     val alias: String? = null,
 
     /* Number of account tokens with non-zero balances */
-    val activeTokensCount: Int? = null,
+    val activeTokensCount: Int,
 
     /* Number of tokens the account ever had */
-    val tokenBalancesCount: Int? = null,
+    val tokenBalancesCount: Int,
 
     /* Number of token transfers from/to the account */
-    val tokenTransfersCount: Int? = null,
+    val tokenTransfersCount: Int,
 
     /* Block height at which the ghost contract appeared first time */
-    val firstActivity: Int? = null,
+    val firstActivity: Int,
 
     /* Block datetime at which the ghost contract appeared first time (ISO 8601, e.g. `2020-02-20T02:40:57Z`) */
-    val firstActivityTime: java.time.OffsetDateTime? = null,
+    val firstActivityTime: java.time.OffsetDateTime,
 
     /* Height of the block in which the ghost contract state was changed last time */
-    val lastActivity: Int? = null,
+    val lastActivity: Int,
 
     /* Datetime of the block in which the ghost contract state was changed last time (ISO 8601, e.g. `2020-02-20T02:40:57Z`) */
-    val lastActivityTime: java.time.OffsetDateTime? = null,
+    val lastActivityTime: java.time.OffsetDateTime,
 
     /* Metadata of the ghost contract (alias, logo, website, contacts, etc) */
     val metadata: AccountMetadata? = null

@@ -31,13 +31,13 @@ package com.rarible.tzkt.model
 open class TokenActivity (
 
     /* Internal TzKT id.   **[sortable]** */
-    open val id: Int? = null,
+    open val id: Int,
 
     /* Level of the block, at which the token transfer was made.   **[sortable]** */
-    open val level: Int? = null,
+    open val level: Int,
 
     /* Timestamp of the block, at which the token transfer was made. */
-    open val timestamp: java.time.OffsetDateTime? = null,
+    open val timestamp: java.time.OffsetDateTime,
 
     /* Token info.   Click on the field to expand more details. */
     open val token: TokenInfo? = null,

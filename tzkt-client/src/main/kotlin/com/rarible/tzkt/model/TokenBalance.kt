@@ -30,7 +30,7 @@ package com.rarible.tzkt.model
 data class TokenBalance (
 
     /* Internal TzKT id.   **[sortable]** */
-    val id: Int? = null,
+    val id: Int,
 
     /* Owner account.   Click on the field to expand more details. */
     val account: Alias? = null,
@@ -42,19 +42,19 @@ data class TokenBalance (
     val balance: String? = null,
 
     /* Total number of transfers, affecting the token balance.   **[sortable]** */
-    val transfersCount: Int? = null,
+    val transfersCount: Int,
 
     /* Level of the block where the token balance was first changed.   **[sortable]** */
-    val firstLevel: Int? = null,
+    val firstLevel: Int,
 
     /* Timestamp of the block where the token balance was first changed. */
-    val firstTime: java.time.OffsetDateTime? = null,
+    val firstTime: java.time.OffsetDateTime,
 
     /* Level of the block where the token balance was last changed.   **[sortable]** */
-    val lastLevel: Int? = null,
+    val lastLevel: Int,
 
     /* Timestamp of the block where the token balance was last changed. */
-    val lastTime: java.time.OffsetDateTime? = null
+    val lastTime: java.time.OffsetDateTime
 
 )
 
