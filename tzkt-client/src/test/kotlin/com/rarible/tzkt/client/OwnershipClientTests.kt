@@ -1,5 +1,7 @@
 package com.rarible.tzkt.client
 
+import com.rarible.tzkt.model.ItemId
+import com.rarible.tzkt.model.OwnershipId
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -55,7 +57,7 @@ class OwnershipClientTests : BaseClientTests() {
         var tokenId = "631268"
         var owner = "tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88"
         val balance = "7"
-        val ownership = ownershipClient.ownershipById(contract, tokenId, owner)
+        val ownership = ownershipClient.ownershipById(OwnershipId(contract, tokenId, owner).toString())
         assertThat(request().path).isEqualTo("/v1/tokens/balances?account=tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88&token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268")
         assertThat(ownership.account?.address).isEqualTo(owner)
         assertThat(ownership.token?.tokenId).isEqualTo(tokenId)
@@ -256,9 +258,9 @@ class OwnershipClientTests : BaseClientTests() {
 
         var contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
         var tokenId = "631268"
-        val ownerships = ownershipClient.ownershipsByToken(contract, tokenId)
-        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268")
-        ownerships.forEach {
+        val ownerships = ownershipClient.ownershipsByToken(ItemId(contract, tokenId).toString(), 100, null, true)
+        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268&limit=100&sort.asc=id")
+        ownerships.items.forEach {
             assertThat(it.token?.tokenId).isEqualTo(tokenId)
             assertThat(it.token?.contract?.address).isEqualTo(contract)
         }

@@ -811,15 +811,15 @@ class RoyaltiesTests : BaseClientTests() {
         val limit = 20
         val continuation = 90951L
         val handler = RoyaltiesHandler(bmClient, ipfs, royaltiesConfig)
-        var tokens = tokenClient.tokens(limit, continuation)
+        var tokens = tokenClient.tokens(limit, continuation.toString())
         var totalOK = 0
         var totalKO = 0
         val filePath = "/Users/florianpautot/Desktop/logs/errors.txt"
         File(filePath).writeText("==================\nStarting Run\n==================\n")
-        while (tokens.isNotEmpty()) {
-            val lastId = tokens.last().id!!.toLong()
+        while (tokens.items.isNotEmpty()) {
+            val lastId = tokens.items.last().id!!.toLong()
             runBlocking {
-                tokens.forEach {
+                tokens.items.forEach {
                     launch {
                         val id = "${it.contract?.address}:${it.tokenId}"
                         val parts = handler.processRoyalties(id)
@@ -829,7 +829,7 @@ class RoyaltiesTests : BaseClientTests() {
                             if(legacyRoyalties.has("royalties")){
                                 val shares = legacyRoyalties["royalties"] as ArrayNode
                                 shares.forEach {
-                                    legacyParts.add(Part(it["account"]!!.textValue(), it["value"]!!.longValue()))
+                                    legacyParts.add(Part(it["account"]!!.textValue(), it["value"]!!.intValue()))
                                 }
                             }
                             if (parts.toList() != legacyParts.toList()) {
@@ -849,7 +849,7 @@ class RoyaltiesTests : BaseClientTests() {
                     }
                 }
             }
-            tokens = tokenClient.tokens(limit, lastId)
+            tokens = tokenClient.tokens(limit, lastId.toString())
         }
         logger.info("Total OK = $totalOK")
         File(filePath).appendText("Total OK = $totalOK")

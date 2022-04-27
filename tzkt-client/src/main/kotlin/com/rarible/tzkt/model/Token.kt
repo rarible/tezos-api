@@ -78,7 +78,9 @@ data class Token (
     val totalSupply: String? = null,
 
     /* Token metadata.   **[sortable]** */
-    val metadata: Map<String, Object>? = null
+    val metadata: Map<String, Object>? = null,
+
+    val meta: TokenMeta? = null
 
 )
 

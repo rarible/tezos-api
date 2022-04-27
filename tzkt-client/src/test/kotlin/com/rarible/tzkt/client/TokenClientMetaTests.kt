@@ -62,7 +62,7 @@ class TokenClientMetaTests : BaseClientTests() {
         }]"""
         )
 
-        val meta = tokenClient.tokenMeta("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton", "2453767")
+        val meta = tokenClient.tokenMeta("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:2453767")
 
         assertThat(meta.name).isEqualTo("Smoking area 07")
         assertThat(meta.attributes).hasSize(3)
@@ -103,7 +103,7 @@ class TokenClientMetaTests : BaseClientTests() {
             }]"""
         )
 
-        val meta = tokenClient.tokenMeta("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton", "2453767")
+        val meta = tokenClient.tokenMeta("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:2453767")
 
         assertThat(meta.name).isEqualTo("hDAO")
         assertThat(meta.attributes).hasSize(0)
@@ -198,7 +198,7 @@ class TokenClientMetaTests : BaseClientTests() {
         }]"""
         )
 
-        val meta = tokenClient.tokenMeta("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton", "2453767")
+        val meta = tokenClient.tokenMeta("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:2453767")
 
         assertThat(meta.name).isEqualTo("Thinker 02: To share")
         assertThat(meta.attributes).hasSize(3)
