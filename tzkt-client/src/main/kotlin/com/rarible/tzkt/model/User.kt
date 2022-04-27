@@ -49,7 +49,7 @@ data class User (
     override val type: String,
 
     /* Public key hash of the account */
-    val address: String? = null,
+    val address: String,
 
     /* Name of the project behind the account or account description */
     val alias: String? = null,
@@ -58,13 +58,13 @@ data class User (
     val publicKey: String? = null,
 
     /* Public key revelation status. Unrevealed account can't send manager operation (transaction, origination etc.) */
-    val revealed: Boolean? = null,
+    val revealed: Boolean,
 
     /* Account balance */
-    val balance: Long? = null,
+    val balance: Long,
 
     /* An account nonce which is used to prevent operation replay */
-    val counter: Int? = null,
+    val counter: Int,
 
     /* Information about the current delegate of the account. `null` if it's not delegated */
     val `delegate`: DelegateInfo? = null,
@@ -76,40 +76,40 @@ data class User (
     val delegationTime: java.time.OffsetDateTime? = null,
 
     /* Number of contracts, created (originated) and/or managed by the contract */
-    val numContracts: Int? = null,
+    val numContracts: Int,
 
     /* Number of account tokens with non-zero balances */
-    val activeTokensCount: Int? = null,
+    val activeTokensCount: Int,
 
     /* Number of tokens the account ever had */
-    val tokenBalancesCount: Int? = null,
+    val tokenBalancesCount: Int,
 
     /* Number of token transfers from/to the account */
-    val tokenTransfersCount: Int? = null,
+    val tokenTransfersCount: Int,
 
     /* Number of account activation operations. Are used to activate accounts that were recommended allocations of tezos tokens for donations to the Tezos Foundation’s fundraiser */
-    val numActivations: Int? = null,
+    val numActivations: Int,
 
     /* Number of delegation operations, related to the account */
-    val numDelegations: Int? = null,
+    val numDelegations: Int,
 
     /* Number of all origination (deployment / contract creation) operations, related to the account */
-    val numOriginations: Int? = null,
+    val numOriginations: Int,
 
     /* Number of all transaction (tez transfer) operations, related to the account */
-    val numTransactions: Int? = null,
+    val numTransactions: Int,
 
     /* Number of reveal (is used to reveal the public key associated with an account) operations of the contract */
-    val numReveals: Int? = null,
+    val numReveals: Int,
 
     /* Number of register global constant operations of the delegate (baker) */
-    val numRegisterConstants: Int? = null,
+    val numRegisterConstants: Int,
 
     /* Number of migration (result of the context (database) migration during a protocol update) operations, related to the account (synthetic type)  */
-    val numMigrations: Int? = null,
+    val numMigrations: Int,
 
     /* Block height of the first operation, related to the account */
-    val firstActivity: Int? = null,
+    val firstActivity: Int?,
 
     /* Block datetime of the first operation, related to the account (ISO 8601, e.g. `2020-02-20T02:40:57Z`) */
     val firstActivityTime: java.time.OffsetDateTime? = null,

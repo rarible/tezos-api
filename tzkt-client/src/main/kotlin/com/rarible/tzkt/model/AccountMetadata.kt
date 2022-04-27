@@ -36,7 +36,7 @@ package com.rarible.tzkt.model
 
 data class AccountMetadata (
 
-    val kind: String? = null,
+    val kind: String,
 
     val alias: String? = null,
 

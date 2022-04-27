@@ -36,7 +36,7 @@ package com.rarible.tzkt.model
 data class Token (
 
     /* Internal TzKT id (not the same as `tokenId`).   **[sortable]** */
-    val id: Int? = null,
+    val id: Int,
 
     /* Contract, created the token. */
     val contract: Alias? = null,
@@ -60,13 +60,13 @@ data class Token (
     val lastTime: java.time.OffsetDateTime? = null,
 
     /* Total number of transfers.   **[sortable]** */
-    val transfersCount: Int? = null,
+    val transfersCount: Int,
 
     /* Total number of holders ever seen.   **[sortable]** */
-    val balancesCount: Int? = null,
+    val balancesCount: Int,
 
     /* Total number of current holders.   **[sortable]** */
-    val holdersCount: Int? = null,
+    val holdersCount: Int,
 
     /* Total number of minted tokens (raw value, not divided by `decimals`). */
     val totalMinted: String? = null,

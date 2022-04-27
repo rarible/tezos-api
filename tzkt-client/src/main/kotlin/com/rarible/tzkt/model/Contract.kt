@@ -55,7 +55,7 @@ data class Contract (
     val address: String? = null,
 
     /* Kind of the contract (`delegator_contract` or `smart_contract`), where `delegator_contract` - manager.tz smart contract for delegation purpose only */
-    val kind: String? = null,
+    val kind: String,
 
     /* List of implemented standards (TZIPs) */
     val tzips: List<String>? = null,
@@ -64,7 +64,7 @@ data class Contract (
     val alias: String? = null,
 
     /* Contract balance (micro tez) */
-    val balance: Long? = null,
+    val balance: Long,
 
     /* Information about the account, which has deployed the contract to the blockchain */
     val creator: CreatorInfo? = null,
@@ -82,31 +82,31 @@ data class Contract (
     val delegationTime: java.time.OffsetDateTime? = null,
 
     /* Number of contracts, created (originated) and/or managed by the contract */
-    val numContracts: Int? = null,
+    val numContracts: Int,
 
     /* Number of account tokens with non-zero balances */
-    val activeTokensCount: Int? = null,
+    val activeTokensCount: Int,
 
     /* Number of tokens the account ever had */
-    val tokenBalancesCount: Int? = null,
+    val tokenBalancesCount: Int,
 
     /* Number of token transfers from/to the account */
-    val tokenTransfersCount: Int? = null,
+    val tokenTransfersCount: Int,
 
     /* Number of delegation operations of the contract */
-    val numDelegations: Int? = null,
+    val numDelegations: Int,
 
     /* Number of origination (deployment / contract creation) operations, related the contract */
-    val numOriginations: Int? = null,
+    val numOriginations: Int,
 
     /* Number of transaction (transfer) operations, related to the contract */
-    val numTransactions: Int? = null,
+    val numTransactions: Int,
 
     /* Number of reveal (is used to reveal the public key associated with an account) operations of the contract */
-    val numReveals: Int? = null,
+    val numReveals: Int,
 
     /* Number of migration (result of the context (database) migration during a protocol update) operations related to the contract (synthetic type) */
-    val numMigrations: Int? = null,
+    val numMigrations: Int,
 
     /* Block height of the contract creation */
     val firstActivity: Int? = null,

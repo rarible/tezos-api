@@ -26,10 +26,10 @@ data class DelegateInfo (
     val alias: String? = null,
 
     /* Public key hash of the delegate (baker) */
-    val address: String? = null,
+    val address: String,
 
     /* Delegation status (`true` - active, `false` - deactivated) */
-    val active: Boolean? = null
+    val active: Boolean
 
 )
 

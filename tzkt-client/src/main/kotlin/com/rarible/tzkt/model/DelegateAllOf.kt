@@ -63,43 +63,43 @@ package com.rarible.tzkt.model
 data class DelegateAllOf (
 
     /* Type of the account, `delegate` - account, registered as a delegate (baker) */
-    val type: String? = null,
+    val type: String,
 
     /* Public key hash of the delegate (baker) */
-    val address: String? = null,
+    val address: String,
 
     /* Delegation status (`true` - active, `false` - deactivated) */
-    val active: Boolean? = null,
+    val active: Boolean,
 
     /* Name of the baking service */
     val alias: String? = null,
 
     /* Public key of the delegate (baker) */
-    val publicKey: String? = null,
+    val publicKey: String,
 
     /* Public key revelation status. Unrevealed account can't send manager operation (transaction, origination etc.) */
-    val revealed: Boolean? = null,
+    val revealed: Boolean,
 
     /* Total balance of the delegate (baker), including spendable and frozen funds (micro tez) */
-    val balance: Long? = null,
+    val balance: Long,
 
     /* Amount of security deposit, currently locked for baked (produced) blocks and (or) given endorsements (micro tez) */
-    val frozenDeposits: Long? = null,
+    val frozenDeposits: Long,
 
     /* Amount of currently frozen baking rewards (micro tez) */
-    val frozenRewards: Long? = null,
+    val frozenRewards: Long,
 
     /* Amount of currently frozen fees paid by operations inside blocks, baked (produced) by the delegate (micro tez) */
-    val frozenFees: Long? = null,
+    val frozenFees: Long,
 
     /* An account nonce which is used to prevent operation replay */
-    val counter: Int? = null,
+    val counter: Int,
 
     /* Block height when delegate (baker) was registered as a baker last time */
-    val activationLevel: Int? = null,
+    val activationLevel: Int,
 
     /* Block datetime when delegate (baker) was registered as a baker last time (ISO 8601, e.g. 2019-11-31) */
-    val activationTime: java.time.OffsetDateTime? = null,
+    val activationTime: java.time.OffsetDateTime,
 
     /* Block height when delegate (baker) was deactivated as a baker because of lack of funds or inactivity */
     val deactivationLevel: Int? = null,
@@ -108,79 +108,79 @@ data class DelegateAllOf (
     val deactivationTime: java.time.OffsetDateTime? = null,
 
     /* Sum of delegate (baker) balance and delegated funds minus frozen rewards (micro tez) */
-    val stakingBalance: Long? = null,
+    val stakingBalance: Long,
 
     /* Number of contracts, created (originated) and/or managed by the delegate (baker) */
-    val numContracts: Int? = null,
+    val numContracts: Int,
 
     /* Number of account tokens with non-zero balances */
-    val activeTokensCount: Int? = null,
+    val activeTokensCount: Int,
 
     /* Number of tokens the account ever had */
-    val tokenBalancesCount: Int? = null,
+    val tokenBalancesCount: Int,
 
     /* Number of token transfers from/to the account */
-    val tokenTransfersCount: Int? = null,
+    val tokenTransfersCount: Int,
 
     /* Number of current delegators (accounts, delegated their funds) of the delegate (baker) */
-    val numDelegators: Int? = null,
+    val numDelegators: Int,
 
     /* Number of baked (validated) blocks all the time by the delegate (baker) */
-    val numBlocks: Int? = null,
+    val numBlocks: Int,
 
     /* Number of given endorsements (approvals) by the delegate (baker) */
-    val numEndorsements: Int? = null,
+    val numEndorsements: Int,
 
     /* Number of submitted by the delegate ballots during a voting period */
-    val numBallots: Int? = null,
+    val numBallots: Int,
 
     /* Number of submitted (upvoted) by the delegate proposals during a proposal period */
-    val numProposals: Int? = null,
+    val numProposals: Int,
 
     /* Number of account activation operations. Are used to activate accounts that were recommended allocations of tezos tokens for donations to the Tezos Foundation’s fundraiser */
-    val numActivations: Int? = null,
+    val numActivations: Int,
 
     /* Number of double baking (baking two different blocks at the same height) evidence operations, included in blocks, baked (validated) by the delegate */
-    val numDoubleBaking: Int? = null,
+    val numDoubleBaking: Int,
 
     /* Number of double endorsement (endorsing two different blocks at the same block height) evidence operations, included in blocks, baked (validated) by the delegate */
-    val numDoubleEndorsing: Int? = null,
+    val numDoubleEndorsing: Int,
 
     /* Number of seed nonce revelation (are used by the blockchain to create randomness) operations provided by the delegate */
-    val numNonceRevelations: Int? = null,
+    val numNonceRevelations: Int,
 
     /* Number of operations for all time in which rewards were lost due to unrevealed seed nonces by the delegate (synthetic type) */
-    val numRevelationPenalties: Int? = null,
+    val numRevelationPenalties: Int,
 
     /* Number of all delegation related operations (new delegator, left delegator, registration as a baker), related to the delegate (baker)  */
-    val numDelegations: Int? = null,
+    val numDelegations: Int,
 
     /* Number of all origination (deployment / contract creation) operations, related to the delegate (baker) */
-    val numOriginations: Int? = null,
+    val numOriginations: Int,
 
     /* Number of all transaction (tez transfer) operations, related to the delegate (baker) */
-    val numTransactions: Int? = null,
+    val numTransactions: Int,
 
     /* Number of reveal (is used to reveal the public key associated with an account) operations of the delegate (baker) */
-    val numReveals: Int? = null,
+    val numReveals: Int,
 
     /* Number of register global constant operations of the delegate (baker) */
-    val numRegisterConstants: Int? = null,
+    val numRegisterConstants: Int,
 
     /* Number of migration (result of the context (database) migration during a protocol update) operations, related to the delegate (synthetic type)  */
-    val numMigrations: Int? = null,
+    val numMigrations: Int,
 
     /* Block height of the first operation, related to the delegate (baker) */
-    val firstActivity: Int? = null,
+    val firstActivity: Int,
 
     /* Block datetime of the first operation, related to the delegate (ISO 8601, e.g. `2020-02-20T02:40:57Z`) */
-    val firstActivityTime: java.time.OffsetDateTime? = null,
+    val firstActivityTime: java.time.OffsetDateTime,
 
     /* Height of the block in which the account state was changed last time */
-    val lastActivity: Int? = null,
+    val lastActivity: Int,
 
     /* Datetime of the block in which the account state was changed last time (ISO 8601, e.g. `2020-02-20T02:40:57Z`) */
-    val lastActivityTime: java.time.OffsetDateTime? = null,
+    val lastActivityTime: java.time.OffsetDateTime,
 
     /* Metadata of the delegate (alias, logo, website, contacts, etc) */
     val metadata: AccountMetadata? = null,

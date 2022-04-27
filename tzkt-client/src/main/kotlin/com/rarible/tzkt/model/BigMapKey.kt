@@ -29,28 +29,28 @@ package com.rarible.tzkt.model
 data class BigMapKey (
 
     /* Internal Id, can be used for pagination */
-    val id: Int? = null,
+    val id: Int,
 
     /* Bigmap key status (`true` - active, `false` - removed) */
-    val active: Boolean? = null,
+    val active: Boolean,
 
     /* Key hash */
-    val hash: String? = null,
+    val hash: String,
 
     /* Key in JSON or Micheline format, depending on the `micheline` query parameter. */
-    val key: Any? = null,
+    val key: Any,
 
     /* Value in JSON or Micheline format, depending on the `micheline` query parameter. Note, if the key is inactive (removed) it will contain the last non-null value. */
     val `value`: Any? = null,
 
     /* Level of the block where the bigmap key was seen first time */
-    val firstLevel: Int? = null,
+    val firstLevel: Int,
 
     /* Level of the block where the bigmap key was seen last time */
-    val lastLevel: Int? = null,
+    val lastLevel: Int,
 
     /* Total number of actions with the bigmap key */
-    val updates: Int? = null
+    val updates: Int
 
 )
 

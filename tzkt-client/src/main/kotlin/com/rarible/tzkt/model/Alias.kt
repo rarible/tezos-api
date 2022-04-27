@@ -26,7 +26,7 @@ data class Alias (
     val alias: String? = null,
 
     /* Account address (public key hash). */
-    val address: String? = null
+    val address: String
 
 )
 
