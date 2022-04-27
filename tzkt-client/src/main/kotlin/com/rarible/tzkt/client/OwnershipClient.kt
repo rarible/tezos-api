@@ -1,5 +1,8 @@
 package com.rarible.tzkt.client
 
+import com.rarible.tzkt.model.ItemId
+import com.rarible.tzkt.model.OwnershipId
+import com.rarible.tzkt.model.Page
 import com.rarible.tzkt.model.TokenBalance
 import org.springframework.web.reactive.function.client.WebClient
 
@@ -7,26 +10,39 @@ class OwnershipClient(
     webClient: WebClient
 ) : BaseClient(webClient) {
 
-    suspend fun ownershipById(contract: String, tokenId: String, owner: String): TokenBalance {
+    suspend fun ownershipById(ownershipId: String): TokenBalance {
+        val id = OwnershipId.parse(ownershipId)
         val ownership = invoke<List<TokenBalance>> { builder ->
             builder.path(BASE_PATH)
-                .queryParam("account", owner)
-                .queryParam("token.contract", contract)
-                .queryParam("token.tokenId", tokenId)
+                .queryParam("account", id.owner)
+                .queryParam("token.contract", id.contract)
+                .queryParam("token.tokenId", id.tokenId)
         }
         return ownership.first()
     }
 
-    suspend fun ownershipsByToken(contract: String, tokenId: String): List<TokenBalance> {
-        val ownership = invoke<List<TokenBalance>> { builder ->
+    suspend fun ownershipsByToken(itemId: String, size: Int = DEFAULT_SIZE, continuation: String?, sortAsc: Boolean = true): Page<TokenBalance> {
+        val parsed = ItemId.parse(itemId)
+        val ownerships = invoke<List<TokenBalance>> { builder ->
             builder.path(BASE_PATH)
-                .queryParam("token.contract", contract)
-                .queryParam("token.tokenId", tokenId)
+                .queryParam("token.contract", parsed.contract)
+                .queryParam("token.tokenId", parsed.tokenId)
+                .apply {
+                    queryParam("limit", size)
+                    continuation?.let { queryParam("offset.cr", it) }
+                    val sorting = if (sortAsc) "sort.asc" else "sort.desc"
+                    queryParam(sorting, "id")
+                }
         }
-        return ownership
+        return Page.Get(
+            items = ownerships,
+            size = size,
+            last = { it.id.toString() }
+        )
     }
 
     companion object {
         const val BASE_PATH = "v1/tokens/balances"
+        const val DEFAULT_SIZE = 1000
     }
 }

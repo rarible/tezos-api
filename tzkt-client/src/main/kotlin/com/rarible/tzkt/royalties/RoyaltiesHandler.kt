@@ -96,7 +96,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         try {
             val key = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.henRoyalties, "royalties", tokenId)
             royaltiesMap = key.value as LinkedHashMap<String, String>
-            parts.add(Part(royaltiesMap["issuer"]!!, royaltiesMap["royalties"]!!.toLong() * 10))
+            parts.add(Part(royaltiesMap["issuer"]!!, royaltiesMap["royalties"]!!.toInt() * 10))
         } catch (e: Exception) {
             logger.warn("Could not parse royalties for token ${royaltiesConfig.henRoyalties}:$tokenId with HEN pattern: ${e.message}")
         }
@@ -109,7 +109,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         try {
             val key = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.kalamint, "tokens", tokenId)
             royaltiesMap = key.value as LinkedHashMap<String, String>
-            parts.add(Part(royaltiesMap["creator"]!!, royaltiesMap["creator_royalty"]!!.toLong() * 100))
+            parts.add(Part(royaltiesMap["creator"]!!, royaltiesMap["creator_royalty"]!!.toInt() * 100))
         } catch (e: Exception) {
             logger.warn("Could not parse royalties for token ${royaltiesConfig.kalamint}:$tokenId with Kalamint pattern: ${e.message}")
         }
@@ -125,7 +125,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
             royaltiesMap = royaltiesKey.value as LinkedHashMap<String, String>
             val authorKey = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.fxhashV1Manager, "ledger", royaltiesMap["issuer_id"]!!)
             authorMap = authorKey.value as LinkedHashMap<String, String>
-            parts.add(Part(authorMap["author"]!!, royaltiesMap["royalties"]!!.toLong() * 10))
+            parts.add(Part(authorMap["author"]!!, royaltiesMap["royalties"]!!.toInt() * 10))
         } catch (e: Exception) {
             logger.warn("Could not parse royalties for token ${royaltiesConfig.fxhashV1}:$tokenId with FXHASH pattern: ${e.message}")
         }
@@ -139,10 +139,10 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         try {
             val royaltiesKey = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.fxhashV2, "token_data", tokenId)
             royaltiesMap = royaltiesKey.value as LinkedHashMap<String, String>
-            val royaltiesAmount = royaltiesMap["royalties"]!!.toLong()
+            val royaltiesAmount = royaltiesMap["royalties"]!!.toInt()
             val percentages = royaltiesMap["royalties_split"] as ArrayList<LinkedHashMap<String, String>>
             percentages.forEach {
-                parts.add(Part(it["address"]!!, royaltiesAmount * it["pct"]!!.toLong() / 100))
+                parts.add(Part(it["address"]!!, royaltiesAmount * it["pct"]!!.toInt() / 100))
             }
         } catch (e: Exception) {
             logger.warn("Could not parse royalties for token ${royaltiesConfig.fxhashV2}:$tokenId with FXHASH pattern: ${e.message}")
@@ -157,7 +157,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         try {
             val key = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.versum,"token_extra_data", tokenId)
             royaltiesMap = key.value as LinkedHashMap<String, String>
-            parts.add(Part(royaltiesMap["minter"]!!, royaltiesMap["royalty"]!!.toLong() * 10))
+            parts.add(Part(royaltiesMap["minter"]!!, royaltiesMap["royalty"]!!.toInt() * 10))
         } catch (e: Exception) {
             logger.warn("Could not parse royalties for token ${royaltiesConfig.versum}:$tokenId with VERSUM pattern: ${e.message}")
         }
@@ -170,7 +170,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
             val key = bigMapKeyClient.bigMapKeyWithName(contract, "royalties", tokenId)
             val royaltiesMap = key.value as List<LinkedHashMap<String, String>>
             royaltiesMap.forEach { part ->
-                parts.add(Part(part["partAccount"]!!, part["partValue"]!!.toLong()))
+                parts.add(Part(part["partAccount"]!!, part["partValue"]!!.toInt()))
             }
         } catch (e: Exception) {
             logger.warn("Could not parse royalties for token ${contract}:$tokenId with RARIBLE pattern: ${e.message}")
@@ -185,7 +185,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
             shares.forEach {
                 partList.add(
                     Part(
-                        it, data["shares"][it].asLong() * 10
+                        it, data["shares"][it].asInt() * 10
                     )
                 )
             }
@@ -211,7 +211,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
             }
             if (recipient.isNotEmpty() && share.isNotEmpty()) {
                 logger.info("Token royalties pattern is SWEET IO")
-                partList.add(Part(recipient, share.toLong()))
+                partList.add(Part(recipient, share.toInt()))
             }
         } catch (e: Exception) {
             logger.warn("Could not parse royalties for $contract:$tokenId with SWEET IO pattern: ${e.message}")
@@ -241,7 +241,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
             }
         }
         data?.forEach { part ->
-            parts.add(Part(part["partAccount"]!!, part["partValue"]!!.toLong()))
+            parts.add(Part(part["partAccount"]!!, part["partValue"]!!.toInt()))
         }
         return parts
     }

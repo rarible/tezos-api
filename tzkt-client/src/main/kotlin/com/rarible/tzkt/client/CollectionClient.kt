@@ -1,6 +1,7 @@
 package com.rarible.tzkt.client
 
 import com.rarible.tzkt.model.Contract
+import com.rarible.tzkt.model.Page
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -17,7 +18,7 @@ class CollectionClient(
         return collection
     }
 
-    suspend fun collections(size: Int?, continuation: Long?, sortAsc: Boolean = true): List<Contract> {
+    suspend fun collections(size: Int = DEFAULT_SIZE, continuation: String?, sortAsc: Boolean = true): Page<Contract> {
         val collections = invoke<List<Contract>> { builder ->
             builder.path(BASE_PATH)
                 .queryParam("kind", "asset")
@@ -29,7 +30,11 @@ class CollectionClient(
                     queryParam(sorting, "firstActivity")
                 }
         }
-        return collections
+        return Page.Get(
+            items = collections,
+            size = size,
+            last = { it.firstActivity!!.toString() }
+        )
     }
 
     suspend fun collections(addresses: List<String>): List<Contract> {
@@ -43,5 +48,6 @@ class CollectionClient(
 
     companion object {
         const val BASE_PATH = "v1/contracts"
+        const val DEFAULT_SIZE = 1000
     }
 }

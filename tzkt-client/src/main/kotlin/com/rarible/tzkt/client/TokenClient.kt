@@ -1,7 +1,8 @@
 package com.rarible.tzkt.client
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.rarible.tzkt.meta.MetaService
+import com.rarible.tzkt.model.ItemId
+import com.rarible.tzkt.model.Page
 import com.rarible.tzkt.model.Part
 import com.rarible.tzkt.model.Token
 import com.rarible.tzkt.model.TokenMeta
@@ -17,58 +18,70 @@ class TokenClient(
     val royaltyHander: RoyaltiesHandler
 ) : BaseClient(webClient) {
 
-    suspend fun token(contract: String, id: String): Token {
+    suspend fun token(itemId: String): Token {
+        val parsed = ItemId.parse(itemId)
         val tokens = invoke<List<Token>> {
             it.path(BASE_PATH)
-                .queryParam("contract", contract)
-                .queryParam("tokenId", id)
+                .queryParam("contract", parsed.contract)
+                .queryParam("tokenId", parsed.tokenId)
                 .queryParam("token.standard", "fa2")
         }
-        return tokens.first()
+        val result = tokens.first()
+
+        // enrich with parsed meta
+        return result.copy(meta = metaService.meta(result))
     }
 
-    suspend fun tokenMeta(contract: String, id: String): TokenMeta {
+    suspend fun tokenMeta(itemId: String): TokenMeta {
+        val parsed = ItemId.parse(itemId)
         val tokens = invoke<List<Token>> {
             it.path(BASE_PATH)
-                .queryParam("contract", contract)
-                .queryParam("tokenId", id)
+                .queryParam("contract", parsed.contract)
+                .queryParam("tokenId", parsed.tokenId)
         }
         val token = tokens.first()
         return metaService.meta(token)
     }
 
-    suspend fun tokens(size: Int?, continuation: Long?, sortAsc: Boolean = true): List<Token> {
+    suspend fun tokens(size: Int = DEFAULT_SIZE, continuation: String?, sortAsc: Boolean = true): Page<Token> {
         val tokens = invoke<List<Token>> { builder ->
             builder.path(BASE_PATH)
                 .queryParam("token.standard", "fa2")
                 .apply {
-                    size?.let { queryParam("limit", it) }
+                    queryParam("limit", size)
                     continuation?.let { queryParam("offset.cr", it) }
                     val sorting = if (sortAsc) "sort.asc" else "sort.desc"
                     queryParam(sorting, "id")
                     queryParam("metadata.artifactUri.null", "false")
                 }
-        }
-        return tokens
+
+        // enrich with parsed meta
+        }.map { token -> token.copy(meta = metaService.meta(token)) }
+        return Page.Get(
+            items = tokens,
+            size = size,
+            last = { it.id.toString() }
+        )
     }
 
     suspend fun tokens(ids: List<String>): List<Token> {
         val tokens = coroutineScope {
             ids
                 .map {
-                    val raw = it.split(":")
-                    async { token(raw[0], raw[1]) }
+                    async { token(it) }
                 }
                 .awaitAll()
         }
         return tokens
     }
 
-    suspend fun royalty(contract: String, id: String): List<Part> {
-        return royaltyHander.processRoyalties(contract, id)
+    suspend fun royalty(itemId: String): List<Part> {
+        val parsed = ItemId.parse(itemId)
+        return royaltyHander.processRoyalties(parsed.contract, parsed.tokenId)
     }
 
     companion object {
         const val BASE_PATH = "v1/tokens"
+        const val DEFAULT_SIZE = 1000
     }
 }

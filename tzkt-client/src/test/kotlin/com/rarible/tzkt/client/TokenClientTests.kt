@@ -1,5 +1,8 @@
 package com.rarible.tzkt.client
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.rarible.tzkt.meta.MetaService
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
@@ -7,7 +10,8 @@ import org.junit.jupiter.api.Test
 
 class TokenClientTests : BaseClientTests() {
 
-    val tokenClient = TokenClient(client, mockk(), mockk())
+    val metaService = MetaService(ObjectMapper().registerKotlinModule())
+    val tokenClient = TokenClient(client, metaService, mockk())
 
     @Test
     fun `should return token by contract and token id`() = runBlocking<Unit> {
@@ -68,10 +72,11 @@ class TokenClientTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val token = tokenClient.token("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton", "157993")
+        val token = tokenClient.token("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:157993")
         assertThat(request().path).isEqualTo("/v1/tokens?contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&tokenId=157993&token.standard=fa2")
 
         assertThat(token).isNotNull
+        assertThat(token.meta).isNotNull
         assertThat(token.standard).isEqualTo("fa2")
     }
 
@@ -723,26 +728,26 @@ class TokenClientTests : BaseClientTests() {
         )
 
         val size = 10
-        var continuation = 0L
+        var continuation = 0L.toString()
         var tokens = tokenClient.tokens(size, continuation)
         assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=0&sort.asc=id&metadata.artifactUri.null=false")
         var prevId = 0
-        tokens.forEach {
+        tokens.items.forEach {
             assertThat(it.id).isGreaterThan(prevId)
             assertThat(it.standard).isEqualTo("fa2")
             prevId = it.id!!
         }
         prevId = 0
-        val lastId = tokens.last().id!!.toLong()
-        continuation = lastId
+        val lastId = tokens.items.last().id!!.toLong()
+        continuation = lastId.toString()
         tokens = tokenClient.tokens(size, continuation)
         assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=77&sort.asc=id&metadata.artifactUri.null=false")
-        tokens.forEach {
+        tokens.items.forEach {
             assertThat(it.id).isGreaterThan(prevId)
             assertThat(it.standard).isEqualTo("fa2")
             prevId = it.id!!
         }
-        assertThat(tokens.first().id?.toLong()).isGreaterThan(lastId)
+        assertThat(tokens.items.first().id?.toLong()).isGreaterThan(lastId)
     }
 
     @Test
@@ -1361,26 +1366,26 @@ class TokenClientTests : BaseClientTests() {
         )
 
         val size = 10
-        var continuation = 88L
+        var continuation = 88L.toString()
         var tokens = tokenClient.tokens(size, continuation, false)
         assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=88&sort.desc=id&metadata.artifactUri.null=false")
         var prevId = 88L
-        tokens.forEach {
-            assertThat(it.id?.toLong()).isLessThan(prevId)
+        tokens.items.forEach {
+            assertThat(it.id?.toLong()).isLessThan(prevId.toLong())
             assertThat(it.standard).isEqualTo("fa2")
             prevId = it.id!!.toLong()
         }
-        val lastId = tokens.last().id!!.toLong()
-        continuation = lastId
+        val lastId = tokens.items.last().id!!.toLong()
+        continuation = lastId.toString()
         prevId = lastId
         tokens = tokenClient.tokens(size, continuation, false)
         assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=77&sort.desc=id&metadata.artifactUri.null=false")
-        tokens.forEach {
+        tokens.items.forEach {
             assertThat(it.id?.toLong()).isLessThan(prevId)
             assertThat(it.standard).isEqualTo("fa2")
             prevId = it.id!!.toLong()
         }
-        assertThat(tokens.first().id?.toLong()).isLessThan(lastId)
+        assertThat(tokens.items.first().id?.toLong()).isLessThan(lastId.toLong())
     }
 
     @Test
