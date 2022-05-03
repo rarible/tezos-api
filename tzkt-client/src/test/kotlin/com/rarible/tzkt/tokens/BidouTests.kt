@@ -10,8 +10,8 @@ class BidouTests : BaseClientTests() {
 
     val bigMapKeyClient = BigMapKeyClient(client)
 
-    val `8x8` = "KT1MxDwChiDwd6WBVs24g1NjERUoK622ZEFp"
-    //val `24x24` = "KT1TR1ErEQPTdtaJ7hbvKTJSa1tsGnHGZTpf"
+    val bidou8 = "KT1MxDwChiDwd6WBVs24g1NjERUoK622ZEFp"
+    //val bidou24 = "KT1TR1ErEQPTdtaJ7hbvKTJSa1tsGnHGZTpf"
 
     @Test
     fun `should correctly fetch and parse 8Bidou data`() = runBlocking<Unit> {
@@ -35,8 +35,8 @@ class BidouTests : BaseClientTests() {
             }
         """.trimIndent())
 
-        val handler = BidouHandler(bigMapKeyClient, `8x8`)
-        val data = handler.getData("69")
+        val handler = BidouHandler(bigMapKeyClient)
+        val data = handler.getData(bidou8, "69")
         assertThat(data).isNotNull
         assertThat(data!!.rgb).isEqualTo("989898916d91b37db3000000ce62ced925d9e947e9fd01fd6b956b979b97ffccbcffccbc000000b89286d729d7e74ae779b879679767ffccbcffccbcffccbcffccbcca67cad32bd341bf4177bb77ffccbc000000ffccbc000000ad53adc86ac859d759ffccbcffccbcffccbcffccbcffccbcaa86aaa955a917e917e6ff00ffccbcffccbcffccbcffccbc837d83a989a93af63a13eb13ffccbc423430423430ffccbc8ba68b7f7f7f00ff0039f839ffccbcffccbcffccbc6ec46e59a75989a989")
         assertThat(data!!.creator).isEqualTo("tz2QhmKtUWRyArfaqfBedvVdidgKpCcckMXV")

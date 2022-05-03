@@ -3,11 +3,11 @@ package com.rarible.tzkt.tokens
 import com.rarible.tzkt.client.BigMapKeyClient
 import org.slf4j.LoggerFactory
 
-class BidouHandler(val bigMapKeyClient: BigMapKeyClient, val contract: String) {
+class BidouHandler(val bigMapKeyClient: BigMapKeyClient) {
 
     val logger = LoggerFactory.getLogger(javaClass)
 
-     suspend fun getData(tokenId: String): BidouProperties? {
+     suspend fun getData(contract: String, tokenId: String): BidouProperties? {
         var properties: BidouProperties? = null
         try {
             val key = bigMapKeyClient.bigMapKeyWithName(contract, "rgb", tokenId)

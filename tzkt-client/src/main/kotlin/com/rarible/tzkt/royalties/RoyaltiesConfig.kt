@@ -8,5 +8,7 @@ data class RoyaltiesConfig(
     val fxhashV1Manager: String,
     val fxhashV2: String,
     val versum: String,
-    val royaltiesManager: String
+    val royaltiesManager: String,
+    val bidou8x8: String,
+    val bidou24x24: String
     )

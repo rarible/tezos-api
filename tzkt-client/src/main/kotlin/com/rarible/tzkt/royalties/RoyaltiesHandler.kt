@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.rarible.tzkt.client.BigMapKeyClient
 import com.rarible.tzkt.client.IPFSClient
 import com.rarible.tzkt.model.Part
+import com.rarible.tzkt.tokens.BidouHandler
 import okio.ByteString.Companion.decodeHex
 import org.slf4j.LoggerFactory
 import java.net.URLEncoder
@@ -11,6 +12,10 @@ import java.nio.charset.StandardCharsets
 
 class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPFSClient, val royaltiesConfig: RoyaltiesConfig) {
     val logger = LoggerFactory.getLogger(javaClass)
+    val bidouRoyalties = mapOf<String, Int>(
+        Pair(royaltiesConfig.bidou8x8, 1000),
+        Pair(royaltiesConfig.bidou24x24, 1500)
+    )
 
     suspend fun processRoyalties(id: String): List<Part> {
         val contract = id.split(":")[0]
@@ -46,6 +51,11 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
             royaltiesConfig.versum -> {
                 logger.info("Token $contract:$tokenId royalties pattern is VERSUM")
                 part = getVersumRoyalties(tokenId)
+                return part
+            }
+            royaltiesConfig.bidou8x8, royaltiesConfig.bidou24x24 -> {
+                logger.info("Token $contract:$tokenId royalties pattern is 8Bidou 8x8 (10% auto)")
+                part = getBidouRoyalties(contract, tokenId)
                 return part
             }
         }
@@ -242,6 +252,22 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         }
         data?.forEach { part ->
             parts.add(Part(part["partAccount"]!!, part["partValue"]!!.toInt()))
+        }
+        return parts
+    }
+
+    private suspend fun getBidouRoyalties(contract: String, tokenId: String): List<Part> {
+        val parts = mutableListOf<Part>()
+        try {
+            val handler = BidouHandler(bigMapKeyClient)
+            val properties = handler.getData(contract, tokenId)
+            if(properties != null){
+                parts.add(
+                    Part(properties.creator, bidouRoyalties[contract]!!)
+                )
+            }
+        } catch (e: Exception) {
+            logger.warn("Could not parse royalties for token ${contract}:$tokenId with 8Bidou pattern: ${e.message}")
         }
         return parts
     }
