@@ -13,7 +13,7 @@ import com.rarible.tzkt.model.TokenMeta.Representation
 import com.rarible.tzkt.tokens.BidouHandler
 import kotlinx.coroutines.runBlocking
 
-class MetaService(val mapper: ObjectMapper, val bigMapKeyClient: BigMapKeyClient, val knownAddresses: KnownAddresses) {
+class MetaService(private val mapper: ObjectMapper, private val bigMapKeyClient: BigMapKeyClient, private val knownAddresses: KnownAddresses) {
 
     fun meta(token: Token): TokenMeta {
         return if (null != token.metadata) {

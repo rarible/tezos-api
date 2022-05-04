@@ -1,5 +1,6 @@
 package com.rarible.tzkt.client
 
+import com.rarible.tzkt.config.KnownAddresses
 import com.rarible.tzkt.meta.MetaService
 import com.rarible.tzkt.model.TokenMeta
 import com.rarible.tzkt.model.TokenMeta.Representation
@@ -10,7 +11,32 @@ import org.junit.jupiter.api.Test
 
 class TokenClientMetaTests : BaseClientTests() {
 
-    val metaService = MetaService(mapper)
+    val HEN = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
+    val HEN_ROYALTIES = "KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9"
+    val KALAMINT = "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"
+    val FXHASH_V1 = "KT1KEa8z6vWXDJrVqtMrAeDVzsvxat3kHaCE"
+    val FXHASH_MANAGER_LEGACY_V1 = "KT1XCoGnfupWk7Sp8536EfrxcP73LmT68Nyr"
+    val FXHASH_V2 = "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
+    val VERSUM = "KT1LjmAdYQCLBjwv4S2oFkEzyHVkomAf5MrW"
+    val ROYALTIES_MANAGER = "KT1HNNrmCk1fpqveRDz8Fvww2GM4gPzmA7fo"
+    val BIDOU_8x8 = "KT1MxDwChiDwd6WBVs24g1NjERUoK622ZEFp"
+    val BIDOU_24x24 = "KT1TR1ErEQPTdtaJ7hbvKTJSa1tsGnHGZTpf"
+
+    val config = KnownAddresses(
+        hen = HEN,
+        henRoyalties = HEN_ROYALTIES,
+        kalamint = KALAMINT,
+        fxhashV1 = FXHASH_V1,
+        fxhashV1Manager = FXHASH_MANAGER_LEGACY_V1,
+        fxhashV2 = FXHASH_V2,
+        versum = VERSUM,
+        royaltiesManager = ROYALTIES_MANAGER,
+        bidou8x8 = BIDOU_8x8,
+        bidou24x24 = BIDOU_24x24
+    )
+
+    val bigMapKeyClient = BigMapKeyClient(client)
+    val metaService = MetaService(mapper, bigMapKeyClient, config)
     val tokenClient = TokenClient(client, metaService, mockk())
 
     @Test
@@ -225,5 +251,135 @@ class TokenClientMetaTests : BaseClientTests() {
         )
         assertThat(meta.attributes.map { it.key }).containsAll(listOf("thinker","share","fantasy"))
         assertThat(meta.description).isEqualTo("Sharing is growing")
+    }
+
+    @Test
+    fun `should return meta from 8Bidou 8x8`() = runBlocking<Unit> {
+        mock(
+            """
+                [
+                    {
+                        "id": 2234888,
+                        "contract": {
+                            "alias": "8bidou 8x8",
+                            "address": "KT1MxDwChiDwd6WBVs24g1NjERUoK622ZEFp"
+                        },
+                        "tokenId": "69",
+                        "standard": "fa2",
+                        "firstLevel": 2139139,
+                        "firstTime": "2022-02-22T08:30:10Z",
+                        "lastLevel": 2228095,
+                        "lastTime": "2022-03-26T09:23:54Z",
+                        "transfersCount": 14,
+                        "balancesCount": 10,
+                        "holdersCount": 9,
+                        "totalMinted": "10",
+                        "totalBurned": "0",
+                        "totalSupply": "10"
+                    }
+                ]
+            """.trimIndent()
+        )
+        mock(
+            """
+            {
+            	"id": 19575683,
+            	"active": true,
+            	"hash": "expruDGbwWN7Jqay8SnvBhQQxvbYXtxjNnUXYwm9sExfKo42XqtubG",
+            	"key": "69",
+            	"value": {
+            		"rgb": "989898916d91b37db3000000ce62ced925d9e947e9fd01fd6b956b979b97ffccbcffccbc000000b89286d729d7e74ae779b879679767ffccbcffccbcffccbcffccbcca67cad32bd341bf4177bb77ffccbc000000ffccbc000000ad53adc86ac859d759ffccbcffccbcffccbcffccbcffccbcaa86aaa955a917e917e6ff00ffccbcffccbcffccbcffccbc837d83a989a93af63a13eb13ffccbc423430423430ffccbc8ba68b7f7f7f00ff0039f839ffccbcffccbcffccbc6ec46e59a75989a989",
+            		"creater": "tz2QhmKtUWRyArfaqfBedvVdidgKpCcckMXV",
+            		"token_id": "69",
+            		"token_name": "f09f928038c9aec9a8c8b6d684ca8ad5bcd3bcf09f9280",
+            		"creater_name": "67757275677572756879656e61",
+            		"token_description": "f09fa498e29aa1efb88f"
+            	},
+            	"firstLevel": 2139139,
+            	"lastLevel": 2139139,
+            	"updates": 1
+            }
+            """.trimIndent()
+        )
+
+        val meta = tokenClient.tokenMeta("KT1MxDwChiDwd6WBVs24g1NjERUoK622ZEFp:69")
+
+        assertThat(meta.name).isEqualTo("f09f928038c9aec9a8c8b6d684ca8ad5bcd3bcf09f9280")
+        assertThat(meta.description).isEqualTo("f09fa498e29aa1efb88f")
+        assertThat(meta.attributes).hasSize(2)
+        assertThat(meta.content.first()).isEqualTo(
+            TokenMeta.Content(
+                //TODO: to update once image generation is done
+                uri = "",
+                mimeType = "image/jpeg",
+                representation = Representation.PREVIEW
+            )
+        )
+        assertThat(meta.attributes.map { it.key }).containsAll(listOf("creator", "creator_name"))
+    }
+
+    @Test
+    fun `should return meta from 8Bidou 24x24`() = runBlocking<Unit> {
+        mock(
+            """
+                [
+                    {
+                        "id": 2234888,
+                        "contract": {
+                            "alias": "8bidou 8x8",
+                            "address": "KT1TR1ErEQPTdtaJ7hbvKTJSa1tsGnHGZTpf"
+                        },
+                        "tokenId": "69",
+                        "standard": "fa2",
+                        "firstLevel": 2139139,
+                        "firstTime": "2022-02-22T08:30:10Z",
+                        "lastLevel": 2228095,
+                        "lastTime": "2022-03-26T09:23:54Z",
+                        "transfersCount": 14,
+                        "balancesCount": 10,
+                        "holdersCount": 9,
+                        "totalMinted": "10",
+                        "totalBurned": "0",
+                        "totalSupply": "10"
+                    }
+                ]
+            """.trimIndent()
+        )
+        mock(
+            """
+            {
+            	"id": 19575683,
+            	"active": true,
+            	"hash": "expruDGbwWN7Jqay8SnvBhQQxvbYXtxjNnUXYwm9sExfKo42XqtubG",
+            	"key": "69",
+            	"value": {
+            		"rgb": "989898916d91b37db3000000ce62ced925d9e947e9fd01fd6b956b979b97ffccbcffccbc000000b89286d729d7e74ae779b879679767ffccbcffccbcffccbcffccbcca67cad32bd341bf4177bb77ffccbc000000ffccbc000000ad53adc86ac859d759ffccbcffccbcffccbcffccbcffccbcaa86aaa955a917e917e6ff00ffccbcffccbcffccbcffccbc837d83a989a93af63a13eb13ffccbc423430423430ffccbc8ba68b7f7f7f00ff0039f839ffccbcffccbcffccbc6ec46e59a75989a989",
+            		"creater": "tz2QhmKtUWRyArfaqfBedvVdidgKpCcckMXV",
+            		"token_id": "69",
+            		"token_name": "f09f928038c9aec9a8c8b6d684ca8ad5bcd3bcf09f9280",
+            		"creater_name": "67757275677572756879656e61",
+            		"token_description": "f09fa498e29aa1efb88f"
+            	},
+            	"firstLevel": 2139139,
+            	"lastLevel": 2139139,
+            	"updates": 1
+            }
+            """.trimIndent()
+        )
+
+        val meta = tokenClient.tokenMeta("KT1TR1ErEQPTdtaJ7hbvKTJSa1tsGnHGZTpf:69")
+
+        assertThat(meta.name).isEqualTo("f09f928038c9aec9a8c8b6d684ca8ad5bcd3bcf09f9280")
+        assertThat(meta.description).isEqualTo("f09fa498e29aa1efb88f")
+        assertThat(meta.attributes).hasSize(2)
+        assertThat(meta.content.first()).isEqualTo(
+            TokenMeta.Content(
+                //TODO: to update once image generation is done
+                uri = "",
+                mimeType = "image/jpeg",
+                representation = Representation.PREVIEW
+            )
+        )
+        assertThat(meta.attributes.map { it.key }).containsAll(listOf("creator", "creator_name"))
     }
 }
