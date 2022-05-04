@@ -10,9 +10,13 @@ data class BidouProperties(
 ) {
     companion object {
         fun fromMap(map: LinkedHashMap<String, String>): BidouProperties? {
-            return if (map.containsKey("rgb") && map.containsKey("creater") && map.containsKey("token_id") && map.containsKey(
-                    "token_name"
-                ) && map.containsKey("creater_name") && map.containsKey("token_description")
+            return if (
+                map.containsKey("rgb") &&
+                map.containsKey("creater") &&
+                map.containsKey("token_id") &&
+                map.containsKey("token_name") &&
+                map.containsKey("creater_name") &&
+                map.containsKey("token_description")
             ) {
                 BidouProperties(
                     map["rgb"]!!,

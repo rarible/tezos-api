@@ -3,6 +3,7 @@ package com.rarible.tzkt.royalties
 import com.fasterxml.jackson.databind.JsonNode
 import com.rarible.tzkt.client.BigMapKeyClient
 import com.rarible.tzkt.client.IPFSClient
+import com.rarible.tzkt.config.KnownAddresses
 import com.rarible.tzkt.model.Part
 import com.rarible.tzkt.tokens.BidouHandler
 import okio.ByteString.Companion.decodeHex
@@ -10,9 +11,9 @@ import org.slf4j.LoggerFactory
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
-class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPFSClient, val royaltiesConfig: RoyaltiesConfig) {
+class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPFSClient, val royaltiesConfig: KnownAddresses) {
     val logger = LoggerFactory.getLogger(javaClass)
-    val bidouRoyalties = mapOf<String, Int>(
+    val bidouRoyalties = mapOf(
         Pair(royaltiesConfig.bidou8x8, 1000),
         Pair(royaltiesConfig.bidou24x24, 1500)
     )

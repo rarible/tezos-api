@@ -5,6 +5,7 @@ import com.rarible.tzkt.client.BaseClientTests
 import com.rarible.tzkt.client.BigMapKeyClient
 import com.rarible.tzkt.client.IPFSClient
 import com.rarible.tzkt.client.TokenClient
+import com.rarible.tzkt.config.KnownAddresses
 import com.rarible.tzkt.model.Part
 import io.mockk.mockk
 import kotlinx.coroutines.launch
@@ -33,7 +34,7 @@ class RoyaltiesTests : BaseClientTests() {
     val BIDOU_8x8 = "KT1MxDwChiDwd6WBVs24g1NjERUoK622ZEFp"
     val BIDOU_24x24 = "KT1TR1ErEQPTdtaJ7hbvKTJSa1tsGnHGZTpf"
 
-    val royaltiesConfig = RoyaltiesConfig(
+    val royaltiesConfig = KnownAddresses(
         hen = HEN,
         henRoyalties = HEN_ROYALTIES,
         kalamint = KALAMINT,
