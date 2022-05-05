@@ -43,6 +43,16 @@ class TokenClient(
         return metaService.meta(token)
     }
 
+    suspend fun isNft(itemId: String): Boolean? {
+        val parsed = ItemId.parse(itemId)
+        val token = invoke<List<Token>> {
+            it.path(BASE_PATH)
+                .queryParam("contract", parsed.contract)
+                .queryParam("tokenId", parsed.tokenId)
+        }.first()
+        return token.metadata?.let { it["artifactUri"] != null }
+    }
+
     suspend fun tokens(size: Int = DEFAULT_SIZE, continuation: String?, sortAsc: Boolean = true): Page<Token> {
         val tokens = invoke<List<Token>> { builder ->
             builder.path(BASE_PATH)
