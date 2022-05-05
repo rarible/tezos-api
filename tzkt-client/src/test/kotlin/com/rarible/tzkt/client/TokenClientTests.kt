@@ -1447,4 +1447,93 @@ class TokenClientTests : BaseClientTests() {
         assertThat(tokens).hasSize(2)
         assertThat(tokens.first().standard).isEqualTo("fa1.2")
     }
+
+    @Test
+    fun `should return true for nft item`() = runBlocking<Unit> {
+        mock("""[
+                {
+        "id": 60,
+        "contract": {
+            "address": "KT1S95Dyj2QrJpSnAbHRUSUZr7DhuFqssrog"
+        },
+        "tokenId": "0",
+        "standard": "fa2",
+        "firstLevel": 1328122,
+        "firstTime": "2021-02-02T19:17:52Z",
+        "lastLevel": 1390772,
+        "lastTime": "2021-03-19T00:29:18Z",
+        "transfersCount": 2,
+        "balancesCount": 2,
+        "holdersCount": 1,
+        "totalMinted": "1",
+        "totalBurned": "0",
+        "totalSupply": "1",
+        "metadata": {
+            "artifactUri": "https://cloudflare-ipfs.com/ipfs/QmUnPB2pBFHv3MyRDQcmMGkpDNKNqeX57xASa9cx4Xomn1"
+        }
+    }]""".trimMargin())
+
+        val isNft = tokenClient.isNft("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:157993")
+
+        assertThat(request().path).isEqualTo("/v1/tokens?contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&tokenId=157993")
+        assertThat(isNft).isEqualTo(true)
+    }
+
+    @Test
+    fun `should return false for nft item`() = runBlocking<Unit> {
+        mock("""[
+                {
+        "id": 60,
+        "contract": {
+            "address": "KT1S95Dyj2QrJpSnAbHRUSUZr7DhuFqssrog"
+        },
+        "tokenId": "0",
+        "standard": "fa2",
+        "firstLevel": 1328122,
+        "firstTime": "2021-02-02T19:17:52Z",
+        "lastLevel": 1390772,
+        "lastTime": "2021-03-19T00:29:18Z",
+        "transfersCount": 2,
+        "balancesCount": 2,
+        "holdersCount": 1,
+        "totalMinted": "1",
+        "totalBurned": "0",
+        "totalSupply": "1",
+        "metadata": {
+            
+        }
+    }]""".trimMargin())
+
+        val isNft = tokenClient.isNft("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:157993")
+
+        assertThat(request().path).isEqualTo("/v1/tokens?contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&tokenId=157993")
+        assertThat(isNft).isEqualTo(false)
+    }
+
+    @Test
+    fun `should return null for nft item`() = runBlocking<Unit> {
+        mock("""[
+                {
+        "id": 60,
+        "contract": {
+            "address": "KT1S95Dyj2QrJpSnAbHRUSUZr7DhuFqssrog"
+        },
+        "tokenId": "0",
+        "standard": "fa2",
+        "firstLevel": 1328122,
+        "firstTime": "2021-02-02T19:17:52Z",
+        "lastLevel": 1390772,
+        "lastTime": "2021-03-19T00:29:18Z",
+        "transfersCount": 2,
+        "balancesCount": 2,
+        "holdersCount": 1,
+        "totalMinted": "1",
+        "totalBurned": "0",
+        "totalSupply": "1" }]""".trimMargin())
+
+        val isNft = tokenClient.isNft("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:157993")
+
+        assertThat(request().path).isEqualTo("/v1/tokens?contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&tokenId=157993")
+        assertThat(isNft).isNull()
+    }
 }
