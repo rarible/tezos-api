@@ -1,6 +1,6 @@
-package com.rarible.tzkt.royalties
+package com.rarible.tzkt.config
 
-data class RoyaltiesConfig(
+data class KnownAddresses(
     val hen: String,
     val henRoyalties: String,
     val kalamint: String,
@@ -8,5 +8,7 @@ data class RoyaltiesConfig(
     val fxhashV1Manager: String,
     val fxhashV2: String,
     val versum: String,
-    val royaltiesManager: String
+    val royaltiesManager: String,
+    val bidou8x8: String,
+    val bidou24x24: String
     )

@@ -5,6 +5,7 @@ import com.rarible.tzkt.client.BaseClientTests
 import com.rarible.tzkt.client.BigMapKeyClient
 import com.rarible.tzkt.client.IPFSClient
 import com.rarible.tzkt.client.TokenClient
+import com.rarible.tzkt.config.KnownAddresses
 import com.rarible.tzkt.model.Part
 import io.mockk.mockk
 import kotlinx.coroutines.launch
@@ -30,8 +31,10 @@ class RoyaltiesTests : BaseClientTests() {
     val FXHASH_V2 = "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
     val VERSUM = "KT1LjmAdYQCLBjwv4S2oFkEzyHVkomAf5MrW"
     val ROYALTIES_MANAGER = "KT1HNNrmCk1fpqveRDz8Fvww2GM4gPzmA7fo"
+    val BIDOU_8x8 = "KT1MxDwChiDwd6WBVs24g1NjERUoK622ZEFp"
+    val BIDOU_24x24 = "KT1TR1ErEQPTdtaJ7hbvKTJSa1tsGnHGZTpf"
 
-    val royaltiesConfig = RoyaltiesConfig(
+    val royaltiesConfig = KnownAddresses(
         hen = HEN,
         henRoyalties = HEN_ROYALTIES,
         kalamint = KALAMINT,
@@ -39,7 +42,9 @@ class RoyaltiesTests : BaseClientTests() {
         fxhashV1Manager = FXHASH_MANAGER_LEGACY_V1,
         fxhashV2 = FXHASH_V2,
         versum = VERSUM,
-        royaltiesManager = ROYALTIES_MANAGER
+        royaltiesManager = ROYALTIES_MANAGER,
+        bidou8x8 = BIDOU_8x8,
+        bidou24x24 = BIDOU_24x24
     )
 
     @Test
@@ -114,6 +119,70 @@ class RoyaltiesTests : BaseClientTests() {
         val id = "$contract:$tokenId"
         val parts = handler.processRoyalties(id)
         assertThat(parts).isEqualTo(listOf(Part("tz1gSCfWiPL8e6us331gtHCvJr9Cuf3jX8g6", 10 * 100)))
+    }
+
+    @Test
+    fun `should correctly fetch and parse 8Bidou 8x8 royalties`() = runBlocking<Unit> {
+        mock(
+            """
+            {
+            	"id": 19575683,
+            	"active": true,
+            	"hash": "expruDGbwWN7Jqay8SnvBhQQxvbYXtxjNnUXYwm9sExfKo42XqtubG",
+            	"key": "69",
+            	"value": {
+            		"rgb": "989898916d91b37db3000000ce62ced925d9e947e9fd01fd6b956b979b97ffccbcffccbc000000b89286d729d7e74ae779b879679767ffccbcffccbcffccbcffccbcca67cad32bd341bf4177bb77ffccbc000000ffccbc000000ad53adc86ac859d759ffccbcffccbcffccbcffccbcffccbcaa86aaa955a917e917e6ff00ffccbcffccbcffccbcffccbc837d83a989a93af63a13eb13ffccbc423430423430ffccbc8ba68b7f7f7f00ff0039f839ffccbcffccbcffccbc6ec46e59a75989a989",
+            		"creater": "tz2QhmKtUWRyArfaqfBedvVdidgKpCcckMXV",
+            		"token_id": "69",
+            		"token_name": "f09f928038c9aec9a8c8b6d684ca8ad5bcd3bcf09f9280",
+            		"creater_name": "67757275677572756879656e61",
+            		"token_description": "f09fa498e29aa1efb88f"
+            	},
+            	"firstLevel": 2139139,
+            	"lastLevel": 2139139,
+            	"updates": 1
+            }
+        """.trimIndent()
+        )
+
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        var contract = "KT1MxDwChiDwd6WBVs24g1NjERUoK622ZEFp"
+        var tokenId = "69"
+        val id = "$contract:$tokenId"
+        val parts = handler.processRoyalties(id)
+        assertThat(parts).isEqualTo(listOf(Part("tz2QhmKtUWRyArfaqfBedvVdidgKpCcckMXV", 1000)))
+    }
+
+    @Test
+    fun `should correctly fetch and parse 8Bidou 24x24 royalties`() = runBlocking<Unit> {
+        mock(
+            """
+            {
+            	"id": 19575683,
+            	"active": true,
+            	"hash": "expruDGbwWN7Jqay8SnvBhQQxvbYXtxjNnUXYwm9sExfKo42XqtubG",
+            	"key": "69",
+            	"value": {
+            		"rgb": "989898916d91b37db3000000ce62ced925d9e947e9fd01fd6b956b979b97ffccbcffccbc000000b89286d729d7e74ae779b879679767ffccbcffccbcffccbcffccbcca67cad32bd341bf4177bb77ffccbc000000ffccbc000000ad53adc86ac859d759ffccbcffccbcffccbcffccbcffccbcaa86aaa955a917e917e6ff00ffccbcffccbcffccbcffccbc837d83a989a93af63a13eb13ffccbc423430423430ffccbc8ba68b7f7f7f00ff0039f839ffccbcffccbcffccbc6ec46e59a75989a989",
+            		"creater": "tz2QhmKtUWRyArfaqfBedvVdidgKpCcckMXV",
+            		"token_id": "69",
+            		"token_name": "f09f928038c9aec9a8c8b6d684ca8ad5bcd3bcf09f9280",
+            		"creater_name": "67757275677572756879656e61",
+            		"token_description": "f09fa498e29aa1efb88f"
+            	},
+            	"firstLevel": 2139139,
+            	"lastLevel": 2139139,
+            	"updates": 1
+            }
+        """.trimIndent()
+        )
+
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        var contract = "KT1TR1ErEQPTdtaJ7hbvKTJSa1tsGnHGZTpf"
+        var tokenId = "69"
+        val id = "$contract:$tokenId"
+        val parts = handler.processRoyalties(id)
+        assertThat(parts).isEqualTo(listOf(Part("tz2QhmKtUWRyArfaqfBedvVdidgKpCcckMXV", 1500)))
     }
 
     @Test
@@ -584,6 +653,30 @@ class RoyaltiesTests : BaseClientTests() {
         val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"
         var tokenId = "53057"
+        val id = "$contract:$tokenId"
+        val parts = handler.processRoyalties(id)
+        assertThat(parts).isEqualTo(emptyList<Part>())
+    }
+
+    @Test
+    fun `should fetch empty royalties for failed request with 8Bidou 8x8`() = runBlocking<Unit> {
+        mock404()
+
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        var contract = "KT1MxDwChiDwd6WBVs24g1NjERUoK622ZEFp"
+        var tokenId = "53057"
+        val id = "$contract:$tokenId"
+        val parts = handler.processRoyalties(id)
+        assertThat(parts).isEqualTo(emptyList<Part>())
+    }
+
+    @Test
+    fun `should fetch empty royalties for failed request with 8Bidou 24x24`() = runBlocking<Unit> {
+        mock404()
+
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        var contract = "KT1TR1ErEQPTdtaJ7hbvKTJSa1tsGnHGZTpf"
+        var tokenId = "69"
         val id = "$contract:$tokenId"
         val parts = handler.processRoyalties(id)
         assertThat(parts).isEqualTo(emptyList<Part>())
