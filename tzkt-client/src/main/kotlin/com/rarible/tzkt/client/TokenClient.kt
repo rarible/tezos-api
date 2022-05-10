@@ -65,12 +65,82 @@ class TokenClient(
                     queryParam("metadata.artifactUri.null", "false")
                 }
 
-        // enrich with parsed meta
+            // enrich with parsed meta
         }.map { token -> token.copy(meta = metaService.meta(token)) }
         return Page.Get(
             items = tokens,
             size = size,
             last = { it.id.toString() }
+        )
+    }
+
+    suspend fun allTokensByLastUpdate(
+        size: Int = DEFAULT_SIZE,
+        continuation: String?,
+        sortAsc: Boolean = true
+    ): Page<Token> {
+        var prefix = ""
+        val tokens = invoke<List<Token>> { builder ->
+            builder.path(BASE_PATH)
+                .queryParam("token.standard", "fa2")
+                .apply {
+                    queryParam("limit", size)
+                    continuation?.let {
+                        val parsedContinuation = continuation.split("_")
+                        if (parsedContinuation.size != 3) {
+                            throw Exception("Could not parse continuation $continuation")
+                        }
+                        val comparison = parsedContinuation[0]
+                        queryParam("lastLevel.$comparison", parsedContinuation[1])
+                        queryParam("id.ni", parsedContinuation[2])
+                    }
+                    val sorting = if (sortAsc) "sort.asc" else "sort.desc"
+                    queryParam(sorting, "lastLevel")
+                    queryParam("metadata.artifactUri.null", "false")
+                }
+
+            // enrich with parsed meta
+        }.map { token -> token.copy(meta = metaService.meta(token)) }
+
+        val lastToken = tokens.last()
+        val lastLevel = lastToken.lastLevel
+        val continuationId = tokens.filter {
+            it.lastLevel == lastLevel
+        }.map {
+            it.id
+        }
+
+        val sameLastLevelTokens = invoke<List<Token>> { builder ->
+            builder.path(BASE_PATH)
+                .queryParam("token.standard", "fa2")
+                .apply {
+                    queryParam("limit", size)
+                    val sorting = if (sortAsc) "sort.asc" else "sort.desc"
+                    queryParam(sorting, "lastLevel")
+                    queryParam("metadata.artifactUri.null", "false")
+                    queryParam("lastLevel", lastLevel)
+                    queryParam("id.ni", continuationId)
+                }
+
+            // enrich with parsed meta
+        }.map { token -> token.copy(meta = metaService.meta(token)) }
+
+        prefix = if (sameLastLevelTokens.isNotEmpty()) {
+            if (sortAsc)
+                "ge"
+            else
+                "le"
+        } else {
+            if (sortAsc)
+                "gt"
+            else
+                "lt"
+        }
+
+        return Page.Get(
+            items = tokens,
+            size = size,
+            last = { "${prefix}_${lastLevel}_${continuationId.joinToString(",")}" }
         )
     }
 
