@@ -1755,20 +1755,22 @@ class TokenClientTests : BaseClientTests() {
                 }]
             """.trimIndent()
         )
-        mock(
-            """
-                []
-            """.trimIndent()
-        )
+        mock("[]")
+        mock("[]")
 
         val firstTokenRequest = tokenClient.allTokensByLastUpdate(5, null)
         assertThat(firstTokenRequest.items.size).isEqualTo(5)
         assertThat(firstTokenRequest.continuation).isNotNull
-        assertThat(firstTokenRequest.continuation).isEqualTo("gt_1333040_74")
+        assertThat(firstTokenRequest.continuation).isEqualTo("1333040_74")
+
         val secondTokenRequest = tokenClient.allTokensByLastUpdate(5, firstTokenRequest.continuation)
         assertThat(secondTokenRequest.items.size).isEqualTo(5)
         assertThat(secondTokenRequest.continuation).isNotNull
-        assertThat(secondTokenRequest.continuation).isEqualTo("gt_1336349_80")
+        assertThat(secondTokenRequest.continuation).isEqualTo("1336349_80")
+
+        val thirdTokenRequest = tokenClient.allTokensByLastUpdate(6, secondTokenRequest.continuation)
+        assertThat(thirdTokenRequest.items.size).isEqualTo(0)
+        assertThat(thirdTokenRequest.continuation).isNull()
     }
 
     @Test
@@ -2409,209 +2411,21 @@ class TokenClientTests : BaseClientTests() {
                 }]
             """.trimIndent()
         )
-        mock(
-            """
-                [{
-                	"id": 2847049,
-                	"contract": {
-                		"alias": "hic et nunc NFTs",
-                		"address": "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
-                	},
-                	"tokenId": "731185",
-                	"standard": "fa2",
-                	"firstLevel": 2347126,
-                	"firstTime": "2022-05-08T10:27:14Z",
-                	"lastLevel": 2352895,
-                	"lastTime": "2022-05-10T11:51:44Z",
-                	"transfersCount": 13,
-                	"balancesCount": 12,
-                	"holdersCount": 9,
-                	"totalMinted": "10",
-                	"totalBurned": "0",
-                	"totalSupply": "10",
-                	"metadata": {
-                		"name": "*:･ﾟ✧ \uD835\uDC91\uD835\uDC8A\uD835\uDC86\uD835\uDC84\uD835\uDC86\uD835\uDC94 \uD835\uDC90\uD835\uDC87 \uD835\uDC96 *:･ﾟ✧",
-                		"tags": ["sad", "glitch", "glitchart", "anime", "sadcore"],
-                		"symbol": "OBJKT",
-                		"formats": [{
-                			"uri": "ipfs://QmS34JidUjQwSuhVAZzXrvM3Apk4ytp72U1VbGWK4MBA5o",
-                			"mimeType": "image/gif"
-                		}],
-                		"creators": ["tz1euHavatDymHRQFMwjHfoUAHmjiVWBSLLw"],
-                		"decimals": "0",
-                		"displayUri": "ipfs://QmS34JidUjQwSuhVAZzXrvM3Apk4ytp72U1VbGWK4MBA5o",
-                		"artifactUri": "ipfs://QmS34JidUjQwSuhVAZzXrvM3Apk4ytp72U1VbGWK4MBA5o",
-                		"description": "૮꒰ ˶• ༝ •˶꒱ა\uD83D\uDDA4  ☆૮꒰•༝ •。꒱ა\n\n// \uD835\uDC93\uD835\uDC86\uD835\uDC84\uD835\uDC90\uD835\uDC93\uD835\uDC85 \uD835\uDC90\uD835\uDC87 \uD835\uDC8D\uD835\uDC90\uD835\uDC85\uD835\uDC90\uD835\uDC94\uD835\uDC94 \uD835\uDC98\uD835\uDC82\uD835\uDC93",
-                		"thumbnailUri": "ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
-                		"isBooleanAmount": false,
-                		"shouldPreferSymbol": false
-                	}
-                }, {
-                	"id": 2832729,
-                	"contract": {
-                		"address": "KT1TkjKV9mNCyYJdzjZ39XdGP6YMwB5ipYGQ"
-                	},
-                	"tokenId": "1234",
-                	"standard": "fa2",
-                	"firstLevel": 2342069,
-                	"firstTime": "2022-05-06T15:04:29Z",
-                	"lastLevel": 2352895,
-                	"lastTime": "2022-05-10T11:51:44Z",
-                	"transfersCount": 3,
-                	"balancesCount": 3,
-                	"holdersCount": 1,
-                	"totalMinted": "1",
-                	"totalBurned": "0",
-                	"totalSupply": "1",
-                	"metadata": {
-                		"date": "2022-05-05T18:15:27.287Z",
-                		"name": "Degen Fox #1234",
-                		"tags": ["degen", "fox", "tdc"],
-                		"rights": "© 2022 Tezos Degen Club",
-                		"symbol": "FOXX",
-                		"edition": "1234",
-                		"formats": [{
-                			"uri": "ipfs://QmTt2ZmvD7o9vhyJKPepeT9zxEyCbbieMcpvL7Maydi7mZ",
-                			"mimeType": "image/png"
-                		}],
-                		"creators": ["@fursiq"],
-                		"decimals": "0",
-                		"royalties": {
-                			"shares": {
-                				"tz1UUYg2gXSgZ1ek13CkTuBgQo6FTHektHuh": "259",
-                				"tz1g2Q8FPFsFmRUXJ4j2vgwBtMN4ZeZ69dhs": "259",
-                				"tz1hztV4eKCB5sD2L8DS3HbGRWhkbPwp7PTb": "259"
-                			},
-                			"decimals": "4"
-                		},
-                		"attributes": [{
-                			"name": "Status",
-                			"value": "Hidden"
-                		}],
-                		"displayUri": "ipfs://QmUfm32TaFV6URxFPYQyve3pSxLd5cWxzcxMe8fLDHabYj",
-                		"artifactUri": "ipfs://QmTt2ZmvD7o9vhyJKPepeT9zxEyCbbieMcpvL7Maydi7mZ",
-                		"description": "Foxes are social creatures, rascals and rumblers, but when it comes to a party they like to keep things classy. The elite club of foxes is the only club recommended for wild parties that goes on all day, every day.",
-                		"thumbnailUri": "ipfs://QmcRx3ADmsRzzAtAF1aQTSniWHqenJSaDtL5A9JqHQfveu",
-                		"isBooleanAmount": true
-                	}
-                }, {
-                	"id": 2796681,
-                	"contract": {
-                		"alias": "Tezotopia NFT Registry",
-                		"address": "KT1ViVwoVfGSCsDaxjwoovejm1aYSGz7s2TZ"
-                	},
-                	"tokenId": "46046",
-                	"standard": "fa2",
-                	"firstLevel": 2333875,
-                	"firstTime": "2022-05-03T16:41:14Z",
-                	"lastLevel": 2352895,
-                	"lastTime": "2022-05-10T11:51:44Z",
-                	"transfersCount": 38,
-                	"balancesCount": 4,
-                	"holdersCount": 1,
-                	"totalMinted": "1",
-                	"totalBurned": "0",
-                	"totalSupply": "1",
-                	"metadata": {
-                		"name": "Sultan Inferno",
-                		"tags": ["unit", "tezotopia", "gaming", "gifdotgames"],
-                		"genres": ["gaming"],
-                		"symbol": "TZTOP",
-                		"creators": ["gifdotgames"],
-                		"decimals": "0",
-                		"language": "en",
-                		"displayUri": "ipfs://QmehZMFWh86GNB4jP62z28FEmK9hDbCQd7veuY7bbPFirT",
-                		"publishers": ["gifdotgames"],
-                		"artifactUri": "ipfs://QmehZMFWh86GNB4jP62z28FEmK9hDbCQd7veuY7bbPFirT",
-                		"description": "A SuperHero of sorts...",
-                		"thumbnailUri": "ipfs://QmVYfbgNHT8uUPwDRQbZ4YpRmf2A2xDW9HbBPCReL5LdJm",
-                		"collectionName": "unit",
-                		"isTransferable": true,
-                		"isBooleanAmount": true,
-                		"shouldPreferSymbol": false
-                	}
-                }, {
-                	"id": 2432776,
-                	"contract": {
-                		"alias": "hic et nunc NFTs",
-                		"address": "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
-                	},
-                	"tokenId": "701568",
-                	"standard": "fa2",
-                	"firstLevel": 2213538,
-                	"firstTime": "2022-03-21T00:47:54Z",
-                	"lastLevel": 2352895,
-                	"lastTime": "2022-05-10T11:51:44Z",
-                	"transfersCount": 66,
-                	"balancesCount": 54,
-                	"holdersCount": 46,
-                	"totalMinted": "50",
-                	"totalBurned": "0",
-                	"totalSupply": "50",
-                	"metadata": {
-                		"name": "System 6.4",
-                		"tags": ["kristenroos", "dither", "system6", "colorcycling", "vintagesoftware"],
-                		"symbol": "OBJKT",
-                		"formats": [{
-                			"uri": "ipfs://QmRVvVhjXeJVxPmWHCAoG9ihW4DCjZz6bJ9z32hyH1UAhf",
-                			"mimeType": "image/gif"
-                		}],
-                		"creators": ["tz1f4V314WFsUzYwVBudTLN7nPoB79HZKsdD"],
-                		"decimals": "0",
-                		"displayUri": "ipfs://QmRVvVhjXeJVxPmWHCAoG9ihW4DCjZz6bJ9z32hyH1UAhf",
-                		"artifactUri": "ipfs://QmRVvVhjXeJVxPmWHCAoG9ihW4DCjZz6bJ9z32hyH1UAhf",
-                		"description": "Inspired by the illustrations found in Macintosh video games from the 1980's. A six part series, that stems from the initial System 6. Each piece is a component of the larger work, with unique dithered backgrounds.\n\nGIF,640x512, 2021/2022",
-                		"thumbnailUri": "ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
-                		"isBooleanAmount": false,
-                		"shouldPreferSymbol": false
-                	}
-                }, {
-                	"id": 415274,
-                	"contract": {
-                		"alias": "hic et nunc NFTs",
-                		"address": "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
-                	},
-                	"tokenId": "301966",
-                	"standard": "fa2",
-                	"firstLevel": 1690714,
-                	"firstTime": "2021-09-13T19:42:52Z",
-                	"lastLevel": 2352895,
-                	"lastTime": "2022-05-10T11:51:44Z",
-                	"transfersCount": 93,
-                	"balancesCount": 36,
-                	"holdersCount": 31,
-                	"totalMinted": "50",
-                	"totalBurned": "0",
-                	"totalSupply": "50",
-                	"metadata": {
-                		"name": "rings(7)",
-                		"tags": ["generative", "art", "generativeart", "rings"],
-                		"symbol": "OBJKT",
-                		"formats": [{
-                			"uri": "ipfs://bafybeidzaa2zdvpoo3rctqzogv6wyo3xflrdfh4ixwr5yukquta2w24i4a",
-                			"mimeType": "image/png"
-                		}],
-                		"creators": ["tz1YHsinBJHMj1YFN7UrCsVAgTcaJCH86PjK"],
-                		"decimals": "0",
-                		"displayUri": "ipfs://bafkreic6klszvl4vxo73hcuye27f7htdijuw6k26wx3hwb3crqcyo2jjei",
-                		"artifactUri": "ipfs://bafybeidzaa2zdvpoo3rctqzogv6wyo3xflrdfh4ixwr5yukquta2w24i4a",
-                		"description": "",
-                		"thumbnailUri": "ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
-                		"isBooleanAmount": false,
-                		"shouldPreferSymbol": false
-                	}
-                }]
-            """.trimIndent()
-        )
+        mock("[]")
 
         val firstTokenRequest = tokenClient.allTokensByLastUpdate(5, null, false)
         assertThat(firstTokenRequest.items.size).isEqualTo(5)
         assertThat(firstTokenRequest.continuation).isNotNull
-        assertThat(firstTokenRequest.continuation).isEqualTo("le_2352896_2860850,2860849,2860800,2831713,2831646")
+        assertThat(firstTokenRequest.continuation).isEqualTo("2352896_2831646")
+
         val secondTokenRequest = tokenClient.allTokensByLastUpdate(5, firstTokenRequest.continuation, false)
         assertThat(secondTokenRequest.items.size).isEqualTo(5)
         assertThat(secondTokenRequest.continuation).isNotNull
-        assertThat(secondTokenRequest.continuation).isEqualTo("le_2352896_2860850,2860849,2860848,2860847,2763372")
+        assertThat(secondTokenRequest.continuation).isEqualTo("2352896_2831713")
+
+        val thirdTokenRequest = tokenClient.allTokensByLastUpdate(6, secondTokenRequest.continuation, false)
+        assertThat(thirdTokenRequest.items.size).isEqualTo(5)
+        assertThat(thirdTokenRequest.continuation).isNull()
     }
 
     @Test
