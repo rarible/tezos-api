@@ -2,6 +2,7 @@ package com.rarible.tzkt.client
 
 import com.rarible.tzkt.meta.MetaService
 import com.rarible.tzkt.model.ItemId
+import com.rarible.tzkt.model.LevelIdContinuation
 import com.rarible.tzkt.model.Page
 import com.rarible.tzkt.model.Part
 import com.rarible.tzkt.model.Token
@@ -11,6 +12,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import org.springframework.web.reactive.function.client.WebClient
+import java.lang.Integer.min
 
 class TokenClient(
     webClient: WebClient,
@@ -65,12 +67,69 @@ class TokenClient(
                     queryParam("metadata.artifactUri.null", "false")
                 }
 
-        // enrich with parsed meta
+            // enrich with parsed meta
         }.map { token -> token.copy(meta = metaService.meta(token)) }
         return Page.Get(
             items = tokens,
             size = size,
             last = { it.id.toString() }
+        )
+    }
+
+    suspend fun allTokensByLastUpdate(
+        size: Int = DEFAULT_SIZE,
+        continuation: String?,
+        sortAsc: Boolean = true
+    ): Page<Token> {
+        var parsedContinuation = continuation?.let {LevelIdContinuation.parse(it)}
+
+        // First request
+        val firstTokens = invoke<List<Token>> { builder ->
+            builder.path(BASE_PATH)
+                .queryParam("token.standard", "fa2")
+                .apply {
+                    queryParam("limit", size)
+
+                    // if we have continuation we need to add additional params
+                    parsedContinuation?.let {
+                        queryParam("lastLevel", it.level)
+                        queryParam("id.${direction(sortAsc)}", it.id)
+                    }
+
+                    val sorting = if (sortAsc) "sort.asc" else "sort.desc"
+                    queryParam(sorting, "lastLevel")
+                    queryParam("metadata.artifactUri.null", "false")
+                }
+        }
+
+        // Second request
+        val secondTokens = if (firstTokens.size < size && parsedContinuation != null) {
+            invoke<List<Token>> { builder ->
+                builder.path(BASE_PATH)
+                    .queryParam("token.standard", "fa2")
+                    .apply {
+                        queryParam("limit", size)
+                        queryParam("lastLevel.${direction(sortAsc)}", parsedContinuation.level)
+                        val sorting = if (sortAsc) "sort.asc" else "sort.desc"
+                        queryParam(sorting, "lastLevel")
+                        queryParam("metadata.artifactUri.null", "false")
+                    }
+
+                // enrich with parsed meta
+            }
+        } else emptyList()
+
+        val tokens = firstTokens + secondTokens
+        // enrich with parsed meta
+        val slice = tokens.subList(0, min(size, tokens.size)).map { token -> token.copy(meta = metaService.meta(token)) }
+        val nextContinuation = if (slice.size >= size) {
+            val token = slice.last()
+            LevelIdContinuation(token.lastLevel!!, token.id)
+        } else null
+
+        return Page(
+            items = tokens,
+            continuation = nextContinuation?.let { it.toString() }
         )
     }
 
@@ -89,6 +148,8 @@ class TokenClient(
         val parsed = ItemId.parse(itemId)
         return royaltyHander.processRoyalties(parsed.contract, parsed.tokenId)
     }
+
+    fun direction(asc: Boolean) = if (asc) "gt" else "lt"
 
     companion object {
         const val BASE_PATH = "v1/tokens"

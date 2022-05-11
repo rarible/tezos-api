@@ -8,6 +8,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.springframework.web.reactive.function.client.WebClient
 
 class TokenClientTests : BaseClientTests() {
 
@@ -108,7 +109,7 @@ class TokenClientTests : BaseClientTests() {
     }
 
     @Test
-    fun `should return tokens by with size, continuation and sorted by ASC`() = runBlocking<Unit> {
+    fun `should return tokens with size, continuation and sorted by ASC`() = runBlocking<Unit> {
         mock(
             """
             [{
@@ -778,7 +779,7 @@ class TokenClientTests : BaseClientTests() {
     }
 
     @Test
-    fun `should return tokens by with size, continuation and sorted by DESC`() = runBlocking<Unit> {
+    fun `should return tokens with size, continuation and sorted by DESC`() = runBlocking<Unit> {
         mock(
             """
             [{
@@ -1413,6 +1414,1018 @@ class TokenClientTests : BaseClientTests() {
             prevId = it.id!!.toLong()
         }
         assertThat(tokens.items.first().id?.toLong()).isLessThan(lastId.toLong())
+    }
+
+    @Test
+    fun `should return tokens sorted by lastLevel with size, continuation and sorted by ASC`() = runBlocking<Unit> {
+        mock(
+            """
+                [{
+                	"id": 70,
+                	"contract": {
+                		"address": "KT1UNMbjyPSY8hbHYCxyM1LMbHMzv5EbFFN3"
+                	},
+                	"tokenId": "0",
+                	"standard": "fa2",
+                	"firstLevel": 1332416,
+                	"firstTime": "2021-02-05T21:55:47Z",
+                	"lastLevel": 1332416,
+                	"lastTime": "2021-02-05T21:55:47Z",
+                	"transfersCount": 1,
+                	"balancesCount": 1,
+                	"holdersCount": 1,
+                	"totalMinted": "1",
+                	"totalBurned": "0",
+                	"totalSupply": "1",
+                	"metadata": {
+                		"name": "Mischief Genesis ",
+                		"creator": "Chris Mischief",
+                		"decimals": "0",
+                		"displayUri": "ipfs://QmaTLw6SRSZBgbsfjNhkhkTQmw9XMvt6YiPRHwZ3YN9X4a",
+                		"artifactUri": "ipfs://QmaTLw6SRSZBgbsfjNhkhkTQmw9XMvt6YiPRHwZ3YN9X4a",
+                		"description": "After many years of hanging out with graffiti artists, assisting in art studios, painting, showing and selling my own works, I picked up an iPad Pro and wondered if I could make art on it. This was my very first attempt and sealed my fate as a digital artist. ",
+                		"thumbnailUri": "ipfs://QmTBAYu12gkhTzZCL7vqN1mr4SjA95UJqDgqxpMCrfjsWP",
+                		"booleanAmount": true,
+                		"serial number": "AP2"
+                	}
+                }, {
+                	"id": 71,
+                	"contract": {
+                		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+                	},
+                	"tokenId": "7",
+                	"standard": "fa2",
+                	"firstLevel": 1332523,
+                	"firstTime": "2021-02-05T23:48:07Z",
+                	"lastLevel": 1332523,
+                	"lastTime": "2021-02-05T23:48:07Z",
+                	"transfersCount": 1,
+                	"balancesCount": 1,
+                	"holdersCount": 1,
+                	"totalMinted": "2",
+                	"totalBurned": "0",
+                	"totalSupply": "2",
+                	"metadata": {
+                		"name": "ung",
+                		"tags": [],
+                		"symbol": "OBJKT",
+                		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+                		"formats": [{
+                			"uri": "https://ipfs.io/ipfs/QmevGKa3g6hFWNV9wviNb1qWUKFE8mygcrU7hEuDxfP33r",
+                			"mimeType": "image/png"
+                		}],
+                		"decimals": "0",
+                		"artifactUri": "https://ipfs.io/ipfs/QmevGKa3g6hFWNV9wviNb1qWUKFE8mygcrU7hEuDxfP33r",
+                		"description": "",
+                		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+                		"booleanAmount": true
+                	}
+                }, {
+                	"id": 72,
+                	"contract": {
+                		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+                	},
+                	"tokenId": "8",
+                	"standard": "fa2",
+                	"firstLevel": 1332773,
+                	"firstTime": "2021-02-06T04:08:47Z",
+                	"lastLevel": 1332773,
+                	"lastTime": "2021-02-06T04:08:47Z",
+                	"transfersCount": 1,
+                	"balancesCount": 1,
+                	"holdersCount": 1,
+                	"totalMinted": "1000",
+                	"totalBurned": "0",
+                	"totalSupply": "1000",
+                	"metadata": {
+                		"name": "la jetee",
+                		"tags": [],
+                		"symbol": "OBJKT",
+                		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+                		"formats": [{
+                			"uri": "https://ipfs.io/ipfs/QmURPaTHnDnA36jeuAVyFYMP8utCciCJY2cB42du1hs9hC",
+                			"mimeType": "video/mp4"
+                		}],
+                		"decimals": "0",
+                		"artifactUri": "https://ipfs.io/ipfs/QmURPaTHnDnA36jeuAVyFYMP8utCciCJY2cB42du1hs9hC",
+                		"description": "",
+                		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+                		"booleanAmount": true
+                	}
+                }, {
+                	"id": 73,
+                	"contract": {
+                		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+                	},
+                	"tokenId": "9",
+                	"standard": "fa2",
+                	"firstLevel": 1332897,
+                	"firstTime": "2021-02-06T06:19:27Z",
+                	"lastLevel": 1332897,
+                	"lastTime": "2021-02-06T06:19:27Z",
+                	"transfersCount": 1,
+                	"balancesCount": 1,
+                	"holdersCount": 1,
+                	"totalMinted": "10",
+                	"totalBurned": "0",
+                	"totalSupply": "10",
+                	"metadata": {
+                		"name": "UNG",
+                		"tags": [],
+                		"symbol": "OBJKT",
+                		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+                		"formats": [{
+                			"uri": "https://ipfs.io/ipfs/Qmf6KqanvCYkyJkCLJ3UAei8oavZytWBL9SNEnNTa58M1X",
+                			"mimeType": "image/png"
+                		}],
+                		"decimals": "0",
+                		"artifactUri": "https://ipfs.io/ipfs/Qmf6KqanvCYkyJkCLJ3UAei8oavZytWBL9SNEnNTa58M1X",
+                		"description": "",
+                		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+                		"booleanAmount": true
+                	}
+                }, {
+                	"id": 74,
+                	"contract": {
+                		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+                	},
+                	"tokenId": "10",
+                	"standard": "fa2",
+                	"firstLevel": 1333040,
+                	"firstTime": "2021-02-06T08:48:35Z",
+                	"lastLevel": 1333040,
+                	"lastTime": "2021-02-06T08:48:35Z",
+                	"transfersCount": 1,
+                	"balancesCount": 1,
+                	"holdersCount": 1,
+                	"totalMinted": "10",
+                	"totalBurned": "0",
+                	"totalSupply": "10",
+                	"metadata": {
+                		"name": "UNG",
+                		"tags": [],
+                		"media": [{
+                			"hash": "QmZYBf2MbVGzusnq311Jn7WQ6rQqoaxqu6hq6CpDgWGN5A",
+                			"path": "QmZYBf2MbVGzusnq311Jn7WQ6rQqoaxqu6hq6CpDgWGN5A",
+                			"size": "29368"
+                		}],
+                		"symbol": "OBJKT",
+                		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+                		"formats": [{
+                			"uri": "",
+                			"mimeType": "image/png"
+                		}],
+                		"decimals": "0",
+                		"artifactUri": "",
+                		"description": "",
+                		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+                		"booleanAmount": true
+                	}
+                }]
+            """.trimIndent()
+        )
+        mock(
+            """
+                []
+            """.trimIndent()
+        )
+        mock(
+            """
+                [{
+                	"id": 75,
+                	"contract": {
+                		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+                	},
+                	"tokenId": "11",
+                	"standard": "fa2",
+                	"firstLevel": 1333049,
+                	"firstTime": "2021-02-06T08:58:15Z",
+                	"lastLevel": 1333049,
+                	"lastTime": "2021-02-06T08:58:15Z",
+                	"transfersCount": 1,
+                	"balancesCount": 1,
+                	"holdersCount": 1,
+                	"totalMinted": "22",
+                	"totalBurned": "0",
+                	"totalSupply": "22",
+                	"metadata": {
+                		"name": "fadfa",
+                		"tags": [],
+                		"media": "https://ipfs.io/ipfs/QmZYBf2MbVGzusnq311Jn7WQ6rQqoaxqu6hq6CpDgWGN5A",
+                		"symbol": "OBJKT",
+                		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+                		"formats": [{
+                			"uri": "",
+                			"mimeType": "image/png"
+                		}],
+                		"decimals": "0",
+                		"artifactUri": "",
+                		"description": "",
+                		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+                		"booleanAmount": true
+                	}
+                }, {
+                	"id": 76,
+                	"contract": {
+                		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+                	},
+                	"tokenId": "12",
+                	"standard": "fa2",
+                	"firstLevel": 1333069,
+                	"firstTime": "2021-02-06T09:19:35Z",
+                	"lastLevel": 1333761,
+                	"lastTime": "2021-02-06T21:14:15Z",
+                	"transfersCount": 2,
+                	"balancesCount": 2,
+                	"holdersCount": 2,
+                	"totalMinted": "20",
+                	"totalBurned": "0",
+                	"totalSupply": "20",
+                	"metadata": {
+                		"name": "ung",
+                		"tags": [],
+                		"symbol": "OBJKT",
+                		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+                		"formats": [{
+                			"uri": "https://ipfs.io/ipfs/QmZYBf2MbVGzusnq311Jn7WQ6rQqoaxqu6hq6CpDgWGN5A",
+                			"mimeType": "image/png"
+                		}],
+                		"decimals": "0",
+                		"artifactUri": "https://ipfs.io/ipfs/QmZYBf2MbVGzusnq311Jn7WQ6rQqoaxqu6hq6CpDgWGN5A",
+                		"description": "",
+                		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+                		"booleanAmount": true
+                	}
+                }, {
+                	"id": 77,
+                	"contract": {
+                		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+                	},
+                	"tokenId": "13",
+                	"standard": "fa2",
+                	"firstLevel": 1335564,
+                	"firstTime": "2021-02-08T04:51:59Z",
+                	"lastLevel": 1335564,
+                	"lastTime": "2021-02-08T04:51:59Z",
+                	"transfersCount": 1,
+                	"balancesCount": 1,
+                	"holdersCount": 1,
+                	"totalMinted": "100",
+                	"totalBurned": "0",
+                	"totalSupply": "100",
+                	"metadata": {
+                		"name": "hDAO",
+                		"tags": [],
+                		"symbol": "OBJKT",
+                		"creator": "tz1LVkMDYV4AqLEgPDjd2c9zwZ2Wq76dqRYC",
+                		"formats": [{
+                			"uri": "https://ipfs.io/ipfs/QmULY1poQwAzgcwoHGBugKdKv1742x6UYDsQ3vBSQkm8LP",
+                			"mimeType": "image/png"
+                		}],
+                		"decimals": "0",
+                		"artifactUri": "https://ipfs.io/ipfs/QmULY1poQwAzgcwoHGBugKdKv1742x6UYDsQ3vBSQkm8LP",
+                		"description": "",
+                		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+                		"booleanAmount": true
+                	}
+                }, {
+                	"id": 79,
+                	"contract": {
+                		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+                	},
+                	"tokenId": "15",
+                	"standard": "fa2",
+                	"firstLevel": 1336229,
+                	"firstTime": "2021-02-08T16:24:35Z",
+                	"lastLevel": 1336229,
+                	"lastTime": "2021-02-08T16:24:35Z",
+                	"transfersCount": 1,
+                	"balancesCount": 1,
+                	"holdersCount": 1,
+                	"totalMinted": "1",
+                	"totalBurned": "0",
+                	"totalSupply": "1",
+                	"metadata": {
+                		"name": "XTZ News",
+                		"tags": [],
+                		"symbol": "OBJKT",
+                		"creator": "tz1Rux3pGrp2KpZUBKvg3VQ4edRYVJsapr4z",
+                		"formats": [{
+                			"uri": "https://ipfs.io/ipfs/QmSrifEeCTpZ5RcSLRdX5wWRbmxjD4LeSpx3ZQi25cXSd4",
+                			"mimeType": "image/jpeg"
+                		}],
+                		"decimals": "0",
+                		"artifactUri": "https://ipfs.io/ipfs/QmSrifEeCTpZ5RcSLRdX5wWRbmxjD4LeSpx3ZQi25cXSd4",
+                		"description": "XTZ News Logo",
+                		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+                		"booleanAmount": false
+                	}
+                }, {
+                	"id": 80,
+                	"contract": {
+                		"address": "KT1M2JnD1wsg7w2B4UXJXtKQPuDUpU2L7cJH"
+                	},
+                	"tokenId": "16",
+                	"standard": "fa2",
+                	"firstLevel": 1336349,
+                	"firstTime": "2021-02-08T18:30:35Z",
+                	"lastLevel": 1336349,
+                	"lastTime": "2021-02-08T18:30:35Z",
+                	"transfersCount": 1,
+                	"balancesCount": 1,
+                	"holdersCount": 1,
+                	"totalMinted": "10",
+                	"totalBurned": "0",
+                	"totalSupply": "10",
+                	"metadata": {
+                		"name": "Enigma",
+                		"tags": [],
+                		"symbol": "OBJKT",
+                		"creator": "tz1SBxNvpDFC4bjW23CtQfVLqN5cBATVf68B",
+                		"formats": [{
+                			"uri": "https://ipfs.io/ipfs/QmZwx9rB1myiPsonKmhyprZuCLnQmemxgztjGXN5GpMPPg",
+                			"mimeType": "image/jpeg"
+                		}],
+                		"decimals": "0",
+                		"artifactUri": "https://ipfs.io/ipfs/QmZwx9rB1myiPsonKmhyprZuCLnQmemxgztjGXN5GpMPPg",
+                		"description": "",
+                		"thumbnailUri": "https://ipfs.io/ipfs/QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+                		"booleanAmount": true
+                	}
+                }]
+            """.trimIndent()
+        )
+        mock("[]")
+        mock("[]")
+
+        val firstTokenRequest = tokenClient.allTokensByLastUpdate(5, null)
+        assertThat(firstTokenRequest.items.size).isEqualTo(5)
+        assertThat(firstTokenRequest.continuation).isNotNull
+        assertThat(firstTokenRequest.continuation).isEqualTo("1333040_74")
+
+        val secondTokenRequest = tokenClient.allTokensByLastUpdate(5, firstTokenRequest.continuation)
+        assertThat(secondTokenRequest.items.size).isEqualTo(5)
+        assertThat(secondTokenRequest.continuation).isNotNull
+        assertThat(secondTokenRequest.continuation).isEqualTo("1336349_80")
+
+        val thirdTokenRequest = tokenClient.allTokensByLastUpdate(6, secondTokenRequest.continuation)
+        assertThat(thirdTokenRequest.items.size).isEqualTo(0)
+        assertThat(thirdTokenRequest.continuation).isNull()
+    }
+
+    @Test
+    fun `should return tokens sorted by lastLevel with size, continuation and sorted by DESC`() = runBlocking<Unit> {
+        mock(
+            """
+                [{
+                	"id": 2860850,
+                	"contract": {
+                		"alias": "FXHASH GENTK v2",
+                		"address": "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
+                	},
+                	"tokenId": "686247",
+                	"standard": "fa2",
+                	"firstLevel": 2352896,
+                	"firstTime": "2022-05-10T11:52:14Z",
+                	"lastLevel": 2352896,
+                	"lastTime": "2022-05-10T11:52:14Z",
+                	"transfersCount": 1,
+                	"balancesCount": 1,
+                	"holdersCount": 1,
+                	"totalMinted": "1",
+                	"totalBurned": "0",
+                	"totalSupply": "1",
+                	"metadata": {
+                		"name": "[WAITING TO BE SIGNED]",
+                		"symbol": "GENTK",
+                		"decimals": "0",
+                		"displayUri": "ipfs://QmYwSwa5hP4346GqD7hAjutwJSmeYTdiLQ7Wec2C7Cez1D",
+                		"artifactUri": "ipfs://QmdGV3UqJqX4v5x9nFcDYeekCEAm3SDXUG5SHdjKQKn4Pe",
+                		"description": "This Gentk is waiting to be signed by Fxhash Signer module",
+                		"thumbnailUri": "ipfs://QmbvEAn7FLMeYBDroYwBP8qWc3d3VVWbk19tTB83LCMB5S"
+                	}
+                }, {
+                	"id": 2860849,
+                	"contract": {
+                		"alias": "FXHASH GENTK v2",
+                		"address": "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
+                	},
+                	"tokenId": "686246",
+                	"standard": "fa2",
+                	"firstLevel": 2352896,
+                	"firstTime": "2022-05-10T11:52:14Z",
+                	"lastLevel": 2352896,
+                	"lastTime": "2022-05-10T11:52:14Z",
+                	"transfersCount": 1,
+                	"balancesCount": 1,
+                	"holdersCount": 1,
+                	"totalMinted": "1",
+                	"totalBurned": "0",
+                	"totalSupply": "1",
+                	"metadata": {
+                		"name": "[WAITING TO BE SIGNED]",
+                		"symbol": "GENTK",
+                		"decimals": "0",
+                		"displayUri": "ipfs://QmYwSwa5hP4346GqD7hAjutwJSmeYTdiLQ7Wec2C7Cez1D",
+                		"artifactUri": "ipfs://QmdGV3UqJqX4v5x9nFcDYeekCEAm3SDXUG5SHdjKQKn4Pe",
+                		"description": "This Gentk is waiting to be signed by Fxhash Signer module",
+                		"thumbnailUri": "ipfs://QmbvEAn7FLMeYBDroYwBP8qWc3d3VVWbk19tTB83LCMB5S"
+                	}
+                }, {
+                	"id": 2860800,
+                	"contract": {
+                		"alias": "FXHASH GENTK v2",
+                		"address": "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
+                	},
+                	"tokenId": "686228",
+                	"standard": "fa2",
+                	"firstLevel": 2352876,
+                	"firstTime": "2022-05-10T11:41:29Z",
+                	"lastLevel": 2352896,
+                	"lastTime": "2022-05-10T11:52:14Z",
+                	"transfersCount": 2,
+                	"balancesCount": 2,
+                	"holdersCount": 1,
+                	"totalMinted": "1",
+                	"totalBurned": "0",
+                	"totalSupply": "1",
+                	"metadata": {
+                		"name": "1984 #14",
+                		"tags": ["sketch", "eye", "animated", "drawing", "pencil", "1984", "creativecoding", "generativeart", "p5js"],
+                		"symbol": "GENTK",
+                		"version": "0.2",
+                		"decimals": "0",
+                		"attributes": [{
+                			"name": "Species",
+                			"value": "Mammal"
+                		}, {
+                			"name": "Palette",
+                			"value": "Acid"
+                		}, {
+                			"name": "Format",
+                			"value": "Vertical"
+                		}, {
+                			"name": "Sheet",
+                			"value": "Paper"
+                		}, {
+                			"name": "Torn",
+                			"value": "Slightly"
+                		}],
+                		"displayUri": "ipfs://Qmevvv2qF2SnidEehM4uANUmT3gm1xFiX19cN6GN9qn6Yc",
+                		"artifactUri": "ipfs://QmbCv4ktfvEr89kzURRAWbxFQcqzk9wmR5dbtooKWjqscf?fxhash=onify73B3Ziv956VHSPtX3tMhzkJP2xsB9KaETDcBuR3ezv6tXr",
+                		"description": "“Always eyes watching you and the voice enveloping you. Asleep or awake, indoors or out of doors, in the bath or bed—no escape. Nothing was your own except the few cubic centimeters in your skull.” George Orwell\n\nPress [s] to save as png.\n\nGenerative artwork by Gandhiavelli, @gandhiavelli. Made with p5js in 2022.",
+                		"generatorUri": "ipfs://QmbCv4ktfvEr89kzURRAWbxFQcqzk9wmR5dbtooKWjqscf",
+                		"thumbnailUri": "ipfs://QmdP4VKLyu9Y1fy1EDkUyupXG6uUU9sgg5Gy7pbXeT2QBE",
+                		"iterationHash": "onify73B3Ziv956VHSPtX3tMhzkJP2xsB9KaETDcBuR3ezv6tXr",
+                		"authenticityHash": "5d36062a3a97df430e58c72016366350811d9c6a99e77be813b86cf382e5ee40"
+                	}
+                }, {
+                	"id": 2831713,
+                	"contract": {
+                		"alias": "hic et nunc NFTs",
+                		"address": "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
+                	},
+                	"tokenId": "729572",
+                	"standard": "fa2",
+                	"firstLevel": 2341908,
+                	"firstTime": "2022-05-06T13:41:14Z",
+                	"lastLevel": 2352896,
+                	"lastTime": "2022-05-10T11:52:14Z",
+                	"transfersCount": 47,
+                	"balancesCount": 31,
+                	"holdersCount": 30,
+                	"totalMinted": "100",
+                	"totalBurned": "0",
+                	"totalSupply": "100",
+                	"metadata": {
+                		"name": "AI Pollock",
+                		"tags": ["ai", "artificialintelligence", "generative", "aigenerated", "abstract", "expressionism", "jacksonpollock", "abstractexpressionism", "colors", "colorful", "aigenerated", "60fps", "painting", "aipainting", "generativeart", "creativecoding", "tezos4tezos", "tezos4tezos", "mp4", "video", "fullhd"],
+                		"symbol": "OBJKT",
+                		"formats": [{
+                			"uri": "ipfs://QmX5gdQYN2sP1231ce5hFbPX9GjHtFcpVEScbbJ44faSTq",
+                			"mimeType": "video/mp4"
+                		}],
+                		"creators": ["tz1NZgkr5zUJqso7QXXKt74sX1MJpY4id8MR"],
+                		"decimals": "0",
+                		"displayUri": "ipfs://QmSmJC95Y9h4VDmtqBxYHAZDppY3jccnsZi23BQcqWBJXB",
+                		"artifactUri": "ipfs://QmX5gdQYN2sP1231ce5hFbPX9GjHtFcpVEScbbJ44faSTq",
+                		"description": "AI generated abstract expressionistic painting.\nTEZOS4TEZOS edition!\nFormat: MP4\nDuration : 25 s\nFrame rate: 60 FPS \nDimensions: 1920 x 1080",
+                		"thumbnailUri": "ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+                		"isBooleanAmount": false,
+                		"shouldPreferSymbol": false
+                	}
+                }, {
+                	"id": 2831646,
+                	"contract": {
+                		"alias": "hic et nunc NFTs",
+                		"address": "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
+                	},
+                	"tokenId": "729558",
+                	"standard": "fa2",
+                	"firstLevel": 2341887,
+                	"firstTime": "2022-05-06T13:29:59Z",
+                	"lastLevel": 2352896,
+                	"lastTime": "2022-05-10T11:52:14Z",
+                	"transfersCount": 36,
+                	"balancesCount": 26,
+                	"holdersCount": 25,
+                	"totalMinted": "100",
+                	"totalBurned": "0",
+                	"totalSupply": "100",
+                	"metadata": {
+                		"name": "Wet Nights",
+                		"tags": ["tez4tez", "tezos4tezos", "naked", "nude", "lesbian", "girl", "woman", "hot", "sexy"],
+                		"symbol": "OBJKT",
+                		"formats": [{
+                			"uri": "ipfs://QmbUsMeGdjdspWGYDoNaM2sjgB9PGJVBb5VCoJecxbreno",
+                			"mimeType": "image/jpeg"
+                		}],
+                		"creators": ["tz1Xv6TCtr9NaP5WLg8BJzkFDbsosVAkep6B"],
+                		"decimals": "0",
+                		"displayUri": "ipfs://QmYczLzMemt312DpoGPFTsHmhrpZVeXLuJPA9uFNKuQTYJ",
+                		"artifactUri": "ipfs://QmbUsMeGdjdspWGYDoNaM2sjgB9PGJVBb5VCoJecxbreno",
+                		"description": "Illustration",
+                		"thumbnailUri": "ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+                		"isBooleanAmount": false,
+                		"shouldPreferSymbol": false
+                	}
+                }]
+            """.trimIndent()
+        )
+        mock(
+            """
+                [{
+                	"id": 2860850,
+                	"contract": {
+                		"alias": "FXHASH GENTK v2",
+                		"address": "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
+                	},
+                	"tokenId": "686247",
+                	"standard": "fa2",
+                	"firstLevel": 2352896,
+                	"firstTime": "2022-05-10T11:52:14Z",
+                	"lastLevel": 2352896,
+                	"lastTime": "2022-05-10T11:52:14Z",
+                	"transfersCount": 1,
+                	"balancesCount": 1,
+                	"holdersCount": 1,
+                	"totalMinted": "1",
+                	"totalBurned": "0",
+                	"totalSupply": "1",
+                	"metadata": {
+                		"name": "[WAITING TO BE SIGNED]",
+                		"symbol": "GENTK",
+                		"decimals": "0",
+                		"displayUri": "ipfs://QmYwSwa5hP4346GqD7hAjutwJSmeYTdiLQ7Wec2C7Cez1D",
+                		"artifactUri": "ipfs://QmdGV3UqJqX4v5x9nFcDYeekCEAm3SDXUG5SHdjKQKn4Pe",
+                		"description": "This Gentk is waiting to be signed by Fxhash Signer module",
+                		"thumbnailUri": "ipfs://QmbvEAn7FLMeYBDroYwBP8qWc3d3VVWbk19tTB83LCMB5S"
+                	}
+                }, {
+                	"id": 2860849,
+                	"contract": {
+                		"alias": "FXHASH GENTK v2",
+                		"address": "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
+                	},
+                	"tokenId": "686246",
+                	"standard": "fa2",
+                	"firstLevel": 2352896,
+                	"firstTime": "2022-05-10T11:52:14Z",
+                	"lastLevel": 2352896,
+                	"lastTime": "2022-05-10T11:52:14Z",
+                	"transfersCount": 1,
+                	"balancesCount": 1,
+                	"holdersCount": 1,
+                	"totalMinted": "1",
+                	"totalBurned": "0",
+                	"totalSupply": "1",
+                	"metadata": {
+                		"name": "[WAITING TO BE SIGNED]",
+                		"symbol": "GENTK",
+                		"decimals": "0",
+                		"displayUri": "ipfs://QmYwSwa5hP4346GqD7hAjutwJSmeYTdiLQ7Wec2C7Cez1D",
+                		"artifactUri": "ipfs://QmdGV3UqJqX4v5x9nFcDYeekCEAm3SDXUG5SHdjKQKn4Pe",
+                		"description": "This Gentk is waiting to be signed by Fxhash Signer module",
+                		"thumbnailUri": "ipfs://QmbvEAn7FLMeYBDroYwBP8qWc3d3VVWbk19tTB83LCMB5S"
+                	}
+                }, {
+                	"id": 2860848,
+                	"contract": {
+                		"address": "KT1DyJodC4zgDA8mAekZhH39gEM4BBDdCrTb"
+                	},
+                	"tokenId": "2",
+                	"standard": "fa2",
+                	"firstLevel": 2352896,
+                	"firstTime": "2022-05-10T11:52:14Z",
+                	"lastLevel": 2352896,
+                	"lastTime": "2022-05-10T11:52:14Z",
+                	"transfersCount": 1,
+                	"balancesCount": 1,
+                	"holdersCount": 1,
+                	"totalMinted": "2",
+                	"totalBurned": "0",
+                	"totalSupply": "2",
+                	"metadata": {
+                		"date": "2022-05-10T11:51:20.391Z",
+                		"name": "PB Dailies #2",
+                		"tags": ["pbdailies", "photez", "birds", "photography"],
+                		"image": "ipfs://QmYDhTmQp4hA6VLHKSvjcPKAoTRDsE7BDEwpNefxtX6tUn",
+                		"minter": "KT1Aq4wWmVanpQhq4TTfjZXB5AjFpx15iQMM",
+                		"rights": "No License / All Rights Reserved",
+                		"symbol": "OBJKTCOM",
+                		"formats": [{
+                			"uri": "ipfs://QmeDAJsv1xvGHTEGyPCrueTAXAUemBJmkHfoVQjeYqaTdo",
+                			"fileName": "PBdailies #2.jpg",
+                			"fileSize": "1334382",
+                			"mimeType": "image/jpeg",
+                			"dimensions": {
+                				"unit": "px",
+                				"value": "1328x996"
+                			}
+                		}, {
+                			"uri": "ipfs://QmYDhTmQp4hA6VLHKSvjcPKAoTRDsE7BDEwpNefxtX6tUn",
+                			"fileName": "cover-PBdailies #2.jpeg",
+                			"fileSize": "865853",
+                			"mimeType": "image/jpeg",
+                			"dimensions": {
+                				"unit": "px",
+                				"value": "1024x768"
+                			}
+                		}, {
+                			"uri": "ipfs://QmPFiLsFzAjKUwV5Gzj8kGT6oZpLDLmqUcmXi85kkLJiBs",
+                			"fileName": "thumbnail-PBdailies #2.jpeg",
+                			"fileSize": "127073",
+                			"mimeType": "image/jpeg",
+                			"dimensions": {
+                				"unit": "px",
+                				"value": "350x263"
+                			}
+                		}],
+                		"creators": ["tz1QVvTNBH8D5Y3br7a1W9qvLepseCMDa8he"],
+                		"decimals": "0",
+                		"royalties": {
+                			"shares": {
+                				"tz1QVvTNBH8D5Y3br7a1W9qvLepseCMDa8he": "150"
+                			},
+                			"decimals": "3"
+                		},
+                		"attributes": [],
+                		"displayUri": "ipfs://QmYDhTmQp4hA6VLHKSvjcPKAoTRDsE7BDEwpNefxtX6tUn",
+                		"artifactUri": "ipfs://QmeDAJsv1xvGHTEGyPCrueTAXAUemBJmkHfoVQjeYqaTdo",
+                		"description": "A Red-breasted Merganser swims across a lake\n---\nWeek 1\nBird: Red-breasted Merganser\nEdit: Oil paint exploring empty space\nPhotographed: April 25, 2022\nLocation: Fayetteville, AR",
+                		"mintingTool": "https://objkt.com",
+                		"thumbnailUri": "ipfs://QmPFiLsFzAjKUwV5Gzj8kGT6oZpLDLmqUcmXi85kkLJiBs",
+                		"isBooleanAmount": false,
+                		"shouldPreferSymbol": false
+                	}
+                }, {
+                	"id": 2860847,
+                	"contract": {
+                		"address": "KT1EYJ8dK9MvxK2WxqcTnekXNyMCmHuBjoMz"
+                	},
+                	"tokenId": "4620",
+                	"standard": "fa2",
+                	"firstLevel": 2352896,
+                	"firstTime": "2022-05-10T11:52:14Z",
+                	"lastLevel": 2352896,
+                	"lastTime": "2022-05-10T11:52:14Z",
+                	"transfersCount": 1,
+                	"balancesCount": 1,
+                	"holdersCount": 1,
+                	"totalMinted": "1",
+                	"totalBurned": "0",
+                	"totalSupply": "1",
+                	"metadata": {
+                		"name": "Thibaut Hamonou",
+                		"tags": ["Top 14", "Section Paloise Béarn Pyrénées", "Rugby", "Fanlive"],
+                		"minter": null,
+                		"symbol": "FAN",
+                		"formats": [{
+                			"uri": "ipfs://QmU4tPK78GrFmuqYzp7PAisonRzF1AQwXv1kqUNchAFyRV",
+                			"mimeType": "image/png"
+                		}],
+                		"creators": ["FanLive"],
+                		"decimals": "0",
+                		"royalties": {
+                			"shares": {
+                				"tz1gVVoEE5EGokaZXA8NpV63iN7tiE4H42Ae": "10"
+                			},
+                			"decimals": "2"
+                		},
+                		"attributes": [{
+                			"name": "League",
+                			"value": "Top 14"
+                		}, {
+                			"name": "Nationality",
+                			"value": "France"
+                		}, {
+                			"name": "Position",
+                			"value": "Backrow"
+                		}, {
+                			"name": "Club",
+                			"value": "Section Paloise Béarn Pyrénées"
+                		}, {
+                			"name": "Season",
+                			"value": "2021-2022"
+                		}, {
+                			"name": "Category",
+                			"value": "Gold"
+                		}, {
+                			"name": "Sport",
+                			"value": "Rugby"
+                		}, {
+                			"name": "Serial number",
+                			"value": "27/150"
+                		}],
+                		"displayUri": "ipfs://QmU4tPK78GrFmuqYzp7PAisonRzF1AQwXv1kqUNchAFyRV",
+                		"artifactUri": "ipfs://QmU4tPK78GrFmuqYzp7PAisonRzF1AQwXv1kqUNchAFyRV",
+                		"thumbnailUri": "ipfs://QmSDeNZwgKUh5DomiCkFP2PGMUE1XC7URjh8w5FqLr5zPN",
+                		"isBooleanAmount": true,
+                		"shouldPreferSymbol": false
+                	}
+                }, {
+                	"id": 2831713,
+                	"contract": {
+                		"alias": "hic et nunc NFTs",
+                		"address": "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
+                	},
+                	"tokenId": "729572",
+                	"standard": "fa2",
+                	"firstLevel": 2341908,
+                	"firstTime": "2022-05-06T13:41:14Z",
+                	"lastLevel": 2352896,
+                	"lastTime": "2022-05-10T11:52:14Z",
+                	"transfersCount": 47,
+                	"balancesCount": 31,
+                	"holdersCount": 30,
+                	"totalMinted": "100",
+                	"totalBurned": "0",
+                	"totalSupply": "100",
+                	"metadata": {
+                		"name": "AI Pollock",
+                		"tags": ["ai", "artificialintelligence", "generative", "aigenerated", "abstract", "expressionism", "jacksonpollock", "abstractexpressionism", "colors", "colorful", "aigenerated", "60fps", "painting", "aipainting", "generativeart", "creativecoding", "tezos4tezos", "tezos4tezos", "mp4", "video", "fullhd"],
+                		"symbol": "OBJKT",
+                		"formats": [{
+                			"uri": "ipfs://QmX5gdQYN2sP1231ce5hFbPX9GjHtFcpVEScbbJ44faSTq",
+                			"mimeType": "video/mp4"
+                		}],
+                		"creators": ["tz1NZgkr5zUJqso7QXXKt74sX1MJpY4id8MR"],
+                		"decimals": "0",
+                		"displayUri": "ipfs://QmSmJC95Y9h4VDmtqBxYHAZDppY3jccnsZi23BQcqWBJXB",
+                		"artifactUri": "ipfs://QmX5gdQYN2sP1231ce5hFbPX9GjHtFcpVEScbbJ44faSTq",
+                		"description": "AI generated abstract expressionistic painting.\nTEZOS4TEZOS edition!\nFormat: MP4\nDuration : 25 s\nFrame rate: 60 FPS \nDimensions: 1920 x 1080",
+                		"thumbnailUri": "ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
+                		"isBooleanAmount": false,
+                		"shouldPreferSymbol": false
+                	}
+                }]
+            """.trimIndent()
+        )
+        mock(
+            """
+                [{
+                	"id": 2860850,
+                	"contract": {
+                		"alias": "FXHASH GENTK v2",
+                		"address": "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
+                	},
+                	"tokenId": "686247",
+                	"standard": "fa2",
+                	"firstLevel": 2352896,
+                	"firstTime": "2022-05-10T11:52:14Z",
+                	"lastLevel": 2352896,
+                	"lastTime": "2022-05-10T11:52:14Z",
+                	"transfersCount": 1,
+                	"balancesCount": 1,
+                	"holdersCount": 1,
+                	"totalMinted": "1",
+                	"totalBurned": "0",
+                	"totalSupply": "1",
+                	"metadata": {
+                		"name": "[WAITING TO BE SIGNED]",
+                		"symbol": "GENTK",
+                		"decimals": "0",
+                		"displayUri": "ipfs://QmYwSwa5hP4346GqD7hAjutwJSmeYTdiLQ7Wec2C7Cez1D",
+                		"artifactUri": "ipfs://QmdGV3UqJqX4v5x9nFcDYeekCEAm3SDXUG5SHdjKQKn4Pe",
+                		"description": "This Gentk is waiting to be signed by Fxhash Signer module",
+                		"thumbnailUri": "ipfs://QmbvEAn7FLMeYBDroYwBP8qWc3d3VVWbk19tTB83LCMB5S"
+                	}
+                }, {
+                	"id": 2860849,
+                	"contract": {
+                		"alias": "FXHASH GENTK v2",
+                		"address": "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
+                	},
+                	"tokenId": "686246",
+                	"standard": "fa2",
+                	"firstLevel": 2352896,
+                	"firstTime": "2022-05-10T11:52:14Z",
+                	"lastLevel": 2352896,
+                	"lastTime": "2022-05-10T11:52:14Z",
+                	"transfersCount": 1,
+                	"balancesCount": 1,
+                	"holdersCount": 1,
+                	"totalMinted": "1",
+                	"totalBurned": "0",
+                	"totalSupply": "1",
+                	"metadata": {
+                		"name": "[WAITING TO BE SIGNED]",
+                		"symbol": "GENTK",
+                		"decimals": "0",
+                		"displayUri": "ipfs://QmYwSwa5hP4346GqD7hAjutwJSmeYTdiLQ7Wec2C7Cez1D",
+                		"artifactUri": "ipfs://QmdGV3UqJqX4v5x9nFcDYeekCEAm3SDXUG5SHdjKQKn4Pe",
+                		"description": "This Gentk is waiting to be signed by Fxhash Signer module",
+                		"thumbnailUri": "ipfs://QmbvEAn7FLMeYBDroYwBP8qWc3d3VVWbk19tTB83LCMB5S"
+                	}
+                }, {
+                	"id": 2860848,
+                	"contract": {
+                		"address": "KT1DyJodC4zgDA8mAekZhH39gEM4BBDdCrTb"
+                	},
+                	"tokenId": "2",
+                	"standard": "fa2",
+                	"firstLevel": 2352896,
+                	"firstTime": "2022-05-10T11:52:14Z",
+                	"lastLevel": 2352896,
+                	"lastTime": "2022-05-10T11:52:14Z",
+                	"transfersCount": 1,
+                	"balancesCount": 1,
+                	"holdersCount": 1,
+                	"totalMinted": "2",
+                	"totalBurned": "0",
+                	"totalSupply": "2",
+                	"metadata": {
+                		"date": "2022-05-10T11:51:20.391Z",
+                		"name": "PB Dailies #2",
+                		"tags": ["pbdailies", "photez", "birds", "photography"],
+                		"image": "ipfs://QmYDhTmQp4hA6VLHKSvjcPKAoTRDsE7BDEwpNefxtX6tUn",
+                		"minter": "KT1Aq4wWmVanpQhq4TTfjZXB5AjFpx15iQMM",
+                		"rights": "No License / All Rights Reserved",
+                		"symbol": "OBJKTCOM",
+                		"formats": [{
+                			"uri": "ipfs://QmeDAJsv1xvGHTEGyPCrueTAXAUemBJmkHfoVQjeYqaTdo",
+                			"fileName": "PBdailies #2.jpg",
+                			"fileSize": "1334382",
+                			"mimeType": "image/jpeg",
+                			"dimensions": {
+                				"unit": "px",
+                				"value": "1328x996"
+                			}
+                		}, {
+                			"uri": "ipfs://QmYDhTmQp4hA6VLHKSvjcPKAoTRDsE7BDEwpNefxtX6tUn",
+                			"fileName": "cover-PBdailies #2.jpeg",
+                			"fileSize": "865853",
+                			"mimeType": "image/jpeg",
+                			"dimensions": {
+                				"unit": "px",
+                				"value": "1024x768"
+                			}
+                		}, {
+                			"uri": "ipfs://QmPFiLsFzAjKUwV5Gzj8kGT6oZpLDLmqUcmXi85kkLJiBs",
+                			"fileName": "thumbnail-PBdailies #2.jpeg",
+                			"fileSize": "127073",
+                			"mimeType": "image/jpeg",
+                			"dimensions": {
+                				"unit": "px",
+                				"value": "350x263"
+                			}
+                		}],
+                		"creators": ["tz1QVvTNBH8D5Y3br7a1W9qvLepseCMDa8he"],
+                		"decimals": "0",
+                		"royalties": {
+                			"shares": {
+                				"tz1QVvTNBH8D5Y3br7a1W9qvLepseCMDa8he": "150"
+                			},
+                			"decimals": "3"
+                		},
+                		"attributes": [],
+                		"displayUri": "ipfs://QmYDhTmQp4hA6VLHKSvjcPKAoTRDsE7BDEwpNefxtX6tUn",
+                		"artifactUri": "ipfs://QmeDAJsv1xvGHTEGyPCrueTAXAUemBJmkHfoVQjeYqaTdo",
+                		"description": "A Red-breasted Merganser swims across a lake\n---\nWeek 1\nBird: Red-breasted Merganser\nEdit: Oil paint exploring empty space\nPhotographed: April 25, 2022\nLocation: Fayetteville, AR",
+                		"mintingTool": "https://objkt.com",
+                		"thumbnailUri": "ipfs://QmPFiLsFzAjKUwV5Gzj8kGT6oZpLDLmqUcmXi85kkLJiBs",
+                		"isBooleanAmount": false,
+                		"shouldPreferSymbol": false
+                	}
+                }, {
+                	"id": 2860847,
+                	"contract": {
+                		"address": "KT1EYJ8dK9MvxK2WxqcTnekXNyMCmHuBjoMz"
+                	},
+                	"tokenId": "4620",
+                	"standard": "fa2",
+                	"firstLevel": 2352896,
+                	"firstTime": "2022-05-10T11:52:14Z",
+                	"lastLevel": 2352896,
+                	"lastTime": "2022-05-10T11:52:14Z",
+                	"transfersCount": 1,
+                	"balancesCount": 1,
+                	"holdersCount": 1,
+                	"totalMinted": "1",
+                	"totalBurned": "0",
+                	"totalSupply": "1",
+                	"metadata": {
+                		"name": "Thibaut Hamonou",
+                		"tags": ["Top 14", "Section Paloise Béarn Pyrénées", "Rugby", "Fanlive"],
+                		"minter": null,
+                		"symbol": "FAN",
+                		"formats": [{
+                			"uri": "ipfs://QmU4tPK78GrFmuqYzp7PAisonRzF1AQwXv1kqUNchAFyRV",
+                			"mimeType": "image/png"
+                		}],
+                		"creators": ["FanLive"],
+                		"decimals": "0",
+                		"royalties": {
+                			"shares": {
+                				"tz1gVVoEE5EGokaZXA8NpV63iN7tiE4H42Ae": "10"
+                			},
+                			"decimals": "2"
+                		},
+                		"attributes": [{
+                			"name": "League",
+                			"value": "Top 14"
+                		}, {
+                			"name": "Nationality",
+                			"value": "France"
+                		}, {
+                			"name": "Position",
+                			"value": "Backrow"
+                		}, {
+                			"name": "Club",
+                			"value": "Section Paloise Béarn Pyrénées"
+                		}, {
+                			"name": "Season",
+                			"value": "2021-2022"
+                		}, {
+                			"name": "Category",
+                			"value": "Gold"
+                		}, {
+                			"name": "Sport",
+                			"value": "Rugby"
+                		}, {
+                			"name": "Serial number",
+                			"value": "27/150"
+                		}],
+                		"displayUri": "ipfs://QmU4tPK78GrFmuqYzp7PAisonRzF1AQwXv1kqUNchAFyRV",
+                		"artifactUri": "ipfs://QmU4tPK78GrFmuqYzp7PAisonRzF1AQwXv1kqUNchAFyRV",
+                		"thumbnailUri": "ipfs://QmSDeNZwgKUh5DomiCkFP2PGMUE1XC7URjh8w5FqLr5zPN",
+                		"isBooleanAmount": true,
+                		"shouldPreferSymbol": false
+                	}
+                }, {
+                	"id": 2763372,
+                	"contract": {
+                		"alias": "Tezotopia NFT Registry",
+                		"address": "KT1ViVwoVfGSCsDaxjwoovejm1aYSGz7s2TZ"
+                	},
+                	"tokenId": "44349",
+                	"standard": "fa2",
+                	"firstLevel": 2319002,
+                	"firstTime": "2022-04-28T09:35:29Z",
+                	"lastLevel": 2352896,
+                	"lastTime": "2022-05-10T11:52:14Z",
+                	"transfersCount": 7,
+                	"balancesCount": 2,
+                	"holdersCount": 1,
+                	"totalMinted": "1",
+                	"totalBurned": "0",
+                	"totalSupply": "1",
+                	"metadata": {
+                		"name": "Tz T.Top 1.11",
+                		"tags": ["unit", "tezotopia", "gaming", "gifdotgames"],
+                		"genres": ["gaming"],
+                		"symbol": "TZTOP",
+                		"creators": ["gifdotgames"],
+                		"decimals": "0",
+                		"language": "en",
+                		"displayUri": "ipfs://QmeJqTpYs66Qkqo9NWyp4tH8LieL4tBQwbkxwSutTEsjSL",
+                		"publishers": ["gifdotgames"],
+                		"artifactUri": "ipfs://QmeJqTpYs66Qkqo9NWyp4tH8LieL4tBQwbkxwSutTEsjSL",
+                		"description": "One of the original clone droids to envelope all of Tezotopia's mercenary markets. The T.Top 1.11 model is a light,affordable, standard war machine that is produced in massive quantities.",
+                		"thumbnailUri": "ipfs://QmVzWLwwbqKeLELLS2rGurGZpg42AC4oJ77wFt15a79eJG",
+                		"collectionName": "unit",
+                		"isTransferable": true,
+                		"isBooleanAmount": true,
+                		"shouldPreferSymbol": false
+                	}
+                }]
+            """.trimIndent()
+        )
+        mock("[]")
+
+        val firstTokenRequest = tokenClient.allTokensByLastUpdate(5, null, false)
+        assertThat(firstTokenRequest.items.size).isEqualTo(5)
+        assertThat(firstTokenRequest.continuation).isNotNull
+        assertThat(firstTokenRequest.continuation).isEqualTo("2352896_2831646")
+
+        val secondTokenRequest = tokenClient.allTokensByLastUpdate(5, firstTokenRequest.continuation, false)
+        assertThat(secondTokenRequest.items.size).isEqualTo(5)
+        assertThat(secondTokenRequest.continuation).isNotNull
+        assertThat(secondTokenRequest.continuation).isEqualTo("2352896_2831713")
+
+        val thirdTokenRequest = tokenClient.allTokensByLastUpdate(6, secondTokenRequest.continuation, false)
+        assertThat(thirdTokenRequest.items.size).isEqualTo(5)
+        assertThat(thirdTokenRequest.continuation).isNull()
     }
 
     @Test
