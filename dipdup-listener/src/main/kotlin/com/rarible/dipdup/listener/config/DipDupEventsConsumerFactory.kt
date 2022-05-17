@@ -8,6 +8,7 @@ import com.rarible.dipdup.client.core.model.DipDupOrder
 import java.util.*
 
 class DipDupEventsConsumerFactory(
+    private val network: String,
     private val brokerReplicaSet: String,
     host: String,
     environment: String,
@@ -30,7 +31,7 @@ class DipDupEventsConsumerFactory(
             valueDeserializerClass = JsonDeserializer::class.java,
             valueClass = DipDupOrder::class.java,
             consumerGroup = consumerGroup,
-            defaultTopic = DipDupTopicProvider.ORDER,
+            defaultTopic = "${DipDupTopicProvider.ORDER}_$network",
             bootstrapServers = brokerReplicaSet,
             properties = properties
         )
@@ -42,7 +43,7 @@ class DipDupEventsConsumerFactory(
             valueDeserializerClass = JsonDeserializer::class.java,
             valueClass = DipDupActivity::class.java,
             consumerGroup = consumerGroup,
-            defaultTopic = DipDupTopicProvider.ACTIVITY,
+            defaultTopic = "${DipDupTopicProvider.ACTIVITY}_$network",
             bootstrapServers = brokerReplicaSet,
             properties = properties
         )
