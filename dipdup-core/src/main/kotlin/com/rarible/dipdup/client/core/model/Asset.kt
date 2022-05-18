@@ -6,8 +6,8 @@ import java.math.BigDecimal
 import java.math.BigInteger
 
 data class Asset(
-    val type: AssetType,
-    val value: BigDecimal
+    val assetType: AssetType,
+    val assetValue: BigDecimal
 ) {
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "assetClass")
