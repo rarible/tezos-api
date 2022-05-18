@@ -28,7 +28,7 @@ class DipDupEventsConsumerFactory(
     fun createOrderConsumer(consumerGroup: String): RaribleKafkaConsumer<DipDupOrder> {
         return RaribleKafkaConsumer(
             clientId = "$clientIdPrefix.tezos-order-consumer",
-            valueDeserializerClass = JsonDeserializer::class.java,
+            valueDeserializerClass = DipDupDeserializer.OrderJsonSerializer::class.java,
             valueClass = DipDupOrder::class.java,
             consumerGroup = consumerGroup,
             defaultTopic = "${DipDupTopicProvider.ORDER}_$network",
@@ -40,7 +40,7 @@ class DipDupEventsConsumerFactory(
     fun createActivityConsumer(consumerGroup: String): RaribleKafkaConsumer<DipDupActivity> {
         return RaribleKafkaConsumer(
             clientId = "$clientIdPrefix.tezos-activity-consumer",
-            valueDeserializerClass = JsonDeserializer::class.java,
+            valueDeserializerClass = DipDupDeserializer.ActivityJsonSerializer::class.java,
             valueClass = DipDupActivity::class.java,
             consumerGroup = consumerGroup,
             defaultTopic = "${DipDupTopicProvider.ACTIVITY}_$network",

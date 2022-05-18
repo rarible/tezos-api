@@ -33,7 +33,7 @@ class OrderClient(
     ): DipDupOrdersPage {
         val parsedContinuation = DipDupContinuation.parse(continuation)
         val response = safeExecution(GetOrdersCustomQuery(
-            statuses = statuses.map { it.value },
+            statuses = statuses.map { it.name },
             limit = size,
             sort = sort ?: DipDupOrderSort.LAST_UPDATE_DESC,
             prevId = parsedContinuation?.id.toString(),
@@ -61,7 +61,7 @@ class OrderClient(
                 contract = contract,
                 tokenId = tokenId,
                 maker = maker,
-                statuses = statuses.map { it.value },
+                statuses = statuses.map { it.name },
                 limit = size,
                 prevId = parsedContinuation?.id.toString(),
                 prevDate = parsedContinuation?.date.toString()
