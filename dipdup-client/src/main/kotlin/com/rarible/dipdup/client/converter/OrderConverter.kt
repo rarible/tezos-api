@@ -8,10 +8,12 @@ import com.rarible.dipdup.client.core.model.DipDupOrder
 import com.rarible.dipdup.client.core.model.OrderStatus
 import com.rarible.dipdup.client.core.model.TezosPlatform
 import com.rarible.dipdup.client.fragment.Order
+import com.rarible.dipdup.client.model.DipDupContinuation
 import com.rarible.dipdup.client.model.DipDupOrdersPage
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.time.OffsetDateTime
+import java.util.*
 import kotlin.math.min
 
 fun convert(source: GetOrderByIdQuery.Marketplace_order_by_pk) = DipDupOrder(
@@ -35,10 +37,14 @@ fun convert(source: GetOrderByIdQuery.Marketplace_order_by_pk) = DipDupOrder(
 
 fun convertAll(source: List<GetOrdersQuery.Marketplace_order>, limit: Int): DipDupOrdersPage {
     val continuation = when {
-        source.size == limit -> source[limit-1].order.id.toString()
+        source.size == limit -> convert(source[limit - 1].order)
+            .let { DipDupContinuation(it.lastUpdatedAt, UUID.fromString(it.id)) }.toString()
         else -> null
     }
-    return DipDupOrdersPage(source.subList(0, min(source.size, limit)).map { convert(it.order) }, continuation = continuation)
+    return DipDupOrdersPage(
+        source.subList(0, min(source.size, limit)).map { convert(it.order) },
+        continuation = continuation
+    )
 }
 
 fun convertByIds(source: List<GetOrdersByIdsQuery.Marketplace_order>): List<DipDupOrder> {
@@ -47,10 +53,14 @@ fun convertByIds(source: List<GetOrdersByIdsQuery.Marketplace_order>): List<DipD
 
 fun convertByItem(source: List<GetOrdersByItemQuery.Marketplace_order>, limit: Int): DipDupOrdersPage {
     val continuation = when {
-        source.size == limit -> source[limit-1].order.id.toString()
+        source.size == limit -> convert(source[limit - 1].order)
+            .let { DipDupContinuation(it.lastUpdatedAt, UUID.fromString(it.id)) }.toString()
         else -> null
     }
-    return DipDupOrdersPage(source.subList(0, min(source.size, limit)).map { convert(it.order) }, continuation = continuation)
+    return DipDupOrdersPage(
+        source.subList(0, min(source.size, limit)).map { convert(it.order) },
+        continuation = continuation
+    )
 }
 
 fun convert(source: Order) = DipDupOrder(

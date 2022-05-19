@@ -11,6 +11,10 @@ data class DipDupContinuation(
     val id: UUID
 ) {
 
+    override fun toString(): String {
+        return "${date.toEpochSecond()}_${id}"
+    }
+
     companion object {
         fun parse(value: String?): DipDupContinuation? {
             return value?.let {

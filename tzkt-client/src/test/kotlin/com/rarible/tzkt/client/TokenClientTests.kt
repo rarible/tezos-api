@@ -100,8 +100,8 @@ class TokenClientTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val token = tokenClient.token("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:157993")
-        assertThat(request().path).isEqualTo("/v1/tokens?contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&tokenId=157993&token.standard=fa2")
+        val token = tokenClient.token("KT1NWdwVA8zq5DDJTKcMkRqWYJcEcyTTm5WK:1156")
+        assertThat(request().path).isEqualTo("/v1/tokens?contract=KT1NWdwVA8zq5DDJTKcMkRqWYJcEcyTTm5WK&tokenId=1156&token.standard=fa2")
 
         assertThat(token).isNotNull
         assertThat(token.meta).isNotNull

@@ -1,6 +1,7 @@
 package com.rarible.dipdup.client
 
 import com.rarible.dipdup.client.core.model.OrderStatus
+import com.rarible.dipdup.client.model.DipDupContinuation
 import com.rarible.dipdup.client.model.DipDupOrderSort
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
@@ -287,21 +288,13 @@ class OrderClientFt : BaseClientFt() {
                     "taker": null
                   }]}}
         """.trimIndent())
-//        val orders = orderClient.getOrdersByItem(
-//            contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton",
-//            tokenId = "691915",
-//            maker = null,
-//            statuses = listOf(),
-//            size = 2,
-//            continuation = "1659577833_42737510-3635-53a9-85cc-c37c81c74cf6"
-//        )
         val orders = orderClient.getOrdersByItem(
             contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton",
             tokenId = "691915",
             maker = null,
             statuses = listOf(),
             size = 2,
-            continuation = null
+            continuation = "1659577833_42737510-3635-53a9-85cc-c37c81c74cf6"
         )
         assertThat(orders.orders).hasSize(1)
     }
@@ -341,13 +334,87 @@ class OrderClientFt : BaseClientFt() {
                   }]}}
         """.trimIndent())
         val orders = orderClient.getOrdersByItem(
-            contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton",
-            tokenId = "691915",
+            contract = "KT1NWdwVA8zq5DDJTKcMkRqWYJcEcyTTm5WK",
+            tokenId = "1168",
             maker = null,
             statuses = listOf(),
             size = 2,
             continuation = null
         )
         assertThat(orders.orders).hasSize(1)
+    }
+
+    @Test
+    fun `should return orders with continuation`() = runBlocking<Unit> {
+        mock("""
+            {
+                "data": {
+                    "marketplace_order": [
+                        {
+                            "__typename": "marketplace_order",
+                            "cancelled": false,
+                            "created_at": "2022-02-23T15:27:38+00:00",
+                            "fill": 1,
+                            "ended_at": "2022-02-23T15:29:38+00:00",
+                            "id": "83d8414f-ae60-5b91-b270-97ba99964af2",
+                            "internal_order_id": "1884785405435349737",
+                            "last_updated_at": "2022-02-23T15:29:38+00:00",
+                            "make_asset_class": "TEZOS_FT",
+                            "make_contract": "KT1JwfYcy2uGBg4tS8t8w5CnJotJmF5kN2J3",
+                            "make_price": 1,
+                            "make_stock": 0,
+                            "make_token_id": "3",
+                            "make_value": 1,
+                            "maker": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+                            "network": "hangzhou2net",
+                            "platform": "Rarible",
+                            "started_at": "2022-02-23T15:27:38+00:00",
+                            "salt": 17102,
+                            "status": "FILLED",
+                            "take_asset_class": "XTZ",
+                            "take_contract": null,
+                            "take_token_id": null,
+                            "take_value": 1,
+                            "taker": null
+                        },
+                        {
+                            "__typename": "marketplace_order",
+                            "cancelled": false,
+                            "created_at": "2022-02-23T15:27:38+00:00",
+                            "fill": 1,
+                            "ended_at": "2022-02-23T15:29:38+00:00",
+                            "id": "5788347d-a3e3-58b9-982c-68149874125b",
+                            "internal_order_id": "1884785405435349737",
+                            "last_updated_at": "2022-02-23T15:29:38+00:00",
+                            "make_asset_class": "TEZOS_FT",
+                            "make_contract": "KT1JwfYcy2uGBg4tS8t8w5CnJotJmF5kN2J3",
+                            "make_price": 1,
+                            "make_stock": 0,
+                            "make_token_id": "3",
+                            "make_value": 1,
+                            "maker": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+                            "network": "hangzhou2net",
+                            "platform": "Rarible",
+                            "started_at": "2022-02-23T15:27:38+00:00",
+                            "salt": 17102,
+                            "status": "FILLED",
+                            "take_asset_class": "XTZ",
+                            "take_contract": null,
+                            "take_token_id": null,
+                            "take_value": 1,
+                            "taker": null
+                        }
+                    ]
+                }
+            }""".trimIndent())
+        val page = orderClient.getOrdersAll(
+            statuses = emptyList(),
+            sort = DipDupOrderSort.LAST_UPDATE_DESC,
+            size = 2,
+            continuation = null
+        )
+        assertThat(page.orders).hasSize(2)
+        assertThat(page.continuation).isNotNull()
+        assertThat(DipDupContinuation.isValid(page.continuation!!)).isTrue()
     }
 }
