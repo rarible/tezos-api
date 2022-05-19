@@ -901,7 +901,7 @@ type marketplace_activity {
   taker: String
 
   """
-  LIST: LIST\nMATCH: SELL\nCANCEL: CANCEL_LIST
+  ORDER_LIST: LIST\nORDER_MATCH: SELL\nORDER_CANCEL: CANCEL_LIST\nTOKEN_MINT: MINT\nTOKEN_TRANSFER: TRANSFER\nTOKEN_BURN: BURN
   """
   type: String!
 }

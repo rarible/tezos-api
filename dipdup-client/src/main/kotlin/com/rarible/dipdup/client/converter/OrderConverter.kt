@@ -35,7 +35,7 @@ fun convert(source: GetOrderByIdQuery.Marketplace_order_by_pk) = DipDupOrder(
 
 fun convertAll(source: List<GetOrdersQuery.Marketplace_order>, limit: Int): DipDupOrdersPage {
     val continuation = when {
-        source.size == limit -> source[limit].order.id.toString()
+        source.size == limit -> source[limit-1].order.id.toString()
         else -> null
     }
     return DipDupOrdersPage(source.subList(0, min(source.size, limit)).map { convert(it.order) }, continuation = continuation)
@@ -47,7 +47,7 @@ fun convertByIds(source: List<GetOrdersByIdsQuery.Marketplace_order>): List<DipD
 
 fun convertByItem(source: List<GetOrdersByItemQuery.Marketplace_order>, limit: Int): DipDupOrdersPage {
     val continuation = when {
-        source.size == limit -> source[limit].order.id.toString()
+        source.size == limit -> source[limit-1].order.id.toString()
         else -> null
     }
     return DipDupOrdersPage(source.subList(0, min(source.size, limit)).map { convert(it.order) }, continuation = continuation)

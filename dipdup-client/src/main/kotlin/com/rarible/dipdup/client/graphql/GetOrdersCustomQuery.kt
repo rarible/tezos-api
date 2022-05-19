@@ -17,7 +17,7 @@ data class GetOrdersCustomQuery(
         if (statuses.isNotEmpty()) conditions.add("status: {_in: [${statuses.joinToString(",")}]}")
         prevDate?.let { continuation(sort) }
         return """
-            query GetOrdersByItem(${'$'}limit: Int!) {
+            query GetOrders(${'$'}limit: Int!) {
                 marketplace_order(
                     where: {${conditions.joinToString(",\n")}}
                     limit: ${'$'}limit
