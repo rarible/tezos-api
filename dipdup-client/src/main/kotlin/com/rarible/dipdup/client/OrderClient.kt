@@ -5,9 +5,10 @@ import com.rarible.dipdup.client.converter.convert
 import com.rarible.dipdup.client.converter.convertAll
 import com.rarible.dipdup.client.converter.convertByIds
 import com.rarible.dipdup.client.converter.convertByItem
+import com.rarible.dipdup.client.core.model.Asset
 import com.rarible.dipdup.client.core.model.DipDupOrder
 import com.rarible.dipdup.client.core.model.OrderStatus
-import com.rarible.dipdup.client.exception.NotFound
+import com.rarible.dipdup.client.exception.DipDupNotFound
 import com.rarible.dipdup.client.graphql.GetOrdersByItemCustomQuery
 import com.rarible.dipdup.client.graphql.GetOrdersCustomQuery
 import com.rarible.dipdup.client.model.DipDupContinuation
@@ -21,7 +22,7 @@ class OrderClient(
     suspend fun getOrderById(id: String): DipDupOrder {
         val request = GetOrderByIdQuery(id)
         val response = safeExecution(request)
-        checkNotNull(response.marketplace_order_by_pk) { throw NotFound("${request}") }
+        checkNotNull(response.marketplace_order_by_pk) { throw DipDupNotFound("${request}") }
         return convert(response.marketplace_order_by_pk)
     }
 
@@ -49,8 +50,8 @@ class OrderClient(
 
     suspend fun getOrdersByItem(
         contract: String,
-        tokenId:
-        String, maker: String?,
+        tokenId: String,
+        maker: String?,
         statuses: List<OrderStatus>,
         size: Int = DEFAULT_PAGE,
         continuation: String?
@@ -68,6 +69,21 @@ class OrderClient(
             )
         )
         return convertByItem(response.marketplace_order, size)
+    }
+
+    suspend fun getOrdersCurrenciesByItem(
+        contract: String,
+        tokenId: String
+    ): List<Asset.AssetType> {
+        val response = safeExecution(GetOrdersTakeContractsByMakeItemQuery(contract, tokenId))
+        return convert(response)
+    }
+
+    suspend fun getOrdersCurrenciesByCollection(
+        contract: String
+    ): List<Asset.AssetType> {
+        val response = safeExecution(GetOrdersTakeContractsByMakeCollectionQuery(contract))
+        return convert(response)
     }
 
     companion object {

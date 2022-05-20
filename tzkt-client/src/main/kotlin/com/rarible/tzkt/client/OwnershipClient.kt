@@ -4,6 +4,7 @@ import com.rarible.tzkt.model.ItemId
 import com.rarible.tzkt.model.OwnershipId
 import com.rarible.tzkt.model.Page
 import com.rarible.tzkt.model.TokenBalance
+import com.rarible.tzkt.model.TzktNotFound
 import org.springframework.web.reactive.function.client.WebClient
 
 class OwnershipClient(
@@ -18,7 +19,7 @@ class OwnershipClient(
                 .queryParam("token.contract", id.contract)
                 .queryParam("token.tokenId", id.tokenId)
         }
-        return ownership.first()
+        return ownership.firstOrNull() ?: throw TzktNotFound("Ownership ${ownershipId} wasn't found")
     }
 
     suspend fun ownershipsByToken(itemId: String, size: Int = DEFAULT_SIZE, continuation: String?, sortAsc: Boolean = true): Page<TokenBalance> {

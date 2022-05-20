@@ -7,6 +7,7 @@ import com.rarible.tzkt.model.Page
 import com.rarible.tzkt.model.Part
 import com.rarible.tzkt.model.Token
 import com.rarible.tzkt.model.TokenMeta
+import com.rarible.tzkt.model.TzktNotFound
 import com.rarible.tzkt.royalties.RoyaltiesHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -28,7 +29,7 @@ class TokenClient(
                 .queryParam("tokenId", parsed.tokenId)
                 .queryParam("token.standard", "fa2")
         }
-        val result = tokens.first()
+        val result = tokens.firstOrNotFound(itemId)
 
         // enrich with parsed meta
         return result.copy(meta = metaService.meta(result))
@@ -41,7 +42,7 @@ class TokenClient(
                 .queryParam("contract", parsed.contract)
                 .queryParam("tokenId", parsed.tokenId)
         }
-        val token = tokens.first()
+        val token = tokens.firstOrNotFound(itemId)
         return metaService.meta(token)
     }
 
@@ -51,7 +52,7 @@ class TokenClient(
             it.path(BASE_PATH)
                 .queryParam("contract", parsed.contract)
                 .queryParam("tokenId", parsed.tokenId)
-        }.first()
+        }.firstOrNotFound(itemId)
         return token.metadata?.let { it["artifactUri"] != null }
     }
 
@@ -150,6 +151,10 @@ class TokenClient(
     }
 
     fun direction(asc: Boolean) = if (asc) "gt" else "lt"
+
+    fun List<Token>.firstOrNotFound(itemId: String): Token {
+        return this.firstOrNull() ?: throw TzktNotFound("Token ${itemId} wasn't found")
+    }
 
     companion object {
         const val BASE_PATH = "v1/tokens"

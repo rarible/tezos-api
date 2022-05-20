@@ -1,14 +1,18 @@
 package com.rarible.dipdup.client
 
+import com.rarible.dipdup.client.core.model.Asset
 import com.rarible.dipdup.client.core.model.OrderStatus
+import com.rarible.dipdup.client.exception.DipDupNotFound
 import com.rarible.dipdup.client.model.DipDupContinuation
 import com.rarible.dipdup.client.model.DipDupOrderSort
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import java.math.BigInteger
 import java.util.stream.Stream
 
 class OrderClientFt : BaseClientFt() {
@@ -184,7 +188,6 @@ class OrderClientFt : BaseClientFt() {
         assertThat(page.orders).hasSize(2)
         assertThat(page.continuation).isNull()
     }
-
 
     @Test
     fun `should return orders by ids`() = runBlocking<Unit> {
@@ -416,5 +419,66 @@ class OrderClientFt : BaseClientFt() {
         assertThat(page.orders).hasSize(2)
         assertThat(page.continuation).isNotNull()
         assertThat(DipDupContinuation.isValid(page.continuation!!)).isTrue()
+    }
+
+    @Test
+    fun `should return assetTypes by item`() = runBlocking<Unit> {
+        mock("""
+            {
+              "data": {
+                "marketplace_order": [
+                  {
+                    "__typename": "marketplace_order",
+                    "take_contract": null,
+                    "take_token_id": null
+                  },
+                  {
+                    "__typename": "marketplace_order",
+                    "take_contract": "KT1FaGrMVr6rvfHsfbPSAPgRabsPMiQeaTin",
+                    "take_token_id": "1"
+                  }
+                ]
+              }
+            }
+        """.trimIndent())
+        val types = orderClient.getOrdersCurrenciesByItem("KT1FaGrMVr6rvfHsfbPSAPgRabsPMiQeaTin", "1")
+
+        assertThat(types).hasSize(2)
+        assertThat(types).contains(Asset.XTZ())
+        assertThat(types).contains(Asset.FT(Asset.FT_NAME, "KT1FaGrMVr6rvfHsfbPSAPgRabsPMiQeaTin", BigInteger("1")))
+    }
+
+    @Test
+    fun `should return assetTypes by collection`() = runBlocking<Unit> {
+        mock("""
+            {
+              "data": {
+                "marketplace_order": [
+                  {
+                    "__typename": "marketplace_order",
+                    "take_contract": null,
+                    "take_token_id": null
+                  },
+                  {
+                    "__typename": "marketplace_order",
+                    "take_contract": "KT1FaGrMVr6rvfHsfbPSAPgRabsPMiQeaTin",
+                    "take_token_id": "1"
+                  }
+                ]
+              }
+            }
+        """.trimIndent())
+        val types = orderClient.getOrdersCurrenciesByCollection("KT1FaGrMVr6rvfHsfbPSAPgRabsPMiQeaTin")
+
+        assertThat(types).hasSize(2)
+        assertThat(types).contains(Asset.XTZ())
+        assertThat(types).contains(Asset.FT(Asset.FT_NAME, "KT1FaGrMVr6rvfHsfbPSAPgRabsPMiQeaTin", BigInteger("1")))
+    }
+
+    @Test
+    fun `shouldn't return order by id`() = runBlocking<Unit> {
+        mock("""{"data":{"marketplace_order":[]}}""")
+
+        assertThrows<DipDupNotFound> { orderClient.getOrderById("83d8414f-ae60-5b91-b270-97ba99964af3") }
     }
 }

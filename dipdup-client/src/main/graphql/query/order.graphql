@@ -26,11 +26,34 @@ fragment order on marketplace_order {
     taker
 }
 
+fragment assetType on marketplace_order {
+    take_contract
+    take_token_id
+}
+
 query GetOrders($limit: Int!) {
     marketplace_order(
         limit: $limit
     ) {
         ...order
+    }
+}
+
+query GetOrdersTakeContractsByMakeItem($token: String!, $tokenId: String!) {
+    marketplace_order(
+        where: {make_contract: {_eq: $token}, make_token_id: {_eq: $tokenId}}
+        distinct_on: [take_contract, take_token_id]
+    ) {
+        ...assetType
+    }
+}
+
+query GetOrdersTakeContractsByMakeCollection($token: String!) {
+    marketplace_order(
+        where: {make_contract: {_eq: $token}}
+        distinct_on: [take_contract, take_token_id]
+    ) {
+        ...assetType
     }
 }
 

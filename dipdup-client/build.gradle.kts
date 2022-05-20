@@ -10,6 +10,7 @@ dependencies {
     api(project(":dipdup-core"))
     testImplementation("com.apollographql.apollo3:apollo-mockserver:$apolloVersion")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
 }
 
 apollo {

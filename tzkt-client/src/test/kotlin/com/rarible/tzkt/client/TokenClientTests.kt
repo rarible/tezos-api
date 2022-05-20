@@ -4,11 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.rarible.tzkt.config.KnownAddresses
 import com.rarible.tzkt.meta.MetaService
+import com.rarible.tzkt.model.TzktNotFound
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.springframework.web.reactive.function.client.WebClient
+import org.junit.jupiter.api.assertThrows
 
 class TokenClientTests : BaseClientTests() {
 
@@ -2575,5 +2576,11 @@ class TokenClientTests : BaseClientTests() {
 
         assertThat(request().path).isEqualTo("/v1/tokens?contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&tokenId=157993")
         assertThat(isNft).isNull()
+    }
+
+    @Test
+    fun `shouldn't return token by contract and token id`() = runBlocking<Unit> {
+        mock("[]")
+        assertThrows<TzktNotFound> { tokenClient.token("KT1NWdwVA8zq5DDJTKcMkRqWYJcEcyTTm5WK:1156") }
     }
 }

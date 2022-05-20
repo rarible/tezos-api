@@ -4,6 +4,9 @@ import com.rarible.dipdup.client.GetOrderByIdQuery
 import com.rarible.dipdup.client.GetOrdersByIdsQuery
 import com.rarible.dipdup.client.GetOrdersByItemQuery
 import com.rarible.dipdup.client.GetOrdersQuery
+import com.rarible.dipdup.client.GetOrdersTakeContractsByMakeCollectionQuery
+import com.rarible.dipdup.client.GetOrdersTakeContractsByMakeItemQuery
+import com.rarible.dipdup.client.core.model.Asset
 import com.rarible.dipdup.client.core.model.DipDupOrder
 import com.rarible.dipdup.client.core.model.OrderStatus
 import com.rarible.dipdup.client.core.model.TezosPlatform
@@ -81,3 +84,17 @@ fun convert(source: Order) = DipDupOrder(
     makeStock = BigDecimal(source.make_stock.toString()),
     makePrice = BigDecimal(source.make_price.toString())
 )
+
+fun convert(source: com.rarible.dipdup.client.fragment.AssetType) =
+    when (source.take_contract) {
+        null -> Asset.XTZ()
+        else -> Asset.FT(contract = source.take_contract, tokenId = BigInteger(source.take_token_id))
+    }
+
+fun convert(source: GetOrdersTakeContractsByMakeItemQuery.Data): List<Asset.AssetType> = source.marketplace_order.map {
+    convert(it.assetType)
+}
+
+fun convert(source: GetOrdersTakeContractsByMakeCollectionQuery.Data): List<Asset.AssetType> = source.marketplace_order.map {
+    convert(it.assetType)
+}
