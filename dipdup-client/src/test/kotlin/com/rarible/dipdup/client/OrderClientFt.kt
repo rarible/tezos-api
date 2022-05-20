@@ -295,6 +295,7 @@ class OrderClientFt : BaseClientFt() {
             contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton",
             tokenId = "691915",
             maker = null,
+            currencyId = "XTZ",
             statuses = listOf(),
             size = 2,
             continuation = "1659577833_42737510-3635-53a9-85cc-c37c81c74cf6"
@@ -340,6 +341,53 @@ class OrderClientFt : BaseClientFt() {
             contract = "KT1NWdwVA8zq5DDJTKcMkRqWYJcEcyTTm5WK",
             tokenId = "1168",
             maker = null,
+            currencyId = "XTZ",
+            statuses = listOf(),
+            size = 2,
+            continuation = null
+        )
+        assertThat(orders.orders).hasSize(1)
+    }
+
+    @Test
+    fun `get orders by item with FT in currency`() = runBlocking<Unit> {
+        mock("""
+            {
+              "data": {
+                "marketplace_order": [
+                  {
+                    "__typename": "marketplace_order",
+                    "cancelled": false,
+                    "created_at": "2022-02-23T15:27:38+00:00",
+                    "fill": 1,
+                    "ended_at": "2022-02-23T15:29:38+00:00",
+                    "id": 16535991,
+                    "internal_order_id": "1884785405435349737",
+                    "last_updated_at": "2022-02-23T15:29:38+00:00",
+                    "make_asset_class": "TEZOS_FT",
+                    "make_contract": "KT1JwfYcy2uGBg4tS8t8w5CnJotJmF5kN2J3",
+                    "make_price": 1,
+                    "make_stock": 0,
+                    "make_token_id": "3",
+                    "make_value": 1,
+                    "maker": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+                    "network": "hangzhou2net",
+                    "platform": "Rarible",
+                    "started_at": "2022-02-23T15:27:38+00:00",
+                    "salt": 17102,
+                    "status": "FILLED",
+                    "take_asset_class": "XTZ",
+                    "take_contract": "KT1JwfYcy2uGBg4tS8t8w5CnJotJmF5kN2J3",
+                    "take_token_id": "123",
+                    "take_value": 1,
+                    "taker": null
+                  }]}}
+        """.trimIndent())
+        val orders = orderClient.getOrdersByItem(
+            contract = "KT1NWdwVA8zq5DDJTKcMkRqWYJcEcyTTm5WK",
+            tokenId = "1168",
+            maker = null,
+            currencyId = "KT1JwfYcy2uGBg4tS8t8w5CnJotJmF5kN2J3:123",
             statuses = listOf(),
             size = 2,
             continuation = null

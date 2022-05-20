@@ -6,6 +6,7 @@ data class GetOrdersByItemCustomQuery(
     val contract: String,
     val tokenId: String,
     val maker: String? = null,
+    val currencyId: String,
     val statuses: List<String> = emptyList(),
     val limit: Int,
     val prevId: String? = null,
@@ -18,6 +19,15 @@ data class GetOrdersByItemCustomQuery(
         contract.also { conditions.add("make_contract: {_eq: \"$it\"}") }
         tokenId.also { conditions.add("make_token_id: {_eq: \"$it\"}") }
         maker?.let { conditions.add("maker: {_eq: \"$it\"}") }
+        if (currencyId == "XTZ") {
+            conditions.add("take_contract: {_is_null: true}")
+        } else {
+            val raw = currencyId.split(":")
+            conditions.add("take_contract: {_eq: \"${raw[0]}\"}")
+            if (raw.size == 2) {
+                conditions.add("take_token_id: {_eq: \"${raw[1]}\"}")
+            }
+        }
         if (statuses.isNotEmpty()) conditions.add("status: {_in: [${statuses.joinToString(",")}]}")
         prevDate?.let { conditions.add("""
             _or: [

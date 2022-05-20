@@ -52,6 +52,7 @@ class OrderClient(
         contract: String,
         tokenId: String,
         maker: String?,
+        currencyId: String,
         statuses: List<OrderStatus>,
         size: Int = DEFAULT_PAGE,
         continuation: String?
@@ -62,6 +63,7 @@ class OrderClient(
                 contract = contract,
                 tokenId = tokenId,
                 maker = maker,
+                currencyId = currencyId,
                 statuses = statuses.map { it.name },
                 limit = size,
                 prevId = parsedContinuation?.let { it.toString() },
