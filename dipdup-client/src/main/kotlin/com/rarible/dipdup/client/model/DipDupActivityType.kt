@@ -1,5 +1,5 @@
 package com.rarible.dipdup.client.model
 
 enum class DipDupActivityType {
-    LIST, SELL
+    LIST, SELL, CANCEL_LIST
 }
