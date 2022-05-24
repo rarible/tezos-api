@@ -11,7 +11,7 @@ class TokenActivityClient(
 
     suspend fun activities(
         size: Int?,
-        continuation: Long?,
+        continuation: String?,
         sortAsc: Boolean = true,
         type: ActivityType? = null
     ): List<TypedTokenActivity> {

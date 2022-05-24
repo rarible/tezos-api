@@ -514,7 +514,7 @@ class ActivityClientTests : BaseClientTests() {
 
         val size = 10
         var continuation = 0L
-        var activities = activityClient.activities(size, continuation)
+        var activities = activityClient.activities(size, continuation.toString())
         assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=10&offset.cr=0&sort.asc=id")
         var prevId = 0
         activities.forEach {
@@ -524,7 +524,7 @@ class ActivityClientTests : BaseClientTests() {
         }
         val lastId = activities.last().id!!.toLong()
         continuation = lastId
-        activities = activityClient.activities(size, continuation)
+        activities = activityClient.activities(size, continuation.toString())
         assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=10&offset.cr=23955219&sort.asc=id")
         activities.forEach {
             assertThat(it).isInstanceOf(TokenActivity::class.java)
@@ -1057,7 +1057,7 @@ class ActivityClientTests : BaseClientTests() {
 
         val size = 10
         var continuation = 24878056L
-        var activities = activityClient.activities(size, continuation, false)
+        var activities = activityClient.activities(size, continuation.toString(), false)
         assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=10&offset.cr=24878056&sort.desc=id")
         var prevId = 24878056L
         activities.forEach {
@@ -1067,7 +1067,7 @@ class ActivityClientTests : BaseClientTests() {
         }
         val lastId = activities.last().id!!.toLong()
         continuation = lastId
-        activities = activityClient.activities(size, continuation, false)
+        activities = activityClient.activities(size, continuation.toString(), false)
         assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=10&offset.cr=24778005&sort.desc=id")
         prevId = lastId
         activities.forEach {

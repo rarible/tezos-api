@@ -41,13 +41,13 @@ class OrderActivityClient(
                 ).marketplace_activity
             )
         }
-        val continuation = when (activities.size) {
+        val nextContinuation = when (activities.size) {
             limit -> activities[limit - 1].let { DipDupContinuation(it.date, UUID.fromString(it.id)).toString() }
             else -> null
         }
         return DipDupActivitiesPage(
             activities = activities,
-            continuation = continuation
+            continuation = nextContinuation
         )
     }
 
