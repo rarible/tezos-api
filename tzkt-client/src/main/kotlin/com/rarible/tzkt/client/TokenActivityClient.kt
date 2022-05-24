@@ -1,6 +1,7 @@
 package com.rarible.tzkt.client
 
 import com.rarible.tzkt.model.ActivityType
+import com.rarible.tzkt.model.Page
 import com.rarible.tzkt.model.TokenActivity
 import com.rarible.tzkt.model.TypedTokenActivity
 import org.springframework.web.reactive.function.client.WebClient
@@ -10,17 +11,17 @@ class TokenActivityClient(
 ) : BaseClient(webClient) {
 
     suspend fun activities(
-        size: Int?,
+        size: Int = DEFAULT_SIZE,
         continuation: String?,
         sortAsc: Boolean = true,
         type: ActivityType? = null
-    ): List<TypedTokenActivity> {
+    ): Page<TypedTokenActivity> {
         val activities = invoke<List<TokenActivity>> { builder ->
             builder.path(BASE_PATH)
                 .queryParam("token.standard", "fa2")
                 .queryParam("metadata.artifactUri.null", "false")
                 .apply {
-                    size?.let { queryParam("limit", it) }
+                    size.let { queryParam("limit", it) }
                     continuation?.let { queryParam("offset.cr", it) }
                     val sorting = if (sortAsc) "sort.asc" else "sort.desc"
                     queryParam(sorting, "id")
@@ -40,7 +41,12 @@ class TokenActivityClient(
                     }
                 }
         }
-        return activities.map(this::mapActivity)
+        val tokens = activities.map(this::mapActivity)
+        return Page.Get(
+            items = tokens,
+            size = size,
+            last = { it.id.toString() }
+        )
     }
 
     suspend fun activityByIds(ids: List<Long>): List<TokenActivity> {
@@ -78,5 +84,6 @@ class TokenActivityClient(
         const val BASE_PATH = "v1/tokens/transfers"
         const val BURN_ADDRESS = "tz1burnburnburnburnburnburnburjAYjjX"
         const val NULL_ADDRESS = "tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU"
+        const val DEFAULT_SIZE = 1000
     }
 }

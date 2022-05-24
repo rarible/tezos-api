@@ -514,7 +514,7 @@ class ActivityClientTests : BaseClientTests() {
 
         val size = 10
         var continuation = 0L
-        var activities = activityClient.activities(size, continuation.toString())
+        var activities = activityClient.activities(size, continuation.toString()).items
         assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=10&offset.cr=0&sort.asc=id")
         var prevId = 0
         activities.forEach {
@@ -524,7 +524,7 @@ class ActivityClientTests : BaseClientTests() {
         }
         val lastId = activities.last().id!!.toLong()
         continuation = lastId
-        activities = activityClient.activities(size, continuation.toString())
+        activities = activityClient.activities(size, continuation.toString()).items
         assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=10&offset.cr=23955219&sort.asc=id")
         activities.forEach {
             assertThat(it).isInstanceOf(TokenActivity::class.java)
@@ -1057,7 +1057,7 @@ class ActivityClientTests : BaseClientTests() {
 
         val size = 10
         var continuation = 24878056L
-        var activities = activityClient.activities(size, continuation.toString(), false)
+        var activities = activityClient.activities(size, continuation.toString(), false).items
         assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=10&offset.cr=24878056&sort.desc=id")
         var prevId = 24878056L
         activities.forEach {
@@ -1067,7 +1067,7 @@ class ActivityClientTests : BaseClientTests() {
         }
         val lastId = activities.last().id!!.toLong()
         continuation = lastId
-        activities = activityClient.activities(size, continuation.toString(), false)
+        activities = activityClient.activities(size, continuation.toString(), false).items
         assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=10&offset.cr=24778005&sort.desc=id")
         prevId = lastId
         activities.forEach {
@@ -1389,7 +1389,7 @@ class ActivityClientTests : BaseClientTests() {
         """.trimIndent())
 
         val limit = 10
-        var activities = activityClient.activities(10,null,true,ActivityType.MINT)
+        var activities = activityClient.activities(10,null,true,ActivityType.MINT).items
         assertThat(activities).hasSize(10)
         assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=$limit&sort.asc=id&from.null=true")
         activities.forEach{
@@ -1791,7 +1791,7 @@ class ActivityClientTests : BaseClientTests() {
         """.trimIndent())
 
         val limit = 10
-        var activities = activityClient.activities(10,null,true,ActivityType.BURN)
+        var activities = activityClient.activities(10,null,true,ActivityType.BURN).items
         assertThat(activities).hasSize(10)
         assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=$limit&sort.asc=id&to.in=tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU")
         activities.forEach{
@@ -2014,7 +2014,7 @@ class ActivityClientTests : BaseClientTests() {
         """.trimIndent())
 
         val limit = 10
-        var activities = activityClient.activities(10,null,true,ActivityType.TRANSFER)
+        var activities = activityClient.activities(10,null,true,ActivityType.TRANSFER).items
         assertThat(activities).hasSize(10)
         assertThat(request().path).isEqualTo("/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=$limit&sort.asc=id&from.null=false&to.ni=tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU")
         activities.forEach{
