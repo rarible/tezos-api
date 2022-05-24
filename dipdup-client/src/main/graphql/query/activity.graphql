@@ -20,12 +20,12 @@ fragment activity on marketplace_activity {
     taker
 }
 
-query GetActivitiesDesc($limit: Int!, $prevDate: timestamptz!, $prevId: uuid!) {
+query GetActivitiesDesc($types: [String!]!, $limit: Int!, $prevDate: timestamptz!, $prevId: uuid!) {
     marketplace_activity(
         where: {_or: [
             {operation_timestamp: {_lt: $prevDate}},
             {operation_timestamp: {_eq: $prevDate},
-                id: {_lt: $prevId}}]}
+                id: {_lt: $prevId}}], type: {_in: $types}}
         order_by: {id: desc},
         limit: $limit
     ) {
@@ -33,12 +33,12 @@ query GetActivitiesDesc($limit: Int!, $prevDate: timestamptz!, $prevId: uuid!) {
     }
 }
 
-query GetActivitiesAsc($limit: Int!, $prevDate: timestamptz!, $prevId: uuid!) {
+query GetActivitiesAsc($types: [String!]!, $limit: Int!, $prevDate: timestamptz!, $prevId: uuid!) {
     marketplace_activity(
         where: {_or: [
             {operation_timestamp: {_gt: $prevDate}},
             {operation_timestamp: {_eq: $prevDate},
-                id: {_gt: $prevId}}]}
+                id: {_gt: $prevId}}], type: {_in: $types}}
         order_by: {id: asc},
         limit: $limit
     ) {

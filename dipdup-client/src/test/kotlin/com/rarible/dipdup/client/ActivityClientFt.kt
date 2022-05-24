@@ -1,5 +1,6 @@
 package com.rarible.dipdup.client
 
+import com.rarible.dipdup.client.model.DipDupActivityType
 import com.rarible.dipdup.client.model.DipDupContinuation
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
@@ -63,7 +64,7 @@ class ActivityClientFt : BaseClientFt() {
                 }
             }""")
 
-        val page = activityClient.getActivities(2)
+        val page = activityClient.getActivities(listOf(DipDupActivityType.LIST, DipDupActivityType.SELL), 2)
         assertThat(page.activities).hasSize(2)
         assertThat(DipDupContinuation.parse(page.continuation)).isNotNull
     }
@@ -122,7 +123,7 @@ class ActivityClientFt : BaseClientFt() {
                 }
             }""")
 
-        val page = activityClient.getActivities(2, "1652908780_f9de2ba4-38cb-5c42-b7c2-661fddc21693", true)
+        val page = activityClient.getActivities(listOf(DipDupActivityType.LIST, DipDupActivityType.SELL), 2, "1652908780_f9de2ba4-38cb-5c42-b7c2-661fddc21693", true)
         assertThat(page.activities).hasSize(2)
     }
 
