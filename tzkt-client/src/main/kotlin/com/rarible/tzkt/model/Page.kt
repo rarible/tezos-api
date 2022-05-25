@@ -1,5 +1,7 @@
 package com.rarible.tzkt.model
 
+import java.lang.Integer.min
+
 data class Page<T>(
     val items: List<T>,
     val continuation: String?
@@ -11,7 +13,7 @@ data class Page<T>(
                 else -> null
             }
             return Page(
-                items = items,
+                items = items.subList(0, min(size, items.size)),
                 continuation = continuation
             )
         }

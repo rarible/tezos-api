@@ -4,7 +4,12 @@ import com.rarible.tzkt.model.ActivityType
 import com.rarible.tzkt.model.Page
 import com.rarible.tzkt.model.TokenActivity
 import com.rarible.tzkt.model.TypedTokenActivity
+import com.rarible.tzkt.model.TzktActivityContinuation
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import org.springframework.web.reactive.function.client.WebClient
+import java.time.OffsetDateTime
 
 class TokenActivityClient(
     webClient: WebClient
@@ -14,16 +19,62 @@ class TokenActivityClient(
         size: Int = DEFAULT_SIZE,
         continuation: String?,
         sortAsc: Boolean = true,
-        type: ActivityType? = null
+        types: List<ActivityType> = emptyList()
     ): Page<TypedTokenActivity> {
+        val parsed = continuation?.let { TzktActivityContinuation.parse(it) }
+
+        val prevGroups = coroutineScope {
+            types.map {
+                async {
+                    activities(size, parsed?.date, null, sortAsc, it)
+                }
+            }
+        }
+
+        // If id was parsed we need to send additional requests
+        val eqGoups = parsed?.id?.let { id ->
+            coroutineScope {
+                types.map {
+                    async {
+                        activities(size, parsed.date, id, sortAsc, it)
+                    }
+                }
+            }
+        } ?: emptyList()
+
+        val groups = (prevGroups.awaitAll() + eqGoups.awaitAll()).flatten()
+        val activities = when (sortAsc) {
+            true -> groups.sortedWith(compareBy({ it.timestamp }, { it.id }))
+            else -> groups.sortedWith(compareBy({ it.timestamp }, { it.id })).reversed()
+        }
+        return Page.Get(
+            items = activities,
+            size = size,
+            last = { TzktActivityContinuation(it.timestamp, it.id.toLong()).toString() }
+        )
+    }
+
+    suspend fun activities(
+        size: Int = DEFAULT_SIZE,
+        prevDate: OffsetDateTime?,
+        prevId: Long?,
+        sortAsc: Boolean = true,
+        type: ActivityType? = null
+    ): List<TypedTokenActivity> {
         val activities = invoke<List<TokenActivity>> { builder ->
             builder.path(BASE_PATH)
                 .queryParam("token.standard", "fa2")
                 .queryParam("metadata.artifactUri.null", "false")
                 .apply {
                     size.let { queryParam("limit", it) }
-                    continuation?.let { queryParam("offset.cr", it) }
-                    val sorting = if (sortAsc) "sort.asc" else "sort.desc"
+                    when {
+                        prevDate != null && prevId != null -> {
+                            queryParam("timestamp.eq", prevDate.toString())
+                            queryParam("id.${sortPredicate(sortAsc)}", prevId.toString())
+                        }
+                        prevDate != null -> queryParam("timestamp.${sortPredicate(sortAsc)}", prevDate.toString())
+                    }
+                    val sorting = if (sortAsc) "timestamp.asc" else "timestamp.desc"
                     queryParam(sorting, "id")
                     type?.let {
                         when(type){
@@ -41,12 +92,7 @@ class TokenActivityClient(
                     }
                 }
         }
-        val tokens = activities.map(this::mapActivity)
-        return Page.Get(
-            items = tokens,
-            size = size,
-            last = { it.id.toString() }
-        )
+        return activities.map(this::mapActivity)
     }
 
     suspend fun activityByIds(ids: List<Long>): List<TokenActivity> {
@@ -62,7 +108,8 @@ class TokenActivityClient(
                 .queryParam("token.contract", contract)
                 .queryParam("token.tokenId", tokenId)
                 .apply {
-                    size?.let { queryParam("limit", it) }
+                    // TODO: add continuation later
+//                    size?.let { queryParam("limit", it) }
                     continuation?.let { queryParam("offset.cr", it) }
                     val sorting = if (sortAsc) "sort.asc" else "sort.desc"
                     queryParam(sorting, "id")
@@ -78,6 +125,11 @@ class TokenActivityClient(
             else -> ActivityType.TRANSFER
         }
         return TypedTokenActivity(type = type, tokenActivity)
+    }
+
+    private fun sortPredicate(asc: Boolean = false) = when (asc) {
+        true -> "gt"
+        else -> "lt"
     }
 
     companion object {

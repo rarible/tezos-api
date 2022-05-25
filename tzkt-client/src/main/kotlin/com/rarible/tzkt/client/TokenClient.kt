@@ -56,6 +56,7 @@ class TokenClient(
         return token.metadata?.let { it["artifactUri"] != null }
     }
 
+    @Deprecated("See allTokensByLastUpdate")
     suspend fun tokens(size: Int = DEFAULT_SIZE, continuation: String?, sortAsc: Boolean = true): Page<Token> {
         val tokens = invoke<List<Token>> { builder ->
             builder.path(BASE_PATH)

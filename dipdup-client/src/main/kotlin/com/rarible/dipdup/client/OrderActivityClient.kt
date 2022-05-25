@@ -26,7 +26,10 @@ class OrderActivityClient(
                         types.map { it.name },
                         limit,
                         parsedContinuation.date.toString(),
-                        parsedContinuation.id.toString()
+
+                        // if id wasn't parsed we can use random uuid because it means we use not native continuation
+                        // only date matters in this case
+                        parsedContinuation.id?.let { it.toString() } ?: UUID.randomUUID().toString()
                     )
                 ).marketplace_activity
             )
@@ -36,7 +39,7 @@ class OrderActivityClient(
                         types.map { it.name },
                         limit,
                         parsedContinuation.date.toString(),
-                        parsedContinuation.id.toString()
+                        parsedContinuation.id?.let { it.toString() } ?: UUID.randomUUID().toString()
                     )
                 ).marketplace_activity
             )
