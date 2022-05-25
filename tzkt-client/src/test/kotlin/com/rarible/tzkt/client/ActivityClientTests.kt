@@ -178,7 +178,7 @@ class ActivityClientTests : BaseClientTests() {
             }
         ]""".trimIndent())
 
-        var activities = activityClient.activityByIds(listOf(23818305, 23820166))
+        var activities = activityClient.activityByIds(listOf(23818305, 23820166).map { it.toString() })
 
         assertThat(activities).hasSize(2)
         assertThat(request().path).isEqualTo("/v1/tokens/transfers?id.in=23818305,23820166")
