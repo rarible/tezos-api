@@ -95,7 +95,7 @@ class TokenActivityClient(
         return activities.map(this::mapActivity)
     }
 
-    suspend fun activityByIds(ids: List<String>): List<TokenActivity> {
+    suspend fun activityByIds(ids: List<String>): List<TypedTokenActivity> {
         val activities = invoke<List<TokenActivity>> { builder ->
             builder.path(BASE_PATH).queryParam("id.in", ids.joinToString(","))
         }
