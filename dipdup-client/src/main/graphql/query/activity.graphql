@@ -46,6 +46,32 @@ query GetActivitiesAsc($types: [String!]!, $limit: Int!, $prevDate: timestamptz!
     }
 }
 
+query GetActivitiesByItemDesc($types: [String!]!, $contract: String!, $tokenId: String!, $limit: Int!, $prevDate: timestamptz!, $prevId: uuid!) {
+    marketplace_activity(
+        where: {_or: [
+            {operation_timestamp: {_lt: $prevDate}},
+            {operation_timestamp: {_eq: $prevDate},
+                id: {_lt: $prevId}}], type: {_in: $types}, make_contract: {_eq: $contract}, make_token_id: {_eq: $tokenId}}
+        order_by: {id: desc},
+        limit: $limit
+    ) {
+        ...activity
+    }
+}
+
+query GetActivitiesByItemAsc($types: [String!]!, $contract: String!, $tokenId: String!, $limit: Int!, $prevDate: timestamptz!, $prevId: uuid!) {
+    marketplace_activity(
+        where: {_or: [
+            {operation_timestamp: {_gt: $prevDate}},
+            {operation_timestamp: {_eq: $prevDate},
+                id: {_gt: $prevId}}], type: {_in: $types}, make_contract: {_eq: $contract}, make_token_id: {_eq: $tokenId}}
+        order_by: {id: asc},
+        limit: $limit
+    ) {
+        ...activity
+    }
+}
+
 query GetActivitiesByIds($ids: [uuid!]!) {
     marketplace_activity(
         where: {id: {_in: $ids}},

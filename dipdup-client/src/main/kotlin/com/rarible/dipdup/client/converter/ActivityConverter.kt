@@ -2,6 +2,8 @@ package com.rarible.dipdup.client.converter
 
 import com.rarible.dipdup.client.GetActivitiesAscQuery
 import com.rarible.dipdup.client.GetActivitiesByIdsQuery
+import com.rarible.dipdup.client.GetActivitiesByItemAscQuery
+import com.rarible.dipdup.client.GetActivitiesByItemDescQuery
 import com.rarible.dipdup.client.GetActivitiesDescQuery
 import com.rarible.dipdup.client.core.model.Asset
 import com.rarible.dipdup.client.core.model.DipDupActivity
@@ -27,11 +29,19 @@ fun convert(source: Activity) = activityEvent(
     price = source.sell_price
 )
 
-fun convertDescAll(source: List<GetActivitiesDescQuery.Marketplace_activity>): List<DipDupActivity> {
+fun convertAllDesc(source: List<GetActivitiesDescQuery.Marketplace_activity>): List<DipDupActivity> {
     return source.map { convert(it.activity) }
 }
 
-fun convertAscAll(source: List<GetActivitiesAscQuery.Marketplace_activity>): List<DipDupActivity> {
+fun convertAllAsc(source: List<GetActivitiesAscQuery.Marketplace_activity>): List<DipDupActivity> {
+    return source.map { convert(it.activity) }
+}
+
+fun convertByItemDesc(source: List<GetActivitiesByItemDescQuery.Marketplace_activity>): List<DipDupActivity> {
+    return source.map { convert(it.activity) }
+}
+
+fun convertByItemAsc(source: List<GetActivitiesByItemAscQuery.Marketplace_activity>): List<DipDupActivity> {
     return source.map { convert(it.activity) }
 }
 
