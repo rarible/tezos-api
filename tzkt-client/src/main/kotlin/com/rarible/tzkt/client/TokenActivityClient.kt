@@ -15,27 +15,27 @@ class TokenActivityClient(
     webClient: WebClient
 ) : BaseClient(webClient) {
 
-    suspend fun activities(
+    suspend fun getActivitiesAll(
+        types: List<ActivityType> = emptyList(),
         size: Int = DEFAULT_SIZE,
         continuation: String?,
-        sortAsc: Boolean = true,
-        types: List<ActivityType> = emptyList()
+        sortAsc: Boolean = true
     ) = activitiesWrapper(null, null, size, continuation, sortAsc, types)
 
-    suspend fun activityByIds(ids: List<String>): List<TypedTokenActivity> {
+    suspend fun getActivitiesByIds(ids: List<String>): List<TypedTokenActivity> {
         val activities = invoke<List<TokenActivity>> { builder ->
             builder.path(BASE_PATH).queryParam("id.in", ids.joinToString(","))
         }
         return activities.map(this::mapActivity)
     }
 
-    suspend fun activityByItem(
+    suspend fun getActivitiesByItem(
+        types: List<ActivityType> = emptyList(),
         contract: String,
         tokenId: String,
         size: Int = DEFAULT_SIZE,
         continuation: String?,
-        sortAsc: Boolean = true,
-        types: List<ActivityType> = emptyList()
+        sortAsc: Boolean = true
     ) = activitiesWrapper(contract, tokenId, size, continuation, sortAsc, types)
 
     private suspend fun activitiesWrapper(

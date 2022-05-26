@@ -757,9 +757,8 @@ class TokenClientTests : BaseClientTests() {
         )
 
         val size = 10
-        var continuation = 0L.toString()
-        var tokens = tokenClient.tokens(size, continuation)
-        assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=0&sort.asc=id&metadata.artifactUri.null=false")
+        var tokens = tokenClient.allTokensByLastUpdate(size, null)
+        assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&sort.asc=lastLevel&metadata.artifactUri.null=false")
         var prevId = 0
         tokens.items.forEach {
             assertThat(it.id).isGreaterThan(prevId)
@@ -768,9 +767,8 @@ class TokenClientTests : BaseClientTests() {
         }
         prevId = 0
         val lastId = tokens.items.last().id!!.toLong()
-        continuation = lastId.toString()
-        tokens = tokenClient.tokens(size, continuation)
-        assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&offset.cr=77&sort.asc=id&metadata.artifactUri.null=false")
+        tokens = tokenClient.allTokensByLastUpdate(size, "123456_123")
+        assertThat(request().path).isEqualTo("/v1/tokens?token.standard=fa2&limit=10&lastLevel=123456&id.gt=123&sort.asc=lastLevel&metadata.artifactUri.null=false")
         tokens.items.forEach {
             assertThat(it.id).isGreaterThan(prevId)
             assertThat(it.standard).isEqualTo("fa2")

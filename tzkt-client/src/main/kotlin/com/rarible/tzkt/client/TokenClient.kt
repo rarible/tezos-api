@@ -56,28 +56,6 @@ class TokenClient(
         return token.metadata?.let { it["artifactUri"] != null }
     }
 
-    @Deprecated("See allTokensByLastUpdate")
-    suspend fun tokens(size: Int = DEFAULT_SIZE, continuation: String?, sortAsc: Boolean = true): Page<Token> {
-        val tokens = invoke<List<Token>> { builder ->
-            builder.path(BASE_PATH)
-                .queryParam("token.standard", "fa2")
-                .apply {
-                    queryParam("limit", size)
-                    continuation?.let { queryParam("offset.cr", it) }
-                    val sorting = if (sortAsc) "sort.asc" else "sort.desc"
-                    queryParam(sorting, "id")
-                    queryParam("metadata.artifactUri.null", "false")
-                }
-
-            // enrich with parsed meta
-        }.map { token -> token.copy(meta = metaService.meta(token)) }
-        return Page.Get(
-            items = tokens,
-            size = size,
-            last = { it.id.toString() }
-        )
-    }
-
     suspend fun allTokensByLastUpdate(
         size: Int = DEFAULT_SIZE,
         continuation: String?,

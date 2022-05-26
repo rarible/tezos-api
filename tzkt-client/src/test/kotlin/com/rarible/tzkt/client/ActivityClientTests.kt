@@ -116,7 +116,7 @@ class ActivityClientTests : BaseClientTests() {
             }]
         """.trimIndent())
 
-        var activities = activityClient.activities(2, null, true, listOf(ActivityType.MINT, ActivityType.TRANSFER))
+        var activities = activityClient.getActivitiesAll(listOf(ActivityType.MINT, ActivityType.TRANSFER), 2, null, true)
         assertThat(TzktActivityContinuation.isValid(activities.continuation!!)).isTrue
         assertThat(activities.items).hasSize(2)
         assertThat(mockServer.requestCount).isEqualTo(2)
@@ -182,7 +182,7 @@ class ActivityClientTests : BaseClientTests() {
             }
         ]""".trimIndent())
 
-        var activities = activityClient.activityByIds(listOf(23818305, 23820166).map { it.toString() })
+        var activities = activityClient.getActivitiesByIds(listOf(23818305, 23820166).map { it.toString() })
 
         assertThat(activities).hasSize(2)
         assertThat(request().path).isEqualTo("/v1/tokens/transfers?id.in=23818305,23820166")
@@ -281,7 +281,7 @@ class ActivityClientTests : BaseClientTests() {
             }]
         """.trimIndent())
 
-        var activities = activityClient.activityByItem("KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn", "0", 3, null, false, listOf(ActivityType.MINT, ActivityType.TRANSFER, ActivityType.BURN))
+        var activities = activityClient.getActivitiesByItem(listOf(ActivityType.MINT, ActivityType.TRANSFER, ActivityType.BURN), "KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn", "0", 3, null, false)
 
         assertThat(activities.items).hasSize(3)
         assertThat(activities.continuation.toString()).isEqualTo("1614340163_41904714")
@@ -389,7 +389,7 @@ class ActivityClientTests : BaseClientTests() {
         mock("[]")
         mock("[]")
 
-        var activities = activityClient.activityByItem("KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn", "0", 3, "1614340163_41904714", true, listOf(ActivityType.MINT, ActivityType.TRANSFER, ActivityType.BURN))
+        var activities = activityClient.getActivitiesByItem(listOf(ActivityType.MINT, ActivityType.TRANSFER, ActivityType.BURN), "KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn", "0", 3, "1614340163_41904714", true)
 
         assertThat(activities.items).hasSize(3)
         assertThat(activities.continuation.toString()).isEqualTo("1651850849_225200387")
@@ -465,7 +465,7 @@ class ActivityClientTests : BaseClientTests() {
             }]
         """.trimIndent())
 
-        var activities = activityClient.activities(2, TzktActivityContinuation(OffsetDateTime.now(), Long.MAX_VALUE).toString(), false, listOf(ActivityType.MINT))
+        var activities = activityClient.getActivitiesAll(listOf(ActivityType.MINT), 2, TzktActivityContinuation(OffsetDateTime.now(), Long.MAX_VALUE).toString(), false)
         assertThat(TzktActivityContinuation.isValid(activities.continuation!!)).isTrue
         assertThat(activities.items).hasSize(2)
     }

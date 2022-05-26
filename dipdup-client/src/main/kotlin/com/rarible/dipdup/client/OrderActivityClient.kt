@@ -18,7 +18,7 @@ class OrderActivityClient(
     client: ApolloClient
 ) : BaseClient(client) {
 
-    suspend fun getActivities(
+    suspend fun getActivitiesAll(
         types: List<DipDupActivityType>,
         limit: Int,
         continuation: String? = null,
@@ -110,7 +110,7 @@ class OrderActivityClient(
         )
     }
 
-    suspend fun getActivities(ids: List<String>): List<DipDupActivity> {
+    suspend fun getActivitiesByIds(ids: List<String>): List<DipDupActivity> {
         val response = safeExecution(GetActivitiesByIdsQuery(ids))
         return convertByIds(response.marketplace_activity)
     }

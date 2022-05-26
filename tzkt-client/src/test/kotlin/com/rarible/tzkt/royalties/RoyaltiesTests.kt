@@ -904,7 +904,7 @@ class RoyaltiesTests : BaseClientTests() {
         val limit = 20
         val continuation = 90951L
         val handler = RoyaltiesHandler(bmClient, ipfs, royaltiesConfig)
-        var tokens = tokenClient.tokens(limit, continuation.toString())
+        var tokens = tokenClient.allTokensByLastUpdate(limit, continuation.toString())
         var totalOK = 0
         var totalKO = 0
         val filePath = "/Users/florianpautot/Desktop/logs/errors.txt"
@@ -942,7 +942,7 @@ class RoyaltiesTests : BaseClientTests() {
                     }
                 }
             }
-            tokens = tokenClient.tokens(limit, lastId.toString())
+            tokens = tokenClient.allTokensByLastUpdate(limit, lastId.toString())
         }
         logger.info("Total OK = $totalOK")
         File(filePath).appendText("Total OK = $totalOK")
