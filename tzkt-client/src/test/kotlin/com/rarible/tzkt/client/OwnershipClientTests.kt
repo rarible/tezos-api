@@ -142,7 +142,24 @@ class OwnershipClientTests : BaseClientTests() {
             	"firstTime": "2022-01-13T10:08:00Z",
             	"lastLevel": 2044788,
             	"lastTime": "2022-01-19T17:17:30Z"
-            }, {
+            }]
+        """.trimIndent())
+
+        var contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
+        var tokenId = "631268"
+        val ownerships = ownershipClient.ownershipsByToken(ItemId(contract, tokenId).toString(), 2, null, true)
+        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268&limit=2&sort.asc=id")
+        ownerships.items.forEach {
+            assertThat(it.token?.tokenId).isEqualTo(tokenId)
+            assertThat(it.token?.contract?.address).isEqualTo(contract)
+        }
+        assertThat(ownerships.continuation).isEqualTo("6924058")
+    }
+
+    @Test
+    fun `should return ownerships by token with continuation`() = runBlocking<Unit> {
+        mock("""
+            [{
             	"id": 6941500,
             	"account": {
             		"address": "tz2NKVi7TWXxU3eFvxkzw7cv3Mybavx1XtMV"
@@ -216,54 +233,18 @@ class OwnershipClientTests : BaseClientTests() {
             	"firstTime": "2022-01-18T12:13:50Z",
             	"lastLevel": 2044600,
             	"lastTime": "2022-01-19T15:43:30Z"
-            }, {
-            	"id": 7206553,
-            	"account": {
-            		"address": "tz2QH8sqmgnFajFb5vN6b9KaDmd4ht2yGv6d"
-            	},
-            	"token": {
-            		"id": 1645905,
-            		"contract": {
-            			"alias": "hic et nunc NFTs",
-            			"address": "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
-            		},
-            		"tokenId": "631268",
-            		"standard": "fa2",
-            		"metadata": {
-            			"name": "R-Royal #1 H=N",
-            			"tags": [""],
-            			"symbol": "OBJKT",
-            			"formats": [{
-            				"uri": "ipfs://QmNMPwuzRHm4QGcYUKoQoDZnuufKvDNGtN9dZ4NiUc67Wg",
-            				"mimeType": "image/png"
-            			}],
-            			"creators": ["tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88"],
-            			"decimals": "0",
-            			"displayUri": "ipfs://QmWZKRPsSsEnoA1gaQ7axAX3EPqepGjLv2GCGp7bXVrWwR",
-            			"artifactUri": "ipfs://QmNMPwuzRHm4QGcYUKoQoDZnuufKvDNGtN9dZ4NiUc67Wg",
-            			"description": "1 H-N",
-            			"thumbnailUri": "ipfs://QmNrhZHUaEqxhyLfqoq1mtHSipkWHeT31LNHb1QEbDHgnc",
-            			"isBooleanAmount": false,
-            			"shouldPreferSymbol": false
-            		}
-            	},
-            	"balance": "2",
-            	"transfersCount": 2,
-            	"firstLevel": 2044600,
-            	"firstTime": "2022-01-19T15:43:30Z",
-            	"lastLevel": 2044788,
-            	"lastTime": "2022-01-19T17:17:30Z"
             }]
         """.trimIndent())
 
         var contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
         var tokenId = "631268"
-        val ownerships = ownershipClient.ownershipsByToken(ItemId(contract, tokenId).toString(), 100, null, true)
-        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268&limit=100&sort.asc=id")
+        val ownerships = ownershipClient.ownershipsByToken(ItemId(contract, tokenId).toString(), 2, "6924058", true)
+        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268&limit=2&offset.cr=6924058&sort.asc=id")
         ownerships.items.forEach {
             assertThat(it.token?.tokenId).isEqualTo(tokenId)
             assertThat(it.token?.contract?.address).isEqualTo(contract)
         }
+        assertThat(ownerships.continuation).isEqualTo("7146690")
     }
 
 }
