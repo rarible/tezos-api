@@ -18,26 +18,45 @@ class CollectionClient(
         return collection
     }
 
-    suspend fun collections(size: Int = DEFAULT_SIZE, continuation: String?, sortAsc: Boolean = true): Page<Contract> {
+    suspend fun collectionsAll(size: Int = DEFAULT_SIZE, continuation: String?, sortAsc: Boolean = true): Page<Contract> {
         val collections = invoke<List<Contract>> { builder ->
             builder.path(BASE_PATH)
                 .queryParam("kind", "asset")
                 .queryParam("tzips.all", "fa2")
                 .apply {
                     size?.let { queryParam("limit", it) }
-                    continuation?.let { queryParam("offset.cr", it) }
-                    val sorting = if (sortAsc) "sort.asc" else "sort.desc"
-                    queryParam(sorting, "firstActivity")
+                    continuation?.let { queryParam("offset", it) }
+                    queryParam("sort.${sorting(sortAsc)}", "firstActivity")
                 }
         }
-        return Page.Get(
-            items = collections,
-            size = size,
-            last = { it.firstActivity!!.toString() }
-        )
+        return Page(collections, offset(continuation, collections))
     }
 
-    suspend fun collections(addresses: List<String>): List<Contract> {
+    fun <T> offset(prevOffset: String?, items: List<T>): String? {
+        return when {
+            prevOffset == null && items.isNotEmpty() -> items.size.toString()
+            prevOffset != null && items.isNotEmpty() -> (prevOffset.toInt() + items.size).toString()
+            prevOffset != null && items.isEmpty() -> prevOffset
+            else -> null
+        }
+    }
+
+    suspend fun collectionsByOwner(owner: String, size: Int = DEFAULT_SIZE, continuation: String?, sortAsc: Boolean = true): Page<Contract> {
+        val collections = invoke<List<Contract>> { builder ->
+            builder.path(BASE_PATH)
+                .queryParam("kind", "asset")
+                .queryParam("tzips.all", "fa2")
+                .apply {
+                    size?.let { queryParam("limit", it) }
+                    queryParam("creator.eq", owner)
+                    continuation?.let { queryParam("offset", it) }
+                    queryParam("sort.${sorting(sortAsc)}", "firstActivity")
+                }
+        }
+        return Page(collections, offset(continuation, collections))
+    }
+
+    suspend fun collectionsByIds(addresses: List<String>): List<Contract> {
         val collections = coroutineScope {
             addresses
                 .map { async { collection(it) } }

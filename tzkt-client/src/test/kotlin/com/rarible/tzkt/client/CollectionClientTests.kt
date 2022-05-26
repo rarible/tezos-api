@@ -554,9 +554,8 @@ class CollectionClientTests : BaseClientTests() {
         """.trimIndent())
 
         val size = 10
-        var continuation = 0L.toString()
-        var collections = collectionClient.collections(size, continuation)
-        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=10&offset.cr=0&sort.asc=firstActivity")
+        var collections = collectionClient.collectionsAll(size, null)
+        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=10&sort.asc=firstActivity")
         assertThat(collections.items).hasSize(size)
         var prevId = 0
         collections.items.forEach{
@@ -566,9 +565,8 @@ class CollectionClientTests : BaseClientTests() {
         }
         prevId = 0
         val lastId = collections.items.last().firstActivity!!.toString()
-        continuation = lastId
-        collections = collectionClient.collections(size, continuation)
-        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=10&offset.cr=1048494&sort.asc=firstActivity")
+        collections = collectionClient.collectionsAll(size, collections.continuation)
+        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=10&offset=10&sort.asc=firstActivity")
         collections.items.forEach{
             assertThat(it.kind).isEqualTo("asset")
             assertThat(it.firstActivity).isGreaterThan(prevId)
@@ -1072,27 +1070,22 @@ class CollectionClientTests : BaseClientTests() {
         """.trimIndent())
 
         val size = 10
-        var continuation = 1302640L.toString()
-        var collections = collectionClient.collections(size, continuation, false)
-        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=10&offset.cr=1302640&sort.desc=firstActivity")
+        var collections = collectionClient.collectionsAll(size, null, false)
+        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=10&sort.desc=firstActivity")
         assertThat(collections.items).hasSize(size)
-        var prevId = continuation
+        var prevId = Int.MAX_VALUE
         collections.items.forEach{
             assertThat(it.kind).isEqualTo("asset")
-            assertThat(it.firstActivity?.toLong()).isLessThan(prevId.toLong())
-            prevId = it.firstActivity!!.toString()
+            assertThat(it.firstActivity!!).isLessThan(prevId)
+            prevId = it.firstActivity!!
         }
-        prevId = continuation
-        val lastId = collections.items.last().firstActivity!!.toString()
-        continuation = lastId
-        collections = collectionClient.collections(size, continuation, false)
-        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=10&offset.cr=1288709&sort.desc=firstActivity")
+        collections = collectionClient.collectionsAll(size, collections.continuation, false)
+        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=10&offset=10&sort.desc=firstActivity")
         collections.items.forEach{
             assertThat(it.kind).isEqualTo("asset")
-            assertThat(it.firstActivity?.toString()).isLessThan(prevId)
-            prevId = it.firstActivity!!.toString()
+            assertThat(it.firstActivity).isLessThan(prevId)
+            prevId = it.firstActivity!!
         }
-        assertThat(collections.items.first().firstActivity?.toLong()).isLessThan(lastId.toLong())
     }
 
     @Test
@@ -1163,7 +1156,85 @@ class CollectionClientTests : BaseClientTests() {
             "typeHash": 605223826,
             "codeHash": -2016262351
         }""")
-        val collections = collectionClient.collections(listOf("KT1QuofAgnsWffHzLA7D78rxytJruGHDe7XG", "KT1CSKPf2jeLpMmrgKquN2bCjBTkAcAdRVDy"))
+        val collections = collectionClient.collectionsByIds(listOf("KT1QuofAgnsWffHzLA7D78rxytJruGHDe7XG", "KT1CSKPf2jeLpMmrgKquN2bCjBTkAcAdRVDy"))
         assertThat(collections).hasSize(2)
+    }
+
+    @Test
+    fun `should return collection by owner`() = runBlocking<Unit> {
+        mock("""
+            [{
+            	"type": "contract",
+            	"address": "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton",
+            	"kind": "asset",
+            	"tzips": ["fa2"],
+            	"alias": "hic et nunc NFTs",
+            	"balance": 0,
+            	"creator": {
+            		"alias": "hicetnunc2000lab",
+            		"address": "tz1UBZUkXpKGhYsP5KtzDNqLLchwF4uHrGjw"
+            	},
+            	"numContracts": 0,
+            	"activeTokensCount": 141,
+            	"tokenBalancesCount": 170,
+            	"tokenTransfersCount": 189,
+            	"numDelegations": 0,
+            	"numOriginations": 1,
+            	"numTransactions": 11065912,
+            	"numReveals": 0,
+            	"numMigrations": 0,
+            	"firstActivity": 1365143,
+            	"firstActivityTime": "2021-03-01T01:59:41Z",
+            	"lastActivity": 2274952,
+            	"lastActivityTime": "2022-04-12T15:04:44Z",
+            	"typeHash": 603828391,
+            	"codeHash": 1973375561
+            }]
+        """.trimIndent())
+
+        val collection = collectionClient.collectionsByOwner("tz1UBZUkXpKGhYsP5KtzDNqLLchwF4uHrGjw", 1, null, false)
+        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=1&creator.eq=tz1UBZUkXpKGhYsP5KtzDNqLLchwF4uHrGjw&sort.desc=firstActivity")
+
+        assertThat(collection.items).hasSize(1)
+        assertThat(collection.continuation).isNotNull
+    }
+
+    @Test
+    fun `should return collection by owner with continuation`() = runBlocking<Unit> {
+        mock("""
+            [{
+            	"type": "contract",
+            	"address": "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton",
+            	"kind": "asset",
+            	"tzips": ["fa2"],
+            	"alias": "hic et nunc NFTs",
+            	"balance": 0,
+            	"creator": {
+            		"alias": "hicetnunc2000lab",
+            		"address": "tz1UBZUkXpKGhYsP5KtzDNqLLchwF4uHrGjw"
+            	},
+            	"numContracts": 0,
+            	"activeTokensCount": 141,
+            	"tokenBalancesCount": 170,
+            	"tokenTransfersCount": 189,
+            	"numDelegations": 0,
+            	"numOriginations": 1,
+            	"numTransactions": 11065912,
+            	"numReveals": 0,
+            	"numMigrations": 0,
+            	"firstActivity": 1365143,
+            	"firstActivityTime": "2021-03-01T01:59:41Z",
+            	"lastActivity": 2274952,
+            	"lastActivityTime": "2022-04-12T15:04:44Z",
+            	"typeHash": 603828391,
+            	"codeHash": 1973375561
+            }]
+        """.trimIndent())
+
+        val collection = collectionClient.collectionsByOwner("tz1UBZUkXpKGhYsP5KtzDNqLLchwF4uHrGjw", 1, "1", false)
+        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=1&creator.eq=tz1UBZUkXpKGhYsP5KtzDNqLLchwF4uHrGjw&offset=1&sort.desc=firstActivity")
+
+        assertThat(collection.items).hasSize(1)
+        assertThat(collection.continuation).isNotNull
     }
 }

@@ -23,4 +23,11 @@ abstract class BaseClient(
             .retrieve()
             .awaitBody()
     }
+
+    fun sorting(sortAsc: Boolean) = if (sortAsc) "asc" else "desc"
+
+    fun sortPredicate(asc: Boolean = false) = when (asc) {
+        true -> "gt"
+        else -> "lt"
+    }
 }

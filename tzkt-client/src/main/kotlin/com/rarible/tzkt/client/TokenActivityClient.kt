@@ -100,8 +100,7 @@ class TokenActivityClient(
                         }
                         prevDate != null -> queryParam("timestamp.${sortPredicate(sortAsc)}", prevDate.toString())
                     }
-                    val sorting = if (sortAsc) "asc" else "desc"
-                    queryParam("sort.${sorting}", "timestamp")
+                    queryParam("sort.${sorting(sortAsc)}", "timestamp")
                     type?.let {
                         when (type) {
                             ActivityType.MINT -> {
@@ -128,11 +127,6 @@ class TokenActivityClient(
             else -> ActivityType.TRANSFER
         }
         return TypedTokenActivity(type = type, tokenActivity)
-    }
-
-    private fun sortPredicate(asc: Boolean = false) = when (asc) {
-        true -> "gt"
-        else -> "lt"
     }
 
     companion object {
