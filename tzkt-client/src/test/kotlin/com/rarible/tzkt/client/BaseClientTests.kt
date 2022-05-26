@@ -32,4 +32,10 @@ abstract class BaseClientTests {
     }
 
     fun request() = mockServer.takeRequest()
+
+    fun requests(): Set<String> {
+        return (1..mockServer.requestCount).mapNotNull {
+            mockServer.takeRequest().path
+        }.toSet()
+    }
 }

@@ -20,24 +20,46 @@ class TokenActivityClient(
         continuation: String?,
         sortAsc: Boolean = true,
         types: List<ActivityType> = emptyList()
-    ): Page<TypedTokenActivity> {
+    ) = activitiesWrapper(null, null, size, continuation, sortAsc, types)
+
+    suspend fun activityByIds(ids: List<String>): List<TypedTokenActivity> {
+        val activities = invoke<List<TokenActivity>> { builder ->
+            builder.path(BASE_PATH).queryParam("id.in", ids.joinToString(","))
+        }
+        return activities.map(this::mapActivity)
+    }
+
+    suspend fun activityByItem(
+        contract: String,
+        tokenId: String,
+        size: Int = DEFAULT_SIZE,
+        continuation: String?,
+        sortAsc: Boolean = true,
+        types: List<ActivityType> = emptyList()
+    ) = activitiesWrapper(contract, tokenId, size, continuation, sortAsc, types)
+
+    private suspend fun activitiesWrapper(
+        contract: String?,
+        tokenId: String?,
+        size: Int = DEFAULT_SIZE,
+        continuation: String?,
+        sortAsc: Boolean = true,
+        types: List<ActivityType> = emptyList()
+    ) = coroutineScope {
         val parsed = continuation?.let { TzktActivityContinuation.parse(it) }
 
-        val prevGroups = coroutineScope {
+        val prevGroups =
             types.map {
                 async {
-                    activities(size, parsed?.date, null, sortAsc, it)
+                    activities(contract, tokenId, size, parsed?.date, null, sortAsc, it)
                 }
             }
-        }
 
         // If id was parsed we need to send additional requests
         val eqGoups = parsed?.id?.let { id ->
-            coroutineScope {
-                types.map {
-                    async {
-                        activities(size, parsed.date, id, sortAsc, it)
-                    }
+            types.map {
+                async {
+                    activities(contract, tokenId, size, parsed.date, id, sortAsc, it)
                 }
             }
         } ?: emptyList()
@@ -47,14 +69,16 @@ class TokenActivityClient(
             true -> groups.sortedWith(compareBy({ it.timestamp }, { it.id }))
             else -> groups.sortedWith(compareBy({ it.timestamp }, { it.id })).reversed()
         }
-        return Page.Get(
+        Page.Get(
             items = activities,
             size = size,
             last = { TzktActivityContinuation(it.timestamp, it.id.toLong()).toString() }
         )
     }
 
-    suspend fun activities(
+    private suspend fun activities(
+        contract: String?,
+        tokenId: String?,
         size: Int = DEFAULT_SIZE,
         prevDate: OffsetDateTime?,
         prevId: Long?,
@@ -66,7 +90,9 @@ class TokenActivityClient(
                 .queryParam("token.standard", "fa2")
                 .queryParam("metadata.artifactUri.null", "false")
                 .apply {
-                    size.let { queryParam("limit", it) }
+                    contract?.let { queryParam("token.contract", it) }
+                    tokenId?.let { queryParam("token.tokenId", it) }
+                    queryParam("limit", size)
                     when {
                         prevDate != null && prevId != null -> {
                             queryParam("timestamp.eq", prevDate.toString())
@@ -74,10 +100,10 @@ class TokenActivityClient(
                         }
                         prevDate != null -> queryParam("timestamp.${sortPredicate(sortAsc)}", prevDate.toString())
                     }
-                    val sorting = if (sortAsc) "timestamp.asc" else "timestamp.desc"
-                    queryParam(sorting, "id")
+                    val sorting = if (sortAsc) "asc" else "desc"
+                    queryParam("sort.${sorting}", "timestamp")
                     type?.let {
-                        when(type){
+                        when (type) {
                             ActivityType.MINT -> {
                                 queryParam("from.null", "true")
                             }
@@ -86,33 +112,10 @@ class TokenActivityClient(
                             }
                             ActivityType.TRANSFER -> {
                                 queryParam("from.null", "false")
-                                queryParam("to.ni", "$BURN_ADDRESS,$NULL_ADDRESS")
+                                queryParam("to.in", "$BURN_ADDRESS,$NULL_ADDRESS")
                             }
                         }
                     }
-                }
-        }
-        return activities.map(this::mapActivity)
-    }
-
-    suspend fun activityByIds(ids: List<String>): List<TypedTokenActivity> {
-        val activities = invoke<List<TokenActivity>> { builder ->
-            builder.path(BASE_PATH).queryParam("id.in", ids.joinToString(","))
-        }
-        return activities.map(this::mapActivity)
-    }
-
-    suspend fun activityByItem(contract: String, tokenId: String, size: Int?, continuation: Long?, sortAsc: Boolean = true): List<TokenActivity> {
-        val activities = invoke<List<TokenActivity>> { builder ->
-            builder.path(BASE_PATH)
-                .queryParam("token.contract", contract)
-                .queryParam("token.tokenId", tokenId)
-                .apply {
-                    // TODO: add continuation later
-//                    size?.let { queryParam("limit", it) }
-                    continuation?.let { queryParam("offset.cr", it) }
-                    val sorting = if (sortAsc) "sort.asc" else "sort.desc"
-                    queryParam(sorting, "id")
                 }
         }
         return activities.map(this::mapActivity)
