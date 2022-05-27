@@ -1,6 +1,7 @@
 
 val mockHttpVersion: String by project
 val mockkVersion: String by project
+val rfksystemsVersion: String by project
 
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
@@ -12,6 +13,7 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("com.rfksystems:blake2b:$rfksystemsVersion")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("com.squareup.okhttp3:mockwebserver:$mockHttpVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
