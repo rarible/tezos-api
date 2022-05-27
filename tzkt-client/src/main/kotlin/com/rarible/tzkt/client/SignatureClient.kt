@@ -22,7 +22,6 @@ class SignatureClient(
         signature: String,
         message: String
     ): Boolean {
-        var isValid = "False"
         try {
             val response: Map<*, *> = client.post().uri {
                 val build = it.path("/chains/main/blocks/head/helpers/scripts/run_view").build()
@@ -35,7 +34,7 @@ class SignatureClient(
                 .awaitBody()
 
             val result = response["data"] as LinkedHashMap<String, String>
-            isValid = result["prim"].toString()
+            return result["prim"].toString() == "True"
         } catch (e: Exception) {
             if(e is WebClientResponseException){
                 throw SignatureValidationException("Could not verify signature: ${e.message}: ${e.responseBodyAsString}")
@@ -43,7 +42,6 @@ class SignatureClient(
                 throw SignatureValidationException("Could not verify signature: ${e.message}")
             }
         }
-        return isValid == "True"
     }
 
     private fun payload(chainId: String, contract: String, pk: String, message: String, signature: String): Map<*, *> {
