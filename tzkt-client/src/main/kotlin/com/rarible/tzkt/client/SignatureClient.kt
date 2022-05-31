@@ -23,12 +23,13 @@ class SignatureClient(
         message: String
     ): Boolean {
         try {
+            val payload = payload(chainId, sigChecker, publicKey, message, signature)
             val response: Map<*, *> = client.post().uri {
                 val build = it.path("/chains/main/blocks/head/helpers/scripts/run_view").build()
-                logger.info("Request to ${build}")
+                logger.info("Request to ${build} with payload ${payload}")
                 build
             }.contentType(APPLICATION_JSON)
-                .bodyValue(payload(chainId, sigChecker, publicKey, message, signature))
+                .bodyValue(payload)
                 .accept(APPLICATION_JSON)
                 .retrieve()
                 .awaitBody()
