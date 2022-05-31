@@ -7,8 +7,8 @@ import org.junit.jupiter.api.assertThrows
 
 class SignatureClientTest : BaseClientTests() {
 
-    val signatureClient = SignatureClient(mockServer.url("").toString(), "NetXfHjxW3qBoxi", "KT1ShTc4haTgT76z5nTLSQt3GSTLzeLPZYfT")
-//    val signatureClient = SignatureClient("https://dev-tezos-node.rarible.org", "NetXfHjxW3qBoxi", "KT1ShTc4haTgT76z5nTLSQt3GSTLzeLPZYfT")
+    val signatureClient = SignatureClient(mockServer.url("").toString(), "NetXfHjxW3qBoxi", "KT1EiyFnYEGUtfMLKBcWnYzJ95d1hakR5qaX")
+    //val signatureClient = SignatureClient("https://dev-tezos-node.rarible.org", "NetXfHjxW3qBoxi", "KT1EiyFnYEGUtfMLKBcWnYzJ95d1hakR5qaX")
 
     @Test
     fun `should validate and return true`() = runBlocking<Unit> {
@@ -18,9 +18,9 @@ class SignatureClientTest : BaseClientTests() {
                 }
             }""")
         val result = signatureClient.validate(
-            "edpkuaNBQd9rgqeDHUuCVpwRLFBK8DzneLVLLrFTKmam8A7BAyYir9",
-            "edsigtxMxuHNcwMA1J72dNfFjt5bguyfH2m3VWz3bTfWoDoKcQgpQkGVN8xkrRKemAhjdKtYoHZ7zaZK4LWpsSkTKxvJDC75VSj",
-            "05010000000f7061796c6f616420746f207369676e"
+            "edpkvGfYw3LyB1UcCahKQk4rF2tvbMUk8GFiTuMjL75uGXrpvKXhjn",
+            "edsigtpJtWK2gvgqiMSWpZGutcsxEip92DCZobjL9x7Qz7BdkGdLqNYoMBACQcQPFPmhwxYQYvzFsN96np4J9f4kZnULPiMVWkA",
+            "message to sign"
         )
 
         assertThat(result).isTrue
@@ -35,8 +35,8 @@ class SignatureClientTest : BaseClientTests() {
             }""")
         val result = signatureClient.validate(
             "edpkuaNBQd9rgqeDHUuCVpwRLFBK8DzneLVLLrFTKmam8A7BAyYir9",
-            "edsigtYX9ti5iMMmbybuMp5mUh7PRD9YXbukesysLhF7N5eSuQhv7TugscG2XUB3w4MF8eat7h94G1BL8JRufxP44Qrgeu4de9A",
-            "05010000000f7061796c6f616420746f207369676e"
+            "edsigtpJtWK2gvgqiMSWpZGutcsxEip92DCZobjL9x7Qz7BdkGdLqNYoMBACQcQPFPmhwxYQYvzFsN96np4J9f4kZnULPiMVWkA",
+            "message to sign"
         )
 
         assertThat(result).isFalse
@@ -49,7 +49,7 @@ class SignatureClientTest : BaseClientTests() {
             signatureClient.validate(
                 "pkuaNBQd9rgqeDHUuCVpwRLFBK8DzneLVLLrFTKmam8A7BAyYir9",
                 "edsigtxMxuHNcwMA1J72dNfFjt5bguyfH2m3VWz3bTfWoDoKcQgpQkGVN8xkrRKemAhjdKtYoHZ7zaZK4LWpsSkTKxvJDC75VSj",
-                "05010000000f7061796c6f616420746f207369676e"
+                "message to sign"
             )
         }
     }
@@ -61,7 +61,7 @@ class SignatureClientTest : BaseClientTests() {
             signatureClient.validate(
                 "edpkuaNBQd9rgqeDHUuCVpwRLFBK8DzneLVLLrFTKmam8A7BAyYir9",
                 "txMxuHNcwMA1J72dNfFjt5bguyfH2m3VWz3bTfWoDoKcQgpQkGVN8xkrRKemAhjdKtYoHZ7zaZK4LWpsSkTKxvJDC75VSj",
-                "05010000000f7061796c6f616420746f207369676e"
+                "message to sign"
             )
         }
     }

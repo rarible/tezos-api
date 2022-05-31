@@ -57,7 +57,7 @@ class SignatureClient(
                     mapOf(
                         "prim" to "Pair",
                         "args" to listOf(
-                            mapOf("bytes" to message),
+                            mapOf("string" to message),
                             mapOf("string" to signature)
                         )
                     )
