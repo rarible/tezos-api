@@ -41,6 +41,7 @@ class TokenClient(
             it.path(BASE_PATH)
                 .queryParam("contract", parsed.contract)
                 .queryParam("tokenId", parsed.tokenId)
+                .queryParam("token.standard", "fa2")
         }
         val token = tokens.firstOrNotFound(itemId)
         return metaService.meta(token)
@@ -52,6 +53,7 @@ class TokenClient(
             it.path(BASE_PATH)
                 .queryParam("contract", parsed.contract)
                 .queryParam("tokenId", parsed.tokenId)
+                .queryParam("token.standard", "fa2")
         }.firstOrNotFound(itemId)
         return token.metadata?.let { it["artifactUri"] != null }
     }

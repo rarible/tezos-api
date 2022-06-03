@@ -82,5 +82,10 @@ data class Token (
 
     val meta: TokenMeta? = null
 
-)
+) {
+
+    fun isNft(): Boolean {
+        return this.metadata?.let { it["artifactUri"] != null } ?: false
+    }
+}
 
