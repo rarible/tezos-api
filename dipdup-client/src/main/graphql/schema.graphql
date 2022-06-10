@@ -864,7 +864,7 @@ type marketplace_activity {
 
   make_value: numeric!
 
-  maker: String!
+  maker: String
 
   network: String!
 
@@ -901,7 +901,7 @@ type marketplace_activity {
   taker: String
 
   """
-  ORDER_LIST: LIST\nORDER_MATCH: SELL\nORDER_CANCEL: CANCEL_LIST\nTOKEN_MINT: MINT\nTOKEN_TRANSFER: TRANSFER\nTOKEN_BURN: BURN
+  GET_BID: GET_BID\nGET_FLOOR_BID: GET_FLOOR_BID\nORDER_LIST: LIST\nORDER_MATCH: SELL\nORDER_CANCEL: CANCEL_LIST\nCANCEL_BID: CANCEL_BID\nCANCEL_FLOOR_BID: CANCEL_FLOOR_BID\nMAKE_BID: MAKE_BID\nMAKE_FLOOR_BID: MAKE_FLOOR_BID\nTOKEN_MINT: MINT\nTOKEN_TRANSFER: TRANSFER\nTOKEN_BURN: BURN
   """
   type: String!
 }
@@ -1133,6 +1133,8 @@ type marketplace_order {
 
   created_at: timestamptz!
 
+  end_at: timestamptz
+
   ended_at: timestamptz
 
   fill: numeric!
@@ -1169,7 +1171,7 @@ type marketplace_order {
 
   salt: bigint!
 
-  started_at: timestamptz!
+  start_at: timestamptz!
 
   """
   ACTIVE: ACTIVE\nFILLED: FILLED\nHISTORICAL: HISTORICAL\nINACTIVE: INACTIVE\nCANCELLED: CANCELLED
@@ -1204,6 +1206,8 @@ input marketplace_order_bool_exp {
 
   created_at: timestamptz_comparison_exp
 
+  end_at: timestamptz_comparison_exp
+
   ended_at: timestamptz_comparison_exp
 
   fill: numeric_comparison_exp
@@ -1234,7 +1238,7 @@ input marketplace_order_bool_exp {
 
   salt: bigint_comparison_exp
 
-  started_at: timestamptz_comparison_exp
+  start_at: timestamptz_comparison_exp
 
   status: String_comparison_exp
 
@@ -1256,6 +1260,8 @@ input marketplace_order_order_by {
   cancelled: order_by
 
   created_at: order_by
+
+  end_at: order_by
 
   ended_at: order_by
 
@@ -1287,7 +1293,7 @@ input marketplace_order_order_by {
 
   salt: order_by
 
-  started_at: order_by
+  start_at: order_by
 
   status: order_by
 
@@ -1315,6 +1321,11 @@ enum marketplace_order_select_column {
   column name
   """
   created_at
+
+  """
+  column name
+  """
+  end_at
 
   """
   column name
@@ -1394,7 +1405,7 @@ enum marketplace_order_select_column {
   """
   column name
   """
-  started_at
+  start_at
 
   """
   column name

@@ -4,6 +4,7 @@ fragment order on marketplace_order {
     created_at
     fill
     ended_at
+    end_at
     id
     internal_order_id
     last_updated_at
@@ -16,7 +17,7 @@ fragment order on marketplace_order {
     maker
     network
     platform
-    started_at
+    start_at
     salt
     status
     take_asset_class
@@ -62,6 +63,7 @@ query GetOrderById($id: uuid!) {
         cancelled
         created_at
         ended_at
+        end_at
         fill
         id
         internal_order_id
@@ -76,7 +78,7 @@ query GetOrderById($id: uuid!) {
         network
         platform
         salt
-        started_at
+        start_at
         status
         take_asset_class
         take_contract
