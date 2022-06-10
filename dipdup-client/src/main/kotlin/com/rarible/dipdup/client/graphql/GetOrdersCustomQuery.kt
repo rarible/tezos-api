@@ -28,6 +28,7 @@ data class GetOrdersCustomQuery(
                 created_at
                 fill
                 ended_at
+                end_at
                 id
                 internal_order_id
                 last_updated_at
@@ -40,7 +41,7 @@ data class GetOrdersCustomQuery(
                 maker
                 network
                 platform
-                started_at
+                start_at
                 salt
                 status
                 take_asset_class
