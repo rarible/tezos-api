@@ -58,8 +58,6 @@ data class GetOrdersByItemCustomQuery(
                 last_updated_at
                 make_asset_class
                 make_contract
-                make_price
-                make_stock
                 make_token_id
                 make_value
                 maker

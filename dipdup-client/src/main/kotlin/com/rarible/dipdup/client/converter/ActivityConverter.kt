@@ -25,8 +25,7 @@ fun convert(source: Activity) = activityEvent(
     maker = source.maker,
     taker = source.taker,
     make = getAsset(source.make_asset_class, source.make_contract, source.make_token_id, source.make_value),
-    take = getAsset(source.take_asset_class, source.take_contract, source.take_token_id, source.take_value),
-    price = source.sell_price
+    take = getAsset(source.take_asset_class, source.take_contract, source.take_token_id, source.take_value)
 )
 
 fun convertAllDesc(source: List<GetActivitiesDescQuery.Marketplace_activity>): List<DipDupActivity> {
@@ -59,7 +58,6 @@ fun activityEvent(
     taker: String?,
     make: Asset,
     take: Asset,
-    price: Any
 ): DipDupActivity {
     return when (type) {
         "LIST" -> DipDupOrderListActivity(
@@ -70,8 +68,7 @@ fun activityEvent(
             source = source,
             maker = maker,
             make = make,
-            take = take,
-            price = BigDecimal(price.toString())
+            take = take
         )
         "SELL" -> DipDupOrderSellActivity(
             id = id,
@@ -82,8 +79,7 @@ fun activityEvent(
             nft = make,
             payment = take,
             buyer = taker!!,
-            seller = maker,
-            price = BigDecimal(price.toString())
+            seller = maker
         )
         "CANCEL_LIST" -> DipDupOrderCancelActivity(
             id = id,
