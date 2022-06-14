@@ -12,7 +12,6 @@ fragment activity on marketplace_activity {
     operation_level
     operation_timestamp
     platform
-    sell_price
     take_asset_class
     take_contract
     take_token_id

@@ -39,8 +39,7 @@ data class DipDupOrderListActivity(
     val source: TezosPlatform,
     val maker: String,
     val make: Asset,
-    val take: Asset,
-    val price: BigDecimal
+    val take: Asset
 ) : DipDupActivity()
 
 data class DipDupOrderCancelActivity(
@@ -64,7 +63,6 @@ data class DipDupOrderSellActivity(
     val nft: Asset,
     val payment: Asset,
     val buyer: String,
-    val price: BigDecimal
 ) : DipDupActivity()
 
 data class DipDupTransferActivity(

@@ -885,8 +885,6 @@ type marketplace_activity {
   """
   platform: String!
 
-  sell_price: numeric!
-
   """
   ETH: ETH\nXTZ: XTZ\nFUNGIBLE_TOKEN: TEZOS_FT\nNON_FUNGIBLE_TOKEN: TEZOS_NFT\nMULTI_TOKEN: TEZOS_MT\nERC20: ERC20\nERC721: ERC721\nERC1155: ERC1155\nERC721_LAZY: ERC721_LAZY\nERC1155_LAZY: ERC1155_LAZY\nCOLLECTION: COLLECTION\nGEN_ART: GEN_ART
   """
@@ -946,8 +944,6 @@ input marketplace_activity_bool_exp {
 
   platform: String_comparison_exp
 
-  sell_price: numeric_comparison_exp
-
   take_asset_class: String_comparison_exp
 
   take_contract: String_comparison_exp
@@ -994,8 +990,6 @@ input marketplace_activity_order_by {
   order_id: order_by
 
   platform: order_by
-
-  sell_price: order_by
 
   take_asset_class: order_by
 
@@ -1092,11 +1086,6 @@ enum marketplace_activity_select_column {
   """
   column name
   """
-  sell_price
-
-  """
-  column name
-  """
   take_asset_class
 
   """
@@ -1151,10 +1140,6 @@ type marketplace_order {
   make_asset_class: String!
 
   make_contract: String
-
-  make_price: numeric!
-
-  make_stock: numeric!
 
   make_token_id: String
 
@@ -1222,10 +1207,6 @@ input marketplace_order_bool_exp {
 
   make_contract: String_comparison_exp
 
-  make_price: numeric_comparison_exp
-
-  make_stock: numeric_comparison_exp
-
   make_token_id: String_comparison_exp
 
   make_value: numeric_comparison_exp
@@ -1276,10 +1257,6 @@ input marketplace_order_order_by {
   make_asset_class: order_by
 
   make_contract: order_by
-
-  make_price: order_by
-
-  make_stock: order_by
 
   make_token_id: order_by
 
@@ -1361,16 +1338,6 @@ enum marketplace_order_select_column {
   column name
   """
   make_contract
-
-  """
-  column name
-  """
-  make_price
-
-  """
-  column name
-  """
-  make_stock
 
   """
   column name
