@@ -133,11 +133,18 @@ class TokenClient(
     }
 
     suspend fun tokenCount(contract: String): BigInteger {
-        val collection = invoke<BigInteger> {
-            it.path("${BASE_PATH}/count")
+        val lastTokenId = invoke<List<String>> {
+            it.path(BASE_PATH)
                 .queryParam("contract", contract)
+                .queryParam("sort.desc","tokenId")
+                .queryParam("limit", "1")
+                .queryParam("select","tokenId")
         }
-        return collection
+        return if(lastTokenId.isNullOrEmpty()){
+            BigInteger.ZERO
+        } else{
+            lastTokenId.first().toBigInteger()
+        }
     }
 
     fun direction(asc: Boolean) = if (asc) "gt" else "lt"
