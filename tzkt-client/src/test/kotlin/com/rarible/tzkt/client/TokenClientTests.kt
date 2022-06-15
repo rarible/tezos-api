@@ -1947,8 +1947,8 @@ class TokenClientTests : BaseClientTests() {
 
     @Test
     fun `should return token count`() = runBlocking<Unit> {
-        mock("1885")
+        mock("[\"1977\"]")
         val count = tokenClient.tokenCount("KT1NWdwVA8zq5DDJTKcMkRqWYJcEcyTTm5WK")
-        assertThat(count).isEqualTo(BigInteger("1885"))
+        assertThat(count).isEqualTo(BigInteger("1977"))
     }
 }
