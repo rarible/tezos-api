@@ -13,7 +13,7 @@ abstract class BaseClientTests {
     val mockServer = MockWebServer()
     val client = WebClient.create(mockServer.url("").toString())
 //    val client = WebClient.create("https://api.tzkt.io")
-//    val client = WebClient.create("http://localhost:5001")
+//    val client = WebClient.create("https://dev-tezos-tzkt.rarible.org")
 
     fun mock(body: String) {
         mockServer.enqueue(
