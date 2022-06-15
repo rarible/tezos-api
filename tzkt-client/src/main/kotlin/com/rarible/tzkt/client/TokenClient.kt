@@ -14,6 +14,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import org.springframework.web.reactive.function.client.WebClient
 import java.lang.Integer.min
+import java.math.BigInteger
 
 class TokenClient(
     webClient: WebClient,
@@ -129,6 +130,14 @@ class TokenClient(
     suspend fun royalty(itemId: String): List<Part> {
         val parsed = ItemId.parse(itemId)
         return royaltyHander.processRoyalties(parsed.contract, parsed.tokenId)
+    }
+
+    suspend fun tokenCount(contract: String): BigInteger {
+        val collection = invoke<BigInteger> {
+            it.path("${BASE_PATH}/count")
+                .queryParam("contract", contract)
+        }
+        return collection
     }
 
     fun direction(asc: Boolean) = if (asc) "gt" else "lt"

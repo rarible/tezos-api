@@ -10,6 +10,7 @@ import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import java.math.BigInteger
 
 class TokenClientTests : BaseClientTests() {
 
@@ -1942,5 +1943,12 @@ class TokenClientTests : BaseClientTests() {
     fun `shouldn't return token by contract and token id`() = runBlocking<Unit> {
         mock("[]")
         assertThrows<TzktNotFound> { tokenClient.token("KT1NWdwVA8zq5DDJTKcMkRqWYJcEcyTTm5WK:1156") }
+    }
+
+    @Test
+    fun `should return token count`() = runBlocking<Unit> {
+        mock("1885")
+        val count = tokenClient.tokenCount("KT1NWdwVA8zq5DDJTKcMkRqWYJcEcyTTm5WK")
+        assertThat(count).isEqualTo(BigInteger("1885"))
     }
 }
