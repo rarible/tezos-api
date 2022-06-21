@@ -46,7 +46,20 @@ class OrderClientFt : BaseClientFt() {
                         "take_contract": null,
                         "take_token_id": null,
                         "take_value": 1,
-                        "taker": null"""),
+                        "taker": null,
+                        "origin_fees": [
+                            {
+                                "part_account": "tz1Mxsc66En4HsVHr6rppYZW82ZpLhpupToC",
+                                "part_value": "100"
+                            }
+                        ],
+                        "payouts": [
+                            {
+                                "part_account": "tz1Mxsc66En4HsVHr6rppYZW82ZpLhpupToC",
+                                "part_value": "200"
+                            }
+                        ]
+                        """),
             Arguments.of(OrderStatus.ACTIVE, """
                         "__typename": "marketplace_order",
                         "cancelled": false,
@@ -70,7 +83,20 @@ class OrderClientFt : BaseClientFt() {
                         "take_contract": null,
                         "take_token_id": null,
                         "take_value": 1,
-                        "taker": null"""),
+                        "taker": null,
+                        "origin_fees": [
+                            {
+                                "part_account": "tz1Mxsc66En4HsVHr6rppYZW82ZpLhpupToC",
+                                "part_value": "100"
+                            }
+                        ],
+                        "payouts": [
+                            {
+                                "part_account": "tz1Mxsc66En4HsVHr6rppYZW82ZpLhpupToC",
+                                "part_value": "200"
+                            }
+                        ]
+                        """),
             Arguments.of(OrderStatus.CANCELLED, """
                         "__typename": "marketplace_order",
                         "cancelled": true,
@@ -94,7 +120,20 @@ class OrderClientFt : BaseClientFt() {
                         "take_contract": null,
                         "take_token_id": null,
                         "take_value": 1,
-                        "taker": null""")
+                        "taker": null,
+                        "origin_fees": [
+                            {
+                                "part_account": "tz1Mxsc66En4HsVHr6rppYZW82ZpLhpupToC",
+                                "part_value": "100"
+                            }
+                        ],
+                        "payouts": [
+                            {
+                                "part_account": "tz1Mxsc66En4HsVHr6rppYZW82ZpLhpupToC",
+                                "part_value": "200"
+                            }
+                        ]
+                        """)
         )
     }
 
@@ -107,6 +146,12 @@ class OrderClientFt : BaseClientFt() {
 
         assertThat(order).isNotNull
         assertThat(order.status).isEqualTo(status)
+        assertThat(order.originFees.size).isEqualTo(1)
+        assertThat(order.payouts.size).isEqualTo(1)
+        assertThat(order.originFees.first().account).isEqualTo("tz1Mxsc66En4HsVHr6rppYZW82ZpLhpupToC")
+        assertThat(order.originFees.first().value).isEqualTo(100)
+        assertThat(order.payouts.first().account).isEqualTo("tz1Mxsc66En4HsVHr6rppYZW82ZpLhpupToC")
+        assertThat(order.payouts.first().value).isEqualTo(200)
     }
 
     @Test

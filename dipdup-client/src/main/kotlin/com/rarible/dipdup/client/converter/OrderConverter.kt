@@ -34,7 +34,9 @@ fun convert(source: GetOrderByIdQuery.Marketplace_order_by_pk) = DipDupOrder(
     taker = source.taker,
     platform = TezosPlatform.valueOf(source.platform),
     status = OrderStatus.valueOf(source.status),
-    salt = BigInteger(source.salt.toString())
+    salt = BigInteger(source.salt.toString()),
+    originFees = getParts(source.origin_fees),
+    payouts = getParts(source.payouts)
 )
 
 fun convertAll(source: List<GetOrdersQuery.Marketplace_order>, limit: Int): DipDupOrdersPage {
@@ -80,7 +82,9 @@ fun convert(source: Order) = DipDupOrder(
     taker = source.taker,
     platform = TezosPlatform.valueOf(source.platform),
     status = OrderStatus.valueOf(source.status),
-    salt = BigInteger(source.salt.toString())
+    salt = BigInteger(source.salt.toString()),
+    originFees = getParts(source.origin_fees),
+    payouts = getParts(source.payouts)
 )
 
 fun convert(source: com.rarible.dipdup.client.fragment.AssetType) =
