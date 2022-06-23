@@ -10,7 +10,7 @@ data class TzktActivityContinuation(
 ) {
 
     override fun toString(): String {
-        return "${date.toEpochSecond()}_${id}"
+        return "${date.toEpochSecond() * 1_000}_${id}"
     }
 
     companion object {
@@ -18,7 +18,7 @@ data class TzktActivityContinuation(
             return value?.let {
                 val (sortField, idStr) = value.split('_')
                 TzktActivityContinuation(
-                    date = Instant.ofEpochSecond(sortField.toLong()).atOffset(ZoneOffset.UTC),
+                    date = Instant.ofEpochMilli(sortField.toLong()).atOffset(ZoneOffset.UTC),
                     id = idStr?.toLongOrNull()
                 )
             }

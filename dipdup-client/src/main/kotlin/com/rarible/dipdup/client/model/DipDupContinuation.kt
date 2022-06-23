@@ -12,7 +12,7 @@ data class DipDupContinuation(
 ) {
 
     override fun toString(): String {
-        return "${date.toEpochSecond()}_${id}"
+        return "${date.toEpochSecond() * 1_000}_${id}"
     }
 
     companion object {
@@ -20,7 +20,7 @@ data class DipDupContinuation(
             return value?.let {
                 val (sortField, idStr) = value.split('_')
                 DipDupContinuation(
-                    date = Instant.ofEpochSecond(sortField.toLong()).atOffset(ZoneOffset.UTC),
+                    date = Instant.ofEpochMilli(sortField.toLong()).atOffset(ZoneOffset.UTC),
                     id = idStr?.let {
                         if (isValidUUID(it))
                             UUID.fromString(it)
