@@ -284,7 +284,7 @@ class ActivityClientTests : BaseClientTests() {
         var activities = activityClient.getActivitiesByItem(listOf(ActivityType.MINT, ActivityType.TRANSFER, ActivityType.BURN), "KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn", "0", 3, null, false)
 
         assertThat(activities.items).hasSize(3)
-        assertThat(activities.continuation.toString()).isEqualTo("1614340163_41904714")
+        assertThat(activities.continuation.toString()).isEqualTo("1614340163000_41904714")
         assertThat(mockServer.requestCount).isEqualTo(3)
         assertThat(requests()).isEqualTo(setOf(
             "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&sort.desc=timestamp&from.null=true",
@@ -389,10 +389,10 @@ class ActivityClientTests : BaseClientTests() {
         mock("[]")
         mock("[]")
 
-        var activities = activityClient.getActivitiesByItem(listOf(ActivityType.MINT, ActivityType.TRANSFER, ActivityType.BURN), "KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn", "0", 3, "1614340163_41904714", true)
+        var activities = activityClient.getActivitiesByItem(listOf(ActivityType.MINT, ActivityType.TRANSFER, ActivityType.BURN), "KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn", "0", 3, "1614340163000_41904714", true)
 
         assertThat(activities.items).hasSize(3)
-        assertThat(activities.continuation.toString()).isEqualTo("1651850849_225200387")
+        assertThat(activities.continuation.toString()).isEqualTo("1651850849000_225200387")
         assertThat(mockServer.requestCount).isEqualTo(6)
         assertThat(requests()).isEqualTo(setOf(
             "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.gt=2021-02-26T11:49:23Z&sort.asc=timestamp&from.null=true",
