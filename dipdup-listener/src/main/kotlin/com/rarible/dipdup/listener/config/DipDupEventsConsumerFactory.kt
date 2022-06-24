@@ -1,8 +1,8 @@
 package com.rarible.dipdup.listener.config
 
 import com.rarible.core.kafka.RaribleKafkaConsumer
-import com.rarible.core.kafka.json.JsonDeserializer
 import com.rarible.dipdup.client.core.model.DipDupActivity
+import com.rarible.dipdup.client.core.model.DipDupCollection
 import com.rarible.dipdup.client.core.model.DipDupOrder
 
 import java.util.*
@@ -44,6 +44,18 @@ class DipDupEventsConsumerFactory(
             valueClass = DipDupActivity::class.java,
             consumerGroup = consumerGroup,
             defaultTopic = "${DipDupTopicProvider.ACTIVITY}_$network",
+            bootstrapServers = brokerReplicaSet,
+            properties = properties
+        )
+    }
+
+    fun createCollectionConsumer(consumerGroup: String): RaribleKafkaConsumer<DipDupCollection> {
+        return RaribleKafkaConsumer(
+            clientId = "$clientIdPrefix.tezos-collection-consumer",
+            valueDeserializerClass = DipDupDeserializer.ActivityJsonSerializer::class.java,
+            valueClass = DipDupCollection::class.java,
+            consumerGroup = consumerGroup,
+            defaultTopic = "${DipDupTopicProvider.COLLECTION}_$network",
             bootstrapServers = brokerReplicaSet,
             properties = properties
         )
