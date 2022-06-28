@@ -4,6 +4,12 @@ import java.math.BigDecimal
 import java.math.BigInteger
 import java.time.OffsetDateTime
 
+
+data class Part(
+    val account: String,
+    val value: Int
+)
+
 data class DipDupOrder(
     val id: String,
     val fill: BigDecimal,
@@ -19,5 +25,7 @@ data class DipDupOrder(
     val make: Asset,
     val taker: String?,
     val take: Asset,
-    val salt: BigInteger
+    val salt: BigInteger,
+    val originFees: List<Part>,
+    val payouts: List<Part>
 )

@@ -71,6 +71,8 @@ data class GetOrdersByItemCustomQuery(
                 take_token_id
                 take_value
                 taker
+                origin_fees
+                payouts
             }
         """.trimIndent()
     }

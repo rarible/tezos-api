@@ -23,6 +23,8 @@ fragment order on marketplace_order {
     take_token_id
     take_value
     taker
+    origin_fees
+    payouts
 }
 
 fragment assetType on marketplace_order {
@@ -81,6 +83,8 @@ query GetOrderById($id: uuid!) {
         take_token_id
         take_value
         taker
+        origin_fees
+        payouts
     }
 }
 

@@ -881,7 +881,7 @@ type marketplace_activity {
   order_id: uuid!
 
   """
-  HEN: Hen\nOBJKT: Objkt\nOBJKT_V2: Objkt_v2\nRARIBLE: Rarible
+  HEN: Hen\nOBJKT: Objkt\nOBJKT_V2: Objkt_v2\nRARIBLE_V1: RARIBLE_V1\nRARIBLE_V2: RARIBLE_V2
   """
   platform: String!
 
@@ -1149,8 +1149,12 @@ type marketplace_order {
 
   network: String!
 
+  origin_fees("JSON select path" path: String): jsonb
+
+  payouts("JSON select path" path: String): jsonb
+
   """
-  HEN: Hen\nOBJKT: Objkt\nOBJKT_V2: Objkt_v2\nRARIBLE: Rarible
+  HEN: Hen\nOBJKT: Objkt\nOBJKT_V2: Objkt_v2\nRARIBLE_V1: RARIBLE_V1\nRARIBLE_V2: RARIBLE_V2
   """
   platform: String!
 
@@ -1215,6 +1219,10 @@ input marketplace_order_bool_exp {
 
   network: String_comparison_exp
 
+  origin_fees: jsonb_comparison_exp
+
+  payouts: jsonb_comparison_exp
+
   platform: String_comparison_exp
 
   salt: bigint_comparison_exp
@@ -1265,6 +1273,10 @@ input marketplace_order_order_by {
   maker: order_by
 
   network: order_by
+
+  origin_fees: order_by
+
+  payouts: order_by
 
   platform: order_by
 
@@ -1358,6 +1370,16 @@ enum marketplace_order_select_column {
   column name
   """
   network
+
+  """
+  column name
+  """
+  origin_fees
+
+  """
+  column name
+  """
+  payouts
 
   """
   column name
