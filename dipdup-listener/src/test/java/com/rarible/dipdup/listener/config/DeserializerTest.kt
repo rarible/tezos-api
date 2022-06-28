@@ -15,6 +15,8 @@ class DeserializerTest {
                 "network": "private",
                 "fill": "1",
                 "platform": "Rarible",
+                "payouts": [],
+                "originFees": [],
                 "status": "FILLED",
                 "startedAt": "2022-05-18T13:41:29+00:00",
                 "endedAt": "2022-05-18T13:41:39+00:00",
