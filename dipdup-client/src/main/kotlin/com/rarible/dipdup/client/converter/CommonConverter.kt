@@ -32,7 +32,7 @@ fun getParts(data: Any?): List<Part> {
     if(data != null){
         val rawParts = data as List<LinkedHashMap<String, Any>>
         for(rawPart in rawParts){
-            if(rawPart.keys.containsAll(listOf("part_account", "part_value"))){
+            if (rawPart.keys.containsAll(listOf("part_account", "part_value"))) {
                 parts.add(Part(rawPart["part_account"] as String, (rawPart["part_value"] as String).toInt()))
             } else {
                 throw RuntimeException("Unknown parts format: $rawParts")

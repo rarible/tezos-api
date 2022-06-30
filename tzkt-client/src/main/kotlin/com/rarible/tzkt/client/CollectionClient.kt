@@ -1,5 +1,6 @@
 package com.rarible.tzkt.client
 
+import com.rarible.tzkt.model.CollectionType
 import com.rarible.tzkt.model.Contract
 import com.rarible.tzkt.model.Page
 import kotlinx.coroutines.async
@@ -56,6 +57,18 @@ class CollectionClient(
         return Page(collections, offset(continuation, collections))
     }
 
+    suspend fun collectionType(contract: String): CollectionType {
+        val schema = invoke<Map<String, Any>> { builder ->
+            builder.path("$BASE_PATH/$contract/storage/schema")
+        }.getMap("schema:object")
+        val type: CollectionType = when {
+            schema?.get("ledger:big_map:object:nat") != null -> CollectionType.MT
+            schema?.get("ledger:big_map_flat:nat:address") != null -> CollectionType.NFT
+            else -> throw RuntimeException("Wrong collection type for $contract $schema")
+        }
+        return type
+    }
+
     suspend fun collectionsByIds(addresses: List<String>): List<Contract> {
         val collections = coroutineScope {
             addresses
@@ -63,6 +76,10 @@ class CollectionClient(
                 .awaitAll()
         }
         return collections
+    }
+
+    private fun Map<String, Any>?.getMap(key: String): Map<String, Any>? {
+        return this?.get(key) as Map<String, Any>?
     }
 
     companion object {

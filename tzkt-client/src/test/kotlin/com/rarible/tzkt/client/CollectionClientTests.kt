@@ -1,5 +1,6 @@
 package com.rarible.tzkt.client
 
+import com.rarible.tzkt.model.CollectionType
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -1236,5 +1237,155 @@ class CollectionClientTests : BaseClientTests() {
 
         assertThat(collection.items).hasSize(1)
         assertThat(collection.continuation).isNotNull
+    }
+
+    @Test
+    fun `should return NFT type for collection`() = runBlocking<Unit> {
+        mock("""
+            {
+                "schema:object": {
+                    "owner:address": "address",
+                    "owner_candidate:?address": "address",
+                    "paused:bool": "bool",
+                    "royalties:big_map_flat:nat:list:object": {
+                        "nat": [
+                            {
+                                "partAccount:address": "address",
+                                "partValue:nat": "nat"
+                            }
+                        ]
+                    },
+                    "ledger:big_map_flat:nat:address": {
+                        "nat": "address"
+                    },
+                    "operators:big_map:object:unit": [
+                        {
+                            "key:object": {
+                                "address_0:address": "address",
+                                "nat:nat": "nat",
+                                "address_1:address": "address"
+                            },
+                            "value:unit": "unit"
+                        }
+                    ],
+                    "token_metadata:big_map_flat:nat:object": {
+                        "nat": {
+                            "token_id:nat": "nat",
+                            "token_info:map_flat:string:bytes": {
+                                "string": "bytes"
+                            }
+                        }
+                    },
+                    "permits:big_map_flat:address:object": {
+                        "address": {
+                            "counter:nat": "nat",
+                            "user_expiry:?nat": "nat",
+                            "user_permits:map_flat:bytes:object": {
+                                "bytes": {
+                                    "expiry:?nat": "nat",
+                                    "created_at:timestamp": "timestamp"
+                                }
+                            }
+                        }
+                    },
+                    "operators_for_all:big_map:object:unit": [
+                        {
+                            "key:object": {
+                                "address_0:address": "address",
+                                "address_1:address": "address"
+                            },
+                            "value:unit": "unit"
+                        }
+                    ],
+                    "default_expiry:nat": "nat",
+                    "metadata:big_map_flat:string:bytes": {
+                        "string": "bytes"
+                    }
+                }
+            }
+        """.trimIndent())
+
+        val type = collectionClient.collectionType("KT1DtQV5qTnxdG49GbMRdKC8fg7bpvPLNcpm")
+        assertThat(request().path).isEqualTo("/v1/contracts/KT1DtQV5qTnxdG49GbMRdKC8fg7bpvPLNcpm/storage/schema")
+
+        assertThat(type).isEqualTo(CollectionType.NFT)
+    }
+
+    @Test
+    fun `should return MT type for collection`() = runBlocking<Unit> {
+        mock("""
+            {
+                "schema:object": {
+                    "owner:address": "address",
+                    "owner_candidate:?address": "address",
+                    "paused:bool": "bool",
+                    "royalties:big_map_flat:nat:list:object": {
+                        "nat": [
+                            {
+                                "partAccount:address": "address",
+                                "partValue:nat": "nat"
+                            }
+                        ]
+                    },
+                    "ledger:big_map:object:nat": [
+                        {
+                            "key:object": {
+                                "nat:nat": "nat",
+                                "address:address": "address"
+                            },
+                            "value:nat": "nat"
+                        }
+                    ],
+                    "operator:big_map:object:unit": [
+                        {
+                            "key:object": {
+                                "address_0:address": "address",
+                                "nat:nat": "nat",
+                                "address_1:address": "address"
+                            },
+                            "value:unit": "unit"
+                        }
+                    ],
+                    "token_metadata:big_map_flat:nat:object": {
+                        "nat": {
+                            "token_id:nat": "nat",
+                            "token_info:map_flat:string:bytes": {
+                                "string": "bytes"
+                            }
+                        }
+                    },
+                    "permits:big_map_flat:address:object": {
+                        "address": {
+                            "counter:nat": "nat",
+                            "user_expiry:?nat": "nat",
+                            "user_permits:map_flat:bytes:object": {
+                                "bytes": {
+                                    "expiry:?nat": "nat",
+                                    "created_at:timestamp": "timestamp"
+                                }
+                            }
+                        }
+                    },
+                    "operator_for_all:big_map:object:unit": [
+                        {
+                            "key:object": {
+                                "address_0:address": "address",
+                                "address_1:address": "address"
+                            },
+                            "value:unit": "unit"
+                        }
+                    ],
+                    "default_expiry:nat": "nat",
+                    "metadata:big_map_flat:string:bytes": {
+                        "string": "bytes"
+                    }
+                }
+            }
+        """.trimIndent())
+
+        val type = collectionClient.collectionType("KT1Uke8qc4YTfP41dGuoGC8UsgRyCtyvKPLA")
+        assertThat(request().path).isEqualTo("/v1/contracts/KT1Uke8qc4YTfP41dGuoGC8UsgRyCtyvKPLA/storage/schema")
+
+        assertThat(type).isEqualTo(CollectionType.MT)
     }
 }
