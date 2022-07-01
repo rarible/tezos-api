@@ -1,12 +1,15 @@
 package com.rarible.dipdup.client.core.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.time.OffsetDateTime
 
 
 data class Part(
+    @JsonProperty("part_account")
     val account: String,
+    @JsonProperty("part_value")
     val value: Int
 )
 
