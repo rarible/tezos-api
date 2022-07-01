@@ -5,5 +5,6 @@ enum class TezosPlatform {
     Objkt,
     Objkt_v2,
     Rarible,
+    RARIBLE_V1,
     RARIBLE_V2;
 }

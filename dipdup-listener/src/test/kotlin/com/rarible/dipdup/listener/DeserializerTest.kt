@@ -56,4 +56,56 @@ class DeserializerTest {
         assertThat(order).isNotNull
     }
 
+    @Test
+    fun `should deserialize activity v1`() {
+        val txt = """
+            {
+                "id": "bd38425f-493d-5644-8c5c-eca6731d84a2",
+                "network": "ithacanet",
+                "fill": "0",
+                "platform": "RARIBLE_V1",
+                "status": "ACTIVE",
+                "startAt": "2022-06-30T14:51:31+00:00",
+                "endAt": null,
+                "cancelled": false,
+                "createdAt": "2022-06-30T14:51:31+00:00",
+                "endedAt": null,
+                "lastUpdatedAt": "2022-06-30T14:51:31+00:00",
+                "maker": "tz1NRh1vTn3b38m7Gg2qP81dqb5Kr2BAjwJV",
+                "taker": null,
+                "make": {
+                    "assetType": {
+                        "assetClass": "TEZOS_MT",
+                        "contract": "KT19VgWR1FeQYQw3tR3Ch8bEynrjmzHPjGb2",
+                        "tokenId": "2"
+                    },
+                    "assetValue": "2"
+                },
+                "take": {
+                    "assetType": {
+                        "assetClass": "XTZ"
+                    },
+                    "assetValue": "2"
+                },
+                "originFees": [
+                    {
+                        "part_account": "tz1gkQ4rNzPTgf1Yn3oBweWHAAvvF9VJv9hh",
+                        "part_value": "250"
+                    }
+                ],
+                "payouts": [
+                    {
+                        "part_account": "tz1NRh1vTn3b38m7Gg2qP81dqb5Kr2BAjwJV",
+                        "part_value": "10000"
+                    }
+                ],
+                "salt": "16624826187119183140186178151761430011714134697190895817714779241133841113657211102"
+            }
+        """.trimIndent()
+
+        val order = DipDupDeserializer.OrderJsonSerializer().createMapper()
+            .readValue<DipDupOrder>(txt)
+
+        assertThat(order).isNotNull
+    }
 }
