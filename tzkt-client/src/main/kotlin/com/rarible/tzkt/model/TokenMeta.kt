@@ -20,7 +20,7 @@ data class TokenMeta(
     )
 
     data class Content(
-        val uri: String,
+        val uri: String?,
         val mimeType: String,
         val representation: Representation
     )

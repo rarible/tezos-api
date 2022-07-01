@@ -79,7 +79,7 @@ class MetaService(private val mapper: ObjectMapper, private val bigMapKeyClient:
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         data class TzktContent(
-            val uri: String,
+            val uri: String?,
             val mimeType: String
         )
 
