@@ -132,8 +132,9 @@ class TokenActivityClient(
     private suspend fun wrapWithHashes(activities: List<TypedTokenActivity>): List<TypedTokenActivity> {
         val transactionIds = activities.mapNotNull { it.transactionId }
         val pairs: Map<Long, String> = invoke<List<TransactionItem>> { builder ->
-            builder.path(BASE_TRANSACTION_PATH).queryParam("id.in", transactionIds.joinToString(","))
-            builder.path(BASE_TRANSACTION_PATH).queryParam("select", "id,hash")
+            builder.path(BASE_TRANSACTION_PATH)
+                .queryParam("id.in", transactionIds.joinToString(","))
+                .queryParam("select", "id,hash")
         }.map{ it.id to it.hash }.toMap()
         return activities.map {
             when (it.tokenActivity.transactionId) {
