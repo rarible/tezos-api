@@ -26,7 +26,7 @@ class TokenActivityClient(
         val activities = invoke<List<TokenActivity>> { builder ->
             builder.path(BASE_PATH).queryParam("id.in", ids.joinToString(","))
         }
-        return activities.map(this::mapActivity)
+        return wrapWithHashes(activities.map(this::mapActivity))
     }
 
     suspend fun getActivitiesByItem(
@@ -70,7 +70,7 @@ class TokenActivityClient(
             else -> groups.sortedWith(compareBy({ it.timestamp }, { it.id })).reversed()
         }
         Page.Get(
-            items = activities,
+            items = wrapWithHashes(activities),
             size = size,
             last = { TzktActivityContinuation(it.timestamp, it.id.toLong()).toString() }
         )
@@ -129,10 +129,30 @@ class TokenActivityClient(
         return TypedTokenActivity(type = type, tokenActivity)
     }
 
+    private suspend fun wrapWithHashes(activities: List<TypedTokenActivity>): List<TypedTokenActivity> {
+        val transactionIds = activities.mapNotNull { it.transactionId }
+        val pairs: Map<Long, String> = invoke<List<TransactionItem>> { builder ->
+            builder.path(BASE_TRANSACTION_PATH).queryParam("id.in", transactionIds.joinToString(","))
+            builder.path(BASE_TRANSACTION_PATH).queryParam("select", "id,hash")
+        }.map{ it.id to it.hash }.toMap()
+        return activities.map {
+            when (it.tokenActivity.transactionId) {
+                null -> it
+                else -> it.addHash(pairs[it.tokenActivity.transactionId])
+            }
+        }
+    }
+
     companion object {
         const val BASE_PATH = "v1/tokens/transfers"
+        const val BASE_TRANSACTION_PATH = "v1/operations/transactions"
         const val BURN_ADDRESS = "tz1burnburnburnburnburnburnburjAYjjX"
         const val NULL_ADDRESS = "tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU"
         const val DEFAULT_SIZE = 1000
     }
+
+    class TransactionItem(
+        val id: Long,
+        val hash: String
+    )
 }
