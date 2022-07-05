@@ -11,6 +11,23 @@ class OwnershipClient(
     webClient: WebClient
 ) : BaseClient(webClient) {
 
+    suspend fun ownershipsAll(continuation: String?, size: Int): Page<TokenBalance> {
+        val ownerships = invoke<List<TokenBalance>> { builder ->
+            builder.path(BASE_PATH)
+                .queryParam("sort.desc", "id")
+                .queryParam("token.standard", "fa2")
+                .queryParam("limit", size)
+                .apply {
+                    continuation?.let { queryParam("offset.cr", it) }
+                }
+        }
+        return Page.Get(
+            items = ownerships,
+            size = size,
+            last = { it.id.toString() }
+        )
+    }
+
     suspend fun ownershipById(ownershipId: String): TokenBalance {
         val id = OwnershipId.parse(ownershipId)
         val ownership = invoke<List<TokenBalance>> { builder ->

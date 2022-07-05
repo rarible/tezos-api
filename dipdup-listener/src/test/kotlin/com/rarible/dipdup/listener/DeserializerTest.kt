@@ -2,6 +2,7 @@ package com.rarible.dipdup.listener
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.rarible.dipdup.client.core.model.DipDupOrder
+import com.rarible.dipdup.client.core.model.DipDupTransferActivity
 import com.rarible.dipdup.listener.config.DipDupDeserializer
 import org.junit.jupiter.api.Test
 import org.assertj.core.api.Assertions.assertThat
@@ -105,6 +106,31 @@ class DeserializerTest {
 
         val order = DipDupDeserializer.OrderJsonSerializer().createMapper()
             .readValue<DipDupOrder>(txt)
+
+        assertThat(order).isNotNull
+    }
+
+
+    @Test
+    fun `should deserialize transfer`() {
+        val txt = """
+            {
+                "id":"64ad4815-2de9-5bba-95b5-5bc77407990e",
+                "date":"2022-04-26T07:36:45Z",
+                "reverted":"false",
+                "transferId":"27148400",
+                "contract":"KT1MjD39KZWvX2QF3MJuhG3JGDkUq5LrMygw",
+                "tokenId":"0",
+                "value":"1",
+                "transactionId":"27148396",
+                "from":"tz1Ra5aPL6NVBbiN6DqwTHYuk6dHNPtFJiJU",
+                "owner":"tz1fNCKWMNdznZv3Gk9MFR2wEQF3VejXZbpw",
+                "type": "TRANSFER"
+            }
+        """.trimIndent()
+
+        val order = DipDupDeserializer.OrderJsonSerializer().createMapper()
+            .readValue<DipDupTransferActivity>(txt)
 
         assertThat(order).isNotNull
     }
