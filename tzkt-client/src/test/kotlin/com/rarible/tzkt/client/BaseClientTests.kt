@@ -12,7 +12,13 @@ abstract class BaseClientTests {
     val mapper = ObjectMapper().registerKotlinModule()
     val mockServer = MockWebServer()
     val client = WebClient.create(mockServer.url("").toString())
-//    val client = WebClient.create("https://api.ithacanet.tzkt.io")
+//    val client = WebClient.builder()
+//        .exchangeStrategies(
+//            ExchangeStrategies.builder()
+//                .codecs { it.defaultCodecs().maxInMemorySize(10_000_000) }
+//                .build())
+//        .baseUrl("https://api.ithacanet.tzkt.io")
+//        .build()
 //    val client = WebClient.create("https://dev-tezos-tzkt.rarible.org")
 
     fun mock(body: String) {

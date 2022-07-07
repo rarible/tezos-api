@@ -4,6 +4,7 @@ import com.rarible.tzkt.model.ActivityType
 import com.rarible.tzkt.model.TzktActivityContinuation
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.time.OffsetDateTime
 
@@ -553,5 +554,17 @@ class ActivityClientTests : BaseClientTests() {
         assertThat(TzktActivityContinuation.isValid(activities.continuation!!)).isTrue
         assertThat(activities.items).hasSize(2)
         assertThat(activities.items.first().tokenActivity.transactionHash).isNotEmpty
+    }
+
+    // This's for testnet real indexer
+    @Disabled
+    @Test
+    fun `should return 1000 activities`() = runBlocking<Unit> {
+        val fileContent = ActivityClientTests::class.java.getResource("/testnet_transactions.txt").readText()
+        val ids = fileContent.split(",").map { it.trim() }
+        var activities = activityClient.getActivitiesByIds(ids)
+        assertThat(activities).hasSize(1000)
+        val hashes = activities.mapNotNull { it.transactionHash }
+        assertThat(hashes).hasSize(879) //maybe flaky
     }
 }
