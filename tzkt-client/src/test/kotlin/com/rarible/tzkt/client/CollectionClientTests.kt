@@ -3,6 +3,7 @@ package com.rarible.tzkt.client
 import com.rarible.tzkt.model.CollectionType
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class CollectionClientTests : BaseClientTests() {
@@ -40,6 +41,7 @@ class CollectionClientTests : BaseClientTests() {
             	"codeHash": 1973375561
             }
         """.trimIndent())
+        mock("""[]""") // for meta
 
         val address = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
         val collection = collectionClient.collection(address)
@@ -1124,6 +1126,7 @@ class CollectionClientTests : BaseClientTests() {
             "typeHash": 605223826,
             "codeHash": -2016262351
         }""")
+        mock("""[]""") // for meta
         mock("""{
             "type": "contract",
             "address": "KT1CSKPf2jeLpMmrgKquN2bCjBTkAcAdRVDy",
@@ -1157,6 +1160,7 @@ class CollectionClientTests : BaseClientTests() {
             "typeHash": 605223826,
             "codeHash": -2016262351
         }""")
+        mock("""[]""") // for meta
         val collections = collectionClient.collectionsByIds(listOf("KT1QuofAgnsWffHzLA7D78rxytJruGHDe7XG", "KT1CSKPf2jeLpMmrgKquN2bCjBTkAcAdRVDy"))
         assertThat(collections).hasSize(2)
     }
@@ -1387,5 +1391,14 @@ class CollectionClientTests : BaseClientTests() {
         assertThat(request().path).isEqualTo("/v1/contracts/KT1Uke8qc4YTfP41dGuoGC8UsgRyCtyvKPLA/storage/schema")
 
         assertThat(type).isEqualTo(CollectionType.MT)
+    }
+
+    // This test is for testnet only
+    @Disabled
+    @Test
+    fun `should return meta for collection`() = runBlocking<Unit> {
+        val collection = collectionClient.collection("KT1UFkqihyjz1GhxM1hk78CjfcChsBbLGYMm")
+        assertThat(collection.name).isEqualTo("123-000")
+        assertThat(collection.symbol).isEqualTo("123")
     }
 }

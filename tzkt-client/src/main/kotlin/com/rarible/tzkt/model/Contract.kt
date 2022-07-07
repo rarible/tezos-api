@@ -57,6 +57,12 @@ data class Contract (
     /* Kind of the contract (`delegator_contract` or `smart_contract`), where `delegator_contract` - manager.tz smart contract for delegation purpose only */
     val kind: String,
 
+    /* name from bigmaps/metadata */
+    val name: String?,
+
+    /* symbol from bigmaps/metadata */
+    val symbol: String?,
+
     /* List of implemented standards (TZIPs) */
     val tzips: List<String>? = null,
 
@@ -134,5 +140,11 @@ data class Contract (
 
     val collectionType: CollectionType? = null
 
-) : Account
+) : Account {
+
+    fun meta(meta: CollectionMeta): Contract {
+        return this.copy(name = meta.name, symbol = meta.symbol)
+    }
+
+}
 

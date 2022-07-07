@@ -1,5 +1,6 @@
 package com.rarible.tzkt.client
 
+import com.rarible.tzkt.model.CollectionMeta
 import com.rarible.tzkt.model.CollectionType
 import com.rarible.tzkt.model.Contract
 import com.rarible.tzkt.model.Page
@@ -12,11 +13,16 @@ class CollectionClient(
     webClient: WebClient
 ) : BaseClient(webClient) {
 
-    suspend fun collection(contract: String): Contract {
-        val collection = invoke<Contract> {
-            it.path("$BASE_PATH/$contract")
+    suspend fun collection(contract: String): Contract = coroutineScope {
+        val collection = async {
+            invoke<Contract> {
+                it.path("$BASE_PATH/$contract")
+            }
         }
-        return collection
+        val meta = async {
+            collectionMeta(contract)
+        }
+        collection.await().meta(meta.await())
     }
 
     suspend fun collectionsAll(size: Int = DEFAULT_SIZE, continuation: String?, sortAsc: Boolean = true): Page<Contract> {
@@ -64,7 +70,10 @@ class CollectionClient(
         val type: CollectionType = when {
             schema?.get("ledger:big_map:object:nat") != null -> CollectionType.MT
             schema?.get("ledger:big_map_flat:nat:address") != null -> CollectionType.NFT
-            else -> throw RuntimeException("Wrong collection type for $contract $schema")
+            else -> {
+                logger.warn("Wrong collection type for $contract $schema, set MT")
+                CollectionType.MT
+            }
         }
         return type
     }
@@ -77,6 +86,31 @@ class CollectionClient(
         }
         return collections
     }
+
+    suspend fun collectionMeta(contract: String): CollectionMeta {
+        val meta = invoke<List<Map<String, Any>>> {
+            it.path("$BASE_PATH/$contract/bigmaps/metadata/keys")
+        }
+        return CollectionMeta(getKey(meta, "name"), getKey(meta, "symbol"))
+    }
+
+    private fun String.decodeHex(): ByteArray? {
+        return if (length % 2 == 0) {
+            chunked(2)
+                .map { it.toInt(16).toByte() }
+                .toByteArray()
+        } else {
+            null
+        }
+    }
+
+    private fun getKey(meta: List<Map<String, Any>>, key: String): String? =
+        meta.find { it["key"] == key }?.get("value")?.let {
+            when (val bytes = it.toString().decodeHex()) {
+                null -> null
+                else -> String(bytes)
+            }
+        }
 
     private fun Map<String, Any>?.getMap(key: String): Map<String, Any>? {
         return this?.get(key) as Map<String, Any>?
