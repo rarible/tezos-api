@@ -1940,6 +1940,48 @@ class TokenClientTests : BaseClientTests() {
     }
 
     @Test
+    fun `should return meta from escaped string`() = runBlocking<Unit> {
+        mock("""
+            [
+                {
+                    "id": 12571,
+                    "contract": {
+                        "address": "KT1PWG9Xm9vuLGGASfoh7aeCAfPNwuzx1P4J"
+                    },
+                    "tokenId": "69",
+                    "standard": "fa2",
+                    "firstLevel": 457281,
+                    "firstTime": "2022-04-29T09:13:25Z",
+                    "lastLevel": 457283,
+                    "lastTime": "2022-04-29T09:13:55Z",
+                    "transfersCount": 2,
+                    "balancesCount": 2,
+                    "holdersCount": 1,
+                    "totalMinted": "1",
+                    "totalBurned": "0",
+                    "totalSupply": "1",
+                    "metadata": {
+                        "name": "Dogami",
+                        "rights": "(c) DOGAMI. All Rights Reserved.",
+                        "formats": "[{\"mimeType\": \"video/mp4\", \"uri\": \"ipfs://QmbXbqeV6DTVXYF5UDt15CEv8RMLsuWUEGsjF885QXzn37\"}, {\"mimeType\": \"image/png\", \"uri\": \"ipfs://QmS7QeMdCw39LEf7tEW44owuSuWNRCPjGQKjFq6KuZxCPS\"}, {\"mimeType\": \"image/png\", \"uri\": \"ipfs://QmXJ9faS96kQVDSdu8osz7TJvKg36yWiiRzmkb9X1BGmzp\"}]",
+                        "creators": "[\"DOGAMI\"]",
+                        "decimals": "0",
+                        "royalties": "{\"decimals\": 2, \"shares\": {\"tz1bj9NxKYups7WCFmytkYJTw6rxtizJR79K\": 7}}",
+                        "attributes": "",
+                        "displayUri": "ipfs://QmS7QeMdCw39LEf7tEW44owuSuWNRCPjGQKjFq6KuZxCPS",
+                        "artifactUri": "ipfs://QmbXbqeV6DTVXYF5UDt15CEv8RMLsuWUEGsjF885QXzn37",
+                        "description": "Your true virtual companion!",
+                        "thumbnailUri": "ipfs://QmXJ9faS96kQVDSdu8osz7TJvKg36yWiiRzmkb9X1BGmzp",
+                        "isBooleanAmount": "true"
+                    }
+                }
+            ]
+        """.trimIndent())
+        val nft = tokenClient.token("KT1PWG9Xm9vuLGGASfoh7aeCAfPNwuzx1P4J:69")
+        assertThat(nft.meta?.content).hasSize(3)
+    }
+
+    @Test
     fun `shouldn't return token by contract and token id`() = runBlocking<Unit> {
         mock("[]")
         assertThrows<TzktNotFound> { tokenClient.token("KT1NWdwVA8zq5DDJTKcMkRqWYJcEcyTTm5WK:1156") }

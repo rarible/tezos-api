@@ -3,6 +3,7 @@ package com.rarible.tzkt.meta
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.convertValue
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.rarible.tzkt.client.BigMapKeyClient
 import com.rarible.tzkt.config.KnownAddresses
 import com.rarible.tzkt.model.Token
@@ -17,7 +18,7 @@ class MetaService(private val mapper: ObjectMapper, private val bigMapKeyClient:
 
     fun meta(token: Token): TokenMeta {
         return if (null != token.metadata) {
-            val meta: TzktMeta = mapper.convertValue(token.metadata)
+            val meta: TzktMeta = mapper.convertValue(adjustMeta(token.metadata))
             TokenMeta(
                 name = meta.name ?: TokenMeta.UNTITLED,
                 description = meta.description,
@@ -63,6 +64,29 @@ class MetaService(private val mapper: ObjectMapper, private val bigMapKeyClient:
         }
     }
 
+    private fun adjustMeta(source: Map<String, *>): Map<String, *> {
+        val mutable = source.toMutableMap()
+        mutable["formats"] = adjustListMap(mutable["formats"])
+        mutable["creators"] = adjustList(mutable["creators"])
+        return mutable.toMap()
+    }
+
+    private fun adjustListMap(source: Any?): List<Map<String, Object>> {
+        return when (source) {
+            is String -> mapper.readValue(source)
+            is List<*> -> source as List<Map<String, Object>>
+            else -> emptyList()
+        }
+    }
+
+    private fun adjustList(source: Any?): List<String> {
+        return when (source) {
+            is String -> mapper.readValue(source)
+            is List<*> -> source as List<String>
+            else -> emptyList()
+        }
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class TzktMeta(
         val name: String? = null,
@@ -80,15 +104,15 @@ class MetaService(private val mapper: ObjectMapper, private val bigMapKeyClient:
         @JsonIgnoreProperties(ignoreUnknown = true)
         data class TzktContent(
             val uri: String?,
-            val mimeType: String
+            val mimeType: String?
         )
 
         fun attrs() = tags.map { Attribute(it) }
 
-        fun contents() = formats.map {
+        fun contents() = formats.filter { it.uri != null && it.mimeType != null }.map {
             Content(
                 uri = it.uri,
-                mimeType = it.mimeType,
+                mimeType = it.mimeType!!,
                 representation = representation(it)
             )
         }
