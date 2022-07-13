@@ -87,5 +87,7 @@ data class Token (
     fun isNft(): Boolean {
         return this.metadata?.let { it["artifactUri"] != null } ?: false
     }
+
+    fun itemId() = "${contract?.address}:$tokenId"
 }
 
