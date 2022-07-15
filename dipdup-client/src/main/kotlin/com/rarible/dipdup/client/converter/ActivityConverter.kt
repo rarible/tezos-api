@@ -12,12 +12,12 @@ import com.rarible.dipdup.client.core.model.DipDupOrderListActivity
 import com.rarible.dipdup.client.core.model.DipDupOrderSellActivity
 import com.rarible.dipdup.client.core.model.TezosPlatform
 import com.rarible.dipdup.client.fragment.Activity
-import java.math.BigDecimal
 import java.time.OffsetDateTime
 
 fun convert(source: Activity) = activityEvent(
     type = source.type,
     id = source.id.toString(),
+    operationCounter = source.operation_counter,
     reverted = false,
     date = OffsetDateTime.parse(source.operation_timestamp.toString()),
     hash = source.operation_hash,
@@ -49,7 +49,7 @@ fun convertByIds(source: List<GetActivitiesByIdsQuery.Marketplace_activity>): Li
 }
 
 fun activityEvent(
-    type: String, id: String,
+    type: String, id: String, operationCounter: Int,
     date: OffsetDateTime,
     reverted: Boolean,
     hash: String,
@@ -62,6 +62,7 @@ fun activityEvent(
     return when (type) {
         "LIST" -> DipDupOrderListActivity(
             id = id,
+            operationCounter = operationCounter,
             date = date,
             reverted = reverted,
             hash = hash,
@@ -72,6 +73,7 @@ fun activityEvent(
         )
         "SELL" -> DipDupOrderSellActivity(
             id = id,
+            operationCounter = operationCounter,
             date = date,
             reverted = reverted,
             hash = hash,
@@ -83,6 +85,7 @@ fun activityEvent(
         )
         "CANCEL_LIST" -> DipDupOrderCancelActivity(
             id = id,
+            operationCounter = operationCounter,
             date = date,
             reverted = reverted,
             hash = hash,

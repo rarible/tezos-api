@@ -31,39 +31,46 @@ sealed class DipDupActivity {
     }
 }
 
+interface WithOperationCounter {
+    val operationCounter: Int
+}
+
 data class DipDupOrderListActivity(
     override val id: String,
     override val date: OffsetDateTime,
     override val reverted: Boolean,
+    override val operationCounter: Int,
     val hash: String,
     val source: TezosPlatform,
     val maker: String,
     val make: Asset,
     val take: Asset
-) : DipDupActivity()
+) : WithOperationCounter, DipDupActivity()
 
 data class DipDupOrderCancelActivity(
     override val id: String,
     override val date: OffsetDateTime,
     override val reverted: Boolean,
+    override val operationCounter: Int,
     val hash: String,
     val source: TezosPlatform,
     val maker: String,
     val make: Asset,
     val take: Asset,
-) : DipDupActivity()
+) : WithOperationCounter, DipDupActivity()
 
 data class DipDupOrderSellActivity(
     override val id: String,
     override val date: OffsetDateTime,
     override val reverted: Boolean,
+    override val operationCounter: Int,
     val hash: String,
     val source: TezosPlatform,
     val seller: String,
     val nft: Asset,
     val payment: Asset,
     val buyer: String,
-) : DipDupActivity()
+) : WithOperationCounter, DipDupActivity()
 
 data class DipDupTransferActivity(
     override val id: String,

@@ -11,6 +11,7 @@ fragment activity on marketplace_activity {
     operation_hash
     operation_level
     operation_timestamp
+    operation_counter
     platform
     take_asset_class
     take_contract
@@ -19,52 +20,52 @@ fragment activity on marketplace_activity {
     taker
 }
 
-query GetActivitiesDesc($types: [String!]!, $limit: Int!, $prevDate: timestamptz!, $prevId: uuid!) {
+query GetActivitiesDesc($types: [String!]!, $limit: Int!, $prevDate: timestamptz!, $prevId: Int!) {
     marketplace_activity(
         where: {_or: [
             {operation_timestamp: {_lt: $prevDate}},
             {operation_timestamp: {_eq: $prevDate},
-                id: {_lt: $prevId}}], type: {_in: $types}}
-        order_by: {id: desc},
+                operation_counter: {_lt: $prevId}}], type: {_in: $types}}
+        order_by: {operation_timestamp: desc, operation_counter: desc},
         limit: $limit
     ) {
         ...activity
     }
 }
 
-query GetActivitiesAsc($types: [String!]!, $limit: Int!, $prevDate: timestamptz!, $prevId: uuid!) {
+query GetActivitiesAsc($types: [String!]!, $limit: Int!, $prevDate: timestamptz!, $prevId: Int!) {
     marketplace_activity(
         where: {_or: [
             {operation_timestamp: {_gt: $prevDate}},
             {operation_timestamp: {_eq: $prevDate},
-                id: {_gt: $prevId}}], type: {_in: $types}}
-        order_by: {id: asc},
+                operation_counter: {_gt: $prevId}}], type: {_in: $types}}
+        order_by: {operation_timestamp: asc, operation_counter: asc},
         limit: $limit
     ) {
         ...activity
     }
 }
 
-query GetActivitiesByItemDesc($types: [String!]!, $contract: String!, $tokenId: String!, $limit: Int!, $prevDate: timestamptz!, $prevId: uuid!) {
+query GetActivitiesByItemDesc($types: [String!]!, $contract: String!, $tokenId: String!, $limit: Int!, $prevDate: timestamptz!, $prevId: Int!) {
     marketplace_activity(
         where: {_or: [
             {operation_timestamp: {_lt: $prevDate}},
             {operation_timestamp: {_eq: $prevDate},
-                id: {_lt: $prevId}}], type: {_in: $types}, make_contract: {_eq: $contract}, make_token_id: {_eq: $tokenId}}
-        order_by: {id: desc},
+                operation_counter: {_lt: $prevId}}], type: {_in: $types}, make_contract: {_eq: $contract}, make_token_id: {_eq: $tokenId}}
+        order_by: {operation_timestamp: desc, operation_counter: desc},
         limit: $limit
     ) {
         ...activity
     }
 }
 
-query GetActivitiesByItemAsc($types: [String!]!, $contract: String!, $tokenId: String!, $limit: Int!, $prevDate: timestamptz!, $prevId: uuid!) {
+query GetActivitiesByItemAsc($types: [String!]!, $contract: String!, $tokenId: String!, $limit: Int!, $prevDate: timestamptz!, $prevId: Int!) {
     marketplace_activity(
         where: {_or: [
             {operation_timestamp: {_gt: $prevDate}},
             {operation_timestamp: {_eq: $prevDate},
-                id: {_gt: $prevId}}], type: {_in: $types}, make_contract: {_eq: $contract}, make_token_id: {_eq: $tokenId}}
-        order_by: {id: asc},
+                operation_counter: {_gt: $prevId}}], type: {_in: $types}, make_contract: {_eq: $contract}, make_token_id: {_eq: $tokenId}}
+        order_by: {operation_timestamp: asc, operation_counter: asc},
         limit: $limit
     ) {
         ...activity

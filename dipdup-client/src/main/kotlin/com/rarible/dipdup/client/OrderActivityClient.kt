@@ -7,12 +7,12 @@ import com.rarible.dipdup.client.converter.convertAllDesc
 import com.rarible.dipdup.client.converter.convertByItemAsc
 import com.rarible.dipdup.client.converter.convertByItemDesc
 import com.rarible.dipdup.client.core.model.DipDupActivity
+import com.rarible.dipdup.client.core.model.WithOperationCounter
 import com.rarible.dipdup.client.model.DipDupActivitiesPage
+import com.rarible.dipdup.client.model.DipDupActivityContinuation
 import com.rarible.dipdup.client.model.DipDupActivityType
-import com.rarible.dipdup.client.model.DipDupContinuation
 import java.time.LocalDateTime
 import java.time.ZoneOffset
-import java.util.*
 
 class OrderActivityClient(
     client: ApolloClient
@@ -24,8 +24,8 @@ class OrderActivityClient(
         continuation: String? = null,
         sortAsc: Boolean = false
     ): DipDupActivitiesPage {
-        val parsedContinuation: DipDupContinuation =
-            continuation?.let { DipDupContinuation.parse(it) } ?: mockContinuation(sortAsc)
+        val parsedContinuation: DipDupActivityContinuation =
+            continuation?.let { DipDupActivityContinuation.parse(it) } ?: mockContinuation(sortAsc)
         val activities = when (sortAsc) {
             true -> convertAllAsc(
                 safeExecution(
@@ -33,10 +33,7 @@ class OrderActivityClient(
                         types.map { it.name },
                         limit,
                         parsedContinuation.date.toString(),
-
-                        // if id wasn't parsed we can use random uuid because it means we use not native continuation
-                        // only date matters in this case
-                        parsedContinuation.id?.let { it.toString() } ?: UUID.randomUUID().toString()
+                        parsedContinuation.id
                     )
                 ).marketplace_activity
             )
@@ -46,13 +43,16 @@ class OrderActivityClient(
                         types.map { it.name },
                         limit,
                         parsedContinuation.date.toString(),
-                        parsedContinuation.id?.let { it.toString() } ?: UUID.randomUUID().toString()
+                        parsedContinuation.id
                     )
                 ).marketplace_activity
             )
         }
         val nextContinuation = when (activities.size) {
-            limit -> activities[limit - 1].let { DipDupContinuation(it.date, UUID.fromString(it.id)).toString() }
+            limit -> activities[limit - 1].let {
+                val withOperationCounter = it as WithOperationCounter
+                DipDupActivityContinuation(it.date, withOperationCounter.operationCounter).toString()
+            }
             else -> null
         }
         return DipDupActivitiesPage(
@@ -69,8 +69,8 @@ class OrderActivityClient(
         continuation: String? = null,
         sortAsc: Boolean = false
     ): DipDupActivitiesPage {
-        val parsedContinuation: DipDupContinuation =
-            continuation?.let { DipDupContinuation.parse(it) } ?: mockContinuation(sortAsc)
+        val parsedContinuation: DipDupActivityContinuation =
+            continuation?.let { DipDupActivityContinuation.parse(it) } ?: mockContinuation(sortAsc)
         val activities = when (sortAsc) {
             true -> convertByItemAsc(
                 safeExecution(
@@ -80,10 +80,7 @@ class OrderActivityClient(
                         tokenId,
                         limit,
                         parsedContinuation.date.toString(),
-
-                        // if id wasn't parsed we can use random uuid because it means we use not native continuation
-                        // only date matters in this case
-                        parsedContinuation.id?.let { it.toString() } ?: UUID.randomUUID().toString()
+                        parsedContinuation.id
                     )
                 ).marketplace_activity
             )
@@ -95,13 +92,16 @@ class OrderActivityClient(
                         tokenId,
                         limit,
                         parsedContinuation.date.toString(),
-                        parsedContinuation.id?.let { it.toString() } ?: UUID.randomUUID().toString()
+                        parsedContinuation.id
                     )
                 ).marketplace_activity
             )
         }
         val nextContinuation = when (activities.size) {
-            limit -> activities[limit - 1].let { DipDupContinuation(it.date, UUID.fromString(it.id)).toString() }
+            limit -> activities[limit - 1].let {
+                val withOperationCounter = it as WithOperationCounter
+                DipDupActivityContinuation(it.date, withOperationCounter.operationCounter).toString()
+            }
             else -> null
         }
         return DipDupActivitiesPage(
@@ -115,12 +115,16 @@ class OrderActivityClient(
         return convertByIds(response.marketplace_activity)
     }
 
-    private fun mockContinuation(sortAsc: Boolean = true): DipDupContinuation {
+    private fun mockContinuation(sortAsc: Boolean = true): DipDupActivityContinuation {
         val date = when (sortAsc) {
             true -> LocalDateTime.now().minusYears(1000).atOffset(ZoneOffset.UTC)
             else -> LocalDateTime.now().plusYears(1000).atOffset(ZoneOffset.UTC)
         }
-        return DipDupContinuation(date, UUID.randomUUID())
+        val id: Int = when (sortAsc) {
+            true -> 0
+            else -> Int.MAX_VALUE
+        }
+        return DipDupActivityContinuation(date, id)
     }
 
 }
