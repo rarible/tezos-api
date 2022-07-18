@@ -1,9 +1,13 @@
 package com.rarible.tzkt.royalties
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.kotlinModule
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.rarible.tzkt.client.BigMapKeyClient
 import com.rarible.tzkt.client.IPFSClient
 import com.rarible.tzkt.config.KnownAddresses
+import com.rarible.tzkt.model.BigMapKey
 import com.rarible.tzkt.model.Part
 import com.rarible.tzkt.tokens.BidouHandler
 import okio.ByteString.Companion.decodeHex
@@ -71,12 +75,13 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
 
         //fetch metadata from ipfs
         //check ipfs pattern
+        var tokenMetadata: BigMapKey? = null
         try {
-            val tokenMetadata = bigMapKeyClient.bigMapKeyWithName(contract, "token_metadata", tokenId)
+            tokenMetadata = bigMapKeyClient.bigMapKeyWithName(contract, "token_metadata", tokenId)
             val metadataMap = tokenMetadata.value as LinkedHashMap<String, String>
             val metadata = metadataMap["token_info"] as LinkedHashMap<String, String>
             val uri = metadata[""]?.decodeHex()?.utf8()
-            if(!uri.isNullOrEmpty()){
+            if (!uri.isNullOrEmpty()) {
                 val ipfsData = fetchIpfsData(uri)
                 if (ipfsData.has("royalties")) {
                     val royalties = ipfsData["royalties"] as JsonNode
@@ -94,12 +99,32 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
             logger.warn("Could not parse royalties for token $contract:$tokenId from IPFS metadata: ${e.message}")
         }
 
-        if(part.isNullOrEmpty()) {
+        if (part.isNullOrEmpty()) {
             part = getRoyaltiesFromRoyaltiesManager(contract, tokenId)
+        }
+
+        if (part.isNullOrEmpty() && tokenMetadata != null) {
+            part = getEmbeddedRoyalty(tokenMetadata.value, "$contract:$tokenId")
         }
 
         return part
     }
+
+    private fun getEmbeddedRoyalty(tokenMetadata: Any?, tokenId: String): List<Part> {
+        return try {
+            val metadataMap = tokenMetadata as LinkedHashMap<String, String>
+            val metadata = metadataMap["token_info"] as LinkedHashMap<String, String>
+            val embeddedRoyalty = metadata["royalties"].toString().decodeHex().utf8()
+            val royalty: EmbeddedRoyalty = ObjectMapper().registerModule(kotlinModule()).readValue(embeddedRoyalty)
+            val decimal = royalty.decimals?.let { it.toDouble() }?.let { Math.pow(10.0, it).toInt() } ?: 1
+            royalty.shares.map { Part(it.key, it.value * decimal) }
+        } catch (e: Exception) {
+            logger.warn("Could not parse royalties for token $tokenId from embedded metadata: ${e.message}")
+            emptyList()
+        }
+    }
+
+    data class EmbeddedRoyalty(val decimals: Int?, val shares: Map<String, Int>)
 
     private suspend fun getHENRoyalties(tokenId: String): List<Part> {
         var royaltiesMap: LinkedHashMap<String, String>

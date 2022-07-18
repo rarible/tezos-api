@@ -949,4 +949,16 @@ class RoyaltiesTests : BaseClientTests() {
         logger.info("Total KO = $totalKO")
         File(filePath).appendText("Total KO = $totalKO")
     }
+
+    @Test
+    @Ignore
+    fun `should fetch royalties from meta`() = runBlocking<Unit> {
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        var contract = "KT1NVvPsNDChrLRH5K2cy6Sc9r1uuUwdiZQd"
+        var tokenId = "8276"
+        val id = "$contract:$tokenId"
+        val parts = handler.processRoyalties(id)
+        assertThat(parts.first().share).isEqualTo(700)
+    }
+
 }
