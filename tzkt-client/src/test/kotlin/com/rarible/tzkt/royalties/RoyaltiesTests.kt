@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Ignore
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.web.reactive.function.client.WebClient
@@ -951,7 +952,7 @@ class RoyaltiesTests : BaseClientTests() {
     }
 
     @Test
-    @Ignore
+    @Disabled
     fun `should fetch royalties from meta`() = runBlocking<Unit> {
         val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
         var contract = "KT1NVvPsNDChrLRH5K2cy6Sc9r1uuUwdiZQd"
