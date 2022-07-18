@@ -110,7 +110,6 @@ class DeserializerTest {
         assertThat(order).isNotNull
     }
 
-
     @Test
     fun `should deserialize transfer`() {
         val txt = """
@@ -131,6 +130,59 @@ class DeserializerTest {
 
         val order = DipDupDeserializer.OrderJsonSerializer().createMapper()
             .readValue<DipDupTransferActivity>(txt)
+
+        assertThat(order).isNotNull
+    }
+
+    @Test
+    fun `should deserialize legacy order`() {
+        val txt = """
+            {
+                "id": "f9118ebd-e36e-583c-a3c7-378d0f84a4d5",
+                "network": "mainnet",
+                "fill": "0",
+                "platform": "RARIBLE_V1",
+                "status": "ACTIVE",
+                "startAt": "2022-03-17T13:25:04+00:00",
+                "endAt": null,
+                "cancelled": false,
+                "createdAt": "2022-03-17T13:25:04+00:00",
+                "endedAt": null,
+                "lastUpdatedAt": "2022-03-22T09:12:45",
+                "maker": "tz1T1HjtGRqxQSx3Xmvk3aWeYbUTXnStzfut",
+                "taker": null,
+                "make": {
+                    "assetType": {
+                        "assetClass": "TEZOS_MT",
+                        "contract": "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS",
+                        "tokenId": "49514"
+                    },
+                    "assetValue": "1"
+                },
+                "take": {
+                    "assetType": {
+                        "assetClass": "XTZ"
+                    },
+                    "assetValue": "2"
+                },
+                "originFees": [
+                    {
+                        "part_account": "tz1gkQ4rNzPTgf1Yn3oBweWHAAvvF9VJv9hh",
+                        "part_value": "250"
+                    }
+                ],
+                "payouts": [
+                    {
+                        "part_account": "tz1T1HjtGRqxQSx3Xmvk3aWeYbUTXnStzfut",
+                        "part_value": "10000"
+                    }
+                ],
+                "salt": "2755363520664528963105155163811214312206021984221118423874118127897686131116226"
+            }
+        """.trimIndent()
+
+        val order = DipDupDeserializer.OrderJsonSerializer().createMapper()
+            .readValue<DipDupOrder>(txt)
 
         assertThat(order).isNotNull
     }
