@@ -115,16 +115,11 @@ class OrderActivityClient(
         return convertByIds(response.marketplace_activity)
     }
 
-    private fun mockContinuation(sortAsc: Boolean = true): DipDupActivityContinuation {
-        val date = when (sortAsc) {
-            true -> LocalDateTime.now().minusYears(1000).atOffset(ZoneOffset.UTC)
-            else -> LocalDateTime.now().plusYears(1000).atOffset(ZoneOffset.UTC)
+    private fun mockContinuation(sortAsc: Boolean): DipDupActivityContinuation {
+        return when (sortAsc) {
+            true -> DipDupActivityContinuation(LocalDateTime.now().minusYears(1000).atOffset(ZoneOffset.UTC), 0)
+            else -> DipDupActivityContinuation(LocalDateTime.now().plusYears(1000).atOffset(ZoneOffset.UTC), Int.MAX_VALUE)
         }
-        val id: Int = when (sortAsc) {
-            true -> 0
-            else -> Int.MAX_VALUE
-        }
-        return DipDupActivityContinuation(date, id)
     }
 
 }
