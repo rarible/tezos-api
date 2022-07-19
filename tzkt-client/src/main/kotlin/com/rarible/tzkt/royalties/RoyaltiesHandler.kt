@@ -218,10 +218,11 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         var partList: MutableList<Part> = ArrayList()
         try {
             val shares = data["shares"].fieldNames()
+            val decimals = data["decimals"]?.toString()?.toDouble() ?: 1.0
             shares.forEach {
                 partList.add(
                     Part(
-                        it, data["shares"][it].asInt() * 10
+                        it, data["shares"][it].asInt() * Math.pow(10.0, decimals).toInt()
                     )
                 )
             }

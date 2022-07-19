@@ -21,6 +21,7 @@ import java.io.File
 class RoyaltiesTests : BaseClientTests() {
 
     val bigMapKeyClient = BigMapKeyClient(client)
+//    val ipfsWb = WebClient.create("https://ipfs.io/ipfs/")
     val ipfsClient = IPFSClient(client, mapper)
     val logger = LoggerFactory.getLogger(javaClass)
 
@@ -525,8 +526,8 @@ class RoyaltiesTests : BaseClientTests() {
             	"royalties": {
             		"decimals": 3,
             		"shares": {
-            			"tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88": 100,
-                        "tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP89": 100
+            			"tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88": 1,
+                        "tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP89": 1
 
             		}
             	}
@@ -955,8 +956,8 @@ class RoyaltiesTests : BaseClientTests() {
     @Disabled
     fun `should fetch royalties from meta`() = runBlocking<Unit> {
         val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
-        var contract = "KT1NVvPsNDChrLRH5K2cy6Sc9r1uuUwdiZQd"
-        var tokenId = "8276"
+        var contract = "KT1L7GvUxZH5tfa6cgZKnH6vpp2uVxnFVHKu:945"
+        var tokenId = "945"
         val id = "$contract:$tokenId"
         val parts = handler.processRoyalties(id)
         assertThat(parts.first().share).isEqualTo(700)
