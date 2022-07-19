@@ -3,11 +3,13 @@ package com.rarible.tzkt.it
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.rarible.tzkt.client.BigMapKeyClient
+import com.rarible.tzkt.client.IPFSClient
 import com.rarible.tzkt.client.TokenClient
 import com.rarible.tzkt.config.KnownAddresses
 import com.rarible.tzkt.meta.MetaService
+import com.rarible.tzkt.model.Part
 import com.rarible.tzkt.model.TokenMeta
-import io.mockk.mockk
+import com.rarible.tzkt.royalties.RoyaltiesHandler
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -19,6 +21,7 @@ import org.springframework.web.reactive.function.client.WebClient
 @DisabledOnOs(OS.LINUX)
 class TokenClientTests {
 
+    val mapper = ObjectMapper().registerKotlinModule()
 
     val HEN = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
     val HEN_ROYALTIES = "KT1Hkg5qeNhfwpKW4fXvq7HGZB9z2EnmCCA9"
@@ -48,19 +51,26 @@ class TokenClientTests {
 
     val bigMapKeyClient = BigMapKeyClient(client)
     val metaService = MetaService(ObjectMapper().registerKotlinModule(), bigMapKeyClient, config)
-    val tokenClient = TokenClient(client, metaService, mockk())
+    val ipfsWb = WebClient.create("https://ipfs.io/ipfs/")
+    val ipfsClient = IPFSClient(ipfsWb, mapper)
+    val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, config)
+    val tokenClient = TokenClient(client, metaService, handler)
 
     @Test
     fun `should return token tag from string`() = runBlocking<Unit> {
-       val item = tokenClient.token("KT1Aq1umaV8gcDQmi4CLDk7KeKpoUjFQeg1B:9")
-        assertThat(item).isNotNull
+        val item = tokenClient.token("KT1Aq1umaV8gcDQmi4CLDk7KeKpoUjFQeg1B:9")
         assertThat(item.meta?.attributes?.first()).isEqualTo(TokenMeta.Attribute("#climatechange"))
     }
 
     @Test
     fun `should return token tag from string list`() = runBlocking<Unit> {
         val item = tokenClient.token("KT1Aq1umaV8gcDQmi4CLDk7KeKpoUjFQeg1B:7")
-        assertThat(item).isNotNull
         assertThat(item.meta?.attributes?.first()).isEqualTo(TokenMeta.Attribute("summer, ice cream"))
+    }
+
+    @Test
+    fun `should have correct royalty`() = runBlocking<Unit> {
+        val parts = tokenClient.royalty("KT1L7GvUxZH5tfa6cgZKnH6vpp2uVxnFVHKu:945")
+        assertThat(parts.first()).isEqualTo(Part("tz29DrxbfkcfpUveVGsmhgvWqjgkVtGXbQyP", 700))
     }
 }
