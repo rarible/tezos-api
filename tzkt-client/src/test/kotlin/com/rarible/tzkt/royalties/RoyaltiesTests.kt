@@ -526,9 +526,7 @@ class RoyaltiesTests : BaseClientTests() {
             	"royalties": {
             		"decimals": 3,
             		"shares": {
-            			"tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88": 1,
-                        "tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP89": 1
-
+            			"tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88": 100
             		}
             	}
             }
@@ -542,8 +540,127 @@ class RoyaltiesTests : BaseClientTests() {
         val parts = handler.processRoyalties(id)
         assertThat(parts).isEqualTo(
             listOf(
-                Part("tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88", 1000),
-                Part("tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP89", 1000)
+                Part("tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88", 1000)
+            )
+        )
+    }
+
+    @Test
+    fun `should correctly fetch and parse Code crafting royalties`() = runBlocking<Unit> {
+        mock404()
+        mock(
+            """
+            {
+                "id": 11281265,
+                "active": true,
+                "hash": "exprtaragTX5o2kb51GppULzdY1KiPcwuELfgLEhV7QoCinYd78ywS",
+                "key": "897",
+                "value": {
+                    "token_id": "897",
+                    "token_info": {
+                        "": "697066733a2f2f516d5a4b4a423350644e477671447a7653314279516a47317a39645a3439547167797064564578385273697673652f3839372e6a736f6e"
+                    }
+                },
+                "firstLevel": 1910411,
+                "lastLevel": 1913412,
+                "updates": 2
+            }
+        """.trimIndent()
+        )
+        mock(
+            """
+            {
+                "artifactUri": "ipfs://QmRzMEUfnjnrFPWB7J9kaWLQM7PHbKdxibZMcEVoepYF55/shinoda_7370acafa62b699b9961f5fb674d026b0adca84e66e52a28dc6db3e1_897_141810.mp3",
+                "attributes": [
+                    {
+                        "name": "Background",
+                        "value": "Yellow"
+                    },
+                    {
+                        "name": "Face",
+                        "value": "Big Dog"
+                    },
+                    {
+                        "name": "Foreground",
+                        "value": "Toxic Smoke"
+                    },
+                    {
+                        "name": "Head",
+                        "value": "Green V"
+                    },
+                    {
+                        "name": "Drums Track",
+                        "value": "Drums #14"
+                    },
+                    {
+                        "name": "Melody Track",
+                        "value": "Melody #1"
+                    },
+                    {
+                        "name": "Music Track",
+                        "value": "Music #8"
+                    },
+                    {
+                        "name": "Percussion Track",
+                        "value": "Percussion  #1"
+                    }
+                ],
+                "decimals": 0,
+                "description": "ZIGGURATS is the first generative NFT mixtape. It is a collection of 5000 unique audio + visual NFTs on the Tezos chain, generated from new art and music by Mike Shinoda. Visually and musically, no two items are the same, but some are more rare. The initial price of each NFT will be 15 Tezos (XTZ).\n\nIn ancient Mesopotamia, the Ziggurat was a tall, layered, structure. It was believed that the Gods lived in the temple at the top. Great care, effort, and creativity went into the creation of its complex structure. Likewise, this project is built upon layers of effort and devotion, some elements many years in the making.",
+                "displayUri": "ipfs://QmfJ85aaYJCGMmPHKfuBCbCeViCnao8M8oWDipEs2X9nBK/897.png",
+                "externalUri": "https://ziggurats.xyz/",
+                "formats": [
+                    {
+                        "dataRate": {
+                            "unit": "kbps",
+                            "value": 64
+                        },
+                        "duration": "00:06:45",
+                        "mimeType": "audio/mpeg",
+                        "uri": "ipfs://QmRzMEUfnjnrFPWB7J9kaWLQM7PHbKdxibZMcEVoepYF55/shinoda_7370acafa62b699b9961f5fb674d026b0adca84e66e52a28dc6db3e1_897_141810.mp3"
+                    },
+                    {
+                        "dimensions": {
+                            "unit": "px",
+                            "value": "1080x1080"
+                        },
+                        "mimeType": "image/png",
+                        "uri": "ipfs://QmfJ85aaYJCGMmPHKfuBCbCeViCnao8M8oWDipEs2X9nBK/897.png"
+                    },
+                    {
+                        "dimensions": {
+                            "unit": "px",
+                            "value": "350x350"
+                        },
+                        "mimeType": "image/png",
+                        "uri": "ipfs://Qmdt367K8V2GxKaGk6SrQCzqWqaaQMGK6jrLwz45xA4NAd/897.png"
+                    }
+                ],
+                "id": 897,
+                "isBooleanAmount": true,
+                "name": "ZIGGURATS #897",
+                "rightsUri": "https://www.mikeshinoda.com/NFTTerms",
+                "royalties": {
+                    "decimals": 2,
+                    "shares": {
+                        "tz1SLgrDBpFWjGCnCwyNpCpQC1v8v2N8M2Ks": "5"
+                    }
+                },
+                "shouldPreferSymbol": false,
+                "symbol": "ZIGGS",
+                "thumbnailUri": "ipfs://Qmdt367K8V2GxKaGk6SrQCzqWqaaQMGK6jrLwz45xA4NAd/897.png"
+            }
+        """.trimIndent()
+        )
+
+        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        var contract = "KT1PNcZQkJXMQ2Mg92HG1kyrcu3auFX5pfd8"
+        var tokenId = "897"
+        val id = "$contract:$tokenId"
+        val parts = handler.processRoyalties(id)
+        assertThat(parts).isEqualTo(
+            listOf(
+                Part("tz1SLgrDBpFWjGCnCwyNpCpQC1v8v2N8M2Ks", 500),
             )
         )
     }
