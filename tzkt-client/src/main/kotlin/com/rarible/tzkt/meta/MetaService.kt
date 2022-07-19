@@ -68,6 +68,7 @@ class MetaService(private val mapper: ObjectMapper, private val bigMapKeyClient:
         val mutable = source.toMutableMap()
         mutable["formats"] = adjustListMap(mutable["formats"])
         mutable["creators"] = adjustList(mutable["creators"])
+        mutable["tags"] = adjustList(mutable["tags"])
         return mutable.toMap()
     }
 
@@ -81,7 +82,7 @@ class MetaService(private val mapper: ObjectMapper, private val bigMapKeyClient:
 
     private fun adjustList(source: Any?): List<String> {
         return when (source) {
-            is String -> mapper.readValue(source)
+            is String -> listOf(source)
             is List<*> -> source as List<String>
             else -> emptyList()
         }
@@ -91,7 +92,7 @@ class MetaService(private val mapper: ObjectMapper, private val bigMapKeyClient:
     data class TzktMeta(
         val name: String? = null,
         val description: String? = null,
-        val tags: List<String> = emptyList(),
+        val tags: List<String>? = emptyList(),
         val symbol: String? = null,
         val creators: List<String> = emptyList(),
         val formats: List<TzktContent> = emptyList(),
@@ -107,7 +108,7 @@ class MetaService(private val mapper: ObjectMapper, private val bigMapKeyClient:
             val mimeType: String?
         )
 
-        fun attrs() = tags.map { Attribute(it) }
+        fun attrs() = tags?.map { Attribute(it) } ?: emptyList()
 
         fun contents() = formats.filter { it.uri != null && it.mimeType != null }.map {
             Content(
