@@ -5,10 +5,12 @@ import com.rarible.dipdup.client.converter.convert
 import com.rarible.dipdup.client.converter.convertAll
 import com.rarible.dipdup.client.converter.convertByIds
 import com.rarible.dipdup.client.converter.convertByItem
+import com.rarible.dipdup.client.converter.convertByMaker
 import com.rarible.dipdup.client.core.model.Asset
 import com.rarible.dipdup.client.core.model.DipDupOrder
 import com.rarible.dipdup.client.core.model.OrderStatus
 import com.rarible.dipdup.client.exception.DipDupNotFound
+import com.rarible.dipdup.client.graphql.GetOrderByMakerCustomQuery
 import com.rarible.dipdup.client.graphql.GetOrdersByItemCustomQuery
 import com.rarible.dipdup.client.graphql.GetOrdersCustomQuery
 import com.rarible.dipdup.client.model.DipDupContinuation
@@ -71,6 +73,25 @@ class OrderClient(
             )
         )
         return convertByItem(response.marketplace_order, size)
+    }
+
+    suspend fun getOrdersByMakers(
+        makers: List<String>,
+        statuses: List<OrderStatus>,
+        size: Int = DEFAULT_PAGE,
+        continuation: String?
+    ): DipDupOrdersPage {
+        val parsedContinuation = DipDupContinuation.parse(continuation)
+        val response = safeExecution(
+            GetOrderByMakerCustomQuery(
+                makers = makers,
+                statuses = statuses.map { it.name },
+                limit = size,
+                prevId = parsedContinuation?.let { it.toString() },
+                prevDate = parsedContinuation?.let { it.toString() }
+            )
+        )
+        return convertByMaker(response.marketplace_order, size)
     }
 
     suspend fun getOrdersCurrenciesByItem(
