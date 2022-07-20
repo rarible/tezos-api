@@ -3,6 +3,7 @@ package com.rarible.dipdup.client.converter
 import com.rarible.dipdup.client.GetOrderByIdQuery
 import com.rarible.dipdup.client.GetOrdersByIdsQuery
 import com.rarible.dipdup.client.GetOrdersByItemQuery
+import com.rarible.dipdup.client.GetOrdersByMakerQuery
 import com.rarible.dipdup.client.GetOrdersQuery
 import com.rarible.dipdup.client.GetOrdersTakeContractsByMakeCollectionQuery
 import com.rarible.dipdup.client.GetOrdersTakeContractsByMakeItemQuery
@@ -56,6 +57,18 @@ fun convertByIds(source: List<GetOrdersByIdsQuery.Marketplace_order>): List<DipD
 }
 
 fun convertByItem(source: List<GetOrdersByItemQuery.Marketplace_order>, limit: Int): DipDupOrdersPage {
+    val continuation = when {
+        source.size == limit -> convert(source[limit - 1].order)
+            .let { DipDupContinuation(it.lastUpdatedAt, UUID.fromString(it.id)) }.toString()
+        else -> null
+    }
+    return DipDupOrdersPage(
+        source.subList(0, min(source.size, limit)).map { convert(it.order) },
+        continuation = continuation
+    )
+}
+
+fun convertByMaker(source: List<GetOrdersByMakerQuery.Marketplace_order>, limit: Int): DipDupOrdersPage {
     val continuation = when {
         source.size == limit -> convert(source[limit - 1].order)
             .let { DipDupContinuation(it.lastUpdatedAt, UUID.fromString(it.id)) }.toString()
