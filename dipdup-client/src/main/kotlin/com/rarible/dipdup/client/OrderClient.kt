@@ -10,7 +10,6 @@ import com.rarible.dipdup.client.core.model.Asset
 import com.rarible.dipdup.client.core.model.DipDupOrder
 import com.rarible.dipdup.client.core.model.OrderStatus
 import com.rarible.dipdup.client.exception.DipDupNotFound
-import com.rarible.dipdup.client.fragment.Order
 import com.rarible.dipdup.client.graphql.GetOrderByMakerCustomQuery
 import com.rarible.dipdup.client.graphql.GetOrdersByItemCustomQuery
 import com.rarible.dipdup.client.graphql.GetOrdersCustomQuery
