@@ -73,4 +73,10 @@ class TokenClientTests {
         val parts = tokenClient.royalty("KT1L7GvUxZH5tfa6cgZKnH6vpp2uVxnFVHKu:945")
         assertThat(parts.first()).isEqualTo(Part("tz29DrxbfkcfpUveVGsmhgvWqjgkVtGXbQyP", 700))
     }
+
+    @Test
+    fun `should have correct attributes`() = runBlocking<Unit> {
+        val token = tokenClient.token("KT1NUMZqQ4SNg7VyM2T9WyidkdV7RLhU6SsK:71")
+        assertThat(token.meta?.attributes).hasSize(12)
+    }
 }

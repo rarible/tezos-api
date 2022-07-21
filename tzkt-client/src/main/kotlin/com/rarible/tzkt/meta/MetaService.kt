@@ -14,7 +14,11 @@ import com.rarible.tzkt.model.TokenMeta.Representation
 import com.rarible.tzkt.tokens.BidouHandler
 import kotlinx.coroutines.runBlocking
 
-class MetaService(private val mapper: ObjectMapper, private val bigMapKeyClient: BigMapKeyClient, private val knownAddresses: KnownAddresses) {
+class MetaService(
+    private val mapper: ObjectMapper,
+    private val bigMapKeyClient: BigMapKeyClient,
+    private val knownAddresses: KnownAddresses
+) {
 
     fun meta(token: Token): TokenMeta {
         return if (null != token.metadata) {
@@ -69,6 +73,26 @@ class MetaService(private val mapper: ObjectMapper, private val bigMapKeyClient:
         mutable["formats"] = adjustListMap(mutable["formats"])
         mutable["creators"] = adjustList(mutable["creators"])
         mutable["tags"] = adjustList(mutable["tags"])
+        if (mutable["attributes"] != null && mutable["attributes"] is List<*>) {
+            mutable["attributes"] = (mutable["attributes"] as List<Map<String, *>>)
+                .map { it.toMutableMap() }
+                .filter {
+                    it["key"] != null || it["name"] != null
+                }
+                .map {
+                    it["key"] = it["name"]
+
+                    // fill according to Attribute
+                    mapOf(
+                        "key" to it["key"],
+                        "value" to it["value"],
+                        "type" to it["type"],
+                        "format" to it["format"]
+                    )
+                }
+        } else {
+            mutable.remove("attributes")
+        }
         return mutable.toMap()
     }
 
@@ -93,6 +117,7 @@ class MetaService(private val mapper: ObjectMapper, private val bigMapKeyClient:
         val name: String? = null,
         val description: String? = null,
         val tags: List<String>? = emptyList(),
+        val attributes: List<Attribute>? = emptyList(),
         val symbol: String? = null,
         val creators: List<String> = emptyList(),
         val formats: List<TzktContent> = emptyList(),
@@ -108,7 +133,11 @@ class MetaService(private val mapper: ObjectMapper, private val bigMapKeyClient:
             val mimeType: String?
         )
 
-        fun attrs() = tags?.map { Attribute(it) } ?: emptyList()
+        fun attrs() = when {
+            attributes != null && attributes.isNotEmpty() -> attributes
+            tags != null && tags.isNotEmpty() -> tags.map { Attribute(it) }
+            else -> emptyList()
+        }
 
         fun contents() = formats.filter { it.uri != null && it.mimeType != null }.map {
             Content(
