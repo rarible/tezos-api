@@ -4,6 +4,7 @@ data class TokenMeta(
     val name: String,
     val description: String? = null,
     val attributes: List<Attribute> = emptyList(),
+    val tags: List<String> = emptyList(),
     val content: List<Content> = emptyList()
 ) {
 

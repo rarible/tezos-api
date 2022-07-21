@@ -91,7 +91,7 @@ class TokenClientMetaTests : BaseClientTests() {
         val meta = tokenClient.tokenMeta("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:2453767")
 
         assertThat(meta.name).isEqualTo("Smoking area 07")
-        assertThat(meta.attributes).hasSize(3)
+        assertThat(meta.tags).hasSize(3)
         assertThat(meta.content.first()).isEqualTo(
             TokenMeta.Content(
                 uri = "ipfs://QmUfR1S71rA7krc8YZTZbSwHEToJ2ZjNsbcQuTLfLyfLH2",
@@ -99,7 +99,7 @@ class TokenClientMetaTests : BaseClientTests() {
                 representation = Representation.ORIGINAL
             )
         )
-        assertThat(meta.attributes.map { it.key }).containsAll(listOf("pixelart", "gif", "goodvibe"))
+        assertThat(meta.tags).containsAll(listOf("pixelart", "gif", "goodvibe"))
         assertThat(meta.description).isEqualTo("Cappadocia, I miss you! What a magical place. Let's have some cay, Turkish delight, baklava and enjoy the balloon ride. ")
     }
 
@@ -227,7 +227,7 @@ class TokenClientMetaTests : BaseClientTests() {
         val meta = tokenClient.tokenMeta("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:2453767")
 
         assertThat(meta.name).isEqualTo("Thinker 02: To share")
-        assertThat(meta.attributes).hasSize(3)
+        assertThat(meta.tags).hasSize(3)
         assertThat(meta.content).contains(
             TokenMeta.Content(
                 uri = "ipfs://QmTnMV5yQiSYAxWcFMyYZR5oZj84vuhVFU2Co7i1StVUpW",
@@ -249,7 +249,7 @@ class TokenClientMetaTests : BaseClientTests() {
                 representation = Representation.BIG
             )
         )
-        assertThat(meta.attributes.map { it.key }).containsAll(listOf("thinker","share","fantasy"))
+        assertThat(meta.tags).containsAll(listOf("thinker","share","fantasy"))
         assertThat(meta.description).isEqualTo("Sharing is growing")
     }
 

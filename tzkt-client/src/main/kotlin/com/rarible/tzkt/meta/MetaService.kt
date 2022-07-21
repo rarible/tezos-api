@@ -27,7 +27,8 @@ class MetaService(
                 name = meta.name ?: TokenMeta.UNTITLED,
                 description = meta.description,
                 content = meta.contents(),
-                attributes = meta.attrs()
+                attributes = meta.attributes ?: emptyList(),
+                tags = meta.tags ?: emptyList()
             )
         } else {
             when (token.contract?.address) {
@@ -132,12 +133,6 @@ class MetaService(
             val uri: String?,
             val mimeType: String?
         )
-
-        fun attrs() = when {
-            attributes != null && attributes.isNotEmpty() -> attributes
-            tags != null && tags.isNotEmpty() -> tags.map { Attribute(it) }
-            else -> emptyList()
-        }
 
         fun contents() = formats.filter { it.uri != null && it.mimeType != null }.map {
             Content(

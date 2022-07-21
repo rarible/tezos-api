@@ -59,13 +59,13 @@ class TokenClientTests {
     @Test
     fun `should return token tag from string`() = runBlocking<Unit> {
         val item = tokenClient.token("KT1Aq1umaV8gcDQmi4CLDk7KeKpoUjFQeg1B:9")
-        assertThat(item.meta?.attributes?.first()).isEqualTo(TokenMeta.Attribute("#climatechange"))
+        assertThat(item.meta?.tags?.first()).isEqualTo("#climatechange")
     }
 
     @Test
     fun `should return token tag from string list`() = runBlocking<Unit> {
         val item = tokenClient.token("KT1Aq1umaV8gcDQmi4CLDk7KeKpoUjFQeg1B:7")
-        assertThat(item.meta?.attributes?.first()).isEqualTo(TokenMeta.Attribute("summer, ice cream"))
+        assertThat(item.meta?.tags?.first()).isEqualTo("summer, ice cream")
     }
 
     @Test
@@ -78,5 +78,11 @@ class TokenClientTests {
     fun `should have correct attributes`() = runBlocking<Unit> {
         val token = tokenClient.token("KT1NUMZqQ4SNg7VyM2T9WyidkdV7RLhU6SsK:71")
         assertThat(token.meta?.attributes).hasSize(12)
+    }
+
+    @Test
+    fun `should have correct tags`() = runBlocking<Unit> {
+        val token = tokenClient.token("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:2382")
+        assertThat(token.meta?.tags).isEqualTo(listOf("tattoo", "money", "animation", "shit", "renatomoll", "capitalism", "life"))
     }
 }
