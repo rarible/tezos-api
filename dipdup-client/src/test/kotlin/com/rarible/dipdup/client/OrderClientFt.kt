@@ -498,11 +498,13 @@ class OrderClientFt : BaseClientFt() {
                 "marketplace_order": [
                   {
                     "__typename": "marketplace_order",
+                    "take_asset_class": "XTZ",
                     "take_contract": null,
                     "take_token_id": null
                   },
                   {
                     "__typename": "marketplace_order",
+                    "take_asset_class": "TEZOS_FT",
                     "take_contract": "KT1FaGrMVr6rvfHsfbPSAPgRabsPMiQeaTin",
                     "take_token_id": "1"
                   }
@@ -525,11 +527,13 @@ class OrderClientFt : BaseClientFt() {
                 "marketplace_order": [
                   {
                     "__typename": "marketplace_order",
+                    "take_asset_class": "XTZ",
                     "take_contract": null,
                     "take_token_id": null
                   },
                   {
                     "__typename": "marketplace_order",
+                    "take_asset_class": "TEZOS_FT",
                     "take_contract": "KT1FaGrMVr6rvfHsfbPSAPgRabsPMiQeaTin",
                     "take_token_id": "1"
                   }

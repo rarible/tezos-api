@@ -8,7 +8,6 @@ import com.rarible.tzkt.client.TokenClient
 import com.rarible.tzkt.config.KnownAddresses
 import com.rarible.tzkt.meta.MetaService
 import com.rarible.tzkt.model.Part
-import com.rarible.tzkt.model.TokenMeta
 import com.rarible.tzkt.royalties.RoyaltiesHandler
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
@@ -19,7 +18,7 @@ import org.springframework.web.reactive.function.client.WebClient
 
 // this test will be disabled on jenkins
 @DisabledOnOs(OS.LINUX)
-class TokenClientTests {
+class TokenClientIt {
 
     val mapper = ObjectMapper().registerKotlinModule()
 
@@ -84,5 +83,11 @@ class TokenClientTests {
     fun `should have correct tags`() = runBlocking<Unit> {
         val token = tokenClient.token("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:2382")
         assertThat(token.meta?.tags).isEqualTo(listOf("tattoo", "money", "animation", "shit", "renatomoll", "capitalism", "life"))
+    }
+
+    @Test
+    fun `should have correct attributes in meta`() = runBlocking<Unit> {
+        val meta = tokenClient.tokenMeta("KT1NUMZqQ4SNg7VyM2T9WyidkdV7RLhU6SsK:71")
+        assertThat(meta.attributes).hasSize(12)
     }
 }

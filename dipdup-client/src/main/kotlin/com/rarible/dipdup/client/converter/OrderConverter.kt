@@ -101,8 +101,8 @@ fun convert(source: Order) = DipDupOrder(
 )
 
 fun convert(source: com.rarible.dipdup.client.fragment.AssetType) =
-    when (source.take_contract) {
-        null -> Asset.XTZ()
+    when (source.take_asset_class) {
+        "XTZ" -> Asset.XTZ()
         else -> Asset.FT(contract = source.take_contract, tokenId = BigInteger(source.take_token_id))
     }
 

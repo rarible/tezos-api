@@ -28,6 +28,7 @@ fragment order on marketplace_order {
 }
 
 fragment assetType on marketplace_order {
+    take_asset_class
     take_contract
     take_token_id
 }
