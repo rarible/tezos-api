@@ -104,7 +104,7 @@ class TokenActivityClient(
                                 queryParam("from.null", "true")
                             }
                             ActivityType.BURN -> {
-                                queryParam("to.in", "true")
+                                queryParam("to.in", "null,${BURN_ADDRESS},${NULL_ADDRESS}")
                             }
                             ActivityType.TRANSFER -> {
                                 queryParam("from.null", "false")
