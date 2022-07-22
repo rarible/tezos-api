@@ -342,7 +342,7 @@ class ActivityClientTests : BaseClientTests() {
         assertThat(requests()).isEqualTo(setOf(
             "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&sort.desc=timestamp&from.null=true",
             "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&sort.desc=timestamp&from.null=false&to.null=false",
-            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&sort.desc=timestamp&to.in=true",
+            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&sort.desc=timestamp&to.null=true",
             "/v1/operations/transactions?id.in=225200218,225174019,41904711&select=id,hash")
         )
     }
@@ -468,8 +468,8 @@ class ActivityClientTests : BaseClientTests() {
         assertThat(requests()).isEqualTo(setOf(
             "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.gt=2021-02-26T11:49:23Z&sort.asc=timestamp&from.null=true",
             "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.gt=2021-02-26T11:49:23Z&sort.asc=timestamp&from.null=false&to.null=false",
-            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.eq=2021-02-26T11:49:23Z&id.gt=41904714&sort.asc=timestamp&to.in=true",
-            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.gt=2021-02-26T11:49:23Z&sort.asc=timestamp&to.in=true",
+            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.eq=2021-02-26T11:49:23Z&id.gt=41904714&sort.asc=timestamp&to.null=true",
+            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.gt=2021-02-26T11:49:23Z&sort.asc=timestamp&to.null=true",
             "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.eq=2021-02-26T11:49:23Z&id.gt=41904714&sort.asc=timestamp&from.null=true",
             "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.eq=2021-02-26T11:49:23Z&id.gt=41904714&sort.asc=timestamp&from.null=false&to.null=false",
             "/v1/operations/transactions?id.in=41904711,225174019,225200218&select=id,hash")
