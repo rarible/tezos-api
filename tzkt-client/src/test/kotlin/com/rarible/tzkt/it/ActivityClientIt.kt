@@ -13,7 +13,7 @@ import org.springframework.web.reactive.function.client.WebClient
 @DisabledOnOs(OS.LINUX)
 class ActivityClientIt {
 
-    val client = WebClient.create("https://api.ithacanet.tzkt.io")
+    val client = WebClient.create("https://api.tzkt.io")
     val activityClient = TokenActivityClient(client)
 
     @Test
@@ -22,6 +22,24 @@ class ActivityClientIt {
             listOf(ActivityType.MINT, ActivityType.BURN, ActivityType.TRANSFER), 10, null, true
         )
         assertThat(activities.items).hasSize(10)
+    }
+
+    @Test
+    fun `should return burn activities`() = runBlocking<Unit> {
+        val activities = activityClient.getActivitiesAll(
+            listOf(ActivityType.BURN), 10, null, true
+        )
+        assertThat(activities.items).hasSize(10)
+        activities.items.forEach { assertThat(it.type).isEqualTo(ActivityType.BURN) }
+    }
+
+    @Test
+    fun `should return transfer activities`() = runBlocking<Unit> {
+        val activities = activityClient.getActivitiesAll(
+            listOf(ActivityType.TRANSFER), 10, null, true
+        )
+        assertThat(activities.items).hasSize(10)
+        activities.items.forEach { assertThat(it.type).isEqualTo(ActivityType.TRANSFER) }
     }
 
 }
