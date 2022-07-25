@@ -39,7 +39,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
                 return part
             }
             royaltiesConfig.kalamint -> {
-                logger.info("Token $contract:$tokenId royalties pattern is KALAMINT")
+                logger.info("Token $contract:$tokenId royalties pattern is KALAMINT (public collection)")
                 part = getKalamintRoyalties(contract, tokenId)
                 return part
             }
@@ -73,11 +73,11 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
             return part
         }
 
-        //check kalamint pattern in contract storage
+        //check kalamint pattern for private collection in contract storage
         part = getKalamintRoyalties(contract, tokenId)
 
         if (part.isNotEmpty()) {
-            logger.info("Token $contract:$tokenId royalties pattern is KALAMINT")
+            logger.info("Token $contract:$tokenId royalties pattern is KALAMINT (private collection)")
             return part
         }
 
