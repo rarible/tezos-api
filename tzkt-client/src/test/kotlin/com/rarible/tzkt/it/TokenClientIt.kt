@@ -8,13 +8,17 @@ import com.rarible.tzkt.client.TokenClient
 import com.rarible.tzkt.config.KnownAddresses
 import com.rarible.tzkt.meta.MetaService
 import com.rarible.tzkt.model.Part
+import com.rarible.tzkt.model.TimestampItemIdContinuation
 import com.rarible.tzkt.royalties.RoyaltiesHandler
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.DisabledOnOs
 import org.junit.jupiter.api.condition.OS
+import org.springframework.web.reactive.function.client.ExchangeStrategies
 import org.springframework.web.reactive.function.client.WebClient
+import java.time.Instant
 
 // this test will be disabled on jenkins
 @DisabledOnOs(OS.LINUX)
@@ -33,7 +37,14 @@ class TokenClientIt {
     val BIDOU_8x8 = "KT1MxDwChiDwd6WBVs24g1NjERUoK622ZEFp"
     val BIDOU_24x24 = "KT1TR1ErEQPTdtaJ7hbvKTJSa1tsGnHGZTpf"
 
-    val client = WebClient.create("https://api.tzkt.io")
+    val client = WebClient.builder()
+        .exchangeStrategies(
+            ExchangeStrategies.builder()
+                .codecs { it.defaultCodecs().maxInMemorySize(10_000_000) }
+                .build())
+//        .baseUrl("https://api.ithacanet.tzkt.io")
+        .baseUrl("https://api.tzkt.io")
+        .build()
 
     val config = KnownAddresses(
         hen = HEN,
@@ -57,13 +68,13 @@ class TokenClientIt {
 
     @Test
     fun `should return token tag from string`() = runBlocking<Unit> {
-        val item = tokenClient.token("KT1Aq1umaV8gcDQmi4CLDk7KeKpoUjFQeg1B:9")
+        val item = tokenClient.token("KT1Aq1umaV8gcDQmi4CLDk7KeKpoUjFQeg1B:9", true)
         assertThat(item.meta?.tags?.first()).isEqualTo("#climatechange")
     }
 
     @Test
     fun `should return token tag from string list`() = runBlocking<Unit> {
-        val item = tokenClient.token("KT1Aq1umaV8gcDQmi4CLDk7KeKpoUjFQeg1B:7")
+        val item = tokenClient.token("KT1Aq1umaV8gcDQmi4CLDk7KeKpoUjFQeg1B:7", true)
         assertThat(item.meta?.tags?.first()).isEqualTo("summer, ice cream")
     }
 
@@ -75,13 +86,13 @@ class TokenClientIt {
 
     @Test
     fun `should have correct attributes`() = runBlocking<Unit> {
-        val token = tokenClient.token("KT1NUMZqQ4SNg7VyM2T9WyidkdV7RLhU6SsK:71")
+        val token = tokenClient.token("KT1NUMZqQ4SNg7VyM2T9WyidkdV7RLhU6SsK:71", true)
         assertThat(token.meta?.attributes).hasSize(12)
     }
 
     @Test
     fun `should have correct tags`() = runBlocking<Unit> {
-        val token = tokenClient.token("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:2382")
+        val token = tokenClient.token("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:2382", true)
         assertThat(token.meta?.tags).isEqualTo(listOf("tattoo", "money", "animation", "shit", "renatomoll", "capitalism", "life"))
     }
 
@@ -89,5 +100,49 @@ class TokenClientIt {
     fun `should have correct attributes in meta`() = runBlocking<Unit> {
         val meta = tokenClient.tokenMeta("KT1NUMZqQ4SNg7VyM2T9WyidkdV7RLhU6SsK:71")
         assertThat(meta.attributes).hasSize(12)
+    }
+
+    @Test
+    fun `should have correct royalties`() = runBlocking<Unit> {
+        val parts = tokenClient.royalty("KT1RCzrLhBpdKXkyasKGpDTCcdbBTipUk77x:7027")
+        assertThat(parts).hasSize(1)
+    }
+
+    @Test
+    fun `should get items all with continuation`() = runBlocking<Unit> {
+        val page = tokenClient.allTokensByLastUpdate(2, null, false)
+
+        assertThat(page.items).hasSize(2)
+        val continuation = page.continuation?.let { TimestampItemIdContinuation.parse(it) }
+        assertThat(continuation?.date).isBefore(Instant.now())
+        assertThat(continuation?.id).isEqualTo(page.items.last().itemId())
+        assertThat(continuation?.date).isEqualTo(page.items.last().lastTime?.toInstant())
+
+        val nextPage = tokenClient.allTokensByLastUpdate(2, continuation.toString(), false)
+
+        assertThat(nextPage.items).hasSize(2)
+        val nextContinuation = nextPage.continuation?.let { TimestampItemIdContinuation.parse(it) }
+        assertThat(nextContinuation?.date).isBefore(Instant.now())
+        assertThat(nextContinuation?.id).isEqualTo(nextPage.items.last().itemId())
+        assertThat(nextContinuation?.date).isEqualTo(nextPage.items.last().lastTime?.toInstant())
+
+        assertThat(nextContinuation?.date).isBeforeOrEqualTo(continuation?.date)
+        assertThat(nextPage.items).isNotEqualTo(page.items)
+    }
+
+    @Test
+    @Disabled
+    fun `shouldn't have duplications`() = runBlocking<Unit> {
+        var total = 100_000
+        var current = 0
+        val itemIds = setOf<String>().toMutableSet()
+        var continuation: String? = null
+        while (current < total) {
+            val page = tokenClient.allTokensByLastUpdate(1000, continuation, false, false)
+            continuation = page.continuation
+            current += page.items.size
+            itemIds.addAll(page.items.map { it.itemId() })
+        }
+        assertThat(current).isEqualTo(itemIds.size)
     }
 }

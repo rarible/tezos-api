@@ -2,9 +2,9 @@ package com.rarible.tzkt.client
 
 import com.rarible.tzkt.meta.MetaService
 import com.rarible.tzkt.model.ItemId
-import com.rarible.tzkt.model.LevelIdContinuation
 import com.rarible.tzkt.model.Page
 import com.rarible.tzkt.model.Part
+import com.rarible.tzkt.model.TimestampItemIdContinuation
 import com.rarible.tzkt.model.Token
 import com.rarible.tzkt.model.TokenActivity
 import com.rarible.tzkt.model.TokenBalance
@@ -17,6 +17,7 @@ import kotlinx.coroutines.coroutineScope
 import org.springframework.web.reactive.function.client.WebClient
 import java.lang.Integer.min
 import java.math.BigInteger
+import java.time.Instant
 
 class TokenClient(
     webClient: WebClient,
@@ -24,7 +25,7 @@ class TokenClient(
     val royaltyHander: RoyaltiesHandler
 ) : BaseClient(webClient) {
 
-    suspend fun token(itemId: String): Token {
+    suspend fun token(itemId: String, loadMeta: Boolean = false): Token {
         val parsed = ItemId.parse(itemId)
         val tokens = invoke<List<Token>> {
             it.path(BASE_PATH)
@@ -35,7 +36,10 @@ class TokenClient(
         val result = tokens.firstOrNotFound(itemId)
 
         // enrich with parsed meta
-        return result.copy(meta = metaService.meta(result))
+        return when (loadMeta) {
+            true -> result.copy(meta = metaService.meta(result))
+            else -> result
+        }
     }
 
     suspend fun tokenMeta(itemId: String): TokenMeta {
@@ -64,11 +68,11 @@ class TokenClient(
     suspend fun allTokensByLastUpdate(
         size: Int = DEFAULT_SIZE,
         continuation: String?,
-        sortAsc: Boolean = true
+        sortAsc: Boolean = true,
+        loadMeta: Boolean = false
     ): Page<Token> {
-        var parsedContinuation = continuation?.let {LevelIdContinuation.parse(it)}
+        var parsedContinuation = continuation?.let { TimestampItemIdContinuation.parse(it) }
 
-        // First request
         val firstTokens = invoke<List<Token>> { builder ->
             builder.path(BASE_PATH)
                 .queryParam("token.standard", "fa2")
@@ -77,39 +81,34 @@ class TokenClient(
 
                     // if we have continuation we need to add additional params
                     parsedContinuation?.let {
-                        queryParam("lastLevel", it.level)
-                        queryParam("id.${direction(sortAsc)}", it.id)
+                        queryParam("lastTime.${directionEqual(sortAsc)}", it.date)
                     }
 
                     val sorting = if (sortAsc) "sort.asc" else "sort.desc"
-                    queryParam(sorting, "lastLevel")
+                    queryParam(sorting, "lastTime,id")
                     queryParam("metadata.artifactUri.null", "false")
                 }
         }
 
-        // Second request
-        val secondTokens = if (firstTokens.size < size && parsedContinuation != null) {
-            invoke<List<Token>> { builder ->
-                builder.path(BASE_PATH)
-                    .queryParam("token.standard", "fa2")
-                    .apply {
-                        queryParam("limit", size)
-                        queryParam("lastLevel.${direction(sortAsc)}", parsedContinuation.level)
-                        val sorting = if (sortAsc) "sort.asc" else "sort.desc"
-                        queryParam(sorting, "lastLevel")
-                        queryParam("metadata.artifactUri.null", "false")
-                    }
-
-                // enrich with parsed meta
+        // In case of continuation we need to find internal id of token by contract:tokenId
+        val tokens: List<Token> = parsedContinuation?.let { continuation ->
+            var continuationItem = firstTokens.byItemId(continuation.id)
+            if (continuationItem == null) {
+                continuationItem = findTzktToken(continuation.id, continuation.date, size, sortAsc)
             }
-        } else emptyList()
+            tokensByLastUpdateAndId(continuation.date, continuationItem.id, size, sortAsc)
+        } ?: firstTokens
 
-        val tokens = firstTokens + secondTokens
         // enrich with parsed meta
-        val slice = tokens.subList(0, min(size, tokens.size)).map { token -> token.copy(meta = metaService.meta(token)) }
+        val slice = tokens.subList(0, min(size, tokens.size)).map { token ->
+            if (loadMeta) {
+                token.copy(meta = metaService.meta(token))
+            } else token
+        }
+
         val nextContinuation = if (slice.size >= size) {
             val token = slice.last()
-            LevelIdContinuation(token.lastLevel!!, token.id)
+            TimestampItemIdContinuation(token.lastTime!!.toInstant(), "${token.itemId()}")
         } else null
 
         return Page(
@@ -117,6 +116,30 @@ class TokenClient(
             continuation = nextContinuation?.let { it.toString() }
         )
     }
+
+    suspend fun findTzktToken(itemId: String, lastDate: Instant, size: Int, sortAsc: Boolean = true): Token {
+        var tzktToken: Token? = null
+        var lastId: Int? = null
+        while (tzktToken == null) {
+            val tokens = tokensByLastUpdateAndId(lastDate, lastId, size, sortAsc)
+            tzktToken = tokens.byItemId(itemId)
+            lastId = tokens.last().id
+        }
+        return tzktToken
+    }
+
+    suspend fun tokensByLastUpdateAndId(lastDate: Instant, lastId: Int?, size: Int, sortAsc: Boolean = true) = invoke<List<Token>> { builder ->
+            builder.path(BASE_PATH)
+                .queryParam("token.standard", "fa2")
+                .apply {
+                    queryParam("limit", size)
+                    queryParam("lastTime.${directionEqual(sortAsc)}", lastDate)
+                    lastId?.let { queryParam("id.${direction(sortAsc)}", lastId) }
+                    val sorting = if (sortAsc) "sort.asc" else "sort.desc"
+                    queryParam(sorting, "lastTime,id")
+                    queryParam("metadata.artifactUri.null", "false")
+                }
+        }
 
     suspend fun tokens(ids: List<String>): List<Token> {
         val tokens = coroutineScope {
@@ -207,6 +230,7 @@ class TokenClient(
         }
     }
 
+    fun directionEqual(asc: Boolean) = if (asc) "gte" else "lte"
     fun direction(asc: Boolean) = if (asc) "gt" else "lt"
 
     fun List<Token>.firstOrNotFound(itemId: String): Token {
@@ -227,4 +251,6 @@ class TokenClient(
         const val BASE_PATH_TRANSFERS = "v1/tokens/transfers"
         const val DEFAULT_SIZE = 1000
     }
+
+    fun List<Token>.byItemId(itemId: String) = this.firstOrNull{ item -> item.itemId() == itemId }
 }
