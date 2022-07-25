@@ -39,8 +39,8 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
                 return part
             }
             royaltiesConfig.kalamint -> {
-                logger.info("Token $contract:$tokenId royalties pattern is KALAMINT")
-                part = getKalamintRoyalties(tokenId)
+                logger.info("Token $contract:$tokenId royalties pattern is KALAMINT (public collection)")
+                part = getKalamintRoyalties(contract, tokenId)
                 return part
             }
             royaltiesConfig.fxhashV1 -> {
@@ -70,6 +70,14 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
 
         if (part.isNotEmpty()) {
             logger.info("Token $contract:$tokenId royalties pattern is RARIBLE")
+            return part
+        }
+
+        //check kalamint pattern for private collection in contract storage
+        part = getKalamintRoyalties(contract, tokenId)
+
+        if (part.isNotEmpty()) {
+            logger.info("Token $contract:$tokenId royalties pattern is KALAMINT (private collection)")
             return part
         }
 
@@ -139,15 +147,15 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
         return parts
     }
 
-    private suspend fun getKalamintRoyalties(tokenId: String): List<Part> {
+    private suspend fun getKalamintRoyalties(contract: String, tokenId: String): List<Part> {
         var royaltiesMap: LinkedHashMap<String, String>
         val parts = mutableListOf<Part>()
         try {
-            val key = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.kalamint, "tokens", tokenId)
+            val key = bigMapKeyClient.bigMapKeyWithName(contract, "tokens", tokenId)
             royaltiesMap = key.value as LinkedHashMap<String, String>
             parts.add(Part(royaltiesMap["creator"]!!, royaltiesMap["creator_royalty"]!!.toInt() * 100))
         } catch (e: Exception) {
-            logger.warn("Could not parse royalties for token ${royaltiesConfig.kalamint}:$tokenId with Kalamint pattern: ${e.message}")
+            logger.warn("Could not parse royalties for token ${contract}:$tokenId with Kalamint pattern: ${e.message}")
         }
         return parts
     }
