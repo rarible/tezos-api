@@ -6,6 +6,7 @@ import com.fasterxml.jackson.module.kotlin.kotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.rarible.tzkt.client.BigMapKeyClient
 import com.rarible.tzkt.client.IPFSClient
+import com.rarible.tzkt.client.OwnershipClient
 import com.rarible.tzkt.config.KnownAddresses
 import com.rarible.tzkt.model.BigMapKey
 import com.rarible.tzkt.model.Part
@@ -15,7 +16,7 @@ import org.slf4j.LoggerFactory
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
-class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPFSClient, val royaltiesConfig: KnownAddresses) {
+class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ownershipClient: OwnershipClient, val ipfsClient: IPFSClient, val royaltiesConfig: KnownAddresses) {
     val logger = LoggerFactory.getLogger(javaClass)
     val bidouRoyalties = mapOf(
         Pair(royaltiesConfig.bidou8x8, 1000),
@@ -113,6 +114,19 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
 
         if (part.isNullOrEmpty() && tokenMetadata != null) {
             part = getEmbeddedRoyalty(tokenMetadata.value, "$contract:$tokenId")
+        }
+
+        if(part.isNullOrEmpty()){
+            //fallback: if everything else failed, we set the royalties to 0 for the token first owner
+            try {
+                val ownerships = ownershipClient.ownershipsByToken("$contract:$tokenId", continuation = null, sortOnFirstLevel = true)
+                if (ownerships.items.isNotEmpty()){
+                    val firstOwner = ownerships.items.first()
+                    part = listOf(Part(address = firstOwner.account!!.address, share = 0))
+                }
+            } catch (e: Exception){
+                logger.warn("Could not get first owner for token $contract:$tokenId: ${e.message}")
+            }
         }
 
         return part
