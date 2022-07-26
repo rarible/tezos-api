@@ -1,14 +1,25 @@
 package com.rarible.tzkt.client
 
+import com.rarible.tzkt.meta.MetaCollectionService
+import com.rarible.tzkt.model.CollectionMeta
 import com.rarible.tzkt.model.CollectionType
+import io.mockk.coEvery
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class CollectionClientTests : BaseClientTests() {
 
-    val collectionClient = CollectionClient(client)
+    val metaCollectionService: MetaCollectionService = mockk()
+    val collectionClient = CollectionClient(client, metaCollectionService)
+
+    @BeforeEach
+    fun `setUp`() = runBlocking<Unit> {
+        coEvery { metaCollectionService.get(any()) } returns CollectionMeta(null, null)
+    }
 
     @Test
     fun `should return collection by address`() = runBlocking<Unit> {

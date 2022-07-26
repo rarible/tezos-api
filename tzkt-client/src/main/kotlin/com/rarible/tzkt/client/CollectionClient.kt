@@ -1,5 +1,6 @@
 package com.rarible.tzkt.client
 
+import com.rarible.tzkt.meta.MetaCollectionService
 import com.rarible.tzkt.model.CollectionMeta
 import com.rarible.tzkt.model.CollectionType
 import com.rarible.tzkt.model.Contract
@@ -10,7 +11,8 @@ import kotlinx.coroutines.coroutineScope
 import org.springframework.web.reactive.function.client.WebClient
 
 class CollectionClient(
-    webClient: WebClient
+    webClient: WebClient,
+    val metaCollectionService: MetaCollectionService
 ) : BaseClient(webClient) {
 
     suspend fun collection(contract: String): Contract = coroutineScope {
@@ -88,29 +90,8 @@ class CollectionClient(
     }
 
     suspend fun collectionMeta(contract: String): CollectionMeta {
-        val meta = invoke<List<Map<String, Any>>> {
-            it.path("$BASE_PATH/$contract/bigmaps/metadata/keys")
-        }
-        return CollectionMeta(getKey(meta, "name"), getKey(meta, "symbol"))
+        return metaCollectionService.get(contract)
     }
-
-    private fun String.decodeHex(): ByteArray? {
-        return if (length % 2 == 0) {
-            chunked(2)
-                .map { it.toInt(16).toByte() }
-                .toByteArray()
-        } else {
-            null
-        }
-    }
-
-    private fun getKey(meta: List<Map<String, Any>>, key: String): String? =
-        meta.find { it["key"] == key }?.get("value")?.let {
-            when (val bytes = it.toString().decodeHex()) {
-                null -> null
-                else -> String(bytes)
-            }
-        }
 
     private fun Map<String, Any>?.getMap(key: String): Map<String, Any>? {
         return this?.get(key) as Map<String, Any>?

@@ -312,7 +312,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ipfsClient: IPF
     }
 
     private suspend fun fetchIpfsData(url: String): JsonNode{
-        return if(url.startsWith("ipfs://")){
+        return if (url.startsWith("ipfs://")){
             val hash = url!!.split("//")
             ipfsClient.ipfsData(hash[1])
         } else {
