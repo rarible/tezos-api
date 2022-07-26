@@ -39,7 +39,7 @@ class OwnershipClient(
         return ownership.firstOrNull() ?: throw TzktNotFound("Ownership ${ownershipId} wasn't found")
     }
 
-    suspend fun ownershipsByToken(itemId: String, size: Int = DEFAULT_SIZE, continuation: String?, sortAsc: Boolean = true): Page<TokenBalance> {
+    suspend fun ownershipsByToken(itemId: String, size: Int = DEFAULT_SIZE, continuation: String?, sortAsc: Boolean = true, sortOnFirstLevel: Boolean = false): Page<TokenBalance> {
         val parsed = ItemId.parse(itemId)
         val ownerships = invoke<List<TokenBalance>> { builder ->
             builder.path(BASE_PATH)
@@ -49,7 +49,11 @@ class OwnershipClient(
                     queryParam("limit", size)
                     continuation?.let { queryParam("offset.cr", it) }
                     val sorting = if (sortAsc) "sort.asc" else "sort.desc"
-                    queryParam(sorting, "id")
+                    if(sortOnFirstLevel)
+                        queryParam(sorting, "firstLevel")
+                    else
+                        queryParam(sorting, "id")
+
                 }
         }
         return Page.Get(

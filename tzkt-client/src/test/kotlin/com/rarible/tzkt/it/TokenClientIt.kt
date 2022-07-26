@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.rarible.tzkt.client.BigMapKeyClient
 import com.rarible.tzkt.client.IPFSClient
+import com.rarible.tzkt.client.OwnershipClient
 import com.rarible.tzkt.client.TokenClient
 import com.rarible.tzkt.config.KnownAddresses
 import com.rarible.tzkt.meta.MetaService
@@ -60,10 +61,11 @@ class TokenClientIt {
     )
 
     val bigMapKeyClient = BigMapKeyClient(client)
+    val ownershipClient = OwnershipClient(client)
     val metaService = MetaService(ObjectMapper().registerKotlinModule(), bigMapKeyClient, config)
     val ipfsWb = WebClient.create("https://ipfs.io/ipfs/")
     val ipfsClient = IPFSClient(ipfsWb, mapper)
-    val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, config)
+    val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, config)
     val tokenClient = TokenClient(client, metaService, handler)
 
     @Test

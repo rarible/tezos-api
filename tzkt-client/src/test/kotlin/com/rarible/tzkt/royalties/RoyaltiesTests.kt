@@ -1,27 +1,23 @@
 package com.rarible.tzkt.royalties
 
-import com.fasterxml.jackson.databind.node.ArrayNode
 import com.rarible.tzkt.client.BaseClientTests
 import com.rarible.tzkt.client.BigMapKeyClient
 import com.rarible.tzkt.client.IPFSClient
-import com.rarible.tzkt.client.TokenClient
+import com.rarible.tzkt.client.OwnershipClient
 import com.rarible.tzkt.config.KnownAddresses
 import com.rarible.tzkt.model.Part
-import io.mockk.mockk
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Ignore
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.web.reactive.function.client.WebClient
-import java.io.File
 
 class RoyaltiesTests : BaseClientTests() {
 
     val bigMapKeyClient = BigMapKeyClient(client)
-//    val ipfsWb = WebClient.create("https://ipfs.io/ipfs/")
+    val ownershipClient = OwnershipClient(client)
+    //    val ipfsWb = WebClient.create("https://ipfs.io/ipfs/")
     val ipfsClient = IPFSClient(client, mapper)
     val logger = LoggerFactory.getLogger(javaClass)
 
@@ -69,7 +65,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
         var tokenId = "717867"
         val id = "$contract:$tokenId"
@@ -115,7 +111,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"
         var tokenId = "53057"
         val id = "$contract:$tokenId"
@@ -145,7 +141,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"
         var tokenId = "53057"
         val id = "$contract:$tokenId"
@@ -177,7 +173,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1MxDwChiDwd6WBVs24g1NjERUoK622ZEFp"
         var tokenId = "69"
         val id = "$contract:$tokenId"
@@ -209,7 +205,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1TR1ErEQPTdtaJ7hbvKTJSa1tsGnHGZTpf"
         var tokenId = "69"
         val id = "$contract:$tokenId"
@@ -265,7 +261,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1KEa8z6vWXDJrVqtMrAeDVzsvxat3kHaCE"
         var tokenId = "522648"
         val id = "$contract:$tokenId"
@@ -303,7 +299,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
         var tokenId = "638313"
         val id = "$contract:$tokenId"
@@ -341,7 +337,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1LjmAdYQCLBjwv4S2oFkEzyHVkomAf5MrW"
         var tokenId = "19471"
         val id = "$contract:$tokenId"
@@ -369,7 +365,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS"
         var tokenId = "54686"
         val id = "$contract:$tokenId"
@@ -397,7 +393,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT19dDquUBH73ifo1M2jt7vvk8XyirTbUsih"
         var tokenId = "2"
         val id = "$contract:$tokenId"
@@ -435,7 +431,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1HNNrmCk1fpqveRDz8Fvww2GM4gPzmA7fo"
         var tokenId = "2"
         val id = "$contract:$tokenId"
@@ -473,7 +469,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1HNNrmCk1fpqveRDz8Fvww2GM4gPzmA7fo"
         var tokenId = "2"
         val id = "$contract:$tokenId"
@@ -565,7 +561,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
         var tokenId = "0"
         val id = "$contract:$tokenId"
@@ -686,7 +682,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1PNcZQkJXMQ2Mg92HG1kyrcu3auFX5pfd8"
         var tokenId = "897"
         val id = "$contract:$tokenId"
@@ -775,7 +771,7 @@ class RoyaltiesTests : BaseClientTests() {
         """.trimIndent()
         )
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
         var tokenId = "2"
         val id = "$contract:$tokenId"
@@ -791,7 +787,7 @@ class RoyaltiesTests : BaseClientTests() {
     fun `should fetch empty royalties for failed request with HEN`() = runBlocking<Unit> {
         mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
         var tokenId = "717867"
         val id = "$contract:$tokenId"
@@ -803,7 +799,7 @@ class RoyaltiesTests : BaseClientTests() {
     fun `should fetch empty royalties for failed request with KALAMINT public collection`() = runBlocking<Unit> {
         mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1EpGgjQs73QfFJs9z7m1Mxm5MTnpC2tqse"
         var tokenId = "53057"
         val id = "$contract:$tokenId"
@@ -818,8 +814,9 @@ class RoyaltiesTests : BaseClientTests() {
         mock404()
         mock404()
         mock404()
+        mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1RCzrLhBpdKXkyasKGpDTCcdbBTipUk77x"
         var tokenId = "2490"
         val id = "$contract:$tokenId"
@@ -831,7 +828,7 @@ class RoyaltiesTests : BaseClientTests() {
     fun `should fetch empty royalties for failed request with 8Bidou 8x8`() = runBlocking<Unit> {
         mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1MxDwChiDwd6WBVs24g1NjERUoK622ZEFp"
         var tokenId = "53057"
         val id = "$contract:$tokenId"
@@ -843,7 +840,7 @@ class RoyaltiesTests : BaseClientTests() {
     fun `should fetch empty royalties for failed request with 8Bidou 24x24`() = runBlocking<Unit> {
         mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1TR1ErEQPTdtaJ7hbvKTJSa1tsGnHGZTpf"
         var tokenId = "69"
         val id = "$contract:$tokenId"
@@ -855,7 +852,7 @@ class RoyaltiesTests : BaseClientTests() {
     fun `should fetch empty royalties for failed first request with FXHASH_V1`() = runBlocking<Unit> {
         mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1KEa8z6vWXDJrVqtMrAeDVzsvxat3kHaCE"
         var tokenId = "522648"
         val id = "$contract:$tokenId"
@@ -887,7 +884,7 @@ class RoyaltiesTests : BaseClientTests() {
 
         mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1KEa8z6vWXDJrVqtMrAeDVzsvxat3kHaCE"
         var tokenId = "522648"
         val id = "$contract:$tokenId"
@@ -899,7 +896,7 @@ class RoyaltiesTests : BaseClientTests() {
     fun `should fetch empty royalties for failed first request with FXHASH_V2`() = runBlocking<Unit> {
         mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
         var tokenId = "522648"
         val id = "$contract:$tokenId"
@@ -911,7 +908,7 @@ class RoyaltiesTests : BaseClientTests() {
     fun `should fetch empty royalties for failed request with VERSUM`() = runBlocking<Unit> {
         mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1LjmAdYQCLBjwv4S2oFkEzyHVkomAf5MrW"
         var tokenId = "19471"
         val id = "$contract:$tokenId"
@@ -926,8 +923,9 @@ class RoyaltiesTests : BaseClientTests() {
         mock404()
         mock404()
         mock404()
+        mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS"
         var tokenId = "54686"
         val id = "$contract:$tokenId"
@@ -942,8 +940,9 @@ class RoyaltiesTests : BaseClientTests() {
         mock404()
         mock404()
         mock404()
+        mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT19dDquUBH73ifo1M2jt7vvk8XyirTbUsih"
         var tokenId = "2"
         val id = "$contract:$tokenId"
@@ -958,8 +957,9 @@ class RoyaltiesTests : BaseClientTests() {
         mock404()
         mock404()
         mock404()
+        mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
         var tokenId = "0"
         val id = "$contract:$tokenId"
@@ -993,8 +993,9 @@ class RoyaltiesTests : BaseClientTests() {
         mock404()
         mock404()
         mock404()
+        mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
         var tokenId = "0"
         val id = "$contract:$tokenId"
@@ -1009,7 +1010,10 @@ class RoyaltiesTests : BaseClientTests() {
         mock404()
         mock404()
         mock404()
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        mock404()
+        mock404()
+
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
         var tokenId = "2"
         val id = "$contract:$tokenId"
@@ -1042,8 +1046,9 @@ class RoyaltiesTests : BaseClientTests() {
         mock404()
         mock404()
         mock404()
+        mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
         var tokenId = "2"
         val id = "$contract:$tokenId"
@@ -1058,8 +1063,9 @@ class RoyaltiesTests : BaseClientTests() {
         mock404()
         mock404()
         mock404()
+        mock404()
 
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tX"
         var tokenId = "2"
         val id = "$contract:$tokenId"
@@ -1067,67 +1073,330 @@ class RoyaltiesTests : BaseClientTests() {
         assertThat(parts).isEqualTo(emptyList<Part>())
     }
 
-    @Ignore
-    fun `should verify that royalties are parsed for all tokens`() = runBlocking<Unit> {
+    @Test
+    fun `should fetch empty royalties with all requests failed except first owner request`() = runBlocking<Unit> {
+        mock404()
+        mock404()
+        mock404()
+        mock404()
+        mock404()
+        mock(
+            """
+                [{
+                	"id": 6924272,
+                	"account": {
+                		"address": "tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88"
+                	},
+                	"token": {
+                		"id": 1646093,
+                		"contract": {
+                			"address": "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
+                		},
+                		"tokenId": "0",
+                		"standard": "fa2",
+                		"metadata": {
+                			"date": "2022-01-13T10:17:56.746Z",
+                			"name": "R-Royal #2 OBJKT",
+                			"tags": [],
+                			"image": "ipfs://QmZGqiGBeZyF96KLzEiDTaiAYBZzsgGCfK38JQT2zWGN9q",
+                			"minter": "KT1Aq4wWmVanpQhq4TTfjZXB5AjFpx15iQMM",
+                			"rights": "No License / All Rights Reserved",
+                			"symbol": "OBJKTCOM",
+                			"formats": [{
+                				"uri": "ipfs://QmaQ8mHLJAmMLiCTFHk39qV98TnPFADhviPt1dJCQKvZAC",
+                				"fileName": "white copy 3.png",
+                				"fileSize": "100923",
+                				"mimeType": "image/png",
+                				"dimensions": {
+                					"unit": "px",
+                					"value": "600x602"
+                				}
+                			}, {
+                				"uri": "ipfs://QmZGqiGBeZyF96KLzEiDTaiAYBZzsgGCfK38JQT2zWGN9q",
+                				"fileName": "cover-white copy 3.jpg",
+                				"fileSize": "26702",
+                				"mimeType": "image/jpeg",
+                				"dimensions": {
+                					"unit": "px",
+                					"value": "600x602"
+                				}
+                			}, {
+                				"uri": "ipfs://QmRf5zHZCdiAdUBizryjoiRCVaUy6VvQZQwEWqCsoiLtYc",
+                				"fileName": "thumbnail-white copy 3.jpg",
+                				"fileSize": "14398",
+                				"mimeType": "image/jpeg",
+                				"dimensions": {
+                					"unit": "px",
+                					"value": "349x350"
+                				}
+                			}],
+                			"creators": ["tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88"],
+                			"decimals": "0",
+                			"royalties": {
+                				"shares": {
+                					"tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88": "100"
+                				},
+                				"decimals": "3"
+                			},
+                			"attributes": [],
+                			"displayUri": "ipfs://QmZGqiGBeZyF96KLzEiDTaiAYBZzsgGCfK38JQT2zWGN9q",
+                			"artifactUri": "ipfs://QmaQ8mHLJAmMLiCTFHk39qV98TnPFADhviPt1dJCQKvZAC",
+                			"description": "ROYAAAAAAL",
+                			"thumbnailUri": "ipfs://QmRf5zHZCdiAdUBizryjoiRCVaUy6VvQZQwEWqCsoiLtYc",
+                			"isBooleanAmount": false,
+                			"shouldPreferSymbol": false
+                		}
+                	},
+                	"balance": "8",
+                	"transfersCount": 3,
+                	"firstLevel": 2027201,
+                	"firstTime": "2022-01-13T10:18:30Z",
+                	"lastLevel": 2030093,
+                	"lastTime": "2022-01-14T11:22:50Z"
+                }, {
+                	"id": 6997071,
+                	"account": {
+                		"address": "tz1NRh1vTn3b38m7Gg2qP81dqb5Kr2BAjwJV"
+                	},
+                	"token": {
+                		"id": 1646093,
+                		"contract": {
+                			"address": "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
+                		},
+                		"tokenId": "0",
+                		"standard": "fa2",
+                		"metadata": {
+                			"date": "2022-01-13T10:17:56.746Z",
+                			"name": "R-Royal #2 OBJKT",
+                			"tags": [],
+                			"image": "ipfs://QmZGqiGBeZyF96KLzEiDTaiAYBZzsgGCfK38JQT2zWGN9q",
+                			"minter": "KT1Aq4wWmVanpQhq4TTfjZXB5AjFpx15iQMM",
+                			"rights": "No License / All Rights Reserved",
+                			"symbol": "OBJKTCOM",
+                			"formats": [{
+                				"uri": "ipfs://QmaQ8mHLJAmMLiCTFHk39qV98TnPFADhviPt1dJCQKvZAC",
+                				"fileName": "white copy 3.png",
+                				"fileSize": "100923",
+                				"mimeType": "image/png",
+                				"dimensions": {
+                					"unit": "px",
+                					"value": "600x602"
+                				}
+                			}, {
+                				"uri": "ipfs://QmZGqiGBeZyF96KLzEiDTaiAYBZzsgGCfK38JQT2zWGN9q",
+                				"fileName": "cover-white copy 3.jpg",
+                				"fileSize": "26702",
+                				"mimeType": "image/jpeg",
+                				"dimensions": {
+                					"unit": "px",
+                					"value": "600x602"
+                				}
+                			}, {
+                				"uri": "ipfs://QmRf5zHZCdiAdUBizryjoiRCVaUy6VvQZQwEWqCsoiLtYc",
+                				"fileName": "thumbnail-white copy 3.jpg",
+                				"fileSize": "14398",
+                				"mimeType": "image/jpeg",
+                				"dimensions": {
+                					"unit": "px",
+                					"value": "349x350"
+                				}
+                			}],
+                			"creators": ["tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88"],
+                			"decimals": "0",
+                			"royalties": {
+                				"shares": {
+                					"tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88": "100"
+                				},
+                				"decimals": "3"
+                			},
+                			"attributes": [],
+                			"displayUri": "ipfs://QmZGqiGBeZyF96KLzEiDTaiAYBZzsgGCfK38JQT2zWGN9q",
+                			"artifactUri": "ipfs://QmaQ8mHLJAmMLiCTFHk39qV98TnPFADhviPt1dJCQKvZAC",
+                			"description": "ROYAAAAAAL",
+                			"thumbnailUri": "ipfs://QmRf5zHZCdiAdUBizryjoiRCVaUy6VvQZQwEWqCsoiLtYc",
+                			"isBooleanAmount": false,
+                			"shouldPreferSymbol": false
+                		}
+                	},
+                	"balance": "0",
+                	"transfersCount": 2,
+                	"firstLevel": 2030087,
+                	"firstTime": "2022-01-14T11:19:50Z",
+                	"lastLevel": 2030103,
+                	"lastTime": "2022-01-14T11:27:50Z"
+                }, {
+                	"id": 6997145,
+                	"account": {
+                		"address": "tz2NKVi7TWXxU3eFvxkzw7cv3Mybavx1XtMV"
+                	},
+                	"token": {
+                		"id": 1646093,
+                		"contract": {
+                			"address": "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
+                		},
+                		"tokenId": "0",
+                		"standard": "fa2",
+                		"metadata": {
+                			"date": "2022-01-13T10:17:56.746Z",
+                			"name": "R-Royal #2 OBJKT",
+                			"tags": [],
+                			"image": "ipfs://QmZGqiGBeZyF96KLzEiDTaiAYBZzsgGCfK38JQT2zWGN9q",
+                			"minter": "KT1Aq4wWmVanpQhq4TTfjZXB5AjFpx15iQMM",
+                			"rights": "No License / All Rights Reserved",
+                			"symbol": "OBJKTCOM",
+                			"formats": [{
+                				"uri": "ipfs://QmaQ8mHLJAmMLiCTFHk39qV98TnPFADhviPt1dJCQKvZAC",
+                				"fileName": "white copy 3.png",
+                				"fileSize": "100923",
+                				"mimeType": "image/png",
+                				"dimensions": {
+                					"unit": "px",
+                					"value": "600x602"
+                				}
+                			}, {
+                				"uri": "ipfs://QmZGqiGBeZyF96KLzEiDTaiAYBZzsgGCfK38JQT2zWGN9q",
+                				"fileName": "cover-white copy 3.jpg",
+                				"fileSize": "26702",
+                				"mimeType": "image/jpeg",
+                				"dimensions": {
+                					"unit": "px",
+                					"value": "600x602"
+                				}
+                			}, {
+                				"uri": "ipfs://QmRf5zHZCdiAdUBizryjoiRCVaUy6VvQZQwEWqCsoiLtYc",
+                				"fileName": "thumbnail-white copy 3.jpg",
+                				"fileSize": "14398",
+                				"mimeType": "image/jpeg",
+                				"dimensions": {
+                					"unit": "px",
+                					"value": "349x350"
+                				}
+                			}],
+                			"creators": ["tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88"],
+                			"decimals": "0",
+                			"royalties": {
+                				"shares": {
+                					"tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88": "100"
+                				},
+                				"decimals": "3"
+                			},
+                			"attributes": [],
+                			"displayUri": "ipfs://QmZGqiGBeZyF96KLzEiDTaiAYBZzsgGCfK38JQT2zWGN9q",
+                			"artifactUri": "ipfs://QmaQ8mHLJAmMLiCTFHk39qV98TnPFADhviPt1dJCQKvZAC",
+                			"description": "ROYAAAAAAL",
+                			"thumbnailUri": "ipfs://QmRf5zHZCdiAdUBizryjoiRCVaUy6VvQZQwEWqCsoiLtYc",
+                			"isBooleanAmount": false,
+                			"shouldPreferSymbol": false
+                		}
+                	},
+                	"balance": "1",
+                	"transfersCount": 1,
+                	"firstLevel": 2030093,
+                	"firstTime": "2022-01-14T11:22:50Z",
+                	"lastLevel": 2030093,
+                	"lastTime": "2022-01-14T11:22:50Z"
+                }, {
+                	"id": 6997273,
+                	"account": {
+                		"address": "tz1V11fB4EX5VzPKMNQ1CsBKMSFS6fL3Br9W"
+                	},
+                	"token": {
+                		"id": 1646093,
+                		"contract": {
+                			"address": "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
+                		},
+                		"tokenId": "0",
+                		"standard": "fa2",
+                		"metadata": {
+                			"date": "2022-01-13T10:17:56.746Z",
+                			"name": "R-Royal #2 OBJKT",
+                			"tags": [],
+                			"image": "ipfs://QmZGqiGBeZyF96KLzEiDTaiAYBZzsgGCfK38JQT2zWGN9q",
+                			"minter": "KT1Aq4wWmVanpQhq4TTfjZXB5AjFpx15iQMM",
+                			"rights": "No License / All Rights Reserved",
+                			"symbol": "OBJKTCOM",
+                			"formats": [{
+                				"uri": "ipfs://QmaQ8mHLJAmMLiCTFHk39qV98TnPFADhviPt1dJCQKvZAC",
+                				"fileName": "white copy 3.png",
+                				"fileSize": "100923",
+                				"mimeType": "image/png",
+                				"dimensions": {
+                					"unit": "px",
+                					"value": "600x602"
+                				}
+                			}, {
+                				"uri": "ipfs://QmZGqiGBeZyF96KLzEiDTaiAYBZzsgGCfK38JQT2zWGN9q",
+                				"fileName": "cover-white copy 3.jpg",
+                				"fileSize": "26702",
+                				"mimeType": "image/jpeg",
+                				"dimensions": {
+                					"unit": "px",
+                					"value": "600x602"
+                				}
+                			}, {
+                				"uri": "ipfs://QmRf5zHZCdiAdUBizryjoiRCVaUy6VvQZQwEWqCsoiLtYc",
+                				"fileName": "thumbnail-white copy 3.jpg",
+                				"fileSize": "14398",
+                				"mimeType": "image/jpeg",
+                				"dimensions": {
+                					"unit": "px",
+                					"value": "349x350"
+                				}
+                			}],
+                			"creators": ["tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88"],
+                			"decimals": "0",
+                			"royalties": {
+                				"shares": {
+                					"tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88": "100"
+                				},
+                				"decimals": "3"
+                			},
+                			"attributes": [],
+                			"displayUri": "ipfs://QmZGqiGBeZyF96KLzEiDTaiAYBZzsgGCfK38JQT2zWGN9q",
+                			"artifactUri": "ipfs://QmaQ8mHLJAmMLiCTFHk39qV98TnPFADhviPt1dJCQKvZAC",
+                			"description": "ROYAAAAAAL",
+                			"thumbnailUri": "ipfs://QmRf5zHZCdiAdUBizryjoiRCVaUy6VvQZQwEWqCsoiLtYc",
+                			"isBooleanAmount": false,
+                			"shouldPreferSymbol": false
+                		}
+                	},
+                	"balance": "1",
+                	"transfersCount": 1,
+                	"firstLevel": 2030103,
+                	"firstTime": "2022-01-14T11:27:50Z",
+                	"lastLevel": 2030103,
+                	"lastTime": "2022-01-14T11:27:50Z"
+                }]
+            """.trimIndent()
+        )
+
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
+        var contract = "KT1EffErZNVCPXW2trCMD5gGkACdAbAzj4tT"
+        var tokenId = "0"
+        val id = "$contract:$tokenId"
+        val parts = handler.processRoyalties(id)
+        assertThat(parts).isEqualTo(listOf(Part("tz2L6ikhCEHz9rZnZWobd7jFSJ6KfkESSP88", 0)))
+    }
+
+    @Test
+    @Disabled
+    fun `Manual test for royalties`() = runBlocking<Unit> {
         val localTzkt = "https://api.tzkt.io"
         val clientBuilder = WebClient.builder().baseUrl(localTzkt)
             .codecs { configurer -> configurer.defaultCodecs().maxInMemorySize(2 * 1024 * 1024) }.build()
         val bmClient = BigMapKeyClient(clientBuilder)
-        val tokenClient = TokenClient(clientBuilder, mockk(), mockk())
+        val ownershipClient = OwnershipClient(clientBuilder)
         val ipfs = IPFSClient(WebClient.create("https://ipfs.io/"), mapper)
-        val limit = 20
-        val continuation = 90951L
-        val handler = RoyaltiesHandler(bmClient, ipfs, royaltiesConfig)
-        var tokens = tokenClient.allTokensByLastUpdate(limit, continuation.toString())
-        var totalOK = 0
-        var totalKO = 0
-        val filePath = "/Users/florianpautot/Desktop/logs/errors.txt"
-        File(filePath).writeText("==================\nStarting Run\n==================\n")
-        while (tokens.items.isNotEmpty()) {
-            val lastId = tokens.items.last().id!!.toLong()
-            runBlocking {
-                tokens.items.forEach {
-                    launch {
-                        val id = "${it.contract?.address}:${it.tokenId}"
-                        val parts = handler.processRoyalties(id)
-                        val legacyParts = mutableListOf<Part>()
-                        try {
-                            val legacyRoyalties = ipfsClient.data("https://tezos-api.rarible.org/v0.1/items/$id")
-                            if(legacyRoyalties.has("royalties")){
-                                val shares = legacyRoyalties["royalties"] as ArrayNode
-                                shares.forEach {
-                                    legacyParts.add(Part(it["account"]!!.textValue(), it["value"]!!.intValue()))
-                                }
-                            }
-                            if (parts.toList() != legacyParts.toList()) {
-                                logger.error("Error parsing royalties for $id")
-                                File(filePath).appendText("$id\n")
-                                totalKO++
-                            } else {
-                                totalOK++
-                            }
-                        } catch (e: Exception){
-                            logger.error("Error fetching data: ${e.message}")
-                            logger.error("Error parsing royalties for $id")
-                            File(filePath).appendText("$id\n")
-                            totalKO++
-                        }
-
-                    }
-                }
-            }
-            tokens = tokenClient.allTokensByLastUpdate(limit, lastId.toString())
-        }
-        logger.info("Total OK = $totalOK")
-        File(filePath).appendText("Total OK = $totalOK")
-        logger.info("Total KO = $totalKO")
-        File(filePath).appendText("Total KO = $totalKO")
+        val handler = RoyaltiesHandler(bmClient, ownershipClient, ipfs, royaltiesConfig)
+        val id = "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS:77325"
+        val parts = handler.processRoyalties(id)
+        println(parts)
     }
 
     @Test
     @Disabled
     fun `should fetch royalties from meta`() = runBlocking<Unit> {
-        val handler = RoyaltiesHandler(bigMapKeyClient, ipfsClient, royaltiesConfig)
+        val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, royaltiesConfig)
         var contract = "KT1L7GvUxZH5tfa6cgZKnH6vpp2uVxnFVHKu:945"
         var tokenId = "945"
         val id = "$contract:$tokenId"
