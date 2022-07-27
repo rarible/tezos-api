@@ -20,4 +20,13 @@ class IPFSClient (
         val content = webClient.get().uri(url).retrieve().awaitBody<String>()
         return mapper.readTree(content)
     }
+
+    suspend fun fetchIpfsDataFromBlockchain(url: String): JsonNode{
+        return if (url.startsWith("ipfs://")){
+            val hash = url!!.split("//")
+            this.ipfsData(hash[1])
+        } else {
+            this.data(url)
+        }
+    }
 }

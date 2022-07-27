@@ -4,10 +4,12 @@ import com.rarible.tzkt.config.KnownAddresses
 import com.rarible.tzkt.meta.MetaService
 import com.rarible.tzkt.model.TokenMeta
 import com.rarible.tzkt.model.TokenMeta.Representation
+import com.rarible.tzkt.royalties.RoyaltiesHandler
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.springframework.web.reactive.function.client.WebClient
 
 class TokenClientMetaTests : BaseClientTests() {
 
@@ -36,7 +38,8 @@ class TokenClientMetaTests : BaseClientTests() {
     )
 
     val bigMapKeyClient = BigMapKeyClient(client)
-    val metaService = MetaService(mapper, bigMapKeyClient, config)
+    val ipfsClient = IPFSClient(client, mapper)
+    val metaService = MetaService(mapper, bigMapKeyClient, ipfsClient, config)
     val tokenClient = TokenClient(client, metaService, mockk())
 
     @Test
@@ -381,5 +384,82 @@ class TokenClientMetaTests : BaseClientTests() {
             )
         )
         assertThat(meta.attributes.map { it.key }).containsAll(listOf("creator", "creator_name"))
+    }
+
+    @Test
+    fun `should return meta from ipfs (with tzkt not providing meta)`() = runBlocking<Unit> {
+        mock(
+            """
+                [
+                    {
+                        "id": 2399760,
+                        "contract": {
+                            "address": "KT1PKFgv1ZrDVJoYcWczT1eDpw7qezbjxwKw"
+                        },
+                        "tokenId": "38",
+                        "standard": "fa2",
+                        "firstLevel": 2203301,
+                        "firstTime": "2022-03-17T07:49:44Z",
+                        "lastLevel": 2203301,
+                        "lastTime": "2022-03-17T07:49:44Z",
+                        "transfersCount": 1,
+                        "balancesCount": 1,
+                        "holdersCount": 1,
+                        "totalMinted": "5",
+                        "totalBurned": "0",
+                        "totalSupply": "5"
+                    }
+                ]
+            """.trimIndent()
+        )
+        mock(
+            """
+                {
+                	"id": 21154224,
+                	"active": true,
+                	"hash": "expru5TKqwxDRYQUdNBnFH9byzyLDYppZGbof8MPP8MFkxRdjBja9b",
+                	"key": "38",
+                	"value": {
+                		"token_id": "38",
+                		"token_info": {
+                			"": "697066733a2f2f516d4e705a5077696d4e6f35446d385454714e6b4b576f5931446e69673674786a73564c77626931683144614362"
+                		}
+                	},
+                	"firstLevel": 2203301,
+                	"lastLevel": 2203301,
+                	"updates": 1
+                }
+            """.trimIndent()
+        )
+        mock(
+            """
+                {
+                	"name": "FFC 032",
+                	"decimals": 0,
+                	"description": "Fabulous Architectural Flourish 032 from the city of Capreesh ",
+                	"artifactUri": "ipfs://QmSAgKM9HsHA9KEiQxqKiVdHY4agLfsTnZQVeU7CquT68G/image.jpeg",
+                	"displayUri": "ipfs://QmSAgKM9HsHA9KEiQxqKiVdHY4agLfsTnZQVeU7CquT68G/image.jpeg",
+                	"attributes": [],
+                	"formats": [{
+                		"mimeType": "image/jpeg",
+                		"fileSize": 13487767,
+                		"fileName": "FFC_032.jpg",
+                		"uri": "ipfs://QmSAgKM9HsHA9KEiQxqKiVdHY4agLfsTnZQVeU7CquT68G/image.jpeg"
+                	}]
+                }
+            """.trimIndent()
+        )
+
+        val meta = tokenClient.tokenMeta("KT1PKFgv1ZrDVJoYcWczT1eDpw7qezbjxwKw:38")
+        assertThat(meta.name).isEqualTo("FFC 032")
+        assertThat(meta.tags).hasSize(0)
+        assertThat(meta.content).contains(
+            TokenMeta.Content(
+                uri = "ipfs://QmSAgKM9HsHA9KEiQxqKiVdHY4agLfsTnZQVeU7CquT68G/image.jpeg",
+                mimeType = "image/jpeg",
+                representation = Representation.ORIGINAL
+            )
+        )
+        assertThat(meta.description).isEqualTo("Fabulous Architectural Flourish 032 from the city of Capreesh ")
     }
 }
