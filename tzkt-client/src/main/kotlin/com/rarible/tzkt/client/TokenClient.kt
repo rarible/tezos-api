@@ -18,7 +18,6 @@ import kotlinx.coroutines.coroutineScope
 import org.springframework.web.reactive.function.client.WebClient
 import java.lang.Integer.min
 import java.math.BigInteger
-import java.time.Instant
 
 class TokenClient(
     webClient: WebClient,
@@ -107,31 +106,31 @@ class TokenClient(
     ): Page<Token> {
         var parsedContinuation = continuation?.let { TimestampItemIdContinuation.parse(it) }
 
-        val firstTokens = invoke<List<Token>> { builder ->
-            builder.path(BASE_PATH)
-                .queryParam("token.standard", "fa2")
-                .apply {
-                    queryParam("limit", size)
-
-                    // if we have continuation we need to add additional params
-                    parsedContinuation?.let {
-                        queryParam("lastTime.${directionEqual(sortAsc)}", it.date)
+        val tokens = parsedContinuation?.let { continuation ->
+            // we need to identify internal id for correct continuation
+            val prevToken = token(continuation.id)
+            invoke<List<Token>> { builder ->
+                builder.path(BASE_PATH)
+                    .apply {
+                        queryParam("token.standard", "fa2")
+                        queryParam("limit", size)
+                        queryParam("lastTime.${directionEqual(sortAsc)}", continuation.date)
+                        queryParam("id.${direction(sortAsc)}", prevToken.id)
+                        val sorting = if (sortAsc) "sort.asc" else "sort.desc"
+                        queryParam(sorting, "lastTime,id")
+                        queryParam("metadata.artifactUri.null", "false")
                     }
-
+            }
+        } ?: invoke { builder ->
+            builder.path(BASE_PATH)
+                .apply {
+                    queryParam("token.standard", "fa2")
+                    queryParam("limit", size)
                     val sorting = if (sortAsc) "sort.asc" else "sort.desc"
                     queryParam(sorting, "lastTime,id")
                     queryParam("metadata.artifactUri.null", "false")
                 }
         }
-
-        // In case of continuation we need to find internal id of token by contract:tokenId
-        val tokens: List<Token> = parsedContinuation?.let { continuation ->
-            var continuationItem = firstTokens.byItemId(continuation.id)
-            if (continuationItem == null) {
-                continuationItem = findTzktToken(continuation.id, continuation.date, size, sortAsc)
-            }
-            tokensByLastUpdateAndId(continuation.date, continuationItem.id, size, sortAsc)
-        } ?: firstTokens
 
         // enrich with parsed meta
         val slice = tokens.subList(0, min(size, tokens.size)).map { token ->
@@ -150,31 +149,6 @@ class TokenClient(
             continuation = nextContinuation?.let { it.toString() }
         )
     }
-
-    suspend fun findTzktToken(itemId: String, lastDate: Instant, size: Int, sortAsc: Boolean = true): Token {
-        var tzktToken: Token? = null
-        var lastId: Int? = null
-        while (tzktToken == null) {
-            val tokens = tokensByLastUpdateAndId(lastDate, lastId, size, sortAsc)
-            tzktToken = tokens.byItemId(itemId)
-            lastId = tokens.last().id
-        }
-        return tzktToken
-    }
-
-    suspend fun tokensByLastUpdateAndId(lastDate: Instant, lastId: Int?, size: Int, sortAsc: Boolean = true) =
-        invoke<List<Token>> { builder ->
-            builder.path(BASE_PATH)
-                .queryParam("token.standard", "fa2")
-                .apply {
-                    queryParam("limit", size)
-                    queryParam("lastTime.${directionEqual(sortAsc)}", lastDate)
-                    lastId?.let { queryParam("id.${direction(sortAsc)}", lastId) }
-                    val sorting = if (sortAsc) "sort.asc" else "sort.desc"
-                    queryParam(sorting, "lastTime,id")
-                    queryParam("metadata.artifactUri.null", "false")
-                }
-        }
 
     suspend fun tokensByOwner(owner: String, size: Int = DEFAULT_SIZE, continuation: String?): Page<Token> {
         val balances = invoke<List<TokenBalanceShort>> { builder ->

@@ -138,7 +138,7 @@ class TokenClientIt {
         var total = 100_000
         var current = 0
         val itemIds = setOf<String>().toMutableSet()
-        var continuation: String? = null
+        var continuation: String? = "1658761109000_KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi:1029163"
         while (current < total) {
             val page = tokenClient.allTokensByLastUpdate(1000, continuation, false, false)
             continuation = page.continuation

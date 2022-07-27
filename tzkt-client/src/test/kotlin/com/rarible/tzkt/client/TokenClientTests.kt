@@ -174,183 +174,36 @@ class TokenClientTests : BaseClientTests() {
     }
 ]""")
         mock("""[
-    {
-        "id": 3489765,
-        "contract": {
-            "alias": "FXHASH GENTK v2",
-            "address": "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
-        },
-        "tokenId": "1028682",
-        "standard": "fa2",
-        "firstLevel": 2564513,
-        "firstTime": "2022-07-25T13:34:29Z",
-        "lastLevel": 2564513,
-        "lastTime": "2022-07-25T13:34:29Z",
-        "transfersCount": 1,
-        "balancesCount": 1,
-        "holdersCount": 1,
-        "totalMinted": "1",
-        "totalBurned": "0",
-        "totalSupply": "1",
-        "metadata": {
-            "name": "House of Birds #149",
-            "tags": [
-                "generative art",
-                "bird",
-                "p5js",
-                "origami"
-            ],
-            "symbol": "GENTK",
-            "version": "0.2",
-            "decimals": "0",
-            "attributes": true,
-            "displayUri": "ipfs://Qmaxko28XdawB3Q4jS6CV4wmTfRzDuSfNu244fe7HwZiUj",
-            "artifactUri": "ipfs://QmcuM6pt91CwRvqSkzYLnxXBHSETw353qzDGCWCWoEqz7f?fxhash=oocWTh4jyUDBU76zNsfVvAajN79hbsMrmmQFRcBfFQV1SbT7cik",
-            "description": "\"House of Birds\" started as a few origami birds inside a frame.\nBut, birds don't need boundaries; birds need trees, hills, and sky.\n\nCreated using p5js;\n\nPress \"s\" to save as png.\n\nTwitter: @SapirCohen__",
-            "generatorUri": "ipfs://QmcuM6pt91CwRvqSkzYLnxXBHSETw353qzDGCWCWoEqz7f",
-            "thumbnailUri": "ipfs://QmQPLCTBnNY7fsxwJurjaogYtitJNzUTrChyi8FAk3YxvY",
-            "iterationHash": "oocWTh4jyUDBU76zNsfVvAajN79hbsMrmmQFRcBfFQV1SbT7cik",
-            "authenticityHash": "4fcfb0bd3ec395674c6d55df5abd0a3b7e0d9c9c122963aa462ad1586ebccb0a"
-        }
-    },
-    {
-        "id": 3489763,
-        "contract": {
-            "address": "KT1BLhZmq6wSaNGgeZkT4xYxEfTtQt21awza"
-        },
-        "tokenId": "34",
-        "standard": "fa2",
-        "firstLevel": 2564513,
-        "firstTime": "2022-07-25T13:34:29Z",
-        "lastLevel": 2564513,
-        "lastTime": "2022-07-25T13:34:29Z",
-        "transfersCount": 1,
-        "balancesCount": 1,
-        "holdersCount": 1,
-        "totalMinted": "1",
-        "totalBurned": "0",
-        "totalSupply": "1",
-        "metadata": {
-            "date": "2022-07-25T13:33:06.105Z",
-            "name": "ROSE #32",
-            "tags": [],
-            "image": "ipfs://QmP9Pcik9DpGnVV5MN2x6yFRDE55XpNcVpENNquPU43k3L",
-            "minter": "KT1Aq4wWmVanpQhq4TTfjZXB5AjFpx15iQMM",
-            "rights": "No License / All Rights Reserved",
-            "symbol": "OBJKTCOM",
-            "formats": [
-                {
-                    "uri": "ipfs://QmQ4337n12xf91Cmr9c7Q4md8hxrKNz7GWvjy3xpFvZH4W",
-                    "fileName": "Image_20220725_1800.png",
-                    "fileSize": "773133",
-                    "mimeType": "image/png",
-                    "dimensions": {
-                        "unit": "px",
-                        "value": "720x1280"
-                    }
+            {
+                "id": 3489772,
+                "contract": {
+                    "alias": "FXHASH GENTK v2",
+                    "address": "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
                 },
-                {
-                    "uri": "ipfs://QmP9Pcik9DpGnVV5MN2x6yFRDE55XpNcVpENNquPU43k3L",
-                    "fileName": "cover-Image_20220725_1800.jpeg",
-                    "fileSize": "159111",
-                    "mimeType": "image/jpeg",
-                    "dimensions": {
-                        "unit": "px",
-                        "value": "576x1024"
-                    }
-                },
-                {
-                    "uri": "ipfs://QmZcSDKgZPMqfyrfvY82uupwmQa2tbTR1BbigAn3Fho89k",
-                    "fileName": "thumbnail-Image_20220725_1800.jpeg",
-                    "fileSize": "30613",
-                    "mimeType": "image/jpeg",
-                    "dimensions": {
-                        "unit": "px",
-                        "value": "197x350"
-                    }
+                "tokenId": "1028685",
+                "standard": "fa2",
+                "firstLevel": 2564516,
+                "firstTime": "2022-07-25T13:35:59Z",
+                "lastLevel": 2564516,
+                "lastTime": "2022-07-25T13:35:59Z",
+                "transfersCount": 1,
+                "balancesCount": 1,
+                "holdersCount": 1,
+                "totalMinted": "1",
+                "totalBurned": "0",
+                "totalSupply": "1",
+                "metadata": {
+                    "ttl": "30",
+                    "name": "[WAITING TO BE SIGNED]",
+                    "symbol": "GENTK",
+                    "decimals": "0",
+                    "displayUri": "ipfs://QmYwSwa5hP4346GqD7hAjutwJSmeYTdiLQ7Wec2C7Cez1D",
+                    "artifactUri": "ipfs://QmdGV3UqJqX4v5x9nFcDYeekCEAm3SDXUG5SHdjKQKn4Pe",
+                    "description": "This Gentk is waiting to be signed by the fxhash signer module",
+                    "thumbnailUri": "ipfs://QmbvEAn7FLMeYBDroYwBP8qWc3d3VVWbk19tTB83LCMB5S"
                 }
-            ],
-            "creators": [
-                "tz1fZwgLaXzZ4UVBfmQzAfZ6vFPryXARbEuH"
-            ],
-            "decimals": "0",
-            "royalties": {
-                "shares": {
-                    "tz1fZwgLaXzZ4UVBfmQzAfZ6vFPryXARbEuH": "100"
-                },
-                "decimals": "3"
-            },
-            "attributes": [],
-            "displayUri": "ipfs://QmP9Pcik9DpGnVV5MN2x6yFRDE55XpNcVpENNquPU43k3L",
-            "artifactUri": "ipfs://QmQ4337n12xf91Cmr9c7Q4md8hxrKNz7GWvjy3xpFvZH4W",
-            "description": "RoseArt 👩🏼🎨",
-            "mintingTool": "https://objkt.com",
-            "thumbnailUri": "ipfs://QmZcSDKgZPMqfyrfvY82uupwmQa2tbTR1BbigAn3Fho89k",
-            "isBooleanAmount": false,
-            "shouldPreferSymbol": false
-        }
-    }
-]""")
-        mock("""[
-    {
-        "id": 3489773,
-        "contract": {
-            "alias": "FXHASH GENTK v2",
-            "address": "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
-        },
-        "tokenId": "1028686",
-        "standard": "fa2",
-        "firstLevel": 2564517,
-        "firstTime": "2022-07-25T13:36:29Z",
-        "lastLevel": 2564517,
-        "lastTime": "2022-07-25T13:36:29Z",
-        "transfersCount": 1,
-        "balancesCount": 1,
-        "holdersCount": 1,
-        "totalMinted": "1",
-        "totalBurned": "0",
-        "totalSupply": "1",
-        "metadata": {
-            "ttl": "30",
-            "name": "[WAITING TO BE SIGNED]",
-            "symbol": "GENTK",
-            "decimals": "0",
-            "displayUri": "ipfs://QmYwSwa5hP4346GqD7hAjutwJSmeYTdiLQ7Wec2C7Cez1D",
-            "artifactUri": "ipfs://QmdGV3UqJqX4v5x9nFcDYeekCEAm3SDXUG5SHdjKQKn4Pe",
-            "description": "This Gentk is waiting to be signed by the fxhash signer module",
-            "thumbnailUri": "ipfs://QmbvEAn7FLMeYBDroYwBP8qWc3d3VVWbk19tTB83LCMB5S"
-        }
-    },
-    {
-        "id": 3489772,
-        "contract": {
-            "alias": "FXHASH GENTK v2",
-            "address": "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
-        },
-        "tokenId": "1028685",
-        "standard": "fa2",
-        "firstLevel": 2564516,
-        "firstTime": "2022-07-25T13:35:59Z",
-        "lastLevel": 2564516,
-        "lastTime": "2022-07-25T13:35:59Z",
-        "transfersCount": 1,
-        "balancesCount": 1,
-        "holdersCount": 1,
-        "totalMinted": "1",
-        "totalBurned": "0",
-        "totalSupply": "1",
-        "metadata": {
-            "ttl": "30",
-            "name": "[WAITING TO BE SIGNED]",
-            "symbol": "GENTK",
-            "decimals": "0",
-            "displayUri": "ipfs://QmYwSwa5hP4346GqD7hAjutwJSmeYTdiLQ7Wec2C7Cez1D",
-            "artifactUri": "ipfs://QmdGV3UqJqX4v5x9nFcDYeekCEAm3SDXUG5SHdjKQKn4Pe",
-            "description": "This Gentk is waiting to be signed by the fxhash signer module",
-            "thumbnailUri": "ipfs://QmbvEAn7FLMeYBDroYwBP8qWc3d3VVWbk19tTB83LCMB5S"
-        }
-    }
-]""")
+            }
+        ]""")
         mock("""[
     {
         "id": 3489765,
