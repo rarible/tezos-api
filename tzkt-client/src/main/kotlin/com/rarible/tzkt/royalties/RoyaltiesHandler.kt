@@ -91,7 +91,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ownershipClient
             val metadata = metadataMap["token_info"] as LinkedHashMap<String, String>
             val uri = metadata[""]?.decodeHex()?.utf8()
             if (!uri.isNullOrEmpty()) {
-                val ipfsData = fetchIpfsData(uri)
+                val ipfsData = ipfsClient.fetchIpfsDataFromBlockchain(uri)
                 if (ipfsData.has("royalties")) {
                     val royalties = ipfsData["royalties"] as JsonNode
                     if (royalties.has("shares") && royalties.has("decimals")) {
@@ -323,14 +323,5 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ownershipClient
             logger.warn("Could not parse royalties for token ${contract}:$tokenId with 8Bidou pattern: ${e.message}")
         }
         return parts
-    }
-
-    private suspend fun fetchIpfsData(url: String): JsonNode{
-        return if (url.startsWith("ipfs://")){
-            val hash = url!!.split("//")
-            ipfsClient.ipfsData(hash[1])
-        } else {
-            ipfsClient.data(url)
-        }
     }
 }

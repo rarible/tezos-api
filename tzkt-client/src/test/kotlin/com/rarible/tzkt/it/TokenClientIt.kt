@@ -62,9 +62,9 @@ class TokenClientIt {
 
     val bigMapKeyClient = BigMapKeyClient(client)
     val ownershipClient = OwnershipClient(client)
-    val metaService = MetaService(ObjectMapper().registerKotlinModule(), bigMapKeyClient, config)
     val ipfsWb = WebClient.create("https://ipfs.io/ipfs/")
     val ipfsClient = IPFSClient(ipfsWb, mapper)
+    val metaService = MetaService(ObjectMapper().registerKotlinModule(), bigMapKeyClient, ipfsClient, config)
     val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, config)
     val tokenClient = TokenClient(client, metaService, handler)
 

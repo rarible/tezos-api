@@ -40,7 +40,8 @@ class TokenClientTests : BaseClientTests() {
     )
 
     val bigMapKeyClient = BigMapKeyClient(client)
-    val metaService = MetaService(ObjectMapper().registerKotlinModule(), bigMapKeyClient, config)
+    val ipfsClient = IPFSClient(client, mapper)
+    val metaService = MetaService(ObjectMapper().registerKotlinModule(), bigMapKeyClient, ipfsClient, config)
     val tokenClient = TokenClient(client, metaService, mockk())
 
     @Test

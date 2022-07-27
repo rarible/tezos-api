@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.convertValue
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.rarible.tzkt.client.BigMapKeyClient
+import com.rarible.tzkt.client.IPFSClient
 import com.rarible.tzkt.config.KnownAddresses
+import com.rarible.tzkt.model.BigMapKey
 import com.rarible.tzkt.model.Token
 import com.rarible.tzkt.model.TokenMeta
 import com.rarible.tzkt.model.TokenMeta.Attribute
@@ -13,14 +15,18 @@ import com.rarible.tzkt.model.TokenMeta.Content
 import com.rarible.tzkt.model.TokenMeta.Representation
 import com.rarible.tzkt.tokens.BidouHandler
 import kotlinx.coroutines.runBlocking
+import okio.ByteString.Companion.decodeHex
+import org.slf4j.LoggerFactory
 
 class MetaService(
     private val mapper: ObjectMapper,
     private val bigMapKeyClient: BigMapKeyClient,
+    private val ipfsClient: IPFSClient,
     private val knownAddresses: KnownAddresses
 ) {
+    val logger = LoggerFactory.getLogger(javaClass)
 
-    fun meta(token: Token): TokenMeta {
+    suspend fun meta(token: Token): TokenMeta {
         return if (null != token.metadata) {
             val meta: TzktMeta = mapper.convertValue(adjustMeta(token.metadata))
             TokenMeta(
@@ -31,6 +37,7 @@ class MetaService(
                 tags = meta.tags ?: emptyList()
             )
         } else {
+            var meta: TokenMeta?
             when (token.contract?.address) {
                 knownAddresses.bidou8x8, knownAddresses.bidou24x24 -> {
                     val bidouHandler = BidouHandler(bigMapKeyClient)
@@ -38,7 +45,7 @@ class MetaService(
                         bidouHandler.getData(token.contract.address, token.tokenId!!)
                     }
                     if (properties != null) {
-                        TokenMeta(
+                        meta = TokenMeta(
                             name = properties.tokenName,
                             description = properties.tokenDescription,
                             content = listOf(
@@ -61,11 +68,39 @@ class MetaService(
                             )
                         )
                     } else {
-                        TokenMeta.EMPTY
+                        meta = TokenMeta.EMPTY
                     }
                 }
-                else -> TokenMeta.EMPTY
+                else -> meta = TokenMeta.EMPTY
             }
+            if(meta == TokenMeta.EMPTY){
+                var ipfsMeta: TzktMeta? = null
+                try {
+                    var tokenMetadata: BigMapKey?
+                    tokenMetadata = bigMapKeyClient.bigMapKeyWithName(token.contract!!.address, "token_metadata", token.tokenId!!)
+                    val metadataMap = tokenMetadata.value as LinkedHashMap<String, String>
+                    val metadata = metadataMap["token_info"] as LinkedHashMap<String, String>
+                    val uri = metadata[""]?.decodeHex()?.utf8()
+                    if (!uri.isNullOrEmpty()) {
+                        val ipfsData = ipfsClient.fetchIpfsDataFromBlockchain(uri)
+                        ipfsMeta = mapper.convertValue(adjustMeta(mapper.convertValue(ipfsData)))
+                    }
+                } catch (e: Exception) {
+                    logger.warn("Could not parse metadata for token ${token.contract!!.address}:${token.tokenId!!} from IPFS metadata: ${e.message}")
+                }
+                meta = if(ipfsMeta != null){
+                    TokenMeta(
+                        name = ipfsMeta.name ?: TokenMeta.UNTITLED,
+                        description = ipfsMeta.description,
+                        content = ipfsMeta.contents(),
+                        attributes = ipfsMeta.attributes ?: emptyList(),
+                        tags = ipfsMeta.tags ?: emptyList()
+                    )
+                } else {
+                    TokenMeta.EMPTY
+                }
+            }
+            return meta
         }
     }
 
