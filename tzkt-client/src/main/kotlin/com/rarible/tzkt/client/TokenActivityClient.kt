@@ -5,6 +5,8 @@ import com.rarible.tzkt.model.Page
 import com.rarible.tzkt.model.TokenActivity
 import com.rarible.tzkt.model.TypedTokenActivity
 import com.rarible.tzkt.model.TzktActivityContinuation
+import com.rarible.tzkt.utils.Tezos.NULL_ADDRESSES
+import com.rarible.tzkt.utils.Tezos.NULL_ADDRESSES_STRING
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -104,11 +106,11 @@ class TokenActivityClient(
                                 queryParam("from.null", "true")
                             }
                             ActivityType.BURN -> {
-                                queryParam("to.in", "null,$BURN_ADDRESS,$NULL_ADDRESS")
+                                queryParam("to.in", NULL_ADDRESSES_STRING)
                             }
                             ActivityType.TRANSFER -> {
-                                queryParam("from.ni", "null,$BURN_ADDRESS,$NULL_ADDRESS")
-                                queryParam("to.ni", "null,$BURN_ADDRESS,$NULL_ADDRESS")
+                                queryParam("from.ni", NULL_ADDRESSES_STRING)
+                                queryParam("to.ni", NULL_ADDRESSES_STRING)
                             }
                         }
                     }
@@ -120,7 +122,7 @@ class TokenActivityClient(
     private fun mapActivity(tokenActivity: TokenActivity): TypedTokenActivity {
         val type = when {
             tokenActivity.from == null -> ActivityType.MINT
-            listOf(BURN_ADDRESS, NULL_ADDRESS, null).contains(tokenActivity.to?.address) -> ActivityType.BURN
+            NULL_ADDRESSES.contains(tokenActivity.to?.address) -> ActivityType.BURN
             else -> ActivityType.TRANSFER
         }
         return TypedTokenActivity(type = type, tokenActivity)
@@ -150,8 +152,6 @@ class TokenActivityClient(
     companion object {
         const val BASE_PATH = "v1/tokens/transfers"
         const val BASE_TRANSACTION_PATH = "v1/operations/transactions"
-        const val BURN_ADDRESS = "tz1burnburnburnburnburnburnburjAYjjX"
-        const val NULL_ADDRESS = "tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU"
         const val DEFAULT_SIZE = 1000
     }
 

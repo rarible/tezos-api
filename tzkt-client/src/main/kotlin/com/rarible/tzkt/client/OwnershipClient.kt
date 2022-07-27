@@ -5,6 +5,7 @@ import com.rarible.tzkt.model.OwnershipId
 import com.rarible.tzkt.model.Page
 import com.rarible.tzkt.model.TokenBalance
 import com.rarible.tzkt.model.TzktNotFound
+import com.rarible.tzkt.utils.Tezos.NULL_ADDRESSES_STRING
 import org.springframework.web.reactive.function.client.WebClient
 
 class OwnershipClient(
@@ -16,6 +17,8 @@ class OwnershipClient(
             builder.path(BASE_PATH)
                 .queryParam("sort.desc", "id")
                 .queryParam("token.standard", "fa2")
+                .queryParam("account.ni", NULL_ADDRESSES_STRING)
+                .queryParam("balance.gt", 0)
                 .queryParam("limit", size)
                 .apply {
                     continuation?.let { queryParam("offset.cr", it) }
@@ -45,6 +48,8 @@ class OwnershipClient(
             builder.path(BASE_PATH)
                 .queryParam("token.contract", parsed.contract)
                 .queryParam("token.tokenId", parsed.tokenId)
+                .queryParam("account.ni", NULL_ADDRESSES_STRING)
+                .queryParam("balance.gt", 0)
                 .apply {
                     queryParam("limit", size)
                     continuation?.let { queryParam("offset.cr", it) }
