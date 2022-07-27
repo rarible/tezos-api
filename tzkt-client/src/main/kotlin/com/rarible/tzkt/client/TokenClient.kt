@@ -68,7 +68,7 @@ class TokenClient(
     suspend fun allTokensByLastUpdate(
         size: Int = DEFAULT_SIZE,
         continuation: String?,
-        sortAsc: Boolean = true,
+        sortAsc: Boolean = false,
         loadMeta: Boolean = false
     ): Page<Token> {
         var parsedContinuation = continuation?.let { TimestampItemIdContinuation.parse(it) }
