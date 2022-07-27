@@ -148,7 +148,7 @@ class OwnershipClientTests : BaseClientTests() {
         var contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
         var tokenId = "631268"
         val ownerships = ownershipClient.ownershipsByToken(ItemId(contract, tokenId).toString(), 2, null, true)
-        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268&limit=2&sort.asc=id")
+        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&balance.gt=0&limit=2&sort.asc=id")
         ownerships.items.forEach {
             assertThat(it.token?.tokenId).isEqualTo(tokenId)
             assertThat(it.token?.contract?.address).isEqualTo(contract)
@@ -239,7 +239,7 @@ class OwnershipClientTests : BaseClientTests() {
         var contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
         var tokenId = "631268"
         val ownerships = ownershipClient.ownershipsByToken(ItemId(contract, tokenId).toString(), 2, "6924058", true)
-        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268&limit=2&offset.cr=6924058&sort.asc=id")
+        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&balance.gt=0&limit=2&offset.cr=6924058&sort.asc=id")
         ownerships.items.forEach {
             assertThat(it.token?.tokenId).isEqualTo(tokenId)
             assertThat(it.token?.contract?.address).isEqualTo(contract)
@@ -335,7 +335,7 @@ class OwnershipClientTests : BaseClientTests() {
         """.trimIndent())
 
         val ownerships = ownershipClient.ownershipsAll(null, 2)
-        assertThat(request().path).isEqualTo("/v1/tokens/balances?sort.desc=id&token.standard=fa2&limit=2")
+        assertThat(request().path).isEqualTo("/v1/tokens/balances?sort.desc=id&token.standard=fa2&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&balance.gt=0&limit=2")
         assertThat(ownerships.items).hasSize(2)
         assertThat(ownerships.continuation).isEqualTo("121040")
     }
@@ -428,7 +428,7 @@ class OwnershipClientTests : BaseClientTests() {
         """.trimIndent())
 
         val ownerships = ownershipClient.ownershipsAll("121040", 2)
-        assertThat(request().path).isEqualTo("/v1/tokens/balances?sort.desc=id&token.standard=fa2&limit=2&offset.cr=121040")
+        assertThat(request().path).isEqualTo("/v1/tokens/balances?sort.desc=id&token.standard=fa2&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&balance.gt=0&limit=2&offset.cr=121040")
         assertThat(ownerships.items).hasSize(2)
         assertThat(ownerships.continuation).isEqualTo("121038")
     }
