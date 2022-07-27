@@ -7,10 +7,11 @@ import com.rarible.tzkt.model.Part
 import com.rarible.tzkt.model.TimestampItemIdContinuation
 import com.rarible.tzkt.model.Token
 import com.rarible.tzkt.model.TokenActivity
-import com.rarible.tzkt.model.TokenBalance
+import com.rarible.tzkt.model.TokenBalanceShort
 import com.rarible.tzkt.model.TokenMeta
 import com.rarible.tzkt.model.TzktNotFound
 import com.rarible.tzkt.royalties.RoyaltiesHandler
+import com.rarible.tzkt.utils.Tezos
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -40,6 +41,39 @@ class TokenClient(
             true -> result.copy(meta = metaService.meta(result))
             else -> result
         }
+    }
+
+    suspend fun tokens(contract: String, ids: List<String>, loadMeta: Boolean = false): List<Token> {
+        val tokens = invoke<List<Token>> {
+            it.path(BASE_PATH)
+                .queryParam("contract", contract)
+                .queryParam("tokenId.in", ids.joinToString(","))
+                .queryParam("token.standard", "fa2")
+        }
+
+        // enrich with parsed meta
+        return when (loadMeta) {
+            true -> tokens.map { it.copy(meta = metaService.meta(it)) }
+            else -> tokens
+        }
+    }
+
+    suspend fun tokens(ids: List<String>, loadMeta: Boolean = false): List<Token> {
+        // This is optimization for getting items by id
+        // Grouping by contract
+        val groups = ids.map { ItemId.parse(it) }.groupBy({ it.contract }, { it.tokenId })
+            .map { (contract, ids) ->
+
+                // chunking to prevent huge number of ids in the GET request
+                ids.chunked(100).map { Pair(contract, it) }
+            }.flatten()
+        val tokens = coroutineScope {
+            groups
+                .map { (contract, ids) -> async { tokens(contract, ids, loadMeta) } }
+                .awaitAll()
+                .flatten()
+        }
+        return tokens
     }
 
     suspend fun tokenMeta(itemId: String): TokenMeta {
@@ -128,7 +162,8 @@ class TokenClient(
         return tzktToken
     }
 
-    suspend fun tokensByLastUpdateAndId(lastDate: Instant, lastId: Int?, size: Int, sortAsc: Boolean = true) = invoke<List<Token>> { builder ->
+    suspend fun tokensByLastUpdateAndId(lastDate: Instant, lastId: Int?, size: Int, sortAsc: Boolean = true) =
+        invoke<List<Token>> { builder ->
             builder.path(BASE_PATH)
                 .queryParam("token.standard", "fa2")
                 .apply {
@@ -141,38 +176,29 @@ class TokenClient(
                 }
         }
 
-    suspend fun tokens(ids: List<String>): List<Token> {
-        val tokens = coroutineScope {
-            ids
-                .map {
-                    async { token(it) }
-                }
-                .awaitAll()
-        }
-        return tokens
-    }
-
     suspend fun tokensByOwner(owner: String, size: Int = DEFAULT_SIZE, continuation: String?): Page<Token> {
-        val balances = invoke<List<TokenBalance>> { builder ->
+        val balances = invoke<List<TokenBalanceShort>> { builder ->
             builder.path(BASE_PATH_BALANCES)
                 .apply {
                     queryParam("account", owner)
                     queryParam("token.standard", "fa2")
                     queryParam("limit", size)
                     continuation?.let { queryParam("id.lt", it) }
+                    queryParam("balance.gt", 0)
                     queryParam("sort.desc", "id")
+                    queryParam("select", "id,token.contract.address,token.tokenId")
                 }
         }
 
-        val nextContinuation = if (balances.size >= size) {
+        val nextContinuation = if (balances.size == size) {
             balances.last().id
         } else null
-        val tokensIds = balances.mapNotNull { it.token?.itemId() }
+        val tokensIds = balances.mapNotNull { it.itemId() }
         return toPage(tokensIds, nextContinuation)
     }
 
     suspend fun tokensByCreator(creator: String, size: Int = DEFAULT_SIZE, continuation: String?): Page<Token> {
-        val activities = invoke<List<TokenActivity>> { builder ->
+        val transfers = invoke<List<TokenActivity>> { builder ->
             builder.path(BASE_PATH_TRANSFERS)
                 .apply {
                     queryParam("from.null", "true")
@@ -183,30 +209,30 @@ class TokenClient(
                     queryParam("sort.desc", "id")
                 }
         }
-        val slice = activities.subList(0, min(size, activities.size))
-        val nextContinuation = if (slice.size >= size) {
-            slice.last().id
+        val nextContinuation = if (transfers.size == size) {
+            transfers.last().id
         } else null
-        val tokensIds = activities.mapNotNull { it.token?.itemId() }
+        val tokensIds = transfers.mapNotNull { it.token?.itemId() }
         return toPage(tokensIds, nextContinuation)
     }
 
     suspend fun tokensByCollection(collection: String, size: Int = DEFAULT_SIZE, continuation: String?): Page<Token> {
-        val activities = invoke<List<Token>> { builder ->
-            builder.path(BASE_PATH)
+        val balances = invoke<List<TokenBalanceShort>> { builder ->
+            builder.path(BASE_PATH_BALANCES)
                 .apply {
-                    queryParam("contract", collection)
+                    queryParam("token.contract", collection)
                     queryParam("limit", size)
                     continuation?.let { queryParam("id.lt", it) }
+                    queryParam("balance.gt", 0)
+                    queryParam("account.ni", Tezos.NULL_ADDRESSES_STRING)
                     queryParam("sort.desc", "id")
-                    queryParam("select", "id,contract,tokenId")
+                    queryParam("select", "id,token.contract.address,token.tokenId")
                 }
         }
-        val slice = activities.subList(0, min(size, activities.size))
-        val nextContinuation = if (slice.size >= size) {
-            slice.last().id
+        val nextContinuation = if (balances.size == size) {
+            balances.last().id
         } else null
-        val tokensIds = activities.mapNotNull { it.itemId() }
+        val tokensIds = balances.mapNotNull { it.itemId() }
         return toPage(tokensIds, nextContinuation)
     }
 
@@ -219,13 +245,13 @@ class TokenClient(
         val lastTokenId = invoke<List<String>> {
             it.path(BASE_PATH)
                 .queryParam("contract", contract)
-                .queryParam("sort.desc","tokenId")
+                .queryParam("sort.desc", "tokenId")
                 .queryParam("limit", "1")
-                .queryParam("select","tokenId")
+                .queryParam("select", "tokenId")
         }
-        return if(lastTokenId.isNullOrEmpty()){
+        return if (lastTokenId.isNullOrEmpty()) {
             BigInteger.ZERO
-        } else{
+        } else {
             lastTokenId.first().toBigInteger()
         }
     }
@@ -252,5 +278,5 @@ class TokenClient(
         const val DEFAULT_SIZE = 1000
     }
 
-    fun List<Token>.byItemId(itemId: String) = this.firstOrNull{ item -> item.itemId() == itemId }
+    fun List<Token>.byItemId(itemId: String) = this.firstOrNull { item -> item.itemId() == itemId }
 }

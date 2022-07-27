@@ -686,47 +686,11 @@ class TokenClientTests : BaseClientTests() {
 
     @Test
     fun `should return tokens by owner`() = runBlocking<Unit> {
-        mock("""
-            [
-                {
+        mock(""" [{
                     "id": 12277692,
-                    "account": {
-                        "address": "tz1gqL7i1s578qj3NzgKmu6C5j3RdSBewGBo"
-                    },
-                    "token": {
-                        "id": 3279257,
-                        "contract": {
-                            "alias": "Rarible",
-                            "address": "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS"
-                        },
-                        "tokenId": "76999",
-                        "standard": "fa2",
-                        "metadata": {
-                            "name": "Favela #2",
-                            "formats": [
-                                {
-                                    "uri": "ipfs://bafybeibxnyb6nprhkyz2zh6m7wc3ogpibfl2vvp3kzraxddskkqafymrtm/image.jpeg",
-                                    "fileName": "favela9.jpg",
-                                    "fileSize": "7648204",
-                                    "mimeType": "image/jpeg"
-                                }
-                            ],
-                            "decimals": "0",
-                            "attributes": [],
-                            "displayUri": "ipfs://bafybeibxnyb6nprhkyz2zh6m7wc3ogpibfl2vvp3kzraxddskkqafymrtm/image.jpeg",
-                            "artifactUri": "ipfs://bafybeibxnyb6nprhkyz2zh6m7wc3ogpibfl2vvp3kzraxddskkqafymrtm/image.jpeg",
-                            "description": "Favela is life, favela is art, favela is NFT. "
-                        }
-                    },
-                    "balance": "1",
-                    "transfersCount": 1,
-                    "firstLevel": 2530154,
-                    "firstTime": "2022-07-13T10:13:44Z",
-                    "lastLevel": 2530154,
-                    "lastTime": "2022-07-13T10:13:44Z"
-                }
-            ]
-        """.trimIndent())
+                    "token.contract.address": "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS",
+                    "token.tokenId": "76999"
+                }]""".trimIndent())
         mock("""
             [
                 {
@@ -755,45 +719,11 @@ class TokenClientTests : BaseClientTests() {
         assertThat(page1.items).hasSize(1)
         assertThat(page1.continuation).isNotEmpty
 
-        mock("""
-            [{
-                "id": 12277744,
-                "account": {
-                    "address": "tz1gqL7i1s578qj3NzgKmu6C5j3RdSBewGBo"
-                },
-                "token": {
-                    "id": 3402626,
-                    "contract": {
-                        "alias": "Rarible",
-                        "address": "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS"
-                    },
-                    "tokenId": "77263",
-                    "standard": "fa2",
-                    "metadata": {
-                        "name": "pika",
-                        "formats": [
-                            {
-                                "uri": "ipfs://QmWGVatVnSXQdwEK43a6Z75jERnSBEBvkYbjTAFCEcjqaa/image.gif",
-                                "fileName": "meme-pikachu.gif",
-                                "fileSize": "2816801",
-                                "mimeType": "image/gif"
-                            }
-                        ],
-                        "decimals": "0",
-                        "attributes": [],
-                        "displayUri": "ipfs://QmWGVatVnSXQdwEK43a6Z75jERnSBEBvkYbjTAFCEcjqaa/image.gif",
-                        "artifactUri": "ipfs://QmWGVatVnSXQdwEK43a6Z75jERnSBEBvkYbjTAFCEcjqaa/image.gif",
-                        "description": ""
-                    }
-                },
-                "balance": "1",
-                "transfersCount": 1,
-                "firstLevel": 2530166,
-                "firstTime": "2022-07-13T10:19:44Z",
-                "lastLevel": 2530166,
-                "lastTime": "2022-07-13T10:19:44Z"
-            }]
-        """.trimIndent())
+        mock(""" [{
+                    "id": 12277744,
+                    "token.contract.address": "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS",
+                    "token.tokenId": "77263"
+                }]""".trimIndent())
         mock("""
             [
                 {
@@ -823,10 +753,10 @@ class TokenClientTests : BaseClientTests() {
         assertThat(page2.continuation).isNull()
 
         assertThat(requests()).isEqualTo(setOf(
-            "/v1/tokens/balances?account=tz1gqL7i1s578qj3NzgKmu6C5j3RdSBewGBo&token.standard=fa2&limit=1&sort.desc=id",
-            "/v1/tokens?contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&tokenId=76999&token.standard=fa2",
-            "/v1/tokens/balances?account=tz1gqL7i1s578qj3NzgKmu6C5j3RdSBewGBo&token.standard=fa2&limit=2&id.lt=12277692&sort.desc=id",
-            "/v1/tokens?contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&tokenId=77263&token.standard=fa2")
+            "/v1/tokens/balances?account=tz1gqL7i1s578qj3NzgKmu6C5j3RdSBewGBo&token.standard=fa2&limit=1&balance.gt=0&sort.desc=id&select=id,token.contract.address,token.tokenId",
+            "/v1/tokens?contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&tokenId.in=76999&token.standard=fa2",
+            "/v1/tokens/balances?account=tz1gqL7i1s578qj3NzgKmu6C5j3RdSBewGBo&token.standard=fa2&limit=2&id.lt=12277692&balance.gt=0&sort.desc=id&select=id,token.contract.address,token.tokenId",
+            "/v1/tokens?contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&tokenId.in=77263&token.standard=fa2")
         )
     }
 
@@ -905,11 +835,8 @@ class TokenClientTests : BaseClientTests() {
         mock("""
             [{
                 "id": 3404739,
-                "contract": {
-                    "alias": "Rarible",
-                    "address": "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS"
-                },
-                "tokenId": "77272"
+                "token.contract.address": "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS",
+                "token.tokenId": "77272"
             }]
         """.trimIndent())
         mock("""
@@ -941,8 +868,8 @@ class TokenClientTests : BaseClientTests() {
         assertThat(page1.continuation).isNotEmpty()
 
         assertThat(requests()).isEqualTo(setOf(
-            "/v1/tokens?contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&limit=1&sort.desc=id&select=id,contract,tokenId",
-            "/v1/tokens?contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&tokenId=77272&token.standard=fa2")
+            "/v1/tokens/balances?token.contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&limit=1&balance.gt=0&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&sort.desc=id&select=id,token.contract.address,token.tokenId",
+            "/v1/tokens?contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&tokenId.in=77272&token.standard=fa2")
         )
     }
 }
