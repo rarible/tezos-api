@@ -15,8 +15,8 @@ data class GetOrdersCustomQuery(
     override fun document(): String {
         val conditions = mutableListOf<String>()
         if (statuses.isNotEmpty()) conditions.add("status: {_in: [${statuses.joinToString(",")}]}")
-        prevDate?.let { continuation(sort) }
-        return """
+        prevDate?.let { conditions.add(continuation(sort)) }
+        val request = """
             query GetOrders(${'$'}limit: Int!) {
                 marketplace_order(
                     where: {${conditions.joinToString(",\n")}}
@@ -51,6 +51,7 @@ data class GetOrdersCustomQuery(
                 payouts
             }
         """.trimIndent()
+        return request
     }
 
     fun continuation(sort: DipDupOrderSort) = when (sort) {

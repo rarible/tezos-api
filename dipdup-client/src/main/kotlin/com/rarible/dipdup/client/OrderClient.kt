@@ -39,8 +39,8 @@ class OrderClient(
             statuses = statuses.map { it.name },
             limit = size,
             sort = sort ?: DipDupOrderSort.LAST_UPDATE_DESC,
-            prevId = parsedContinuation?.let { it.toString() },
-            prevDate = parsedContinuation?.let { it.toString() }
+            prevId = parsedContinuation?.let { it.id.toString() },
+            prevDate = parsedContinuation?.let { it.date.toString() }
         ))
         return convertAll(response.marketplace_order, size)
     }
@@ -68,8 +68,8 @@ class OrderClient(
                 currencyId = currencyId,
                 statuses = statuses.map { it.name },
                 limit = size,
-                prevId = parsedContinuation?.let { it.toString() },
-                prevDate = parsedContinuation?.let { it.toString() }
+                prevId = parsedContinuation?.let { it.id.toString() },
+                prevDate = parsedContinuation?.let { it.date.toString() }
             )
         )
         return convertByItem(response.marketplace_order, size)
@@ -87,8 +87,8 @@ class OrderClient(
                 makers = makers,
                 statuses = statuses.map { it.name },
                 limit = size,
-                prevId = parsedContinuation?.let { it.toString() },
-                prevDate = parsedContinuation?.let { it.toString() }
+                prevId = parsedContinuation?.let { it.id.toString() },
+                prevDate = parsedContinuation?.let { it.date.toString() }
             )
         )
         return convertByMaker(response.marketplace_order, size)
