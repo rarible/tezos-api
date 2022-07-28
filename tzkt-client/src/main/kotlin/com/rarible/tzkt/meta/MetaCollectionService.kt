@@ -13,22 +13,27 @@ class MetaCollectionService(
 ) : BaseClient(webClient) {
 
     suspend fun get(contract: String): CollectionMeta {
-        val props = invoke<List<Map<String, Any>>> {
-            it.path("${CollectionClient.BASE_PATH}/$contract/bigmaps/metadata/keys")
-        }
-
-        var meta = CollectionMeta(getKey(props, "name"), getKey(props, "symbol"))
-        if (!meta.isEmpty()) {
-            logger.info("Got collection meta to $contract from Bigmap")
-        }
-
-        if (meta.isEmpty()) {
-            meta = getViaIpfs(props)
-            if (!meta.isEmpty()) {
-                logger.info("Got collection meta to $contract from ipfs")
+        return try {
+            val props = invoke<List<Map<String, Any>>> {
+                it.path("${CollectionClient.BASE_PATH}/$contract/bigmaps/metadata/keys")
             }
+
+            var meta = CollectionMeta(getKey(props, "name"), getKey(props, "symbol"))
+            if (!meta.isEmpty()) {
+                logger.info("Got collection meta to $contract from Bigmap")
+            }
+
+            if (meta.isEmpty()) {
+                meta = getViaIpfs(props)
+                if (!meta.isEmpty()) {
+                    logger.info("Got collection meta to $contract from ipfs")
+                }
+            }
+            meta
+        } catch (ex: Exception) {
+            logger.error("Getting meta for collection $contract failed", ex)
+            CollectionMeta(null, null)
         }
-        return meta
     }
 
     suspend fun getViaIpfs(props: List<Map<String, Any>>): CollectionMeta {
