@@ -2,8 +2,10 @@ package com.rarible.tzkt.client
 
 import com.rarible.tzkt.model.ItemId
 import com.rarible.tzkt.model.OwnershipId
+import com.rarible.tzkt.model.TzktNotFound
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.Test
 
 class OwnershipClientTests : BaseClientTests() {
@@ -433,4 +435,10 @@ class OwnershipClientTests : BaseClientTests() {
         assertThat(ownerships.continuation).isEqualTo("121038")
     }
 
+    @Test
+    fun `should return 404 if owner is burn address`() = runBlocking<Unit> {
+        assertThrows<TzktNotFound> {
+            ownershipClient.ownershipById("KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS:73086:tz1burnburnburnburnburnburnburjAYjjX")
+        }
+    }
 }

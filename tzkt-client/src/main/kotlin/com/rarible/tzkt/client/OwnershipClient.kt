@@ -5,6 +5,7 @@ import com.rarible.tzkt.model.OwnershipId
 import com.rarible.tzkt.model.Page
 import com.rarible.tzkt.model.TokenBalance
 import com.rarible.tzkt.model.TzktNotFound
+import com.rarible.tzkt.utils.Tezos
 import com.rarible.tzkt.utils.Tezos.NULL_ADDRESSES_STRING
 import org.springframework.web.reactive.function.client.WebClient
 
@@ -33,6 +34,10 @@ class OwnershipClient(
 
     suspend fun ownershipById(ownershipId: String): TokenBalance {
         val id = OwnershipId.parse(ownershipId)
+        // check burn address
+        if (Tezos.NULL_ADDRESSES.contains(id.owner)) {
+            throw TzktNotFound("Ownership ${ownershipId} wasn't found")
+        }
         val ownership = invoke<List<TokenBalance>> { builder ->
             builder.path(BASE_PATH)
                 .queryParam("account", id.owner)
