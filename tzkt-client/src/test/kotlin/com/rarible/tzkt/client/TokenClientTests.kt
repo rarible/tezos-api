@@ -102,9 +102,10 @@ class TokenClientTests : BaseClientTests() {
             ]
         """.trimIndent()
         )
+        mock("[]")
 
         val token = tokenClient.token("KT1NWdwVA8zq5DDJTKcMkRqWYJcEcyTTm5WK:1156")
-        assertThat(request().path).isEqualTo("/v1/tokens?contract=KT1NWdwVA8zq5DDJTKcMkRqWYJcEcyTTm5WK&tokenId=1156&token.standard=fa2")
+        assertThat(request().path).isEqualTo("/v1/tokens?contract=KT1NWdwVA8zq5DDJTKcMkRqWYJcEcyTTm5WK&tokenId.in=1156&token.standard=fa2")
 
         assertThat(token).isNotNull
         assertThat(token.meta).isNull()
@@ -340,11 +341,11 @@ class TokenClientTests : BaseClientTests() {
             """[{
             "id": 1,
             "contract": {
-                "alias": "tzBTC",
-                "address": "KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn"
+                "alias": "test",
+                "address": "KT1S95Dyj2QrJpSnAbHRUSUZr7DhuFqssrog"
             },
             "tokenId": "0",
-            "standard": "fa1.2",
+            "standard": "fa2",
             "firstLevel": 889166,
             "firstTime": "2020-03-31T15:12:51Z",
             "lastLevel": 2280800,
@@ -352,46 +353,22 @@ class TokenClientTests : BaseClientTests() {
             "transfersCount": 97188,
             "balancesCount": 3029,
             "holdersCount": 1179,
-            "totalMinted": "107615636205",
+            "totalMinted": "2",
             "totalBurned": "0",
-            "totalSupply": "107615636205",
-            "metadata": {
-                "name": "tzBTC",
-                "symbol": "tzBTC",
-                "decimals": "8"
-            }
+            "totalSupply": "2"
         }]"""
         )
         mock(
-            """[{
-            "id": 2,
-            "contract": {
-                "alias": "StakerDAO",
-                "address": "KT1EctCuorV2NfVb1XTQgvzJ88MQtWP8cMMv"
-            },
-            "tokenId": "0",
-            "standard": "fa1.2",
-            "firstLevel": 767840,
-            "firstTime": "2020-01-06T03:46:32Z",
-            "lastLevel": 1098868,
-            "lastTime": "2020-08-25T00:50:26Z",
-            "transfersCount": 25,
-            "balancesCount": 22,
-            "holdersCount": 20,
-            "totalMinted": "1500000",
-            "totalBurned": "0",
-            "totalSupply": "1500000"
-        }]"""
+            """[]"""
         )
         val tokens = tokenClient.tokens(
             listOf(
-                "KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn:0",
-                "KT1EctCuorV2NfVb1XTQgvzJ88MQtWP8cMMv:0"
+                "KT1S95Dyj2QrJpSnAbHRUSUZr7DhuFqssrog:0"
             )
         )
 
-        assertThat(tokens).hasSize(2)
-        assertThat(tokens.first().standard).isEqualTo("fa1.2")
+        assertThat(tokens).hasSize(1)
+        assertThat(tokens.first().standard).isEqualTo("fa2")
     }
 
     @Test
@@ -521,12 +498,14 @@ class TokenClientTests : BaseClientTests() {
                 }
             ]
         """.trimIndent())
+        mock("[]")
         val nft = tokenClient.token("KT1PWG9Xm9vuLGGASfoh7aeCAfPNwuzx1P4J:69", true)
         assertThat(nft.meta?.content).hasSize(3)
     }
 
     @Test
     fun `shouldn't return token by contract and token id`() = runBlocking<Unit> {
+        mock("[]")
         mock("[]")
         assertThrows<TzktNotFound> { tokenClient.token("KT1NWdwVA8zq5DDJTKcMkRqWYJcEcyTTm5WK:1156") }
     }
@@ -679,6 +658,7 @@ class TokenClientTests : BaseClientTests() {
                 }
             ]
         """.trimIndent())
+        mock("[]")
         val page1 = tokenClient.tokensByCreator("tz1gqL7i1s578qj3NzgKmu6C5j3RdSBewGBo", 1, null)
         assertThat(page1.items).hasSize(1)
         assertThat(page1.continuation).isNotEmpty
@@ -725,5 +705,41 @@ class TokenClientTests : BaseClientTests() {
             "/v1/tokens/balances?token.contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&limit=1&balance.gt=0&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&sort.desc=id&select=id,token.contract.address,token.tokenId",
             "/v1/tokens?contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&tokenId.in=77272&token.standard=fa2")
         )
+    }
+
+    @Test
+    fun `should return total supply = 0`() = runBlocking<Unit> {
+        mock("""[{
+            "id": 3073945,
+            "contract": {
+                "alias": "Rarible",
+                "address": "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS"
+            },
+            "tokenId": "73086",
+            "standard": "fa2",
+            "firstLevel": 2424413,
+            "firstTime": "2022-06-04T21:09:29Z",
+            "lastLevel": 2569637,
+            "lastTime": "2022-07-27T08:53:29Z",
+            "transfersCount": 7,
+            "balancesCount": 5,
+            "holdersCount": 1,
+            "totalMinted": "15",
+            "totalBurned": "14",
+            "totalSupply": "1"
+        }]""".trimIndent())
+        mock("""[
+            {
+                "account": {
+                    "alias": "Burn Address 🔥",
+                    "address": "tz1burnburnburnburnburnburnburjAYjjX"
+                },
+                "token.contract.address": "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS",
+                "token.tokenId": "73086",
+                "balance": "1"
+            }
+        ]""")
+        val token = tokenClient.token("KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS:73086")
+        assertThat(token.isDeleted()).isTrue()
     }
 }

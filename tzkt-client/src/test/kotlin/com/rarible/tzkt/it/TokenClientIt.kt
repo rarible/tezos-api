@@ -147,4 +147,10 @@ class TokenClientIt {
         }
         assertThat(current).isEqualTo(itemIds.size)
     }
+
+    @Test
+    fun `should have supply = 0`() = runBlocking<Unit> {
+        val token = tokenClient.token("KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS:73086")
+        assertThat(token.isDeleted()).isTrue()
+    }
 }

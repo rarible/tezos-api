@@ -13,6 +13,9 @@
 
 package com.rarible.tzkt.model
 
+import java.math.BigDecimal
+import java.math.BigInteger
+
 /**
  *
  *
@@ -89,5 +92,7 @@ data class Token (
     }
 
     fun itemId() = "${contract?.address}:$tokenId"
+
+    fun isDeleted() = totalSupply?.let { BigDecimal(it) == BigDecimal.ZERO } ?: false
 }
 

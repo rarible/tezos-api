@@ -8,7 +8,8 @@ data class TokenBalanceShort (
     @JsonProperty("token.contract.address")
     val contract: String? = null,
     @JsonProperty("token.tokenId")
-    val tokenId: String? = null
+    val tokenId: String? = null,
+    val balance: String? = null
 ) {
     fun itemId() = "${contract}:$tokenId"
 }
