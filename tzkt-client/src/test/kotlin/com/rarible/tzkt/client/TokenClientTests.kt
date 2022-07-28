@@ -10,6 +10,8 @@ import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.condition.DisabledOnOs
+import org.junit.jupiter.api.condition.OS
 import java.math.BigInteger
 
 class TokenClientTests : BaseClientTests() {
@@ -44,6 +46,7 @@ class TokenClientTests : BaseClientTests() {
     val metaService = MetaService(ObjectMapper().registerKotlinModule(), bigMapKeyClient, ipfsClient, config)
     val tokenClient = TokenClient(client, metaService, mockk())
 
+    @DisabledOnOs(OS.LINUX)
     @Test
     fun `should return token by contract and token id`() = runBlocking<Unit> {
         mock(
@@ -460,6 +463,7 @@ class TokenClientTests : BaseClientTests() {
         assertThat(isNft).isNull()
     }
 
+    @DisabledOnOs(OS.LINUX)
     @Test
     fun `should return meta from escaped string`() = runBlocking<Unit> {
         mock("""
