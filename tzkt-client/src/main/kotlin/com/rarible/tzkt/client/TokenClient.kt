@@ -113,10 +113,13 @@ class TokenClient(
 
         // We need balances to determine which items were deleted
         // Run this check only if size < REQUEST_LIMIT
-        val balancedSlice = if (checkBalance && enrichedSlice.size < REQUEST_LIMIT) {
+        val balancedSlice = if (checkBalance && enrichedSlice.size <= REQUEST_LIMIT) {
             val ids = enrichedSlice.map { it.itemId() }
             adjustTokens(enrichedSlice, burned(ids))
-        } else enrichedSlice
+        } else {
+            logger.warn("Exceeded request limit for getting balances ${enrichedSlice.size} > $REQUEST_LIMIT")
+            enrichedSlice
+        }
 
         val nextContinuation = if (balancedSlice.size >= size) {
             val token = balancedSlice.last()
