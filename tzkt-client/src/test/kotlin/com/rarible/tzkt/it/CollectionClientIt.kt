@@ -10,8 +10,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.DisabledOnOs
 import org.junit.jupiter.api.condition.OS
-import org.springframework.web.reactive.function.client.ExchangeStrategies
 import org.springframework.web.reactive.function.client.WebClient
+import preparedClient
 
 // this test will be disabled on jenkins
 @DisabledOnOs(OS.LINUX)
@@ -19,13 +19,7 @@ class CollectionClientIt {
 
     fun client(url: String): CollectionClient {
         val mapper = ObjectMapper().registerKotlinModule()
-        val client = WebClient.builder()
-            .exchangeStrategies(
-                ExchangeStrategies.builder()
-                    .codecs { it.defaultCodecs().maxInMemorySize(10_000_000) }
-                    .build())
-            .baseUrl(url)
-            .build()
+        val client = preparedClient(url)
         val ipfsWb = WebClient.create("https://ipfs.io/ipfs/")
         val ipfsClient = IPFSClient(ipfsWb, mapper)
 

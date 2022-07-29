@@ -119,7 +119,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ownershipClient
         if(part.isNullOrEmpty()){
             //fallback: if everything else failed, we set the royalties to 0 for the token first owner
             try {
-                val ownerships = ownershipClient.ownershipsByToken("$contract:$tokenId", continuation = null, sortOnFirstLevel = true)
+                val ownerships = ownershipClient.ownershipsByToken("$contract:$tokenId", continuation = null, sortOnFirstLevel = true, sortAsc = true)
                 if (ownerships.items.isNotEmpty()){
                     val firstOwner = ownerships.items.first()
                     part = listOf(Part(address = firstOwner.account!!.address, share = 0))

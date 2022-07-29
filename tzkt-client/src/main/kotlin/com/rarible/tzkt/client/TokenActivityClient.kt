@@ -95,9 +95,9 @@ class TokenActivityClient(
                     when {
                         prevDate != null && prevId != null -> {
                             queryParam("timestamp.eq", prevDate.toString())
-                            queryParam("id.${sortPredicate(sortAsc)}", prevId.toString())
+                            queryParam("id.${direction(sortAsc)}", prevId.toString())
                         }
-                        prevDate != null -> queryParam("timestamp.${sortPredicate(sortAsc)}", prevDate.toString())
+                        prevDate != null -> queryParam("timestamp.${direction(sortAsc)}", prevDate.toString())
                     }
                     queryParam("sort.${sorting(sortAsc)}", "timestamp")
                     type?.let {

@@ -3,6 +3,7 @@ package com.rarible.tzkt.client
 import com.rarible.tzkt.model.ItemId
 import com.rarible.tzkt.model.OwnershipId
 import com.rarible.tzkt.model.Page
+import com.rarible.tzkt.model.TimestampIdContinuation
 import com.rarible.tzkt.model.TokenBalance
 import com.rarible.tzkt.model.TzktNotFound
 import com.rarible.tzkt.utils.Tezos
@@ -14,21 +15,36 @@ class OwnershipClient(
 ) : BaseClient(webClient) {
 
     suspend fun ownershipsAll(continuation: String?, size: Int): Page<TokenBalance> {
-        val ownerships = invoke<List<TokenBalance>> { builder ->
+        val parsedContinuation = continuation?.let { TimestampIdContinuation.parse(it) }
+        val ownerships: List<TokenBalance> = parsedContinuation?.let {
+            val prevOwnership = balanceByOwnership(parsedContinuation.id)
+            invoke { builder ->
+                builder.path(BASE_PATH)
+                    .queryParam("token.standard", "fa2")
+                    .queryParam("account.ni", NULL_ADDRESSES_STRING)
+                    .queryParam("balance.gt", 0)
+                    .queryParam("lastTime.le", parsedContinuation.date)
+                    .queryParam("id.lt", prevOwnership.id)
+                    .queryParam("sort.desc", "lastTime,id")
+                    .queryParam("limit", size)
+            }
+        } ?: invoke { builder ->
             builder.path(BASE_PATH)
-                .queryParam("sort.desc", "id")
                 .queryParam("token.standard", "fa2")
                 .queryParam("account.ni", NULL_ADDRESSES_STRING)
                 .queryParam("balance.gt", 0)
+                .queryParam("sort.desc", "lastTime,id")
                 .queryParam("limit", size)
-                .apply {
-                    continuation?.let { queryParam("offset.cr", it) }
-                }
         }
-        return Page.Get(
+
+        val nextContinuation = if (ownerships.size >= size) {
+            val ownership = ownerships.last()
+            TimestampIdContinuation(ownership.lastTime!!.toInstant(), "${ownership.ownershipId()}")
+        } else null
+
+        return Page(
             items = ownerships,
-            size = size,
-            last = { it.id.toString() }
+            continuation = nextContinuation?.let { it.toString() }
         )
     }
 
@@ -47,30 +63,75 @@ class OwnershipClient(
         return ownership.firstOrNull() ?: throw TzktNotFound("Ownership ${ownershipId} wasn't found")
     }
 
-    suspend fun ownershipsByToken(itemId: String, size: Int = DEFAULT_SIZE, continuation: String?, sortAsc: Boolean = true, sortOnFirstLevel: Boolean = false): Page<TokenBalance> {
+    suspend fun ownershipsByToken(
+        itemId: String,
+        size: Int = DEFAULT_SIZE,
+        continuation: String?,
+        sortAsc: Boolean = false,
+        sortOnFirstLevel: Boolean = false
+    ): Page<TokenBalance> {
         val parsed = ItemId.parse(itemId)
-        val ownerships = invoke<List<TokenBalance>> { builder ->
+        val parsedContinuation = continuation?.let { TimestampIdContinuation.parse(it) }
+        val ownerships: List<TokenBalance> = parsedContinuation?.let {
+            val prevOwnership = balanceByOwnership(parsedContinuation.id)
+            invoke { builder ->
+                builder.path(BASE_PATH)
+                    .queryParam("token.contract", parsed.contract)
+                    .queryParam("token.tokenId", parsed.tokenId)
+                    .queryParam("account.ni", NULL_ADDRESSES_STRING)
+                    .queryParam("balance.gt", 0)
+                    .queryParam("id.${direction(sortAsc)}", prevOwnership.id)
+                    .queryParam("lastTime.${directionEqual(sortAsc)}", parsedContinuation.date)
+                    .apply {
+                        val sorting = if (sortAsc) "sort.asc" else "sort.desc"
+                        if (sortOnFirstLevel) {
+                            queryParam(sorting, "firstLevel,id")
+                        } else {
+                            queryParam(sorting, "lastTime,id")
+                        }
+                    }
+                    .queryParam("limit", size)
+            }
+        } ?: invoke { builder ->
             builder.path(BASE_PATH)
                 .queryParam("token.contract", parsed.contract)
                 .queryParam("token.tokenId", parsed.tokenId)
                 .queryParam("account.ni", NULL_ADDRESSES_STRING)
                 .queryParam("balance.gt", 0)
                 .apply {
-                    queryParam("limit", size)
-                    continuation?.let { queryParam("offset.cr", it) }
                     val sorting = if (sortAsc) "sort.asc" else "sort.desc"
-                    if(sortOnFirstLevel)
-                        queryParam(sorting, "firstLevel")
-                    else
-                        queryParam(sorting, "id")
-
+                    if (sortOnFirstLevel) {
+                        queryParam(sorting, "firstLevel,id")
+                    } else {
+                        queryParam(sorting, "lastTime,id")
+                    }
                 }
+                .queryParam("limit", size)
         }
-        return Page.Get(
+
+        val nextContinuation = if (ownerships.size >= size) {
+            val ownership = ownerships.last()
+            TimestampIdContinuation(ownership.lastTime!!.toInstant(), "${ownership.ownershipId()}")
+        } else null
+
+        return Page(
             items = ownerships,
-            size = size,
-            last = { it.id.toString() }
+            continuation = nextContinuation?.let { it.toString() }
         )
+    }
+
+    private suspend fun balanceByOwnership(id: String): TokenBalance {
+        val ownershipId = OwnershipId.parse(id)
+        return invoke<List<TokenBalance>> { builder ->
+            builder.path(BASE_PATH)
+                .queryParam("token.contract", ownershipId.contract)
+                .queryParam("token.tokenId", ownershipId.tokenId)
+                .queryParam("account", ownershipId.owner)
+        }.firstOrNotFound(id)
+    }
+
+    private fun List<TokenBalance>.firstOrNotFound(id: String): TokenBalance {
+        return this.firstOrNull() ?: throw TzktNotFound("Ownership ${id} wasn't found")
     }
 
     companion object {

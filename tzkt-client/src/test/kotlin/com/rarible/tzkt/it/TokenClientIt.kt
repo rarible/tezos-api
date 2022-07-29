@@ -9,7 +9,7 @@ import com.rarible.tzkt.client.TokenClient
 import com.rarible.tzkt.config.KnownAddresses
 import com.rarible.tzkt.meta.MetaService
 import com.rarible.tzkt.model.Part
-import com.rarible.tzkt.model.TimestampItemIdContinuation
+import com.rarible.tzkt.model.TimestampIdContinuation
 import com.rarible.tzkt.royalties.RoyaltiesHandler
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.DisabledOnOs
 import org.junit.jupiter.api.condition.OS
-import org.springframework.web.reactive.function.client.ExchangeStrategies
 import org.springframework.web.reactive.function.client.WebClient
+import preparedClient
 import java.time.Instant
 
 // this test will be disabled on jenkins
@@ -38,14 +38,8 @@ class TokenClientIt {
     val BIDOU_8x8 = "KT1MxDwChiDwd6WBVs24g1NjERUoK622ZEFp"
     val BIDOU_24x24 = "KT1TR1ErEQPTdtaJ7hbvKTJSa1tsGnHGZTpf"
 
-    val client = WebClient.builder()
-        .exchangeStrategies(
-            ExchangeStrategies.builder()
-                .codecs { it.defaultCodecs().maxInMemorySize(10_000_000) }
-                .build())
-//        .baseUrl("https://api.ithacanet.tzkt.io")
-        .baseUrl("https://api.tzkt.io")
-        .build()
+    // https://api.ithacanet.tzkt.io
+    val client = preparedClient("https://api.tzkt.io")
 
     val config = KnownAddresses(
         hen = HEN,
@@ -125,7 +119,7 @@ class TokenClientIt {
         val page = tokenClient.allTokensByLastUpdate(2, null, false)
 
         assertThat(page.items).hasSize(2)
-        val continuation = page.continuation?.let { TimestampItemIdContinuation.parse(it) }
+        val continuation = page.continuation?.let { TimestampIdContinuation.parse(it) }
         assertThat(continuation?.date).isBefore(Instant.now())
         assertThat(continuation?.id).isEqualTo(page.items.last().itemId())
         assertThat(continuation?.date).isEqualTo(page.items.last().lastTime?.toInstant())
@@ -133,7 +127,7 @@ class TokenClientIt {
         val nextPage = tokenClient.allTokensByLastUpdate(2, continuation.toString(), false)
 
         assertThat(nextPage.items).hasSize(2)
-        val nextContinuation = nextPage.continuation?.let { TimestampItemIdContinuation.parse(it) }
+        val nextContinuation = nextPage.continuation?.let { TimestampIdContinuation.parse(it) }
         assertThat(nextContinuation?.date).isBefore(Instant.now())
         assertThat(nextContinuation?.id).isEqualTo(nextPage.items.last().itemId())
         assertThat(nextContinuation?.date).isEqualTo(nextPage.items.last().lastTime?.toInstant())

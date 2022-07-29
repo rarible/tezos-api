@@ -7,13 +7,13 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.DisabledOnOs
 import org.junit.jupiter.api.condition.OS
-import org.springframework.web.reactive.function.client.WebClient
+import preparedClient
 
 // this test will be disabled on jenkins
 @DisabledOnOs(OS.LINUX)
 class ActivityClientIt {
 
-    val client = WebClient.create("https://api.tzkt.io")
+    val client = preparedClient("https://api.tzkt.io")
     val activityClient = TokenActivityClient(client)
 
     @Test

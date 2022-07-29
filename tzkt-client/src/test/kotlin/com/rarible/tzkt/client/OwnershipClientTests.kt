@@ -150,12 +150,12 @@ class OwnershipClientTests : BaseClientTests() {
         var contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
         var tokenId = "631268"
         val ownerships = ownershipClient.ownershipsByToken(ItemId(contract, tokenId).toString(), 2, null, true)
-        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&balance.gt=0&limit=2&sort.asc=id")
+        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&balance.gt=0&sort.asc=lastTime,id&limit=2")
         ownerships.items.forEach {
             assertThat(it.token?.tokenId).isEqualTo(tokenId)
             assertThat(it.token?.contract?.address).isEqualTo(contract)
         }
-        assertThat(ownerships.continuation).isEqualTo("6924058")
+        assertThat(ownerships.continuation).isEqualTo("1642612650000_KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:631268:tz1NRh1vTn3b38m7Gg2qP81dqb5Kr2BAjwJV")
     }
 
     @Test
@@ -241,12 +241,12 @@ class OwnershipClientTests : BaseClientTests() {
         var contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
         var tokenId = "631268"
         val ownerships = ownershipClient.ownershipsByToken(ItemId(contract, tokenId).toString(), 2, "6924058", true)
-        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&balance.gt=0&limit=2&offset.cr=6924058&sort.asc=id")
+        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&balance.gt=0&sort.asc=lastTime,id&limit=2")
         ownerships.items.forEach {
             assertThat(it.token?.tokenId).isEqualTo(tokenId)
             assertThat(it.token?.contract?.address).isEqualTo(contract)
         }
-        assertThat(ownerships.continuation).isEqualTo("7146690")
+        assertThat(ownerships.continuation).isEqualTo("1642607010000_KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:631268:tz1ciFAFNfaPY4562dHy7BbCqf4vG39kLJa1")
     }
 
     @Test
@@ -337,9 +337,9 @@ class OwnershipClientTests : BaseClientTests() {
         """.trimIndent())
 
         val ownerships = ownershipClient.ownershipsAll(null, 2)
-        assertThat(request().path).isEqualTo("/v1/tokens/balances?sort.desc=id&token.standard=fa2&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&balance.gt=0&limit=2")
+        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.standard=fa2&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&balance.gt=0&sort.desc=lastTime,id&limit=2")
         assertThat(ownerships.items).hasSize(2)
-        assertThat(ownerships.continuation).isEqualTo("121040")
+        assertThat(ownerships.continuation).isEqualTo("1657006150000_KT1Pm2H31abC73TfgiJTJrKfzozobFxfFy5a:51:tz1QCMomemFVu1GZtP7zRGPXwNCw3jcAQ3Dp")
     }
 
     @Test
@@ -430,9 +430,9 @@ class OwnershipClientTests : BaseClientTests() {
         """.trimIndent())
 
         val ownerships = ownershipClient.ownershipsAll("121040", 2)
-        assertThat(request().path).isEqualTo("/v1/tokens/balances?sort.desc=id&token.standard=fa2&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&balance.gt=0&limit=2&offset.cr=121040")
+        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.standard=fa2&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&balance.gt=0&sort.desc=lastTime,id&limit=2")
         assertThat(ownerships.items).hasSize(2)
-        assertThat(ownerships.continuation).isEqualTo("121038")
+        assertThat(ownerships.continuation).isEqualTo("1657006150000_KT1Pm2H31abC73TfgiJTJrKfzozobFxfFy5a:49:tz1QCMomemFVu1GZtP7zRGPXwNCw3jcAQ3Dp")
     }
 
     @Test

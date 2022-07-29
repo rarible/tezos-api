@@ -32,11 +32,8 @@ abstract class BaseClient(
     }
 
     fun sorting(sortAsc: Boolean) = if (sortAsc) "asc" else "desc"
-
-    fun sortPredicate(asc: Boolean = false) = when (asc) {
-        true -> "gt"
-        else -> "lt"
-    }
+    fun directionEqual(asc: Boolean) = if (asc) "ge" else "le"
+    fun direction(asc: Boolean = false) = if (asc) "gt" else "lt"
 
     companion object {
         const val MAX_BATCH_SIZE = 100 // tzkt supports only 100 items per request

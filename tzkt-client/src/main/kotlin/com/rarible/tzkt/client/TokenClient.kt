@@ -4,7 +4,7 @@ import com.rarible.tzkt.meta.MetaService
 import com.rarible.tzkt.model.ItemId
 import com.rarible.tzkt.model.Page
 import com.rarible.tzkt.model.Part
-import com.rarible.tzkt.model.TimestampItemIdContinuation
+import com.rarible.tzkt.model.TimestampIdContinuation
 import com.rarible.tzkt.model.Token
 import com.rarible.tzkt.model.TokenActivity
 import com.rarible.tzkt.model.TokenBalanceShort
@@ -74,7 +74,7 @@ class TokenClient(
         loadMeta: Boolean = false,
         checkBalance: Boolean = true
     ): Page<Token> {
-        var parsedContinuation = continuation?.let { TimestampItemIdContinuation.parse(it) }
+        val parsedContinuation = continuation?.let { TimestampIdContinuation.parse(it) }
 
         val tokens = parsedContinuation?.let { continuation ->
             // we need to identify internal id for correct continuation
@@ -120,7 +120,7 @@ class TokenClient(
 
         val nextContinuation = if (balancedSlice.size >= size) {
             val token = balancedSlice.last()
-            TimestampItemIdContinuation(token.lastTime!!.toInstant(), "${token.itemId()}")
+            TimestampIdContinuation(token.lastTime!!.toInstant(), "${token.itemId()}")
         } else null
 
         return Page(
@@ -233,9 +233,6 @@ class TokenClient(
                 .queryParam("select", "token.contract.address,token.tokenId,balance")
         }
     }
-
-    private fun directionEqual(asc: Boolean) = if (asc) "ge" else "le"
-    private fun direction(asc: Boolean) = if (asc) "gt" else "lt"
 
     private fun List<Token>.firstOrNotFound(itemId: String): Token {
         return this.firstOrNull() ?: throw TzktNotFound("Token ${itemId} wasn't found")
