@@ -177,6 +177,7 @@ class TokenClientTests : BaseClientTests() {
         }
     }
 ]""")
+        mock("[]")
         mock("""[
             {
                 "id": 3489772,
@@ -326,6 +327,8 @@ class TokenClientTests : BaseClientTests() {
         }
     }
 ]""")
+        mock("[]")
+        mock("[]")
 
         val firstTokenRequest = tokenClient.allTokensByLastUpdate(2, null, false)
         assertThat(firstTokenRequest.items.size).isEqualTo(2)

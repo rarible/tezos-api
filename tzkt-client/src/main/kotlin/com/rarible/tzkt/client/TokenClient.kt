@@ -29,15 +29,7 @@ class TokenClient(
         tokens(listOf(itemId), loadMeta, checkBalance).firstOrNotFound(itemId)
 
     suspend fun tokens(ids: List<String>, loadMeta: Boolean = false, checkBalance: Boolean = true) = coroutineScope {
-        // This is optimization for getting items by id
-        // Grouping by contract
-        val groups = ids.map { ItemId.parse(it) }.groupBy({ it.contract }, { it.tokenId })
-            .map { (contract, ids) ->
-
-                // chunking to prevent huge number of ids in the GET request
-                ids.chunked(100).map { Pair(contract, it) }
-            }.flatten()
-
+        val groups = groupIds(ids)
         val tokensDeferred = async {
             groups
                 .map { (contract, ids) -> async { tokens(contract, ids, loadMeta) } }
@@ -48,29 +40,10 @@ class TokenClient(
         // We need balances to determine which items were deleted
         val balancesDeferred = async {
             if (checkBalance) {
-                groups
-                    .map { (contract, ids) -> async { balances(contract, ids) } }
-                    .awaitAll()
-                    .flatten()
-            } else emptyList()
+                burned(ids)
+            } else emptyMap()
         }
-        val tokens = tokensDeferred.await()
-
-        // If balance exists -> item wasn't burned
-        val burned = balancesDeferred.await().associateBy({ it.itemId() }, { it.balance })
-        if (burned.isNotEmpty()) {
-            tokens.map {
-                if (burned.containsKey(it.itemId())) {
-                    val supply = getBigInt(it.totalSupply)
-                    val burned = getBigInt(burned[it.itemId()])
-                    it.copy(totalSupply = supply.minus(burned).abs().toString())
-                } else {
-                    it
-                }
-            }
-        } else {
-            tokens
-        }
+        adjustTokens(tokensDeferred.await(), balancesDeferred.await())
     }
 
     suspend fun tokenMeta(itemId: String): TokenMeta {
@@ -100,7 +73,8 @@ class TokenClient(
         size: Int = DEFAULT_SIZE,
         continuation: String?,
         sortAsc: Boolean = false,
-        loadMeta: Boolean = false
+        loadMeta: Boolean = false,
+        checkBalance: Boolean = true
     ): Page<Token> {
         var parsedContinuation = continuation?.let { TimestampItemIdContinuation.parse(it) }
 
@@ -131,19 +105,26 @@ class TokenClient(
         }
 
         // enrich with parsed meta
-        val slice = tokens.subList(0, min(size, tokens.size)).map { token ->
+        val enrichedSlice = tokens.subList(0, min(size, tokens.size)).map { token ->
             if (loadMeta) {
                 token.copy(meta = metaService.meta(token))
             } else token
         }
 
-        val nextContinuation = if (slice.size >= size) {
-            val token = slice.last()
+        // We need balances to determine which items were deleted
+        // Run this check only if size < REQUEST_LIMIT
+        val balancedSlice = if (checkBalance && enrichedSlice.size < REQUEST_LIMIT) {
+            val ids = enrichedSlice.map { it.itemId() }
+            adjustTokens(enrichedSlice, burned(ids))
+        } else enrichedSlice
+
+        val nextContinuation = if (balancedSlice.size >= size) {
+            val token = balancedSlice.last()
             TimestampItemIdContinuation(token.lastTime!!.toInstant(), "${token.itemId()}")
         } else null
 
         return Page(
-            items = tokens,
+            items = balancedSlice,
             continuation = nextContinuation?.let { it.toString() }
         )
     }
@@ -254,11 +235,39 @@ class TokenClient(
         }
     }
 
-    fun directionEqual(asc: Boolean) = if (asc) "gte" else "lte"
-    fun direction(asc: Boolean) = if (asc) "gt" else "lt"
+    private fun directionEqual(asc: Boolean) = if (asc) "gte" else "lte"
+    private fun direction(asc: Boolean) = if (asc) "gt" else "lt"
 
-    fun List<Token>.firstOrNotFound(itemId: String): Token {
+    private fun List<Token>.firstOrNotFound(itemId: String): Token {
         return this.firstOrNull() ?: throw TzktNotFound("Token ${itemId} wasn't found")
+    }
+
+    private suspend fun burned(ids: List<String>) = coroutineScope {
+        val groups = groupIds(ids)
+        val balancesDeferred =
+            groups
+                .map { (contract, ids) -> async { balances(contract, ids) } }
+                .awaitAll()
+                .flatten()
+
+        // itemId -> burned count
+        balancesDeferred.associateBy({ it.itemId() }, { it.balance })
+    }
+
+    fun adjustTokens(tokens: List<Token>, burned: Map<String, String?>): List<Token> {
+        return if (burned.isNotEmpty()) {
+            tokens.map {
+                if (burned.containsKey(it.itemId())) {
+                    val supply = getBigInt(it.totalSupply)
+                    val burned = getBigInt(burned[it.itemId()])
+                    it.copy(totalSupply = supply.minus(burned).abs().toString())
+                } else {
+                    it
+                }
+            }
+        } else {
+            tokens
+        }
     }
 
     private suspend fun toPage(tokensIds: List<String>, nextContinuation: Any?, checkBalance: Boolean): Page<Token> {
@@ -268,6 +277,15 @@ class TokenClient(
             continuation = nextContinuation?.let { it.toString() }
         )
     }
+
+    // This is optimization for getting items by id
+    // Grouping by contract
+    private fun groupIds(ids: List<String>) = ids.map { ItemId.parse(it) }.groupBy({ it.contract }, { it.tokenId })
+        .map { (contract, ids) ->
+
+            // chunking to prevent huge number of ids in the GET request
+            ids.chunked(100).map { Pair(contract, it) }
+        }.flatten()
 
     private fun getBigInt(value: String?) = try {
         BigInteger(value)
@@ -280,5 +298,6 @@ class TokenClient(
         const val BASE_PATH_BALANCES = "v1/tokens/balances"
         const val BASE_PATH_TRANSFERS = "v1/tokens/transfers"
         const val DEFAULT_SIZE = 1000
+        const val REQUEST_LIMIT = 50
     }
 }
