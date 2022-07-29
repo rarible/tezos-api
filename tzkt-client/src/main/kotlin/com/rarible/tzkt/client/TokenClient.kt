@@ -234,7 +234,7 @@ class TokenClient(
         }
     }
 
-    private fun directionEqual(asc: Boolean) = if (asc) "gte" else "lte"
+    private fun directionEqual(asc: Boolean) = if (asc) "ge" else "le"
     private fun direction(asc: Boolean) = if (asc) "gt" else "lt"
 
     private fun List<Token>.firstOrNotFound(itemId: String): Token {
