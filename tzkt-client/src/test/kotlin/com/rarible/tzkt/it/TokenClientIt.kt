@@ -95,7 +95,17 @@ class TokenClientIt {
     @Test
     fun `should have correct tags`() = runBlocking<Unit> {
         val token = tokenClient.token("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:2382", true)
-        assertThat(token.meta?.tags).isEqualTo(listOf("tattoo", "money", "animation", "shit", "renatomoll", "capitalism", "life"))
+        assertThat(token.meta?.tags).isEqualTo(
+            listOf(
+                "tattoo",
+                "money",
+                "animation",
+                "shit",
+                "renatomoll",
+                "capitalism",
+                "life"
+            )
+        )
     }
 
     @Test
@@ -152,5 +162,17 @@ class TokenClientIt {
     fun `should have supply = 0`() = runBlocking<Unit> {
         val token = tokenClient.token("KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS:73086")
         assertThat(token.isDeleted()).isTrue()
+    }
+
+    @Test
+    fun `shouldn have 1000 items`() = runBlocking<Unit> {
+        val page = tokenClient.allTokensByLastUpdate(
+            1000,
+            "1654536194000_KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi:831691",
+            sortAsc = false,
+            loadMeta = false,
+            checkBalance = true
+        )
+        assertThat(page.items).hasSize(1000)
     }
 }

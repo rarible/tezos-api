@@ -30,20 +30,18 @@ class TokenClient(
 
     suspend fun tokens(ids: List<String>, loadMeta: Boolean = false, checkBalance: Boolean = true) = coroutineScope {
         val groups = groupIds(ids)
-        val tokensDeferred = async {
-            groups
-                .map { (contract, ids) -> async { tokens(contract, ids, loadMeta) } }
-                .awaitAll()
-                .flatten()
-        }
+        val tokens = groups
+            .map { (contract, ids) -> async { tokens(contract, ids, loadMeta) } }
+            .awaitAll()
+            .flatten()
 
         // We need balances to determine which items were deleted
-        val balancesDeferred = async {
-            if (checkBalance) {
-                burned(ids)
-            } else emptyMap()
-        }
-        adjustTokens(tokensDeferred.await(), balancesDeferred.await())
+        val balances = if (checkBalance) {
+            val tzktIds = tokens.map { it.id }
+            burnedByIds(tzktIds)
+        } else emptyMap()
+
+        adjustBurnedTokens(tokens, balances)
     }
 
     suspend fun tokenMeta(itemId: String): TokenMeta {
@@ -113,11 +111,10 @@ class TokenClient(
 
         // We need balances to determine which items were deleted
         // Run this check only if size < REQUEST_LIMIT
-        val balancedSlice = if (checkBalance && enrichedSlice.size <= REQUEST_LIMIT) {
-            val ids = enrichedSlice.map { it.itemId() }
-            adjustTokens(enrichedSlice, burned(ids))
+        val balancedSlice = if (checkBalance) {
+            val ids = enrichedSlice.map { it.id }
+            adjustBurnedTokens(enrichedSlice, burnedByIds(ids))
         } else {
-            logger.warn("Exceeded request limit for getting balances ${enrichedSlice.size} > $REQUEST_LIMIT")
             enrichedSlice
         }
 
@@ -227,11 +224,10 @@ class TokenClient(
         }
     }
 
-    suspend fun balances(contract: String, ids: List<String>, loadMeta: Boolean = false): List<TokenBalanceShort> {
+    suspend fun balancesByIds(ids: List<Int>): List<TokenBalanceShort> {
         return invoke<List<TokenBalanceShort>> {
             it.path(BASE_PATH_BALANCES)
-                .queryParam("token.contract", contract)
-                .queryParam("token.tokenId.in", ids.joinToString(","))
+                .queryParam("token.id.in", ids.joinToString(","))
                 .queryParam("account.in", Tezos.NULL_ADDRESSES_STRING)
                 .queryParam("balance.gt", 0)
                 .queryParam("select", "token.contract.address,token.tokenId,balance")
@@ -245,11 +241,11 @@ class TokenClient(
         return this.firstOrNull() ?: throw TzktNotFound("Token ${itemId} wasn't found")
     }
 
-    private suspend fun burned(ids: List<String>) = coroutineScope {
-        val groups = groupIds(ids)
+    private suspend fun burnedByIds(ids: List<Int>) = coroutineScope {
+        val groups = ids.chunked(CHUNK_LIMIT)
         val balancesDeferred =
             groups
-                .map { (contract, ids) -> async { balances(contract, ids) } }
+                .map { async { balancesByIds(it) } }
                 .awaitAll()
                 .flatten()
 
@@ -257,7 +253,7 @@ class TokenClient(
         balancesDeferred.associateBy({ it.itemId() }, { it.balance })
     }
 
-    fun adjustTokens(tokens: List<Token>, burned: Map<String, String?>): List<Token> {
+    private fun adjustBurnedTokens(tokens: List<Token>, burned: Map<String, String?>): List<Token> {
         return if (burned.isNotEmpty()) {
             tokens.map {
                 if (burned.containsKey(it.itemId())) {
@@ -287,7 +283,7 @@ class TokenClient(
         .map { (contract, ids) ->
 
             // chunking to prevent huge number of ids in the GET request
-            ids.chunked(100).map { Pair(contract, it) }
+            ids.chunked(CHUNK_LIMIT).map { Pair(contract, it) }
         }.flatten()
 
     private fun getBigInt(value: String?) = try {
@@ -301,6 +297,6 @@ class TokenClient(
         const val BASE_PATH_BALANCES = "v1/tokens/balances"
         const val BASE_PATH_TRANSFERS = "v1/tokens/transfers"
         const val DEFAULT_SIZE = 1000
-        const val REQUEST_LIMIT = 50
+        const val CHUNK_LIMIT = 100
     }
 }
