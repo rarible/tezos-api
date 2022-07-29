@@ -240,15 +240,13 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ownershipClient
         var partList: MutableList<Part> = ArrayList()
         try {
             val shares = data["shares"].fieldNames()
-            var multiplier = 10
+            val decimals = data["decimals"].asDouble()
             shares.forEach {
                 //check if it is codecrafting pattern
-                if(data["shares"][it].asText().length < data["decimals"].asInt()){
-                    multiplier = 100
-                }
+                val percentage = data["shares"][it].asDouble() * 100 / Math.pow(10.0, decimals) * 100
                 partList.add(
                     Part(
-                        it, data["shares"][it].asInt() * multiplier
+                        it, percentage.toInt()
                     )
                 )
             }

@@ -1386,9 +1386,9 @@ class RoyaltiesTests : BaseClientTests() {
             .codecs { configurer -> configurer.defaultCodecs().maxInMemorySize(2 * 1024 * 1024) }.build()
         val bmClient = BigMapKeyClient(clientBuilder)
         val ownershipClient = OwnershipClient(clientBuilder)
-        val ipfs = IPFSClient(WebClient.create("https://ipfs.io/"), mapper)
+        val ipfs = IPFSClient(WebClient.create("https://ipfs.io/ipfs/"), mapper)
         val handler = RoyaltiesHandler(bmClient, ownershipClient, ipfs, royaltiesConfig)
-        val id = "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS:77325"
+        val id = "KT1L6BTeGP5NcVmRjys85EaDxBymxMyx5rj8:0"
         val parts = handler.processRoyalties(id)
         println(parts)
     }
