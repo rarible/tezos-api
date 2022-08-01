@@ -45,7 +45,7 @@ data class GetOrdersByItemCustomQuery(
                 marketplace_order(
                     where: {${conditions.joinToString(",\n")}}
                     limit: ${'$'}limit
-                    order_by: {last_updated_at: desc, id: desc}
+                    order_by: {last_updated_at: desc, id: desc, take_value: asc}
                 ) { __typename ...order } }
             fragment order on marketplace_order {
                 cancelled

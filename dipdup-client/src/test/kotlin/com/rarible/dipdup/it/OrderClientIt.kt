@@ -23,9 +23,15 @@ class OrderClientIt {
     }
 
     @Test
-    fun `should have  for legacy order`() = runBlocking<Unit> {
+    fun `should have for legacy order`() = runBlocking<Unit> {
         val order = orderClient.getOrderById("6345c41b-b8a2-5697-8e29-1438cc5ddf6b")
         assertThat(order.fill).isBetween(BigDecimal("2.0"), order.make.assetValue)
+    }
+
+    @Test
+    fun `should have sort`() = runBlocking<Unit> {
+        val orders = orderClient.getOrdersByItem("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton", "745480", null, "XTZ", emptyList(), 1, null)
+        assertThat(orders.orders.first().take.assetValue).isLessThanOrEqualTo(BigDecimal("70"))
     }
 
 }
