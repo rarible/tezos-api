@@ -7,11 +7,12 @@ import com.rarible.dipdup.client.converter.convertAllDesc
 import com.rarible.dipdup.client.converter.convertByItemAsc
 import com.rarible.dipdup.client.converter.convertByItemDesc
 import com.rarible.dipdup.client.core.model.DipDupActivity
-import com.rarible.dipdup.client.core.model.WithOperationCounter
+import com.rarible.dipdup.client.core.util.isValidUUID
 import com.rarible.dipdup.client.model.DipDupActivitiesPage
 import com.rarible.dipdup.client.model.DipDupActivityContinuation
 import com.rarible.dipdup.client.model.DipDupActivityType
 import java.time.LocalDateTime
+import java.time.OffsetDateTime
 import java.time.ZoneOffset
 
 class OrderActivityClient(
@@ -24,16 +25,15 @@ class OrderActivityClient(
         continuation: String? = null,
         sortAsc: Boolean = false
     ): DipDupActivitiesPage {
-        val parsedContinuation: DipDupActivityContinuation =
-            continuation?.let { DipDupActivityContinuation.parse(it) } ?: mockContinuation(sortAsc)
+        val (date, id) = activityOperation(continuation, sortAsc)
         val activities = when (sortAsc) {
             true -> convertAllAsc(
                 safeExecution(
                     GetActivitiesAscQuery(
                         types.map { it.name },
                         limit,
-                        parsedContinuation.date.toString(),
-                        parsedContinuation.id
+                        date.toString(),
+                        id
                     )
                 ).marketplace_activity
             )
@@ -42,23 +42,13 @@ class OrderActivityClient(
                     GetActivitiesDescQuery(
                         types.map { it.name },
                         limit,
-                        parsedContinuation.date.toString(),
-                        parsedContinuation.id
+                        date.toString(),
+                        id
                     )
                 ).marketplace_activity
             )
         }
-        val nextContinuation = when (activities.size) {
-            limit -> activities[limit - 1].let {
-                val withOperationCounter = it as WithOperationCounter
-                DipDupActivityContinuation(it.date, withOperationCounter.operationCounter).toString()
-            }
-            else -> null
-        }
-        return DipDupActivitiesPage(
-            activities = activities,
-            continuation = nextContinuation
-        )
+        return page(activities, limit)
     }
 
     suspend fun getActivitiesByItem(
@@ -69,8 +59,7 @@ class OrderActivityClient(
         continuation: String? = null,
         sortAsc: Boolean = false
     ): DipDupActivitiesPage {
-        val parsedContinuation: DipDupActivityContinuation =
-            continuation?.let { DipDupActivityContinuation.parse(it) } ?: mockContinuation(sortAsc)
+        val (date, id) = activityOperation(continuation, sortAsc)
         val activities = when (sortAsc) {
             true -> convertByItemAsc(
                 safeExecution(
@@ -79,8 +68,8 @@ class OrderActivityClient(
                         contract,
                         tokenId,
                         limit,
-                        parsedContinuation.date.toString(),
-                        parsedContinuation.id
+                        date.toString(),
+                        id
                     )
                 ).marketplace_activity
             )
@@ -91,16 +80,39 @@ class OrderActivityClient(
                         contract,
                         tokenId,
                         limit,
-                        parsedContinuation.date.toString(),
-                        parsedContinuation.id
+                        date.toString(),
+                        id
                     )
                 ).marketplace_activity
             )
         }
+        return page(activities, limit)
+    }
+
+    suspend fun getActivitiesByIds(ids: List<String>): List<DipDupActivity> {
+        val response = safeExecution(GetActivitiesByIdsQuery(ids))
+        return convertByIds(response.marketplace_activity)
+    }
+
+    suspend fun activityOperation(continuation: String?, sortAsc: Boolean): Pair<OffsetDateTime, Int> {
+        var (date, id) = mockContinuation(sortAsc)
+        continuation?.let {
+            val parsed = DipDupActivityContinuation.parse(it)!!
+            date = parsed.date
+            if (isValidUUID(parsed.id)) {
+                val response = safeExecution(GetActivitiesByIdsQuery(listOf(parsed.id)))
+                if (response.marketplace_activity.size > 0) {
+                    id = response.marketplace_activity.first().activity.operation_counter
+                }
+            }
+        }
+        return date to id
+    }
+
+    private fun page(activities: List<DipDupActivity>, limit: Int): DipDupActivitiesPage {
         val nextContinuation = when (activities.size) {
             limit -> activities[limit - 1].let {
-                val withOperationCounter = it as WithOperationCounter
-                DipDupActivityContinuation(it.date, withOperationCounter.operationCounter).toString()
+                DipDupActivityContinuation(it.date, it.id).toString()
             }
             else -> null
         }
@@ -110,15 +122,10 @@ class OrderActivityClient(
         )
     }
 
-    suspend fun getActivitiesByIds(ids: List<String>): List<DipDupActivity> {
-        val response = safeExecution(GetActivitiesByIdsQuery(ids))
-        return convertByIds(response.marketplace_activity)
-    }
-
-    private fun mockContinuation(sortAsc: Boolean): DipDupActivityContinuation {
+    private fun mockContinuation(sortAsc: Boolean): Pair<OffsetDateTime, Int> {
         return when (sortAsc) {
-            true -> DipDupActivityContinuation(LocalDateTime.now().minusYears(1000).atOffset(ZoneOffset.UTC), 0)
-            else -> DipDupActivityContinuation(LocalDateTime.now().plusYears(1000).atOffset(ZoneOffset.UTC), Int.MAX_VALUE)
+            true -> LocalDateTime.now().minusYears(1000).atOffset(ZoneOffset.UTC) to 0
+            else ->LocalDateTime.now().plusYears(1000).atOffset(ZoneOffset.UTC) to Int.MAX_VALUE
         }
     }
 

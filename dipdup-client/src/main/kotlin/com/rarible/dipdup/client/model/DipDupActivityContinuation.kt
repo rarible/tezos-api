@@ -6,11 +6,11 @@ import java.time.ZoneOffset
 
 data class DipDupActivityContinuation(
     val date: OffsetDateTime,
-    val id: Int?
+    val id: String
 ) {
 
     override fun toString(): String {
-        return "${date.toEpochSecond() * 1_000}_${id.toString()}"
+        return "${date.toEpochSecond() * 1_000}_${id}"
     }
 
     companion object {
@@ -19,7 +19,7 @@ data class DipDupActivityContinuation(
                 val (sortField, idStr) = value.split('_')
                 DipDupActivityContinuation(
                     date = Instant.ofEpochMilli(sortField.toLong()).atOffset(ZoneOffset.UTC),
-                    id = idStr.toInt()
+                    id = idStr
                 )
             }
         }

@@ -1,5 +1,6 @@
 package com.rarible.dipdup.client.model
 
+import com.rarible.dipdup.client.core.util.isValidUUID
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -34,15 +35,6 @@ data class DipDupContinuation(
             val raw = value.split('_')
             return raw.size == 2 && isValidUUID(raw.last())
         }
-
-        fun isValidUUID(str: String?): Boolean {
-            return if (str == null) {
-                false
-            } else UUID_REGEX_PATTERN.matcher(str).matches()
-        }
-
-        private val UUID_REGEX_PATTERN: Pattern =
-            Pattern.compile("^[{]?[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}[}]?$")
     }
 
 }
