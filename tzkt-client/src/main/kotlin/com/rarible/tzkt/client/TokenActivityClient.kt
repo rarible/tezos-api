@@ -110,6 +110,7 @@ class TokenActivityClient(
                                 queryParam("to.ni", NULL_ADDRESSES_STRING)
                             }
                             ActivityType.BURN -> {
+                                queryParam("from.null", "false")
                                 queryParam("to.in", NULL_ADDRESSES_STRING)
                             }
                             ActivityType.TRANSFER -> {
