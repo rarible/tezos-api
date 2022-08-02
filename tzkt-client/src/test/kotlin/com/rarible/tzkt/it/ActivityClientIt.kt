@@ -42,4 +42,13 @@ class ActivityClientIt {
         activities.items.forEach { assertThat(it.type).isEqualTo(ActivityType.TRANSFER) }
     }
 
+//    @Test
+//    fun `shouldn't duplicate`() = runBlocking<Unit> {
+//        val activities = activityClient.getActivitiesAll(
+//            listOf(ActivityType.TRANSFER, ActivityType.BURN, ActivityType.MINT), 1000, "1657281905000_44461644", true
+//        )
+//        assertThat(activities.items).hasSize(1000)
+//        activities.items.forEach { assertThat(it.type).isEqualTo(ActivityType.TRANSFER) }
+//    }
+
 }

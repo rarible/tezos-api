@@ -4,6 +4,7 @@ import com.apollographql.apollo3.ApolloClient
 import com.rarible.dipdup.client.OrderClient
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.DisabledOnOs
 import org.junit.jupiter.api.condition.OS
@@ -11,6 +12,7 @@ import java.math.BigDecimal
 
 // this test will be disabled on jenkins
 @DisabledOnOs(OS.LINUX)
+@Disabled
 class OrderClientIt {
 
     val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://tezos-indexer.rarible.org/v1/graphql").build() }
@@ -27,11 +29,4 @@ class OrderClientIt {
         val order = orderClient.getOrderById("6345c41b-b8a2-5697-8e29-1438cc5ddf6b")
         assertThat(order.fill).isBetween(BigDecimal("2.0"), order.make.assetValue)
     }
-
-    @Test
-    fun `should have sort`() = runBlocking<Unit> {
-        val orders = orderClient.getOrdersByItem("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton", "745480", null, "XTZ", emptyList(), 1, null)
-        assertThat(orders.orders.first().take.assetValue).isLessThanOrEqualTo(BigDecimal("70"))
-    }
-
 }

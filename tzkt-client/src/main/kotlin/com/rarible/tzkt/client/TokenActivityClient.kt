@@ -67,12 +67,13 @@ class TokenActivityClient(
             }
         } ?: emptyList()
 
-        val groups = (prevGroups.awaitAll() + eqGoups.awaitAll()).flatten()
+        val groups = (eqGoups.awaitAll() + prevGroups.awaitAll()).flatten().distinctBy { it.id }
         val activities = when (sortAsc) {
             true -> groups.sortedWith(compareBy({ it.timestamp }, { it.id }))
             else -> groups.sortedWith(compareBy({ it.timestamp }, { it.id })).reversed()
         }
-        Page.Get(items = wrapWithHashes(activities),
+        val slice = activities.subList(0, Integer.min(size, activities.size))
+        Page.Get(items = wrapWithHashes(slice),
             size = size,
             last = { TzktActivityContinuation(it.timestamp, it.id.toLong()).toString() })
     }
@@ -97,13 +98,16 @@ class TokenActivityClient(
                             queryParam("timestamp.eq", prevDate.toString())
                             queryParam("id.${direction(sortAsc)}", prevId.toString())
                         }
-                        prevDate != null -> queryParam("timestamp.${direction(sortAsc)}", prevDate.toString())
+                        prevDate != null -> {
+                            queryParam("timestamp.${direction(sortAsc)}", prevDate.toString())
+                        }
                     }
-                    queryParam("sort.${sorting(sortAsc)}", "timestamp")
+                    queryParam("sort.${sorting(sortAsc)}", "timestamp, id")
                     type?.let {
                         when (type) {
                             ActivityType.MINT -> {
                                 queryParam("from.null", "true")
+                                queryParam("to.ni", NULL_ADDRESSES_STRING)
                             }
                             ActivityType.BURN -> {
                                 queryParam("to.in", NULL_ADDRESSES_STRING)
@@ -121,8 +125,8 @@ class TokenActivityClient(
 
     private fun mapActivity(tokenActivity: TokenActivity): TypedTokenActivity {
         val type = when {
-            tokenActivity.from == null -> ActivityType.MINT
             NULL_ADDRESSES.contains(tokenActivity.to?.address) -> ActivityType.BURN
+            tokenActivity.from == null -> ActivityType.MINT
             else -> ActivityType.TRANSFER
         }
         return TypedTokenActivity(type = type, tokenActivity)
