@@ -462,4 +462,52 @@ class TokenClientMetaTests : BaseClientTests() {
         )
         assertThat(meta.description).isEqualTo("Fabulous Architectural Flourish 032 from the city of Capreesh ")
     }
+
+    @Test
+    fun `should return content from display & artifact uri`() = runBlocking<Unit> {
+        mock("""[{
+                    "id": 1231620,
+                    "contract": {
+                        "alias": "Rarible",
+                        "address": "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS"
+                    },
+                    "tokenId": "3905",
+                    "standard": "fa2",
+                    "firstLevel": 1951143,
+                    "firstTime": "2021-12-16T21:41:16Z",
+                    "lastLevel": 1951143,
+                    "lastTime": "2021-12-16T21:41:16Z",
+                    "transfersCount": 1,
+                    "balancesCount": 1,
+                    "holdersCount": 1,
+                    "totalMinted": "1",
+                    "totalBurned": "0",
+                    "totalSupply": "1",
+                    "metadata": {
+                        "name": "Nest ",
+                        "attributes": [],
+                        "displayUri": "ipfs://QmVahURZU7xaNn3u714ZrSkAQbQm542qEXeNp9Zhd56jHB/image.jpeg",
+                        "artifactUri": "ipfs://QmVahURZU7xaNn3u714ZrSkAQbQm542qEXeNp9Zhd56jHB/image.jpeg",
+                        "description": "Maybe one day this white hawk will pass above our house\n\nشايد روزي اين باز سپيد گذر كند از خانه ما\n\n\nLocation: asalem,gilan,iran\n\n",
+                        "externalUri": "https://rarible.com/token/KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS:3905"
+                    }
+                }]""".trimIndent())
+
+        val meta = tokenClient.tokenMeta("KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS:3905")
+        assertThat(meta.name).isEqualTo("Nest ")
+        assertThat(meta.content).contains(
+            TokenMeta.Content(
+                uri = "ipfs://QmVahURZU7xaNn3u714ZrSkAQbQm542qEXeNp9Zhd56jHB/image.jpeg",
+                mimeType = "image/jpeg",
+                representation = Representation.PREVIEW
+            )
+        )
+        assertThat(meta.content).contains(
+            TokenMeta.Content(
+                uri = "ipfs://QmVahURZU7xaNn3u714ZrSkAQbQm542qEXeNp9Zhd56jHB/image.jpeg",
+                mimeType = "image/jpeg",
+                representation = Representation.ORIGINAL
+            )
+        )
+    }
 }

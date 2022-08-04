@@ -73,11 +73,12 @@ class MetaService(
                 }
                 else -> meta = TokenMeta.EMPTY
             }
-            if(meta == TokenMeta.EMPTY){
+            if (meta == TokenMeta.EMPTY) {
                 var ipfsMeta: TzktMeta? = null
                 try {
                     var tokenMetadata: BigMapKey?
-                    tokenMetadata = bigMapKeyClient.bigMapKeyWithName(token.contract!!.address, "token_metadata", token.tokenId!!)
+                    tokenMetadata =
+                        bigMapKeyClient.bigMapKeyWithName(token.contract!!.address, "token_metadata", token.tokenId!!)
                     val metadataMap = tokenMetadata.value as LinkedHashMap<String, String>
                     val metadata = metadataMap["token_info"] as LinkedHashMap<String, String>
                     val uri = metadata[""]?.decodeHex()?.utf8()
@@ -88,7 +89,7 @@ class MetaService(
                 } catch (e: Exception) {
                     logger.warn("Could not parse metadata for token ${token.contract!!.address}:${token.tokenId!!} from IPFS metadata: ${e.message}")
                 }
-                meta = if(ipfsMeta != null){
+                meta = if (ipfsMeta != null) {
                     TokenMeta(
                         name = ipfsMeta.name ?: TokenMeta.UNTITLED,
                         description = ipfsMeta.description,
@@ -169,12 +170,33 @@ class MetaService(
             val mimeType: String?
         )
 
-        fun contents() = formats.filter { it.uri != null && it.mimeType != null }.map {
-            Content(
-                uri = it.uri,
-                mimeType = it.mimeType!!,
-                representation = representation(it)
-            )
+        fun contents(): List<TokenMeta.Content> {
+            var contents = formats.filter { it.uri != null && it.mimeType != null }.map {
+                Content(
+                    uri = it.uri,
+                    mimeType = it.mimeType!!,
+                    representation = representation(it)
+                )
+            }.toMutableList()
+            if (contents.count { it.representation == Representation.PREVIEW } == 0 && displayUri != null) {
+                contents.add(
+                    Content(
+                        uri = displayUri,
+                        mimeType = guessMime(displayUri),
+                        representation = Representation.PREVIEW
+                    )
+                )
+            }
+            if (contents.count { it.representation == Representation.ORIGINAL } == 0 && artifactUri != null) {
+                contents.add(
+                    Content(
+                        uri = artifactUri,
+                        mimeType = guessMime(artifactUri),
+                        representation = Representation.ORIGINAL
+                    )
+                )
+            }
+            return contents
         }
 
         private fun representation(content: TzktContent): Representation {
@@ -182,6 +204,13 @@ class MetaService(
                 artifactUri -> Representation.ORIGINAL
                 thumbnailUri -> Representation.PREVIEW
                 else -> Representation.BIG
+            }
+        }
+
+        private fun guessMime(value: String): String {
+            return when {
+                value.lowercase().endsWith("jpeg") || value.lowercase().endsWith("jpg") -> "image/jpeg"
+                else -> ""
             }
         }
     }
