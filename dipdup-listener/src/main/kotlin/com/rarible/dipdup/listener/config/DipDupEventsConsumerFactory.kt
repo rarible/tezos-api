@@ -10,10 +10,10 @@ import java.util.*
 class DipDupEventsConsumerFactory(
     private val network: String,
     private val brokerReplicaSet: String,
-    host: String,
-    environment: String,
-    username: String?,
-    password: String?
+    val host: String,
+    val environment: String,
+    val username: String?,
+    val password: String?
 ) {
 
     private val clientIdPrefix = "$environment.$host.${UUID.randomUUID()}"
@@ -31,7 +31,9 @@ class DipDupEventsConsumerFactory(
             valueDeserializerClass = DipDupDeserializer.OrderJsonSerializer::class.java,
             valueClass = DipDupOrder::class.java,
             consumerGroup = consumerGroup,
-            defaultTopic = "${DipDupTopicProvider.ORDER}_$network",
+            defaultTopic = if (username != null && password != null) "${DipDupTopicProvider.ORDER}_$network" else DipDupTopicProvider.getOrderTopic(
+                environment
+            ),
             bootstrapServers = brokerReplicaSet,
             properties = properties
         )
@@ -43,7 +45,9 @@ class DipDupEventsConsumerFactory(
             valueDeserializerClass = DipDupDeserializer.ActivityJsonSerializer::class.java,
             valueClass = DipDupActivity::class.java,
             consumerGroup = consumerGroup,
-            defaultTopic = "${DipDupTopicProvider.ACTIVITY}_$network",
+            defaultTopic = if (username != null && password != null) "${DipDupTopicProvider.ACTIVITY}_$network" else DipDupTopicProvider.getActivityTopic(
+                environment
+            ),
             bootstrapServers = brokerReplicaSet,
             properties = properties
         )
@@ -55,7 +59,9 @@ class DipDupEventsConsumerFactory(
             valueDeserializerClass = DipDupDeserializer.ActivityJsonSerializer::class.java,
             valueClass = DipDupCollection::class.java,
             consumerGroup = consumerGroup,
-            defaultTopic = "${DipDupTopicProvider.COLLECTION}_$network",
+            defaultTopic = if (username != null && password != null) "${DipDupTopicProvider.COLLECTION}_$network" else DipDupTopicProvider.getCollectionTopic(
+                environment
+            ),
             bootstrapServers = brokerReplicaSet,
             properties = properties
         )
