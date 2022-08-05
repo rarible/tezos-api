@@ -4,6 +4,7 @@ import com.rarible.core.kafka.RaribleKafkaConsumer
 import com.rarible.dipdup.client.core.model.DipDupActivity
 import com.rarible.dipdup.client.core.model.DipDupCollection
 import com.rarible.dipdup.client.core.model.DipDupOrder
+import org.apache.kafka.clients.consumer.OffsetResetStrategy
 
 import java.util.*
 
@@ -27,10 +28,11 @@ class DipDupEventsConsumerFactory(
 
     fun createOrderConsumer(consumerGroup: String): RaribleKafkaConsumer<DipDupOrder> {
         return RaribleKafkaConsumer(
-            clientId = "$clientIdPrefix.tezos-order-consumer",
+            clientId = "$clientIdPrefix.tezos.consumer.order",
             valueDeserializerClass = DipDupDeserializer.OrderJsonSerializer::class.java,
             valueClass = DipDupOrder::class.java,
             consumerGroup = consumerGroup,
+            offsetResetStrategy = OffsetResetStrategy.EARLIEST,
             defaultTopic = if (username != null && password != null) "${DipDupTopicProvider.ORDER}_$network" else DipDupTopicProvider.getOrderTopic(
                 environment
             ),
@@ -41,10 +43,11 @@ class DipDupEventsConsumerFactory(
 
     fun createActivityConsumer(consumerGroup: String): RaribleKafkaConsumer<DipDupActivity> {
         return RaribleKafkaConsumer(
-            clientId = "$clientIdPrefix.tezos-activity-consumer",
+            clientId = "$clientIdPrefix.tezos.consumer.activity",
             valueDeserializerClass = DipDupDeserializer.ActivityJsonSerializer::class.java,
             valueClass = DipDupActivity::class.java,
             consumerGroup = consumerGroup,
+            offsetResetStrategy = OffsetResetStrategy.EARLIEST,
             defaultTopic = if (username != null && password != null) "${DipDupTopicProvider.ACTIVITY}_$network" else DipDupTopicProvider.getActivityTopic(
                 environment
             ),
@@ -55,10 +58,11 @@ class DipDupEventsConsumerFactory(
 
     fun createCollectionConsumer(consumerGroup: String): RaribleKafkaConsumer<DipDupCollection> {
         return RaribleKafkaConsumer(
-            clientId = "$clientIdPrefix.tezos-collection-consumer",
+            clientId = "$clientIdPrefix.tezos.consumer.collection",
             valueDeserializerClass = DipDupDeserializer.ActivityJsonSerializer::class.java,
             valueClass = DipDupCollection::class.java,
             consumerGroup = consumerGroup,
+            offsetResetStrategy = OffsetResetStrategy.EARLIEST,
             defaultTopic = if (username != null && password != null) "${DipDupTopicProvider.COLLECTION}_$network" else DipDupTopicProvider.getCollectionTopic(
                 environment
             ),
