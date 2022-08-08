@@ -6,6 +6,7 @@ import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBody
 import org.springframework.web.util.UriBuilder
+import java.net.URI
 
 abstract class BaseClient(
     val webClient: WebClient
@@ -21,6 +22,18 @@ abstract class BaseClient(
                 build
             }
             .accept(APPLICATION_JSON)
+            .retrieve()
+            .awaitBody()
+    }
+
+    suspend inline fun <reified T : Any> invokeURI(crossinline builder: (b: UriBuilder) -> URI): T {
+        return webClient.get()
+            .uri {
+                val build = builder(it)
+                logger.info("Request to ${build}")
+                build
+            }
+                .accept(APPLICATION_JSON)
             .retrieve()
             .awaitBody()
     }
