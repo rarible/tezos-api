@@ -68,7 +68,8 @@ class OwnershipClient(
         size: Int = DEFAULT_SIZE,
         continuation: String?,
         sortAsc: Boolean = false,
-        sortOnFirstLevel: Boolean = false
+        sortOnFirstLevel: Boolean = false,
+        removeEmptyBalances: Boolean = false
     ): Page<TokenBalance> {
         val parsed = ItemId.parse(itemId)
         val parsedContinuation = continuation?.let { TimestampIdContinuation.parse(it) }
@@ -89,6 +90,8 @@ class OwnershipClient(
                         } else {
                             queryParam(sorting, "lastTime,id")
                         }
+                        if (removeEmptyBalances)
+                            queryParam("balance.gt", 0)
                     }
                     .queryParam("limit", size)
             }
@@ -105,6 +108,8 @@ class OwnershipClient(
                     } else {
                         queryParam(sorting, "lastTime,id")
                     }
+                    if (removeEmptyBalances)
+                        queryParam("balance.gt", 0)
                 }
                 .queryParam("limit", size)
         }

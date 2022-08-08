@@ -13,10 +13,13 @@ import com.rarible.tzkt.model.Part
 import com.rarible.tzkt.tokens.BidouHandler
 import okio.ByteString.Companion.decodeHex
 import org.slf4j.LoggerFactory
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
-class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ownershipClient: OwnershipClient, val ipfsClient: IPFSClient, val royaltiesConfig: KnownAddresses) {
+class RoyaltiesHandler(
+    val bigMapKeyClient: BigMapKeyClient,
+    val ownershipClient: OwnershipClient,
+    val ipfsClient: IPFSClient,
+    val royaltiesConfig: KnownAddresses
+) {
     val logger = LoggerFactory.getLogger(javaClass)
     val bidouRoyalties = mapOf(
         Pair(royaltiesConfig.bidou8x8, 1000),
@@ -33,7 +36,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ownershipClient
         logger.info("Checking royalties for token $contract:$tokenId")
         var part: List<Part>
 
-        when (contract){
+        when (contract) {
             royaltiesConfig.hen -> {
                 logger.info("Token $contract:$tokenId royalties pattern is HEN")
                 part = getHENRoyalties(tokenId)
@@ -62,7 +65,9 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ownershipClient
             royaltiesConfig.bidou8x8, royaltiesConfig.bidou24x24 -> {
                 logger.info("Token $contract:$tokenId royalties pattern is 8Bidou 8x8 (10% auto)")
                 part = getBidouRoyalties(contract, tokenId)
-                return part
+                if(part.isNotEmpty()){
+                    return part
+                }
             }
         }
 
@@ -116,15 +121,20 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ownershipClient
             part = getEmbeddedRoyalty(tokenMetadata.value, "$contract:$tokenId")
         }
 
-        if(part.isNullOrEmpty()){
+        if (part.isNullOrEmpty()) {
             //fallback: if everything else failed, we set the royalties to 0 for the token first owner
             try {
-                val ownerships = ownershipClient.ownershipsByToken("$contract:$tokenId", continuation = null, sortOnFirstLevel = true, sortAsc = true)
-                if (ownerships.items.isNotEmpty()){
+                val ownerships = ownershipClient.ownershipsByToken(
+                    "$contract:$tokenId",
+                    continuation = null,
+                    sortOnFirstLevel = true,
+                    sortAsc = true
+                )
+                if (ownerships.items.isNotEmpty()) {
                     val firstOwner = ownerships.items.first()
                     part = listOf(Part(address = firstOwner.account!!.address, share = 0))
                 }
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 logger.warn("Could not get first owner for token $contract:$tokenId: ${e.message}")
             }
         }
@@ -181,7 +191,11 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ownershipClient
         try {
             val royaltiesKey = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.fxhashV1, "token_data", tokenId)
             royaltiesMap = royaltiesKey.value as LinkedHashMap<String, String>
-            val authorKey = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.fxhashV1Manager, "ledger", royaltiesMap["issuer_id"]!!)
+            val authorKey = bigMapKeyClient.bigMapKeyWithName(
+                royaltiesConfig.fxhashV1Manager,
+                "ledger",
+                royaltiesMap["issuer_id"]!!
+            )
             authorMap = authorKey.value as LinkedHashMap<String, String>
             parts.add(Part(authorMap["author"]!!, royaltiesMap["royalties"]!!.toInt() * 10))
         } catch (e: Exception) {
@@ -213,7 +227,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ownershipClient
         var royaltiesMap: LinkedHashMap<String, String>
         val parts = mutableListOf<Part>()
         try {
-            val key = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.versum,"token_extra_data", tokenId)
+            val key = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.versum, "token_extra_data", tokenId)
             royaltiesMap = key.value as LinkedHashMap<String, String>
             parts.add(Part(royaltiesMap["minter"]!!, royaltiesMap["royalty"]!!.toInt() * 10))
         } catch (e: Exception) {
@@ -243,7 +257,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ownershipClient
             val decimals = data["decimals"].asDouble()
             shares.forEach {
                 //check if it is codecrafting pattern
-                val percentage = data["shares"][it].asDouble() * 100 / Math.pow(10.0, decimals) * 100
+                val percentage = data["shares"][it].asDouble() * Math.pow(10.0, decimals * -1) * 10000
                 partList.add(
                     Part(
                         it, percentage.toInt()
@@ -286,7 +300,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ownershipClient
         var data: List<LinkedHashMap<String, String>>? = null
         try {
             val tokenKeyValue = "{\"address\":\"$contract\",\"nat\":$tokenId}"
-            val key = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.royaltiesManager, "royalties", URLEncoder.encode(tokenKeyValue, StandardCharsets.UTF_8.toString()))
+            val key = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.royaltiesManager, "royalties", tokenKeyValue)
             data = key.value as List<LinkedHashMap<String, String>>
         } catch (e: Exception) {
             logger.warn("Could not parse royalties for token $contract:$tokenId with Royalties Manager (with token id) pattern: ${e.message}")
@@ -295,7 +309,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ownershipClient
         if(data.isNullOrEmpty()){
             try {
                 val tokenKeyValue = "{\"address\":\"$contract\",\"nat\":null}"
-                val key = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.royaltiesManager, "royalties", URLEncoder.encode(tokenKeyValue, StandardCharsets.UTF_8.toString()))
+                val key = bigMapKeyClient.bigMapKeyWithName(royaltiesConfig.royaltiesManager, "royalties", tokenKeyValue)
                 data = key.value as List<LinkedHashMap<String, String>>
             } catch (e: Exception) {
                 logger.warn("Could not parse royalties for token $contract:$tokenId with Royalties Manager (without token id) pattern: ${e.message}")
@@ -308,7 +322,7 @@ class RoyaltiesHandler(val bigMapKeyClient: BigMapKeyClient, val ownershipClient
     }
 
     private suspend fun getBidouRoyalties(contract: String, tokenId: String): List<Part> {
-        val parts = mutableListOf<Part>()
+        var parts = mutableListOf<Part>()
         try {
             val handler = BidouHandler(bigMapKeyClient)
             val properties = handler.getData(contract, tokenId)

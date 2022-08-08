@@ -2,6 +2,8 @@ package com.rarible.tzkt.client
 
 import com.rarible.tzkt.model.BigMapKey
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.util.UriBuilder
+import org.springframework.web.util.UriBuilderFactory
 
 class BigMapKeyClient(
     webClient: WebClient
@@ -14,8 +16,8 @@ class BigMapKeyClient(
     }
 
     suspend fun bigMapKeyWithName(contract: String, bigMapName: String, keyId: String): BigMapKey {
-        val key = invoke<BigMapKey> {
-            it.path("v1/contracts/$contract/bigmaps/$bigMapName/keys/$keyId")
+        val key = invokeURI<BigMapKey> {
+            it.path("v1/contracts/$contract/bigmaps/$bigMapName/keys").pathSegment("{id}").build(keyId)
         }
         return key
     }
