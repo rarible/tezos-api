@@ -141,11 +141,10 @@ class ActivityClientTests : BaseClientTests() {
         assertThat(TzktActivityContinuation.isValid(activities.continuation!!)).isTrue
         assertThat(activities.items).hasSize(2)
         assertThat(activities.items.first().tokenActivity.transactionHash).isNotEmpty
-        assertThat(mockServer.requestCount).isEqualTo(3)
+        assertThat(mockServer.requestCount).isEqualTo(2)
         assertThat(requests()).isEqualTo(setOf(
             "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=2&sort.asc=timestamp,%20id&from.null=true&to.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU",
-            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=2&sort.asc=timestamp,%20id&from.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&to.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU",
-            "/v1/operations/transactions?id.in=23818302,23820160&select=id,hash")
+            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=2&sort.asc=timestamp,%20id&from.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&to.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU")
         )
     }
 
@@ -338,12 +337,11 @@ class ActivityClientTests : BaseClientTests() {
         assertThat(activities.items).hasSize(3)
         assertThat(activities.items.first().tokenActivity.transactionHash).isNotEmpty
         assertThat(activities.continuation.toString()).isEqualTo("1614340163000_41904714")
-        assertThat(mockServer.requestCount).isEqualTo(4)
+        assertThat(mockServer.requestCount).isEqualTo(3)
         assertThat(requests()).isEqualTo(setOf(
             "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&sort.desc=timestamp,%20id&from.null=true&to.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU",
             "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&sort.desc=timestamp,%20id&from.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&to.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU",
-            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&sort.desc=timestamp,%20id&from.null=false&to.in=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU",
-            "/v1/operations/transactions?id.in=225200218,225174019,41904711&select=id,hash")
+            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&sort.desc=timestamp,%20id&from.null=false&to.in=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU")
         )
     }
 
@@ -459,7 +457,7 @@ class ActivityClientTests : BaseClientTests() {
             ]
         """.trimIndent())
 
-        var activities = activityClient.getActivitiesByItem(listOf(ActivityType.MINT, ActivityType.TRANSFER, ActivityType.BURN), "KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn", "0", 3, "1614340163000_41904714", true)
+        var activities = activityClient.getActivitiesByItem(listOf(ActivityType.MINT, ActivityType.TRANSFER, ActivityType.BURN), "KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn", "0", 3, "1614340163000_41904714", true, true)
 
         assertThat(activities.items).hasSize(3)
         assertThat(activities.items.first().tokenActivity.transactionHash).isNotEmpty

@@ -40,8 +40,9 @@ class TokenActivityClient(
         tokenId: String,
         size: Int = DEFAULT_SIZE,
         continuation: String?,
-        sortAsc: Boolean = true
-    ) = activitiesWrapper(contract, tokenId, size, continuation, sortAsc, types)
+        sortAsc: Boolean = true,
+        wrapHash: Boolean = false
+    ) = activitiesWrapper(contract, tokenId, size, continuation, sortAsc, types, wrapHash)
 
     private suspend fun activitiesWrapper(
         contract: String?,
@@ -75,7 +76,7 @@ class TokenActivityClient(
             else -> groups.sortedWith(compareBy({ it.timestamp }, { it.id })).reversed()
         }
         val slice = activities.subList(0, Integer.min(size, activities.size))
-        Page.Get(items = if (wrapHash) wrapWithHashes(slice) else slice,
+        Page.Get(items = if (wrapHash) wrapWithHashes(slice) else wrapWithTransactionId(slice),
             size = size,
             last = { TzktActivityContinuation(it.timestamp, it.id.toLong()).toString() })
     }
@@ -153,7 +154,15 @@ class TokenActivityClient(
                 else -> it.addHash(pairs[it.tokenActivity.transactionId])
             }
         }
-        return activities
+    }
+
+    private fun wrapWithTransactionId(activities: List<TypedTokenActivity>): List<TypedTokenActivity> {
+        return activities.map {
+            when (it.tokenActivity.transactionId) {
+                null -> it
+                else -> it.addHash(it.tokenActivity.transactionId.toString())
+            }
+        }
     }
 
     companion object {
