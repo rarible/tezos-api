@@ -21,8 +21,9 @@ class TokenActivityClient(
         types: List<ActivityType> = emptyList(),
         size: Int = DEFAULT_SIZE,
         continuation: String?,
-        sortAsc: Boolean = true
-    ) = activitiesWrapper(null, null, size, continuation, sortAsc, types)
+        sortAsc: Boolean = true,
+        wrapHash: Boolean = false
+    ) = activitiesWrapper(null, null, size, continuation, sortAsc, types, wrapHash)
 
     suspend fun getActivitiesByIds(ids: List<String>): List<TypedTokenActivity> {
         val activities: List<TokenActivity> = withBatch(ids) { batch ->
@@ -48,7 +49,8 @@ class TokenActivityClient(
         size: Int = DEFAULT_SIZE,
         continuation: String?,
         sortAsc: Boolean = true,
-        types: List<ActivityType> = emptyList()
+        types: List<ActivityType> = emptyList(),
+        wrapHash: Boolean = false
     ) = coroutineScope {
         val parsed = continuation?.let { TzktActivityContinuation.parse(it) }
 
@@ -73,7 +75,7 @@ class TokenActivityClient(
             else -> groups.sortedWith(compareBy({ it.timestamp }, { it.id })).reversed()
         }
         val slice = activities.subList(0, Integer.min(size, activities.size))
-        Page.Get(items = wrapWithHashes(slice),
+        Page.Get(items = if (wrapHash) wrapWithHashes(slice) else slice,
             size = size,
             last = { TzktActivityContinuation(it.timestamp, it.id.toLong()).toString() })
     }
