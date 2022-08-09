@@ -173,6 +173,6 @@ class TokenClientIt {
     @Test
     fun `shouldn have royalty`() = runBlocking<Unit> {
         val page = handler.processRoyalties("KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS:68056")
-        println(page)
+        assertThat(page.first().address).isEqualTo("tz1hFesk6GV6fT3vak68zz5JxdZ5kK81rvRB")
     }
 }

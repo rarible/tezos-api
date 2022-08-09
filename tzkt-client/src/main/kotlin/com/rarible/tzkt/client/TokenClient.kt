@@ -29,7 +29,7 @@ class TokenClient(
         tokens(listOf(itemId), loadMeta, checkBalance).firstOrNotFound(itemId)
 
     suspend fun tokens(ids: List<String>, loadMeta: Boolean = false, checkBalance: Boolean = true) = coroutineScope {
-        val groups = groupIds(ids)
+        val groups = groupIds(ids.distinct())
         val tokens = groups
             .map { (contract, ids) -> async { tokens(contract, ids, loadMeta) } }
             .awaitAll()
