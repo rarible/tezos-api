@@ -150,7 +150,7 @@ class OwnershipClientTests : BaseClientTests() {
         var contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
         var tokenId = "631268"
         val ownerships = ownershipClient.ownershipsByToken(ItemId(contract, tokenId).toString(), 2, null, true)
-        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&balance.gt=0&sort.asc=lastTime,id&limit=2")
+        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&sort.asc=lastTime,id&balance.gt=0&limit=2")
         ownerships.items.forEach {
             assertThat(it.token?.tokenId).isEqualTo(tokenId)
             assertThat(it.token?.contract?.address).isEqualTo(contract)
@@ -241,7 +241,7 @@ class OwnershipClientTests : BaseClientTests() {
         var contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
         var tokenId = "631268"
         val ownerships = ownershipClient.ownershipsByToken(ItemId(contract, tokenId).toString(), 2, "6924058", true)
-        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&balance.gt=0&sort.asc=lastTime,id&limit=2")
+        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&sort.asc=lastTime,id&balance.gt=0&limit=2")
         ownerships.items.forEach {
             assertThat(it.token?.tokenId).isEqualTo(tokenId)
             assertThat(it.token?.contract?.address).isEqualTo(contract)
