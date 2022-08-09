@@ -16,6 +16,10 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven(url = "https://repo.rarible.org/repository/maven-public/")
+    maven {
+        url = uri("http://nexus.rarible.int/repository/maven-public/")
+        isAllowInsecureProtocol = true
+    }
 }
 
 dependencies {

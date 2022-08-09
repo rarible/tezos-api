@@ -323,7 +323,7 @@ class RoyaltiesHandler(
     }
 
     private suspend fun getBidouRoyalties(contract: String, tokenId: String): List<Part> {
-        var parts = mutableListOf<Part>()
+        val parts = mutableListOf<Part>()
         try {
             val handler = BidouHandler(bigMapKeyClient)
             val properties = handler.getData(contract, tokenId)
