@@ -2,6 +2,7 @@ package com.rarible.dipdup.it
 
 import com.apollographql.apollo3.ApolloClient
 import com.rarible.dipdup.client.OrderClient
+import com.rarible.dipdup.client.model.DipDupOrderSort
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Disabled
@@ -28,5 +29,11 @@ class OrderClientIt {
     fun `should have for legacy order`() = runBlocking<Unit> {
         val order = orderClient.getOrderById("6345c41b-b8a2-5697-8e29-1438cc5ddf6b")
         assertThat(order.fill).isBetween(BigDecimal("2.0"), order.make.assetValue)
+    }
+
+    @Test
+    fun `should have for legacy orders`() = runBlocking<Unit> {
+        val order = orderClient.getOrdersAll(listOf(), DipDupOrderSort.LAST_UPDATE_DESC, 1000, null)
+        assertThat(order).isNotNull
     }
 }
