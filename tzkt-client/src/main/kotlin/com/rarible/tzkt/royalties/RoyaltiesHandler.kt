@@ -128,7 +128,8 @@ class RoyaltiesHandler(
                     "$contract:$tokenId",
                     continuation = null,
                     sortOnFirstLevel = true,
-                    sortAsc = true
+                    sortAsc = true,
+                    removeEmptyBalances = false
                 )
                 if (ownerships.items.isNotEmpty()) {
                     val firstOwner = ownerships.items.first()
@@ -322,7 +323,7 @@ class RoyaltiesHandler(
     }
 
     private suspend fun getBidouRoyalties(contract: String, tokenId: String): List<Part> {
-        var parts = mutableListOf<Part>()
+        val parts = mutableListOf<Part>()
         try {
             val handler = BidouHandler(bigMapKeyClient)
             val properties = handler.getData(contract, tokenId)
