@@ -69,7 +69,7 @@ class OwnershipClient(
         continuation: String?,
         sortAsc: Boolean = false,
         sortOnFirstLevel: Boolean = false,
-        removeEmptyBalances: Boolean = false
+        removeEmptyBalances: Boolean = true
     ): Page<TokenBalance> {
         val parsed = ItemId.parse(itemId)
         val parsedContinuation = continuation?.let { TimestampIdContinuation.parse(it) }
