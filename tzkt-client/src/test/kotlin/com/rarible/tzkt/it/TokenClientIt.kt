@@ -169,4 +169,10 @@ class TokenClientIt {
         )
         assertThat(page.items).hasSize(1000)
     }
+
+    @Test
+    fun `shouldn have royalty`() = runBlocking<Unit> {
+        val page = handler.processRoyalties("KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS:68056")
+        println(page)
+    }
 }
