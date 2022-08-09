@@ -128,7 +128,8 @@ class RoyaltiesHandler(
                     "$contract:$tokenId",
                     continuation = null,
                     sortOnFirstLevel = true,
-                    sortAsc = true
+                    sortAsc = true,
+                    removeEmptyBalances = false
                 )
                 if (ownerships.items.isNotEmpty()) {
                     val firstOwner = ownerships.items.first()

@@ -80,7 +80,6 @@ class OwnershipClient(
                     .queryParam("token.contract", parsed.contract)
                     .queryParam("token.tokenId", parsed.tokenId)
                     .queryParam("account.ni", NULL_ADDRESSES_STRING)
-                    .queryParam("balance.gt", 0)
                     .queryParam("id.${direction(sortAsc)}", prevOwnership.id)
                     .queryParam("lastTime.${directionEqual(sortAsc)}", parsedContinuation.date)
                     .apply {
@@ -100,7 +99,6 @@ class OwnershipClient(
                 .queryParam("token.contract", parsed.contract)
                 .queryParam("token.tokenId", parsed.tokenId)
                 .queryParam("account.ni", NULL_ADDRESSES_STRING)
-                .queryParam("balance.gt", 0)
                 .apply {
                     val sorting = if (sortAsc) "sort.asc" else "sort.desc"
                     if (sortOnFirstLevel) {
