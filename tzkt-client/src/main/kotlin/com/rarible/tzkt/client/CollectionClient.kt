@@ -15,16 +15,20 @@ class CollectionClient(
     val metaCollectionService: MetaCollectionService
 ) : BaseClient(webClient) {
 
-    suspend fun collection(contract: String): Contract = coroutineScope {
+    suspend fun collection(contract: String, meta: Boolean = false): Contract = coroutineScope {
         val collection = async {
             invoke<Contract> {
                 it.path("$BASE_PATH/$contract")
             }
         }
-        val meta = async {
-            collectionMeta(contract)
+        if (meta) {
+            val meta = async {
+                collectionMeta(contract)
+            }
+            collection.await().meta(meta.await())
+        } else {
+            collection.await()
         }
-        collection.await().meta(meta.await())
     }
 
     suspend fun collectionsAll(size: Int = DEFAULT_SIZE, continuation: String?, sortAsc: Boolean = true): Page<Contract> {

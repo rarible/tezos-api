@@ -7,6 +7,7 @@ import com.rarible.tzkt.client.IPFSClient
 import com.rarible.tzkt.meta.MetaCollectionService
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.DisabledOnOs
 import org.junit.jupiter.api.condition.OS
@@ -27,6 +28,7 @@ class CollectionClientIt {
         return CollectionClient(client, metaCollectionService)
     }
 
+    @Disabled
     @Test
     fun `should return meta for collection from bigmap (ithaca)`() = runBlocking<Unit> {
         val collectionClient = client("https://api.ithacanet.tzkt.io")
