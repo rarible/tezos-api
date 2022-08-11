@@ -45,7 +45,7 @@ data class GetOrdersByItemCustomQuery(
                 marketplace_order(
                     where: {${conditions.joinToString(",\n")}}
                     limit: ${'$'}limit
-                    order_by: {last_updated_at: desc, id: desc, take_value: asc}
+                    order_by: {last_updated_at: desc, id: desc, make_price: asc}
                 ) { __typename ...order } }
             fragment order on marketplace_order {
                 cancelled
@@ -60,6 +60,7 @@ data class GetOrdersByItemCustomQuery(
                 make_contract
                 make_token_id
                 make_value
+                make_price
                 maker
                 network
                 platform
@@ -70,6 +71,7 @@ data class GetOrdersByItemCustomQuery(
                 take_contract
                 take_token_id
                 take_value
+                take_price
                 taker
                 origin_fees
                 payouts

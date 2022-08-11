@@ -45,6 +45,7 @@ data class GetOrderByMakerCustomQuery(
                 make_contract
                 make_token_id
                 make_value
+                make_price
                 maker
                 network
                 platform
@@ -55,6 +56,7 @@ data class GetOrderByMakerCustomQuery(
                 take_contract
                 take_token_id
                 take_value
+                take_price
                 taker
                 origin_fees
                 payouts

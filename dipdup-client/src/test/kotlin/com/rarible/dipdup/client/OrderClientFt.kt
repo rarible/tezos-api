@@ -183,7 +183,9 @@ class OrderClientFt : BaseClientFt() {
                         "take_contract": null,
                         "take_token_id": null,
                         "take_value": 1,
-                        "taker": null
+                        "taker": null,
+                        "origin_fees": [],
+                        "payouts": []
                   },
                   {
                         "__typename": "marketplace_order",
@@ -208,7 +210,9 @@ class OrderClientFt : BaseClientFt() {
                         "take_contract": null,
                         "take_token_id": null,
                         "take_value": 1,
-                        "taker": null
+                        "taker": null,
+                        "origin_fees": [],
+                        "payouts": []
                   }
                 ]
               }
@@ -253,7 +257,9 @@ class OrderClientFt : BaseClientFt() {
                             "take_contract": null,
                             "take_token_id": null,
                             "take_value": 1,
-                            "taker": null
+                            "taker": null,
+                            "origin_fees": [],
+                            "payouts": []
                         },
                         {
                             "__typename": "marketplace_order",
@@ -278,7 +284,9 @@ class OrderClientFt : BaseClientFt() {
                             "take_contract": null,
                             "take_token_id": null,
                             "take_value": 1,
-                            "taker": null
+                            "taker": null,
+                            "origin_fees": [],
+                            "payouts": []
                         }
                     ]
                 }
@@ -317,7 +325,9 @@ class OrderClientFt : BaseClientFt() {
                     "take_contract": null,
                     "take_token_id": null,
                     "take_value": 1,
-                    "taker": null
+                    "taker": null,
+                    "origin_fees": [],
+                    "payouts": []
                   }]}}
         """.trimIndent())
         val orders = orderClient.getOrdersByItem(
@@ -361,7 +371,9 @@ class OrderClientFt : BaseClientFt() {
                     "take_contract": null,
                     "take_token_id": null,
                     "take_value": 1,
-                    "taker": null
+                    "taker": null,
+                    "origin_fees": [],
+                    "payouts": []
                   }]}}
         """.trimIndent())
         val orders = orderClient.getOrdersByItem(
@@ -405,7 +417,9 @@ class OrderClientFt : BaseClientFt() {
                     "take_contract": "KT1JwfYcy2uGBg4tS8t8w5CnJotJmF5kN2J3",
                     "take_token_id": "123",
                     "take_value": 1,
-                    "taker": null
+                    "taker": null,
+                    "origin_fees": [],
+                    "payouts": []
                   }]}}
         """.trimIndent())
         val orders = orderClient.getOrdersByItem(
@@ -449,7 +463,9 @@ class OrderClientFt : BaseClientFt() {
                             "take_contract": null,
                             "take_token_id": null,
                             "take_value": 1,
-                            "taker": null
+                            "taker": null,
+                            "origin_fees": [],
+                            "payouts": []
                         },
                         {
                             "__typename": "marketplace_order",
@@ -474,7 +490,9 @@ class OrderClientFt : BaseClientFt() {
                             "take_contract": null,
                             "take_token_id": null,
                             "take_value": 1,
-                            "taker": null
+                            "taker": null,
+                            "origin_fees": [],
+                            "payouts": []
                         }
                     ]
                 }
@@ -584,7 +602,9 @@ class OrderClientFt : BaseClientFt() {
                     "take_contract": null,
                     "take_token_id": null,
                     "take_value": 1,
-                    "taker": null
+                    "taker": null,
+                    "origin_fees": [],
+                    "payouts": []
                   }]}}
         """.trimIndent())
 
