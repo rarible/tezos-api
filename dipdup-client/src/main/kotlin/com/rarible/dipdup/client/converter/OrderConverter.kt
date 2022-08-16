@@ -16,7 +16,6 @@ import com.rarible.dipdup.client.model.DipDupContinuation
 import com.rarible.dipdup.client.model.DipDupOrdersPage
 import java.math.BigDecimal
 import java.math.BigInteger
-import java.math.MathContext
 import java.time.OffsetDateTime
 import java.util.*
 import kotlin.math.min
@@ -28,11 +27,7 @@ fun convert(source: GetOrderByIdQuery.Marketplace_order_by_pk) = DipDupOrder(
     endedAt = source.ended_at?.let { OffsetDateTime.parse(it.toString()) },
     endAt = source.end_at?.let { OffsetDateTime.parse(it.toString()) },
     startAt = OffsetDateTime.parse(source.start_at.toString()),
-    fill = fill(TezosPlatform.valueOf(source.platform),
-        BigDecimal(source.fill.toString()),
-        BigDecimal(source.make_value.toString()),
-        BigDecimal(source.take_value.toString())
-    ),
+    fill = BigDecimal(source.fill.toString()),
     lastUpdatedAt = OffsetDateTime.parse(source.last_updated_at.toString()),
     make = getAsset(source.make_asset_class, source.make_contract, source.make_token_id, source.make_value),
     makePrice = source.make_price?.let { BigDecimal(it.toString()) },
@@ -94,11 +89,7 @@ fun convert(source: Order) = DipDupOrder(
     endedAt = source.ended_at?.let { OffsetDateTime.parse(it.toString()) },
     endAt = source.end_at?.let { OffsetDateTime.parse(it.toString()) },
     startAt = OffsetDateTime.parse(source.start_at.toString()),
-    fill = fill(TezosPlatform.valueOf(source.platform),
-        BigDecimal(source.fill.toString()),
-        BigDecimal(source.make_value.toString()),
-        BigDecimal(source.take_value.toString())
-    ),
+    fill = BigDecimal(source.fill.toString()),
     lastUpdatedAt = OffsetDateTime.parse(source.last_updated_at.toString()),
     make = getAsset(source.make_asset_class, source.make_contract, source.make_token_id, source.make_value),
     makePrice = source.make_price?.let { BigDecimal(it.toString()) },
@@ -125,14 +116,4 @@ fun convert(source: GetOrdersTakeContractsByMakeItemQuery.Data): List<Asset.Asse
 
 fun convert(source: GetOrdersTakeContractsByMakeCollectionQuery.Data): List<Asset.AssetType> = source.marketplace_order.map {
     convert(it.assetType)
-}
-
-fun fill(platform: TezosPlatform, value: BigDecimal, make: BigDecimal, take: BigDecimal): BigDecimal {
-    return when (platform) {
-        TezosPlatform.RARIBLE_V1 -> {
-            val price = take.divide(make, MathContext.DECIMAL128)
-            value.divide(price, MathContext.DECIMAL128)
-        }
-        else -> value
-    }
 }
