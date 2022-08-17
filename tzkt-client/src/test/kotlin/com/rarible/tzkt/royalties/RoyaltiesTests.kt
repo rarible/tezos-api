@@ -5,6 +5,7 @@ import com.rarible.tzkt.client.BigMapKeyClient
 import com.rarible.tzkt.client.IPFSClient
 import com.rarible.tzkt.client.OwnershipClient
 import com.rarible.tzkt.config.KnownAddresses
+import com.rarible.tzkt.config.TzktSettings
 import com.rarible.tzkt.model.Part
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
@@ -16,7 +17,7 @@ import org.springframework.web.reactive.function.client.WebClient
 class RoyaltiesTests : BaseClientTests() {
 
     val bigMapKeyClient = BigMapKeyClient(client)
-    val ownershipClient = OwnershipClient(client)
+    val ownershipClient = OwnershipClient(client, TzktSettings())
     //    val ipfsWb = WebClient.create("https://ipfs.io/ipfs/")
     val ipfsClient = IPFSClient(client, mapper)
     val logger = LoggerFactory.getLogger(javaClass)
@@ -1397,7 +1398,7 @@ class RoyaltiesTests : BaseClientTests() {
         val clientBuilder = WebClient.builder().baseUrl(localTzkt)
             .codecs { configurer -> configurer.defaultCodecs().maxInMemorySize(2 * 1024 * 1024) }.build()
         val bmClient = BigMapKeyClient(clientBuilder)
-        val ownershipClient = OwnershipClient(clientBuilder)
+        val ownershipClient = OwnershipClient(clientBuilder, TzktSettings())
         val ipfs = IPFSClient(WebClient.create("https://ipfs.io/ipfs/"), mapper)
         val handler = RoyaltiesHandler(bmClient, ownershipClient, ipfs, royaltiesConfig)
         val id = "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS:68056"

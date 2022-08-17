@@ -7,6 +7,7 @@ import com.rarible.tzkt.client.IPFSClient
 import com.rarible.tzkt.client.OwnershipClient
 import com.rarible.tzkt.client.TokenClient
 import com.rarible.tzkt.config.KnownAddresses
+import com.rarible.tzkt.config.TzktSettings
 import com.rarible.tzkt.meta.MetaService
 import com.rarible.tzkt.model.Part
 import com.rarible.tzkt.model.TimestampIdContinuation
@@ -38,8 +39,8 @@ class TokenClientIt {
     val BIDOU_8x8 = "KT1MxDwChiDwd6WBVs24g1NjERUoK622ZEFp"
     val BIDOU_24x24 = "KT1TR1ErEQPTdtaJ7hbvKTJSa1tsGnHGZTpf"
 
-    // https://api.ithacanet.tzkt.io
     val client = preparedClient("https://api.tzkt.io")
+//    val client = preparedClient("http://tezos-tzkt.testnet.rarible.int")
 
     val config = KnownAddresses(
         hen = HEN,
@@ -55,12 +56,14 @@ class TokenClientIt {
     )
 
     val bigMapKeyClient = BigMapKeyClient(client)
-    val ownershipClient = OwnershipClient(client)
+    val ownershipClient = OwnershipClient(client, TzktSettings())
     val ipfsWb = WebClient.create("https://ipfs.io/ipfs/")
     val ipfsClient = IPFSClient(ipfsWb, mapper)
     val metaService = MetaService(ObjectMapper().registerKotlinModule(), bigMapKeyClient, ipfsClient, config)
     val handler = RoyaltiesHandler(bigMapKeyClient, ownershipClient, ipfsClient, config)
-    val tokenClient = TokenClient(client, metaService, handler)
+    val tokenClient = TokenClient(client, metaService, handler, TzktSettings(
+        useTokensBatch = false
+    ))
 
     @Test
     fun `should return token tag from string`() = runBlocking<Unit> {
@@ -174,5 +177,12 @@ class TokenClientIt {
     fun `shouldn have royalty`() = runBlocking<Unit> {
         val page = handler.processRoyalties("KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS:68056")
         assertThat(page.first().address).isEqualTo("tz1hFesk6GV6fT3vak68zz5JxdZ5kK81rvRB")
+    }
+
+    @Test
+    @Disabled
+    fun `should return batch`() = runBlocking<Unit> {
+        val tokens = tokenClient.tokens(listOf("KT1Pz65ssbPF7Zv9Dh7ggqUkgAYNSuJ9iia7:1","KT1DREzUemWyb1q7dUnHmxw3x8Ryq5VLZE8e:1"))
+        assertThat(tokens).hasSize(2)
     }
 }

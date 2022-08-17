@@ -1,15 +1,14 @@
 package com.rarible.tzkt.client
 
 import com.rarible.tzkt.config.KnownAddresses
+import com.rarible.tzkt.config.TzktSettings
 import com.rarible.tzkt.meta.MetaService
 import com.rarible.tzkt.model.TokenMeta
 import com.rarible.tzkt.model.TokenMeta.Representation
-import com.rarible.tzkt.royalties.RoyaltiesHandler
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.springframework.web.reactive.function.client.WebClient
 
 class TokenClientMetaTests : BaseClientTests() {
 
@@ -40,7 +39,7 @@ class TokenClientMetaTests : BaseClientTests() {
     val bigMapKeyClient = BigMapKeyClient(client)
     val ipfsClient = IPFSClient(client, mapper)
     val metaService = MetaService(mapper, bigMapKeyClient, ipfsClient, config)
-    val tokenClient = TokenClient(client, metaService, mockk())
+    val tokenClient = TokenClient(client, metaService, mockk(), TzktSettings())
 
     @Test
     fun `should return meta from hen`() = runBlocking<Unit> {

@@ -26,6 +26,19 @@ abstract class BaseClient(
             .awaitBody()
     }
 
+    suspend inline fun <reified T : Any> invokePost(crossinline builder: (b: UriBuilder) -> UriBuilder, body: Any): T {
+        return webClient.post()
+            .uri {
+                val build = builder(it).build()
+                logger.info("Request to ${build}")
+                build
+            }
+            .accept(APPLICATION_JSON)
+            .bodyValue(body)
+            .retrieve()
+            .awaitBody()
+    }
+
     suspend inline fun <reified T : Any> invokeURI(crossinline builder: (b: UriBuilder) -> URI): T {
         return webClient.get()
             .uri {

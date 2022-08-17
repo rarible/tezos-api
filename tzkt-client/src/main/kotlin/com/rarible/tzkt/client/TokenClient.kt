@@ -1,6 +1,8 @@
 package com.rarible.tzkt.client
 
+import com.rarible.tzkt.config.TzktSettings
 import com.rarible.tzkt.meta.MetaService
+import com.rarible.tzkt.model.BatchBody
 import com.rarible.tzkt.model.ItemId
 import com.rarible.tzkt.model.Page
 import com.rarible.tzkt.model.Part
@@ -22,18 +24,27 @@ import java.math.BigInteger
 class TokenClient(
     webClient: WebClient,
     val metaService: MetaService,
-    val royaltyHander: RoyaltiesHandler
+    val royaltyHander: RoyaltiesHandler,
+    val settings: TzktSettings
 ) : BaseClient(webClient) {
 
     suspend fun token(itemId: String, loadMeta: Boolean = false, checkBalance: Boolean = true) =
         tokens(listOf(itemId), loadMeta, checkBalance).firstOrNotFound(itemId)
 
     suspend fun tokens(ids: List<String>, loadMeta: Boolean = false, checkBalance: Boolean = true) = coroutineScope {
-        val groups = groupIds(ids.distinct())
-        val tokens = groups
-            .map { (contract, ids) -> async { tokens(contract, ids, loadMeta) } }
-            .awaitAll()
-            .flatten()
+        val tokens = when (settings.useTokensBatch) {
+            true -> {
+                invokePost({
+                    it.path(BASE_PATH)
+                }, BatchBody(ids.distinct()))
+            }
+            else -> {
+                groupIds(ids.distinct())
+                    .map { (contract, ids) -> async { tokens(contract, ids, loadMeta) } }
+                    .awaitAll()
+                    .flatten()
+            }
+        }
 
         // We need balances to determine which items were deleted
         val balances = if (checkBalance) {

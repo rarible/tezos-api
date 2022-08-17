@@ -3,6 +3,7 @@ package com.rarible.tzkt.client
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.rarible.tzkt.config.KnownAddresses
+import com.rarible.tzkt.config.TzktSettings
 import com.rarible.tzkt.meta.MetaService
 import com.rarible.tzkt.model.TzktNotFound
 import io.mockk.mockk
@@ -44,7 +45,7 @@ class TokenClientTests : BaseClientTests() {
     val bigMapKeyClient = BigMapKeyClient(client)
     val ipfsClient = IPFSClient(client, mapper)
     val metaService = MetaService(ObjectMapper().registerKotlinModule(), bigMapKeyClient, ipfsClient, config)
-    val tokenClient = TokenClient(client, metaService, mockk())
+    val tokenClient = TokenClient(client, metaService, mockk(), TzktSettings())
 
     @DisabledOnOs(OS.LINUX)
     @Test
