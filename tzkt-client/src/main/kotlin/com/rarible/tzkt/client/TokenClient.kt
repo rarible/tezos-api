@@ -50,7 +50,6 @@ class TokenClient(
             it.path(BASE_PATH)
                 .queryParam("contract", parsed.contract)
                 .queryParam("tokenId", parsed.tokenId)
-                .queryParam("token.standard", "fa2")
         }
         val token = tokens.firstOrNotFound(itemId)
         return metaService.meta(token)
@@ -62,7 +61,7 @@ class TokenClient(
             it.path(BASE_PATH)
                 .queryParam("contract", parsed.contract)
                 .queryParam("tokenId", parsed.tokenId)
-                .queryParam("token.standard", "fa2")
+                .queryParam("standard", "fa2")
         }.firstOrNotFound(itemId)
         return token.metadata?.let { it["artifactUri"] != null }
     }
@@ -82,7 +81,7 @@ class TokenClient(
             invoke<List<Token>> { builder ->
                 builder.path(BASE_PATH)
                     .apply {
-                        queryParam("token.standard", "fa2")
+                        queryParam("standard", "fa2")
                         queryParam("limit", size)
                         queryParam("lastTime.${directionEqual(sortAsc)}", continuation.date)
                         queryParam("id.${direction(sortAsc)}", prevToken.id)
@@ -94,7 +93,7 @@ class TokenClient(
         } ?: invoke { builder ->
             builder.path(BASE_PATH)
                 .apply {
-                    queryParam("token.standard", "fa2")
+                    queryParam("standard", "fa2")
                     queryParam("limit", size)
                     val sorting = if (sortAsc) "sort.asc" else "sort.desc"
                     queryParam(sorting, "lastTime,id")
@@ -214,7 +213,6 @@ class TokenClient(
             it.path(BASE_PATH)
                 .queryParam("contract", contract)
                 .queryParam("tokenId.in", ids.joinToString(","))
-                .queryParam("token.standard", "fa2")
         }
 
         // enrich with parsed meta
