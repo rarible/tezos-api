@@ -32,14 +32,16 @@ class TokenClient(
         tokens(listOf(itemId), loadMeta, checkBalance).firstOrNotFound(itemId)
 
     suspend fun tokens(ids: List<String>, loadMeta: Boolean = false, checkBalance: Boolean = true) = coroutineScope {
+        val distinctIds = ids.distinct()
+        if (distinctIds.isEmpty()) emptyList<Token>()
         val tokens = when (settings.useTokensBatch) {
             true -> {
                 invokePost({
                     it.path(BASE_PATH)
-                }, BatchBody(ids.distinct()))
+                }, BatchBody(distinctIds))
             }
             else -> {
-                groupIds(ids.distinct())
+                groupIds(distinctIds)
                     .map { (contract, ids) -> async { tokens(contract, ids, loadMeta) } }
                     .awaitAll()
                     .flatten()

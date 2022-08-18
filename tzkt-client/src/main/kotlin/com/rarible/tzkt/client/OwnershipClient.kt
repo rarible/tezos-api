@@ -55,6 +55,8 @@ class OwnershipClient(
     }
 
     suspend fun ownershipsByIds(ownershipIds: List<String>) = coroutineScope {
+        val distinctIds = ownershipIds.distinct()
+        if (distinctIds.isEmpty()) emptyList<TokenBalance>()
         when(settings.useOwnershipsBatch) {
             true -> {
                 invokePost({
