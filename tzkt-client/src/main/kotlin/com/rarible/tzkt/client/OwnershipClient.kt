@@ -61,9 +61,9 @@ class OwnershipClient(
             true -> {
                 invokePost({
                     it.path(BASE_PATH)
-                }, BatchBody(ownershipIds.distinct()))
+                }, BatchBody(distinctIds))
             }
-            else -> ownershipIds.map { async { ownershipById(it) } }.awaitAll()
+            else -> distinctIds.map { async { ownershipById(it) } }.awaitAll()
         }
     }
 
