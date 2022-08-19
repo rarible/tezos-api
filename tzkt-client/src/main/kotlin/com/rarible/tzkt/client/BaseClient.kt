@@ -1,10 +1,12 @@
 package com.rarible.tzkt.client
 
+import com.rarible.tzkt.model.TzktNotFound
 import com.rarible.tzkt.utils.flatMapAsync
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBody
+import org.springframework.web.reactive.function.client.awaitBodyOrNull
 import org.springframework.web.util.UriBuilder
 import java.net.URI
 
@@ -15,15 +17,17 @@ abstract class BaseClient(
     val logger = LoggerFactory.getLogger(javaClass)
 
     suspend inline fun <reified T : Any> invoke(crossinline builder: (b: UriBuilder) -> UriBuilder): T {
-        return webClient.get()
+        var build: URI? = null
+        val body = webClient.get()
             .uri {
-                val build = builder(it).build()
-                logger.info("Request to ${build}")
+                build = builder(it).build()
+                logger.info("Request to $build")
                 build
             }
             .accept(APPLICATION_JSON)
             .retrieve()
-            .awaitBody()
+            .awaitBodyOrNull<T>()
+        return body ?: throw TzktNotFound("Empty response for url: $build")
     }
 
     suspend inline fun <reified T : Any> invokePost(crossinline builder: (b: UriBuilder) -> UriBuilder, body: Any): T {

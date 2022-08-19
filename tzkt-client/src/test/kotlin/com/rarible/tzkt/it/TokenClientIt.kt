@@ -11,11 +11,13 @@ import com.rarible.tzkt.config.TzktSettings
 import com.rarible.tzkt.meta.MetaService
 import com.rarible.tzkt.model.Part
 import com.rarible.tzkt.model.TimestampIdContinuation
+import com.rarible.tzkt.model.TzktNotFound
 import com.rarible.tzkt.royalties.RoyaltiesHandler
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.condition.DisabledOnOs
 import org.junit.jupiter.api.condition.OS
 import org.springframework.web.reactive.function.client.WebClient
@@ -81,6 +83,11 @@ class TokenClientIt {
     fun `should have correct royalty`() = runBlocking<Unit> {
         val parts = tokenClient.royalty("KT1L7GvUxZH5tfa6cgZKnH6vpp2uVxnFVHKu:945")
         assertThat(parts.first()).isEqualTo(Part("tz29DrxbfkcfpUveVGsmhgvWqjgkVtGXbQyP", 700))
+    }
+
+    @Test
+    fun `shouldn't return token by contract and token id`() = runBlocking<Unit> {
+        assertThrows<TzktNotFound> { tokenClient.token("KT1NWdwVA8zq5DDJTKcMkRqWYJcEcyTTm5WK:1156") }
     }
 
     @Test

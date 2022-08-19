@@ -6,10 +6,12 @@ import com.rarible.tzkt.client.CollectionClient
 import com.rarible.tzkt.client.IPFSClient
 import com.rarible.tzkt.config.TzktSettings
 import com.rarible.tzkt.meta.MetaCollectionService
+import com.rarible.tzkt.model.TzktNotFound
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.condition.DisabledOnOs
 import org.junit.jupiter.api.condition.OS
 import org.springframework.web.reactive.function.client.WebClient
@@ -36,6 +38,17 @@ class CollectionClientIt {
         val collection = collectionClient.collection("KT1UFkqihyjz1GhxM1hk78CjfcChsBbLGYMm", true)
         assertThat(collection.name).isEqualTo("123-000")
         assertThat(collection.symbol).isEqualTo("123")
+    }
+
+    @Test
+    fun `should return collection`() = runBlocking<Unit> {
+        val collectionClient = client("https://api.ithacanet.tzkt.io")
+        assertThrows<TzktNotFound> {
+            collectionClient.collection("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton", false)
+        }
+        assertThrows<TzktNotFound> {
+            collectionClient.collection("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton", true)
+        }
     }
 
     @Test
