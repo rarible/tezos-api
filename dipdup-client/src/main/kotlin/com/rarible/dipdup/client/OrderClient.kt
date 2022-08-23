@@ -9,6 +9,7 @@ import com.rarible.dipdup.client.converter.convertByMaker
 import com.rarible.dipdup.client.core.model.Asset
 import com.rarible.dipdup.client.core.model.DipDupOrder
 import com.rarible.dipdup.client.core.model.OrderStatus
+import com.rarible.dipdup.client.core.model.TezosPlatform
 import com.rarible.dipdup.client.exception.DipDupNotFound
 import com.rarible.dipdup.client.graphql.GetOrderByMakerCustomQuery
 import com.rarible.dipdup.client.graphql.GetOrdersByItemCustomQuery
@@ -30,6 +31,7 @@ class OrderClient(
 
     suspend fun getOrdersAll(
         statuses: List<OrderStatus>,
+        platforms: List<TezosPlatform> = listOf(TezosPlatform.RARIBLE_V1, TezosPlatform.RARIBLE_V2),
         sort: DipDupOrderSort? = DipDupOrderSort.LAST_UPDATE_DESC,
         size: Int = DEFAULT_PAGE,
         continuation: String?
@@ -37,6 +39,7 @@ class OrderClient(
         val parsedContinuation = DipDupContinuation.parse(continuation)
         val response = safeExecution(GetOrdersCustomQuery(
             statuses = statuses.map { it.name },
+            platforms = platforms,
             limit = size,
             sort = sort ?: DipDupOrderSort.LAST_UPDATE_DESC,
             prevId = parsedContinuation?.let { it.id.toString() },
@@ -56,6 +59,7 @@ class OrderClient(
         maker: String?,
         currencyId: String,
         statuses: List<OrderStatus>,
+        platforms: List<TezosPlatform> = listOf(TezosPlatform.RARIBLE_V1, TezosPlatform.RARIBLE_V2),
         size: Int = DEFAULT_PAGE,
         continuation: String?
     ): DipDupOrdersPage {
@@ -67,6 +71,7 @@ class OrderClient(
                 maker = maker,
                 currencyId = currencyId,
                 statuses = statuses.map { it.name },
+                platforms = platforms,
                 limit = size,
                 prevId = parsedContinuation?.let { it.id.toString() },
                 prevDate = parsedContinuation?.let { it.date.toString() }
@@ -78,6 +83,7 @@ class OrderClient(
     suspend fun getOrdersByMakers(
         makers: List<String>,
         statuses: List<OrderStatus>,
+        platforms: List<TezosPlatform> = listOf(TezosPlatform.RARIBLE_V1, TezosPlatform.RARIBLE_V2),
         size: Int = DEFAULT_PAGE,
         continuation: String?
     ): DipDupOrdersPage {
@@ -86,6 +92,7 @@ class OrderClient(
             GetOrderByMakerCustomQuery(
                 makers = makers,
                 statuses = statuses.map { it.name },
+                platforms = platforms,
                 limit = size,
                 prevId = parsedContinuation?.let { it.id.toString() },
                 prevDate = parsedContinuation?.let { it.date.toString() }

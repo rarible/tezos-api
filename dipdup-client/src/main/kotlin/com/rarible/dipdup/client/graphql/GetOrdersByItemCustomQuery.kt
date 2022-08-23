@@ -1,6 +1,7 @@
 package com.rarible.dipdup.client.graphql
 
 import com.rarible.dipdup.client.GetOrdersByItemQuery
+import com.rarible.dipdup.client.core.model.TezosPlatform
 
 data class GetOrdersByItemCustomQuery(
     val contract: String,
@@ -8,6 +9,7 @@ data class GetOrdersByItemCustomQuery(
     val maker: String? = null,
     val currencyId: String,
     val statuses: List<String> = emptyList(),
+    val platforms: List<TezosPlatform>,
     val limit: Int,
     val prevId: String? = null,
     val prevDate: String? = null
@@ -29,6 +31,7 @@ data class GetOrdersByItemCustomQuery(
             }
         }
         if (statuses.isNotEmpty()) conditions.add("status: {_in: [${statuses.joinToString(",")}]}")
+        conditions.add("platform: {_in: [${platforms.joinToString(",")}]}")
         prevDate?.let { conditions.add("""
             _or: [
                 {
