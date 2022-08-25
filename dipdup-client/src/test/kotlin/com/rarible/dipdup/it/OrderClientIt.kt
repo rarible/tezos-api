@@ -4,6 +4,7 @@ import com.apollographql.apollo3.ApolloClient
 import com.rarible.dipdup.client.OrderClient
 import com.rarible.dipdup.client.core.model.Asset
 import com.rarible.dipdup.client.core.model.TezosPlatform
+import com.rarible.dipdup.client.model.DipDupContinuation
 import com.rarible.dipdup.client.model.DipDupOrderSort
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
@@ -15,6 +16,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.math.BigDecimal
+import java.util.*
 import java.util.stream.Stream
 
 // this test will be disabled on jenkins
@@ -35,6 +37,7 @@ class OrderClientIt {
     }
 
     val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://tezos-indexer.rarible.org/v1/graphql").build() }
+//    val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://testnet-tezos-indexer.rarible.org/v1/graphql").build() }
     val orderClient = OrderClient(client)
 
     @ParameterizedTest
@@ -69,8 +72,30 @@ class OrderClientIt {
     }
 
     @Test
-    fun `should have for legacy orders`() = runBlocking<Unit> {
-        val orders = orderClient.getOrdersAll(listOf(), listOf(TezosPlatform.RARIBLE_V2), DipDupOrderSort.LAST_UPDATE_DESC, 1000, null)
-        assertThat(orders).isNotNull
+    fun `should have collection asset type`() = runBlocking<Unit> {
+        val order = orderClient.getOrderById("3d331b52-472c-5484-84a6-e58794df09b9")
+        assertThat(order.take.assetType).isEqualTo(Asset.COLLECTION(Asset.COLLECTION_NAME, "KT1Uke8qc4YTfP41dGuoGC8UsgRyCtyvKPLA"))
+    }
+
+    @Test
+    fun `iterate all order without duplication`() = runBlocking<Unit> {
+        var continuation: String? = null
+        var count = 0
+        do {
+            val orders = orderClient.getOrdersAll(
+                listOf(),
+                listOf(TezosPlatform.HEN),
+                DipDupOrderSort.LAST_UPDATE_ASC,
+                1000, continuation
+            )
+            continuation = orders.continuation
+            count += orders.orders.size
+            DipDupContinuation.parse(continuation)?.let {
+                assertThat(UUID.fromString(orders.orders.first().id)).isNotEqualTo(it.id)
+            }
+            println("continuation: ${continuation}")
+
+        } while (continuation != null)
+        println("Count: ${count}")
     }
 }

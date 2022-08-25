@@ -23,6 +23,10 @@ fun getAsset(assetClass: String?, contract: String?, tokenId: String?, value: An
             assetType = Asset.XTZ(),
             assetValue = BigDecimal(value.toString())
         )
+        Asset.COLLECTION_NAME -> Asset(
+            assetType = Asset.COLLECTION(contract = contract!!),
+            assetValue = BigDecimal(value.toString())
+        )
         else -> throw RuntimeException("Unknown assetClass: $assetClass")
     }
 }
