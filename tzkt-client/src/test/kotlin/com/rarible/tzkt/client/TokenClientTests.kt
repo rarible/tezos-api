@@ -751,4 +751,71 @@ class TokenClientTests : BaseClientTests() {
         val token = tokenClient.token("KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS:73086")
         assertThat(token.isDeleted()).isTrue()
     }
+
+    @Test
+    fun `should return token meta with incorrect ipfs link`() = runBlocking<Unit> {
+        mock(
+            """
+                [
+                    {
+                        "id": 1211972,
+                        "contract": {
+                            "alias": "Rarible",
+                            "address": "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS"
+                        },
+                        "tokenId": "40",
+                        "standard": "fa2",
+                        "firstLevel": 1947552,
+                        "firstTime": "2021-12-15T14:25:56Z",
+                        "lastLevel": 1950408,
+                        "lastTime": "2021-12-16T15:26:46Z",
+                        "transfersCount": 9,
+                        "balancesCount": 9,
+                        "holdersCount": 9,
+                        "totalMinted": "100",
+                        "totalBurned": "0",
+                        "totalSupply": "100"
+                    }
+                ]
+        """.trimIndent()
+        )
+        mock("""
+            {
+                "id": 12480410,
+                "active": true,
+                "hash": "exprvTHEWNUSkauLiNM7jYXa2hBbHLjWFLcRJzdX9xcmNFd4AiUosN",
+                "key": "40",
+                "value": {
+                    "token_id": "40",
+                    "token_info": {
+                        "": "697066733a2f2f697066732f516d506466644b7779733370557166714b6b577942646f466f365a527734555467514d5237764441674256585931"
+                    }
+                },
+                "firstLevel": 1947552,
+                "lastLevel": 1947552,
+                "updates": 1
+            }
+        """.trimIndent())
+        mock("""
+            {
+            	"name": "NFT X MB",
+            	"description": "LFG",
+            	"artifactUri": "ipfs://ipfs/QmPkkaj8HzxiY6r1vwSQmmiABLtav3JZVLZTnPDsKhJLP1/image.png",
+            	"displayUri": "ipfs://ipfs/QmPkkaj8HzxiY6r1vwSQmmiABLtav3JZVLZTnPDsKhJLP1/image.png",
+            	"thumbnailUri": "ipfs://ipfs/QmPkkaj8HzxiY6r1vwSQmmiABLtav3JZVLZTnPDsKhJLP1/image.png",
+            	"externalUri": "https://rarible.com/token/KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS:40",
+            	"attributes": []
+            }
+        """.trimIndent())
+
+        val token = tokenClient.token("KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS:40", checkBalance = false, loadMeta = true)
+        assertThat(request().path).isEqualTo("/v1/tokens?contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&tokenId.in=40")
+
+        assertThat(token).isNotNull
+        assertThat(token.meta).isNotNull
+        assertThat(token.meta!!.name).isEqualTo("NFT X MB")
+        assertThat(token.meta!!.description).isEqualTo("LFG")
+        assertThat(token.meta!!.content[0].uri).isEqualTo("ipfs://QmPkkaj8HzxiY6r1vwSQmmiABLtav3JZVLZTnPDsKhJLP1/image.png")
+        assertThat(token.meta!!.content[1].uri).isEqualTo("ipfs://QmPkkaj8HzxiY6r1vwSQmmiABLtav3JZVLZTnPDsKhJLP1/image.png")
+    }
 }
