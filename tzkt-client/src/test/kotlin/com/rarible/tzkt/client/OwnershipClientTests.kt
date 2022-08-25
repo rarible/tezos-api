@@ -1,5 +1,6 @@
 package com.rarible.tzkt.client
 
+import com.rarible.tzkt.config.TzktSettings
 import com.rarible.tzkt.model.ItemId
 import com.rarible.tzkt.model.OwnershipId
 import com.rarible.tzkt.model.TzktNotFound
@@ -10,7 +11,7 @@ import org.junit.jupiter.api.Test
 
 class OwnershipClientTests : BaseClientTests() {
 
-    val ownershipClient = OwnershipClient(client)
+    val ownershipClient = OwnershipClient(client, TzktSettings())
 
     @Test
     fun `should return ownership by ownership id`() = runBlocking<Unit> {

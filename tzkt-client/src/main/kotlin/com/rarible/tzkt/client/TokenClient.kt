@@ -1,6 +1,8 @@
 package com.rarible.tzkt.client
 
+import com.rarible.tzkt.config.TzktSettings
 import com.rarible.tzkt.meta.MetaService
+import com.rarible.tzkt.model.BatchBody
 import com.rarible.tzkt.model.ItemId
 import com.rarible.tzkt.model.Page
 import com.rarible.tzkt.model.Part
@@ -22,18 +24,29 @@ import java.math.BigInteger
 class TokenClient(
     webClient: WebClient,
     val metaService: MetaService,
-    val royaltyHander: RoyaltiesHandler
+    val royaltyHander: RoyaltiesHandler,
+    val settings: TzktSettings
 ) : BaseClient(webClient) {
 
     suspend fun token(itemId: String, loadMeta: Boolean = false, checkBalance: Boolean = true) =
         tokens(listOf(itemId), loadMeta, checkBalance).firstOrNotFound(itemId)
 
     suspend fun tokens(ids: List<String>, loadMeta: Boolean = false, checkBalance: Boolean = true) = coroutineScope {
-        val groups = groupIds(ids)
-        val tokens = groups
-            .map { (contract, ids) -> async { tokens(contract, ids, loadMeta) } }
-            .awaitAll()
-            .flatten()
+        val distinctIds = ids.distinct()
+        if (distinctIds.isEmpty()) emptyList<Token>()
+        val tokens = when (settings.useTokensBatch) {
+            true -> {
+                invokePost({
+                    it.path(BASE_PATH)
+                }, BatchBody(distinctIds))
+            }
+            else -> {
+                groupIds(distinctIds)
+                    .map { (contract, ids) -> async { tokens(contract, ids, loadMeta) } }
+                    .awaitAll()
+                    .flatten()
+            }
+        }
 
         // We need balances to determine which items were deleted
         val balances = if (checkBalance) {
@@ -50,7 +63,6 @@ class TokenClient(
             it.path(BASE_PATH)
                 .queryParam("contract", parsed.contract)
                 .queryParam("tokenId", parsed.tokenId)
-                .queryParam("token.standard", "fa2")
         }
         val token = tokens.firstOrNotFound(itemId)
         return metaService.meta(token)
@@ -62,7 +74,7 @@ class TokenClient(
             it.path(BASE_PATH)
                 .queryParam("contract", parsed.contract)
                 .queryParam("tokenId", parsed.tokenId)
-                .queryParam("token.standard", "fa2")
+                .queryParam("standard", "fa2")
         }.firstOrNotFound(itemId)
         return token.metadata?.let { it["artifactUri"] != null }
     }
@@ -82,7 +94,7 @@ class TokenClient(
             invoke<List<Token>> { builder ->
                 builder.path(BASE_PATH)
                     .apply {
-                        queryParam("token.standard", "fa2")
+                        queryParam("standard", "fa2")
                         queryParam("limit", size)
                         queryParam("lastTime.${directionEqual(sortAsc)}", continuation.date)
                         queryParam("id.${direction(sortAsc)}", prevToken.id)
@@ -94,7 +106,7 @@ class TokenClient(
         } ?: invoke { builder ->
             builder.path(BASE_PATH)
                 .apply {
-                    queryParam("token.standard", "fa2")
+                    queryParam("standard", "fa2")
                     queryParam("limit", size)
                     val sorting = if (sortAsc) "sort.asc" else "sort.desc"
                     queryParam(sorting, "lastTime,id")
@@ -214,7 +226,6 @@ class TokenClient(
             it.path(BASE_PATH)
                 .queryParam("contract", contract)
                 .queryParam("tokenId.in", ids.joinToString(","))
-                .queryParam("token.standard", "fa2")
         }
 
         // enrich with parsed meta

@@ -1,13 +1,13 @@
 package com.rarible.tzkt.it
 
 import com.rarible.tzkt.client.OwnershipClient
+import com.rarible.tzkt.config.TzktSettings
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.DisabledOnOs
 import org.junit.jupiter.api.condition.OS
-import org.springframework.web.reactive.function.client.WebClient
 import preparedClient
 
 // this test will be disabled on jenkins
@@ -15,7 +15,8 @@ import preparedClient
 class OwnershipClientIt {
 
     val client = preparedClient("https://api.tzkt.io")
-    val ownershipClient = OwnershipClient(client)
+//    val client = preparedClient("http://tezos-tzkt.testnet.rarible.int")
+    val ownershipClient = OwnershipClient(client, TzktSettings(useOwnershipsBatch = true))
 
     @Disabled
     @Test
@@ -56,5 +57,12 @@ class OwnershipClientIt {
         }
         assertThat(current).isEqualTo(total)
         assertThat(ids).hasSize(total)
+    }
+
+    @Disabled
+    @Test
+    fun `should return ownerships in batch`() = runBlocking<Unit> {
+        val ownerships = ownershipClient.ownershipsByIds(listOf("KT1MmTE786dG3mgzKsa9uWqhoWpMbUtEMXQC:12:tz1QNpkxEufumXqpVkK24HyYi3gca9HzjJZ6"))
+        assertThat(ownerships).hasSize(1)
     }
 }

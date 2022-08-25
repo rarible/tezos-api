@@ -1,10 +1,12 @@
 package com.rarible.dipdup.client.graphql
 
 import com.rarible.dipdup.client.GetOrdersByMakerQuery
+import com.rarible.dipdup.client.core.model.TezosPlatform
 
 data class GetOrderByMakerCustomQuery(
     val makers: List<String>,
     val statuses: List<String> = emptyList(),
+    val platforms: List<TezosPlatform>,
     val limit: Int,
     val prevId: String? = null,
     val prevDate: String? = null
@@ -14,6 +16,7 @@ data class GetOrderByMakerCustomQuery(
         val conditions = mutableListOf<String>()
         conditions.add("maker: {_in: [\"${makers.joinToString ( "\",\"" )}\"]}")
         if (statuses.isNotEmpty()) conditions.add("status: {_in: [${statuses.joinToString(",")}]}")
+        conditions.add("platform: {_in: [${platforms.joinToString(",")}]}")
         prevDate?.let { conditions.add("""
             _or: [
                 {
@@ -45,6 +48,7 @@ data class GetOrderByMakerCustomQuery(
                 make_contract
                 make_token_id
                 make_value
+                make_price
                 maker
                 network
                 platform
@@ -55,6 +59,7 @@ data class GetOrderByMakerCustomQuery(
                 take_contract
                 take_token_id
                 take_value
+                take_price
                 taker
                 origin_fees
                 payouts

@@ -26,8 +26,10 @@ data class DipDupOrder(
     val lastUpdatedAt: OffsetDateTime,
     val maker: String,
     val make: Asset,
+    val makePrice: BigDecimal?,
     val taker: String?,
     val take: Asset,
+    val takePrice: BigDecimal?,
     val salt: BigInteger,
     val originFees: List<Part>,
     val payouts: List<Part>

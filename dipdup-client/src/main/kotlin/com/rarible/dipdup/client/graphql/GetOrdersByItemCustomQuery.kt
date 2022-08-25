@@ -1,6 +1,7 @@
 package com.rarible.dipdup.client.graphql
 
 import com.rarible.dipdup.client.GetOrdersByItemQuery
+import com.rarible.dipdup.client.core.model.TezosPlatform
 
 data class GetOrdersByItemCustomQuery(
     val contract: String,
@@ -8,6 +9,7 @@ data class GetOrdersByItemCustomQuery(
     val maker: String? = null,
     val currencyId: String,
     val statuses: List<String> = emptyList(),
+    val platforms: List<TezosPlatform>,
     val limit: Int,
     val prevId: String? = null,
     val prevDate: String? = null
@@ -29,6 +31,7 @@ data class GetOrdersByItemCustomQuery(
             }
         }
         if (statuses.isNotEmpty()) conditions.add("status: {_in: [${statuses.joinToString(",")}]}")
+        conditions.add("platform: {_in: [${platforms.joinToString(",")}]}")
         prevDate?.let { conditions.add("""
             _or: [
                 {
@@ -45,7 +48,7 @@ data class GetOrdersByItemCustomQuery(
                 marketplace_order(
                     where: {${conditions.joinToString(",\n")}}
                     limit: ${'$'}limit
-                    order_by: {last_updated_at: desc, id: desc, take_value: asc}
+                    order_by: {last_updated_at: desc, id: desc, make_price: asc}
                 ) { __typename ...order } }
             fragment order on marketplace_order {
                 cancelled
@@ -60,6 +63,7 @@ data class GetOrdersByItemCustomQuery(
                 make_contract
                 make_token_id
                 make_value
+                make_price
                 maker
                 network
                 platform
@@ -70,6 +74,7 @@ data class GetOrdersByItemCustomQuery(
                 take_contract
                 take_token_id
                 take_value
+                take_price
                 taker
                 origin_fees
                 payouts

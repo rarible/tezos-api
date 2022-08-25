@@ -1,5 +1,6 @@
 package com.rarible.tzkt.client
 
+import com.rarible.tzkt.config.TzktSettings
 import com.rarible.tzkt.meta.MetaCollectionService
 import com.rarible.tzkt.model.CollectionMeta
 import com.rarible.tzkt.model.CollectionType
@@ -14,7 +15,7 @@ import org.junit.jupiter.api.Test
 class CollectionClientTests : BaseClientTests() {
 
     val metaCollectionService: MetaCollectionService = mockk()
-    val collectionClient = CollectionClient(client, metaCollectionService)
+    val collectionClient = CollectionClient(client, metaCollectionService, TzktSettings())
 
     @BeforeEach
     fun `setUp`() = runBlocking<Unit> {

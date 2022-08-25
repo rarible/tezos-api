@@ -1,10 +1,13 @@
 package com.rarible.tzkt.client
 
+import com.rarible.tzkt.config.TzktSettings
 import com.rarible.tzkt.meta.MetaCollectionService
+import com.rarible.tzkt.model.BatchBody
 import com.rarible.tzkt.model.CollectionMeta
 import com.rarible.tzkt.model.CollectionType
 import com.rarible.tzkt.model.Contract
 import com.rarible.tzkt.model.Page
+import com.rarible.tzkt.model.TokenBalance
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -12,19 +15,24 @@ import org.springframework.web.reactive.function.client.WebClient
 
 class CollectionClient(
     webClient: WebClient,
-    val metaCollectionService: MetaCollectionService
+    val metaCollectionService: MetaCollectionService,
+    val settings: TzktSettings
 ) : BaseClient(webClient) {
 
-    suspend fun collection(contract: String): Contract = coroutineScope {
+    suspend fun collection(contract: String, meta: Boolean = false): Contract = coroutineScope {
         val collection = async {
             invoke<Contract> {
                 it.path("$BASE_PATH/$contract")
             }
         }
-        val meta = async {
-            collectionMeta(contract)
+        if (meta) {
+            val meta = async {
+                collectionMeta(contract)
+            }
+            collection.await().meta(meta.await())
+        } else {
+            collection.await()
         }
-        collection.await().meta(meta.await())
     }
 
     suspend fun collectionsAll(size: Int = DEFAULT_SIZE, continuation: String?, sortAsc: Boolean = true): Page<Contract> {
@@ -80,13 +88,17 @@ class CollectionClient(
         return type
     }
 
-    suspend fun collectionsByIds(addresses: List<String>): List<Contract> {
-        val collections = coroutineScope {
-            addresses
-                .map { async { collection(it) } }
-                .awaitAll()
+    suspend fun collectionsByIds(addresses: List<String>) = coroutineScope {
+        val distinctIds = addresses.distinct()
+        if (distinctIds.isEmpty()) emptyList<Contract>()
+        when(settings.useCollectionBatch) {
+            true -> {
+                invokePost({
+                    it.path(BASE_PATH)
+                }, BatchBody(distinctIds))
+            }
+            else -> distinctIds.map { async { collection(it) } }.awaitAll()
         }
-        return collections
     }
 
     suspend fun collectionMeta(contract: String): CollectionMeta {

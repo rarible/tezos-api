@@ -2,6 +2,7 @@ package com.rarible.dipdup.client
 
 import com.rarible.dipdup.client.core.model.Asset
 import com.rarible.dipdup.client.core.model.OrderStatus
+import com.rarible.dipdup.client.core.model.TezosPlatform
 import com.rarible.dipdup.client.exception.DipDupNotFound
 import com.rarible.dipdup.client.model.DipDupContinuation
 import com.rarible.dipdup.client.model.DipDupOrderSort
@@ -38,7 +39,7 @@ class OrderClientFt : BaseClientFt() {
                         "make_value": 1,
                         "maker": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
                         "network": "hangzhou2net",
-                        "platform": "Rarible",
+                        "platform": "RARIBLE_V2",
                         "start_at": "2022-02-23T15:27:38+00:00",
                         "salt": 17102,
                         "status": "FILLED",
@@ -75,7 +76,7 @@ class OrderClientFt : BaseClientFt() {
                         "make_value": 1,
                         "maker": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
                         "network": "hangzhou2net",
-                        "platform": "Rarible",
+                        "platform": "RARIBLE_V2",
                         "start_at": "2022-02-23T15:32:24+00:00",
                         "salt": 17108,
                         "status": "ACTIVE",
@@ -112,7 +113,7 @@ class OrderClientFt : BaseClientFt() {
                         "make_value": 1,
                         "maker": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
                         "network": "hangzhou2net",
-                        "platform": "Rarible",
+                        "platform": "RARIBLE_V2",
                         "start_at": "2022-02-23T15:32:39+00:00",
                         "salt": 17109,
                         "status": "CANCELLED",
@@ -175,7 +176,7 @@ class OrderClientFt : BaseClientFt() {
                         "make_value": 1,
                         "maker": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
                         "network": "hangzhou2net",
-                        "platform": "Rarible",
+                        "platform": "RARIBLE_V2",
                         "start_at": "2022-02-23T15:27:38+00:00",
                         "salt": 17102,
                         "status": "FILLED",
@@ -183,7 +184,9 @@ class OrderClientFt : BaseClientFt() {
                         "take_contract": null,
                         "take_token_id": null,
                         "take_value": 1,
-                        "taker": null
+                        "taker": null,
+                        "origin_fees": [],
+                        "payouts": []
                   },
                   {
                         "__typename": "marketplace_order",
@@ -200,7 +203,7 @@ class OrderClientFt : BaseClientFt() {
                         "make_value": 1,
                         "maker": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
                         "network": "hangzhou2net",
-                        "platform": "Rarible",
+                        "platform": "RARIBLE_V2",
                         "start_at": "2022-02-23T15:27:38+00:00",
                         "salt": 17102,
                         "status": "FILLED",
@@ -208,7 +211,9 @@ class OrderClientFt : BaseClientFt() {
                         "take_contract": null,
                         "take_token_id": null,
                         "take_value": 1,
-                        "taker": null
+                        "taker": null,
+                        "origin_fees": [],
+                        "payouts": []
                   }
                 ]
               }
@@ -216,6 +221,7 @@ class OrderClientFt : BaseClientFt() {
 
         val page = orderClient.getOrdersAll(
             statuses = emptyList(),
+            platforms = listOf(TezosPlatform.RARIBLE_V2),
             sort = DipDupOrderSort.LAST_UPDATE_DESC,
             size = 10,
             continuation = null
@@ -245,7 +251,7 @@ class OrderClientFt : BaseClientFt() {
                             "make_value": 1,
                             "maker": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
                             "network": "hangzhou2net",
-                            "platform": "Rarible",
+                            "platform": "RARIBLE_V2",
                             "start_at": "2022-02-23T15:27:38+00:00",
                             "salt": 17102,
                             "status": "FILLED",
@@ -253,7 +259,9 @@ class OrderClientFt : BaseClientFt() {
                             "take_contract": null,
                             "take_token_id": null,
                             "take_value": 1,
-                            "taker": null
+                            "taker": null,
+                            "origin_fees": [],
+                            "payouts": []
                         },
                         {
                             "__typename": "marketplace_order",
@@ -270,7 +278,7 @@ class OrderClientFt : BaseClientFt() {
                             "make_value": 1,
                             "maker": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
                             "network": "hangzhou2net",
-                            "platform": "Rarible",
+                            "platform": "RARIBLE_V2",
                             "start_at": "2022-02-23T15:27:38+00:00",
                             "salt": 17102,
                             "status": "FILLED",
@@ -278,7 +286,9 @@ class OrderClientFt : BaseClientFt() {
                             "take_contract": null,
                             "take_token_id": null,
                             "take_value": 1,
-                            "taker": null
+                            "taker": null,
+                            "origin_fees": [],
+                            "payouts": []
                         }
                     ]
                 }
@@ -309,7 +319,7 @@ class OrderClientFt : BaseClientFt() {
                     "make_value": 1,
                     "maker": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
                     "network": "hangzhou2net",
-                    "platform": "Rarible",
+                    "platform": "RARIBLE_V2",
                     "start_at": "2022-02-23T15:27:38+00:00",
                     "salt": 17102,
                     "status": "FILLED",
@@ -317,7 +327,9 @@ class OrderClientFt : BaseClientFt() {
                     "take_contract": null,
                     "take_token_id": null,
                     "take_value": 1,
-                    "taker": null
+                    "taker": null,
+                    "origin_fees": [],
+                    "payouts": []
                   }]}}
         """.trimIndent())
         val orders = orderClient.getOrdersByItem(
@@ -326,6 +338,7 @@ class OrderClientFt : BaseClientFt() {
             maker = null,
             currencyId = "XTZ",
             statuses = listOf(),
+            platforms = listOf(TezosPlatform.RARIBLE_V2),
             size = 2,
             continuation = "1659577833_42737510-3635-53a9-85cc-c37c81c74cf6"
         )
@@ -353,7 +366,7 @@ class OrderClientFt : BaseClientFt() {
                     "make_value": 1,
                     "maker": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
                     "network": "hangzhou2net",
-                    "platform": "Rarible",
+                    "platform": "RARIBLE_V2",
                     "start_at": "2022-02-23T15:27:38+00:00",
                     "salt": 17102,
                     "status": "FILLED",
@@ -361,7 +374,9 @@ class OrderClientFt : BaseClientFt() {
                     "take_contract": null,
                     "take_token_id": null,
                     "take_value": 1,
-                    "taker": null
+                    "taker": null,
+                    "origin_fees": [],
+                    "payouts": []
                   }]}}
         """.trimIndent())
         val orders = orderClient.getOrdersByItem(
@@ -370,6 +385,7 @@ class OrderClientFt : BaseClientFt() {
             maker = null,
             currencyId = "XTZ",
             statuses = listOf(),
+            platforms = listOf(TezosPlatform.RARIBLE_V2),
             size = 2,
             continuation = null
         )
@@ -397,7 +413,7 @@ class OrderClientFt : BaseClientFt() {
                     "make_value": 1,
                     "maker": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
                     "network": "hangzhou2net",
-                    "platform": "Rarible",
+                    "platform": "RARIBLE_V2",
                     "start_at": "2022-02-23T15:27:38+00:00",
                     "salt": 17102,
                     "status": "FILLED",
@@ -405,7 +421,9 @@ class OrderClientFt : BaseClientFt() {
                     "take_contract": "KT1JwfYcy2uGBg4tS8t8w5CnJotJmF5kN2J3",
                     "take_token_id": "123",
                     "take_value": 1,
-                    "taker": null
+                    "taker": null,
+                    "origin_fees": [],
+                    "payouts": []
                   }]}}
         """.trimIndent())
         val orders = orderClient.getOrdersByItem(
@@ -414,6 +432,7 @@ class OrderClientFt : BaseClientFt() {
             maker = null,
             currencyId = "KT1JwfYcy2uGBg4tS8t8w5CnJotJmF5kN2J3:123",
             statuses = listOf(),
+            platforms = listOf(TezosPlatform.RARIBLE_V2),
             size = 2,
             continuation = null
         )
@@ -441,7 +460,7 @@ class OrderClientFt : BaseClientFt() {
                             "make_value": 1,
                             "maker": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
                             "network": "hangzhou2net",
-                            "platform": "Rarible",
+                            "platform": "RARIBLE_V2",
                             "start_at": "2022-02-23T15:27:38+00:00",
                             "salt": 17102,
                             "status": "FILLED",
@@ -449,7 +468,9 @@ class OrderClientFt : BaseClientFt() {
                             "take_contract": null,
                             "take_token_id": null,
                             "take_value": 1,
-                            "taker": null
+                            "taker": null,
+                            "origin_fees": [],
+                            "payouts": []
                         },
                         {
                             "__typename": "marketplace_order",
@@ -466,7 +487,7 @@ class OrderClientFt : BaseClientFt() {
                             "make_value": 1,
                             "maker": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
                             "network": "hangzhou2net",
-                            "platform": "Rarible",
+                            "platform": "RARIBLE_V2",
                             "start_at": "2022-02-23T15:27:38+00:00",
                             "salt": 17102,
                             "status": "FILLED",
@@ -474,13 +495,16 @@ class OrderClientFt : BaseClientFt() {
                             "take_contract": null,
                             "take_token_id": null,
                             "take_value": 1,
-                            "taker": null
+                            "taker": null,
+                            "origin_fees": [],
+                            "payouts": []
                         }
                     ]
                 }
             }""".trimIndent())
         val page = orderClient.getOrdersAll(
             statuses = emptyList(),
+            platforms = listOf(TezosPlatform.RARIBLE_V2),
             sort = DipDupOrderSort.LAST_UPDATE_DESC,
             size = 2,
             continuation = null
@@ -576,7 +600,7 @@ class OrderClientFt : BaseClientFt() {
                     "make_value": 1,
                     "maker": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
                     "network": "hangzhou2net",
-                    "platform": "Rarible",
+                    "platform": "RARIBLE_V2",
                     "start_at": "2022-02-23T15:27:38+00:00",
                     "salt": 17102,
                     "status": "FILLED",
@@ -584,13 +608,16 @@ class OrderClientFt : BaseClientFt() {
                     "take_contract": null,
                     "take_token_id": null,
                     "take_value": 1,
-                    "taker": null
+                    "taker": null,
+                    "origin_fees": [],
+                    "payouts": []
                   }]}}
         """.trimIndent())
 
         val orders = orderClient.getOrdersByMakers(
             makers = listOf("tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"),
             statuses = listOf(),
+            platforms = listOf(TezosPlatform.RARIBLE_V2),
             size = 2,
             continuation = null
         )

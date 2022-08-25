@@ -1,5 +1,7 @@
 package com.rarible.tzkt.client
 
+import com.rarible.tzkt.config.TzktSettings
+import com.rarible.tzkt.model.BatchBody
 import com.rarible.tzkt.model.ItemId
 import com.rarible.tzkt.model.OwnershipId
 import com.rarible.tzkt.model.Page
@@ -8,10 +10,14 @@ import com.rarible.tzkt.model.TokenBalance
 import com.rarible.tzkt.model.TzktNotFound
 import com.rarible.tzkt.utils.Tezos
 import com.rarible.tzkt.utils.Tezos.NULL_ADDRESSES_STRING
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import org.springframework.web.reactive.function.client.WebClient
 
 class OwnershipClient(
-    webClient: WebClient
+    webClient: WebClient,
+    val settings: TzktSettings
 ) : BaseClient(webClient) {
 
     suspend fun ownershipsAll(continuation: String?, size: Int): Page<TokenBalance> {
@@ -46,6 +52,19 @@ class OwnershipClient(
             items = ownerships,
             continuation = nextContinuation?.let { it.toString() }
         )
+    }
+
+    suspend fun ownershipsByIds(ownershipIds: List<String>) = coroutineScope {
+        val distinctIds = ownershipIds.distinct()
+        if (distinctIds.isEmpty()) emptyList<TokenBalance>()
+        when(settings.useOwnershipsBatch) {
+            true -> {
+                invokePost({
+                    it.path(BASE_PATH)
+                }, BatchBody(distinctIds))
+            }
+            else -> distinctIds.map { async { ownershipById(it) } }.awaitAll()
+        }
     }
 
     suspend fun ownershipById(ownershipId: String): TokenBalance {

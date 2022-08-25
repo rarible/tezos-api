@@ -3,6 +3,7 @@ package com.rarible.tzkt.client
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.rarible.tzkt.config.KnownAddresses
+import com.rarible.tzkt.config.TzktSettings
 import com.rarible.tzkt.meta.MetaService
 import com.rarible.tzkt.model.TzktNotFound
 import io.mockk.mockk
@@ -44,7 +45,7 @@ class TokenClientTests : BaseClientTests() {
     val bigMapKeyClient = BigMapKeyClient(client)
     val ipfsClient = IPFSClient(client, mapper)
     val metaService = MetaService(ObjectMapper().registerKotlinModule(), bigMapKeyClient, ipfsClient, config)
-    val tokenClient = TokenClient(client, metaService, mockk())
+    val tokenClient = TokenClient(client, metaService, mockk(), TzktSettings())
 
     @DisabledOnOs(OS.LINUX)
     @Test
@@ -108,7 +109,7 @@ class TokenClientTests : BaseClientTests() {
         mock("[]")
 
         val token = tokenClient.token("KT1NWdwVA8zq5DDJTKcMkRqWYJcEcyTTm5WK:1156")
-        assertThat(request().path).isEqualTo("/v1/tokens?contract=KT1NWdwVA8zq5DDJTKcMkRqWYJcEcyTTm5WK&tokenId.in=1156&token.standard=fa2")
+        assertThat(request().path).isEqualTo("/v1/tokens?contract=KT1NWdwVA8zq5DDJTKcMkRqWYJcEcyTTm5WK&tokenId.in=1156")
 
         assertThat(token).isNotNull
         assertThat(token.meta).isNull()
@@ -404,7 +405,7 @@ class TokenClientTests : BaseClientTests() {
 
         val isNft = tokenClient.isNft("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:157993")
 
-        assertThat(request().path).isEqualTo("/v1/tokens?contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&tokenId=157993&token.standard=fa2")
+        assertThat(request().path).isEqualTo("/v1/tokens?contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&tokenId=157993&standard=fa2")
         assertThat(isNft).isEqualTo(true)
     }
 
@@ -435,7 +436,7 @@ class TokenClientTests : BaseClientTests() {
 
         val isNft = tokenClient.isNft("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:157993")
 
-        assertThat(request().path).isEqualTo("/v1/tokens?contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&tokenId=157993&token.standard=fa2")
+        assertThat(request().path).isEqualTo("/v1/tokens?contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&tokenId=157993&standard=fa2")
         assertThat(isNft).isEqualTo(false)
     }
 
@@ -462,7 +463,7 @@ class TokenClientTests : BaseClientTests() {
 
         val isNft = tokenClient.isNft("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:157993")
 
-        assertThat(request().path).isEqualTo("/v1/tokens?contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&tokenId=157993&token.standard=fa2")
+        assertThat(request().path).isEqualTo("/v1/tokens?contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&tokenId=157993&standard=fa2")
         assertThat(isNft).isNull()
     }
 
@@ -594,9 +595,9 @@ class TokenClientTests : BaseClientTests() {
 
         assertThat(requests()).isEqualTo(setOf(
             "/v1/tokens/balances?account=tz1gqL7i1s578qj3NzgKmu6C5j3RdSBewGBo&token.standard=fa2&limit=1&balance.gt=0&sort.desc=id&select=id,token.contract.address,token.tokenId",
-            "/v1/tokens?contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&tokenId.in=76999&token.standard=fa2",
+            "/v1/tokens?contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&tokenId.in=76999",
             "/v1/tokens/balances?account=tz1gqL7i1s578qj3NzgKmu6C5j3RdSBewGBo&token.standard=fa2&limit=2&id.lt=12277692&balance.gt=0&sort.desc=id&select=id,token.contract.address,token.tokenId",
-            "/v1/tokens?contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&tokenId.in=77263&token.standard=fa2")
+            "/v1/tokens?contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&tokenId.in=77263")
         )
     }
 
@@ -711,7 +712,7 @@ class TokenClientTests : BaseClientTests() {
 
         assertThat(requests()).isEqualTo(setOf(
             "/v1/tokens/balances?token.contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&limit=1&balance.gt=0&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&sort.desc=id&select=id,token.contract.address,token.tokenId",
-            "/v1/tokens?contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&tokenId.in=77272&token.standard=fa2")
+            "/v1/tokens?contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&tokenId.in=77272")
         )
     }
 

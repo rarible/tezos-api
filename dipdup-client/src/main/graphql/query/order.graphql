@@ -12,6 +12,7 @@ fragment order on marketplace_order {
     make_contract
     make_token_id
     make_value
+    make_price
     maker
     network
     platform
@@ -22,6 +23,7 @@ fragment order on marketplace_order {
     take_contract
     take_token_id
     take_value
+    take_price
     taker
     origin_fees
     payouts
@@ -73,6 +75,7 @@ query GetOrderById($id: uuid!) {
         make_contract
         make_token_id
         make_value
+        make_price
         maker
         network
         platform
@@ -83,6 +86,7 @@ query GetOrderById($id: uuid!) {
         take_contract
         take_token_id
         take_value
+        take_price
         taker
         origin_fees
         payouts
