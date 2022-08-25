@@ -18,6 +18,13 @@ import kotlinx.coroutines.runBlocking
 import okio.ByteString.Companion.decodeHex
 import org.slf4j.LoggerFactory
 
+fun processURI(uri: String): String {
+    return if(uri.contains("ipfs://ipfs/")){
+        "ipfs://" + uri.split("ipfs://ipfs/")[1]
+    } else
+        uri
+}
+
 class MetaService(
     private val mapper: ObjectMapper,
     private val bigMapKeyClient: BigMapKeyClient,
@@ -81,8 +88,9 @@ class MetaService(
                         bigMapKeyClient.bigMapKeyWithName(token.contract!!.address, "token_metadata", token.tokenId!!)
                     val metadataMap = tokenMetadata.value as LinkedHashMap<String, String>
                     val metadata = metadataMap["token_info"] as LinkedHashMap<String, String>
-                    val uri = metadata[""]?.decodeHex()?.utf8()
+                    var uri = metadata[""]?.decodeHex()?.utf8()
                     if (!uri.isNullOrEmpty()) {
+                        uri = processURI(uri)
                         val ipfsData = ipfsClient.fetchIpfsDataFromBlockchain(uri)
                         ipfsMeta = mapper.convertValue(adjustMeta(mapper.convertValue(ipfsData)))
                     }
@@ -173,7 +181,7 @@ class MetaService(
         fun contents(): List<TokenMeta.Content> {
             var contents = formats.filter { it.uri != null && it.mimeType != null }.map {
                 Content(
-                    uri = it.uri,
+                    uri = it.uri?.let { itURI -> processURI(itURI) },
                     mimeType = it.mimeType!!,
                     representation = representation(it)
                 )
@@ -181,7 +189,7 @@ class MetaService(
             if (contents.count { it.representation == Representation.PREVIEW } == 0 && displayUri != null) {
                 contents.add(
                     Content(
-                        uri = displayUri,
+                        uri = processURI(displayUri),
                         mimeType = guessMime(displayUri),
                         representation = Representation.PREVIEW
                     )
@@ -190,7 +198,7 @@ class MetaService(
             if (contents.count { it.representation == Representation.ORIGINAL } == 0 && artifactUri != null) {
                 contents.add(
                     Content(
-                        uri = artifactUri,
+                        uri = processURI(artifactUri),
                         mimeType = guessMime(artifactUri),
                         representation = Representation.ORIGINAL
                     )
@@ -214,5 +222,4 @@ class MetaService(
             }
         }
     }
-
 }
