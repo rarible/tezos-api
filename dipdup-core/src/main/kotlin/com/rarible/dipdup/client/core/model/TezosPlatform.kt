@@ -2,8 +2,8 @@ package com.rarible.dipdup.client.core.model
 
 enum class TezosPlatform {
     HEN,
-    VERSUM,
-    TEIA,
+    VERSUM_V1,
+    TEIA_V1,
     OBJKT,
     OBJKT_V2,
     RARIBLE_V1,
