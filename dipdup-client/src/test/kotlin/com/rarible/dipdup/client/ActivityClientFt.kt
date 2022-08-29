@@ -116,7 +116,7 @@ class ActivityClientFt : BaseClientFt() {
                                 "operation_nonce": null,
                                 "operation_timestamp": "2021-08-23T19:48:36+00:00",
                                 "order_id": "1f4ee13b-7251-5ccb-bfc4-fe356c4ae01a",
-                                "platform": "OBJKT",
+                                "platform": "OBJKT_V1",
                                 "take_asset_class": "XTZ",
                                 "take_contract": null,
                                 "take_token_id": null,
