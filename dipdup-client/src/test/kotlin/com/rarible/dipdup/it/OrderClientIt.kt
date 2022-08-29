@@ -29,7 +29,7 @@ class OrderClientIt {
         @JvmStatic
         fun allPlatforms() = Stream.of(
             Arguments.of(TezosPlatform.HEN),
-            Arguments.of(TezosPlatform.OBJKT),
+            Arguments.of(TezosPlatform.OBJKT_V1),
             Arguments.of(TezosPlatform.OBJKT_V2),
             Arguments.of(TezosPlatform.RARIBLE_V1),
             Arguments.of(TezosPlatform.RARIBLE_V2)
