@@ -40,6 +40,8 @@ class TokenClientIt {
     val ROYALTIES_MANAGER = "KT1HNNrmCk1fpqveRDz8Fvww2GM4gPzmA7fo"
     val BIDOU_8x8 = "KT1MxDwChiDwd6WBVs24g1NjERUoK622ZEFp"
     val BIDOU_24x24 = "KT1TR1ErEQPTdtaJ7hbvKTJSa1tsGnHGZTpf"
+    val DOGAMI = "KT1NVvPsNDChrLRH5K2cy6Sc9r1uuUwdiZQd"
+    val DOGAMI_GAP = "KT1CAbPGHUWvkSA9bxMPkqSgabgsjtmRYEda"
 
     val client = preparedClient("https://api.tzkt.io")
 //    val client = preparedClient("http://tezos-tzkt.testnet.rarible.int")
@@ -54,7 +56,9 @@ class TokenClientIt {
         versum = VERSUM,
         royaltiesManager = ROYALTIES_MANAGER,
         bidou8x8 = BIDOU_8x8,
-        bidou24x24 = BIDOU_24x24
+        bidou24x24 = BIDOU_24x24,
+        dogami = DOGAMI,
+        dogamiGap = DOGAMI_GAP
     )
 
     val bigMapKeyClient = BigMapKeyClient(client)
@@ -116,6 +120,20 @@ class TokenClientIt {
     fun `should have correct attributes in meta`() = runBlocking<Unit> {
         val meta = tokenClient.tokenMeta("KT1NUMZqQ4SNg7VyM2T9WyidkdV7RLhU6SsK:71")
         assertThat(meta.attributes).hasSize(12)
+    }
+
+    @Test
+    fun `should have correct attributes in meta for dogami`() = runBlocking<Unit> {
+        val meta = tokenClient.tokenMeta("KT1NVvPsNDChrLRH5K2cy6Sc9r1uuUwdiZQd:4000")
+        assertThat(meta.attributes).hasSize(20)
+        print(meta.attributes)
+    }
+
+    @Test
+    fun `should have correct attributes in meta for dogami x gap`() = runBlocking<Unit> {
+        val meta = tokenClient.tokenMeta("KT1CAbPGHUWvkSA9bxMPkqSgabgsjtmRYEda:6161")
+        assertThat(meta.attributes).hasSize(13)
+        print(meta.attributes)
     }
 
     @Test

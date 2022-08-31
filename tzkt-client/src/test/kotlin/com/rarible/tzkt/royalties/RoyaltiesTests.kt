@@ -32,6 +32,8 @@ class RoyaltiesTests : BaseClientTests() {
     val ROYALTIES_MANAGER = "KT1HNNrmCk1fpqveRDz8Fvww2GM4gPzmA7fo"
     val BIDOU_8x8 = "KT1MxDwChiDwd6WBVs24g1NjERUoK622ZEFp"
     val BIDOU_24x24 = "KT1TR1ErEQPTdtaJ7hbvKTJSa1tsGnHGZTpf"
+    val DOGAMI = "KT1NVvPsNDChrLRH5K2cy6Sc9r1uuUwdiZQd"
+    val DOGAMI_GAP = "KT1CAbPGHUWvkSA9bxMPkqSgabgsjtmRYEda"
 
     val royaltiesConfig = KnownAddresses(
         hen = HEN,
@@ -43,7 +45,9 @@ class RoyaltiesTests : BaseClientTests() {
         versum = VERSUM,
         royaltiesManager = ROYALTIES_MANAGER,
         bidou8x8 = BIDOU_8x8,
-        bidou24x24 = BIDOU_24x24
+        bidou24x24 = BIDOU_24x24,
+        dogami = DOGAMI,
+        dogamiGap = DOGAMI_GAP
     )
 
     @Test
