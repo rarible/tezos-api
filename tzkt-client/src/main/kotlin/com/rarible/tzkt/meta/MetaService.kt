@@ -14,15 +14,36 @@ import com.rarible.tzkt.model.TokenMeta.Attribute
 import com.rarible.tzkt.model.TokenMeta.Content
 import com.rarible.tzkt.model.TokenMeta.Representation
 import com.rarible.tzkt.tokens.BidouHandler
+import it.airgap.tezos.michelson.micheline.Micheline
+import it.airgap.tezos.michelson.micheline.MichelineLiteral
+import it.airgap.tezos.michelson.micheline.MichelinePrimitiveApplication
+import it.airgap.tezos.michelson.micheline.MichelineSequence
+import it.airgap.tezos.michelson.packer.unpackFromString
 import kotlinx.coroutines.runBlocking
 import okio.ByteString.Companion.decodeHex
 import org.slf4j.LoggerFactory
 
 fun processURI(uri: String): String {
-    return if(uri.contains("ipfs://ipfs/")){
+    return if (uri.contains("ipfs://ipfs/")) {
         "ipfs://" + uri.split("ipfs://ipfs/")[1]
     } else
         uri
+}
+
+fun getDogamiAttributes(data: MichelineSequence): List<Attribute> {
+    var attributes: MutableList<Attribute> = mutableListOf()
+    data.nodes.forEach {
+        it as MichelinePrimitiveApplication
+        val key = (it.args.first() as MichelineLiteral.String).string
+        attributes.add(
+            Attribute(
+                key = key,
+                value = ((it.args.last() as MichelinePrimitiveApplication)
+                    .args.last() as MichelineLiteral.String).string
+            )
+        )
+    }
+    return attributes
 }
 
 class MetaService(
@@ -36,11 +57,17 @@ class MetaService(
     suspend fun meta(token: Token): TokenMeta {
         return if (null != token.metadata) {
             val meta: TzktMeta = mapper.convertValue(adjustMeta(token.metadata))
+            var token_attributes = meta.attributes
+            if (token.contract?.address == knownAddresses.dogami || token.contract?.address == knownAddresses.dogamiGap) {
+                val attributesData: String = token.metadata["attributes"] as String
+                val attributes = Micheline.Companion.unpackFromString(attributesData) as MichelineSequence
+                token_attributes = getDogamiAttributes(attributes)
+            }
             TokenMeta(
                 name = meta.name ?: TokenMeta.UNTITLED,
                 description = meta.description,
                 content = meta.contents(),
-                attributes = meta.attributes ?: emptyList(),
+                attributes = token_attributes ?: emptyList(),
                 tags = meta.tags ?: emptyList()
             )
         } else {

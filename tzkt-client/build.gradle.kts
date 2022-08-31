@@ -4,6 +4,7 @@ val mockkVersion: String by project
 val rfksystemsVersion: String by project
 
 dependencies {
+    implementation("com.github.airgap-it:tezos-kotlin-sdk:0.0.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation("com.squareup.moshi:moshi-kotlin:1.12.0")
