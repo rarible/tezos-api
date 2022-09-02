@@ -57,17 +57,17 @@ class MetaService(
     suspend fun meta(token: Token): TokenMeta {
         return if (null != token.metadata) {
             val meta: TzktMeta = mapper.convertValue(adjustMeta(token.metadata))
-            var token_attributes = meta.attributes
+            var tokenAttributes = meta.attributes
             if (token.contract?.address == knownAddresses.dogami || token.contract?.address == knownAddresses.dogamiGap) {
                 val attributesData: String = token.metadata["attributes"] as String
                 val attributes = Micheline.Companion.unpackFromString(attributesData) as MichelineSequence
-                token_attributes = getDogamiAttributes(attributes)
+                tokenAttributes = getDogamiAttributes(attributes)
             }
             TokenMeta(
                 name = meta.name ?: TokenMeta.UNTITLED,
                 description = meta.description,
                 content = meta.contents(),
-                attributes = token_attributes ?: emptyList(),
+                attributes = tokenAttributes ?: emptyList(),
                 tags = meta.tags ?: emptyList()
             )
         } else {
