@@ -5,6 +5,7 @@ import com.rarible.dipdup.client.OrderActivityClient
 import com.rarible.dipdup.client.model.DipDupActivityType
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.DisabledOnOs
 import org.junit.jupiter.api.condition.OS
@@ -17,7 +18,8 @@ class OrderActivityClientIt {
     val orderActivityClient = OrderActivityClient(client)
 
     @Test
-    fun `should return currency for legacy order`() = runBlocking<Unit> {
+    @Disabled
+    fun `should return currency for legacy order test network`() = runBlocking<Unit> {
         val page = orderActivityClient.getActivitiesAll(listOf(DipDupActivityType.SELL, DipDupActivityType.LIST), 100, "1650488385000_a5d8c969-eafc-5a74-b6f6-6c9001f5fcad", true)
         assertThat(page.activities).hasSize(100)
         assertThat(page.continuation).isNotEqualTo("1650488385000_a5d8c969-eafc-5a74-b6f6-6c9001f5fcad")

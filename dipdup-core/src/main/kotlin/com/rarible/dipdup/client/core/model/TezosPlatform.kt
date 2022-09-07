@@ -6,6 +6,8 @@ enum class TezosPlatform {
     TEIA_V1,
     OBJKT_V1,
     OBJKT_V2,
+    FXHASH_V1,
+    FXHASH_V2,
     RARIBLE_V1,
     RARIBLE_V2;
 }
