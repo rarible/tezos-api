@@ -118,6 +118,76 @@ input String_comparison_exp {
 }
 
 """
+columns and relationships of "collection"
+"""
+type collection {
+  contract: String!
+
+  metadata_retries: Int!
+
+  metadata_synced: Boolean!
+
+  owner: String!
+}
+
+"""
+Boolean expression to filter rows from the table "collection". All fields are combined with a logical 'AND'.
+"""
+input collection_bool_exp {
+  _and: [collection_bool_exp!]
+
+  _not: collection_bool_exp
+
+  _or: [collection_bool_exp!]
+
+  contract: String_comparison_exp
+
+  metadata_retries: Int_comparison_exp
+
+  metadata_synced: Boolean_comparison_exp
+
+  owner: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "collection".
+"""
+input collection_order_by {
+  contract: order_by
+
+  metadata_retries: order_by
+
+  metadata_synced: order_by
+
+  owner: order_by
+}
+
+"""
+select columns of table "collection"
+"""
+enum collection_select_column {
+  """
+  column name
+  """
+  contract
+
+  """
+  column name
+  """
+  metadata_retries
+
+  """
+  column name
+  """
+  metadata_synced
+
+  """
+  column name
+  """
+  owner
+}
+
+"""
 columns and relationships of "dipdup_contract"
 """
 type dipdup_contract {
@@ -130,26 +200,6 @@ type dipdup_contract {
   typename: String
 
   updated_at: timestamptz!
-}
-
-"""
-aggregated selection of "dipdup_contract"
-"""
-type dipdup_contract_aggregate {
-  aggregate: dipdup_contract_aggregate_fields
-
-  nodes: [dipdup_contract!]!
-}
-
-"""
-aggregate fields of "dipdup_contract"
-"""
-type dipdup_contract_aggregate_fields {
-  count(columns: [dipdup_contract_select_column!], distinct: Boolean): Int!
-
-  max: dipdup_contract_max_fields
-
-  min: dipdup_contract_min_fields
 }
 
 """
@@ -174,21 +224,6 @@ input dipdup_contract_bool_exp {
 }
 
 """
-aggregate max on columns
-"""
-type dipdup_contract_max_fields {
-  address: String
-
-  created_at: timestamptz
-
-  name: String
-
-  typename: String
-
-  updated_at: timestamptz
-}
-
-"""
 columns and relationships of "dipdup_contract_metadata"
 """
 type dipdup_contract_metadata {
@@ -205,51 +240,6 @@ type dipdup_contract_metadata {
   update_id: Int!
 
   updated_at: timestamptz!
-}
-
-"""
-aggregated selection of "dipdup_contract_metadata"
-"""
-type dipdup_contract_metadata_aggregate {
-  aggregate: dipdup_contract_metadata_aggregate_fields
-
-  nodes: [dipdup_contract_metadata!]!
-}
-
-"""
-aggregate fields of "dipdup_contract_metadata"
-"""
-type dipdup_contract_metadata_aggregate_fields {
-  avg: dipdup_contract_metadata_avg_fields
-
-  count(columns: [dipdup_contract_metadata_select_column!], distinct: Boolean): Int!
-
-  max: dipdup_contract_metadata_max_fields
-
-  min: dipdup_contract_metadata_min_fields
-
-  stddev: dipdup_contract_metadata_stddev_fields
-
-  stddev_pop: dipdup_contract_metadata_stddev_pop_fields
-
-  stddev_samp: dipdup_contract_metadata_stddev_samp_fields
-
-  sum: dipdup_contract_metadata_sum_fields
-
-  var_pop: dipdup_contract_metadata_var_pop_fields
-
-  var_samp: dipdup_contract_metadata_var_samp_fields
-
-  variance: dipdup_contract_metadata_variance_fields
-}
-
-"""
-aggregate avg on columns
-"""
-type dipdup_contract_metadata_avg_fields {
-  id: Float
-
-  update_id: Float
 }
 
 """
@@ -275,40 +265,6 @@ input dipdup_contract_metadata_bool_exp {
   update_id: Int_comparison_exp
 
   updated_at: timestamptz_comparison_exp
-}
-
-"""
-aggregate max on columns
-"""
-type dipdup_contract_metadata_max_fields {
-  contract: String
-
-  created_at: timestamptz
-
-  id: Int
-
-  network: String
-
-  update_id: Int
-
-  updated_at: timestamptz
-}
-
-"""
-aggregate min on columns
-"""
-type dipdup_contract_metadata_min_fields {
-  contract: String
-
-  created_at: timestamptz
-
-  id: Int
-
-  network: String
-
-  update_id: Int
-
-  updated_at: timestamptz
 }
 
 """
@@ -368,84 +324,6 @@ enum dipdup_contract_metadata_select_column {
   column name
   """
   updated_at
-}
-
-"""
-aggregate stddev on columns
-"""
-type dipdup_contract_metadata_stddev_fields {
-  id: Float
-
-  update_id: Float
-}
-
-"""
-aggregate stddev_pop on columns
-"""
-type dipdup_contract_metadata_stddev_pop_fields {
-  id: Float
-
-  update_id: Float
-}
-
-"""
-aggregate stddev_samp on columns
-"""
-type dipdup_contract_metadata_stddev_samp_fields {
-  id: Float
-
-  update_id: Float
-}
-
-"""
-aggregate sum on columns
-"""
-type dipdup_contract_metadata_sum_fields {
-  id: Int
-
-  update_id: Int
-}
-
-"""
-aggregate var_pop on columns
-"""
-type dipdup_contract_metadata_var_pop_fields {
-  id: Float
-
-  update_id: Float
-}
-
-"""
-aggregate var_samp on columns
-"""
-type dipdup_contract_metadata_var_samp_fields {
-  id: Float
-
-  update_id: Float
-}
-
-"""
-aggregate variance on columns
-"""
-type dipdup_contract_metadata_variance_fields {
-  id: Float
-
-  update_id: Float
-}
-
-"""
-aggregate min on columns
-"""
-type dipdup_contract_min_fields {
-  address: String
-
-  created_at: timestamptz
-
-  name: String
-
-  typename: String
-
-  updated_at: timestamptz
 }
 
 """
@@ -511,49 +389,6 @@ type dipdup_head {
 }
 
 """
-aggregated selection of "dipdup_head"
-"""
-type dipdup_head_aggregate {
-  aggregate: dipdup_head_aggregate_fields
-
-  nodes: [dipdup_head!]!
-}
-
-"""
-aggregate fields of "dipdup_head"
-"""
-type dipdup_head_aggregate_fields {
-  avg: dipdup_head_avg_fields
-
-  count(columns: [dipdup_head_select_column!], distinct: Boolean): Int!
-
-  max: dipdup_head_max_fields
-
-  min: dipdup_head_min_fields
-
-  stddev: dipdup_head_stddev_fields
-
-  stddev_pop: dipdup_head_stddev_pop_fields
-
-  stddev_samp: dipdup_head_stddev_samp_fields
-
-  sum: dipdup_head_sum_fields
-
-  var_pop: dipdup_head_var_pop_fields
-
-  var_samp: dipdup_head_var_samp_fields
-
-  variance: dipdup_head_variance_fields
-}
-
-"""
-aggregate avg on columns
-"""
-type dipdup_head_avg_fields {
-  level: Float
-}
-
-"""
 Boolean expression to filter rows from the table "dipdup_head". All fields are combined with a logical 'AND'.
 """
 input dipdup_head_bool_exp {
@@ -574,40 +409,6 @@ input dipdup_head_bool_exp {
   timestamp: timestamptz_comparison_exp
 
   updated_at: timestamptz_comparison_exp
-}
-
-"""
-aggregate max on columns
-"""
-type dipdup_head_max_fields {
-  created_at: timestamptz
-
-  hash: String
-
-  level: Int
-
-  name: String
-
-  timestamp: timestamptz
-
-  updated_at: timestamptz
-}
-
-"""
-aggregate min on columns
-"""
-type dipdup_head_min_fields {
-  created_at: timestamptz
-
-  hash: String
-
-  level: Int
-
-  name: String
-
-  timestamp: timestamptz
-
-  updated_at: timestamptz
 }
 
 """
@@ -672,26 +473,6 @@ type dipdup_head_status {
 }
 
 """
-aggregated selection of "dipdup_head_status"
-"""
-type dipdup_head_status_aggregate {
-  aggregate: dipdup_head_status_aggregate_fields
-
-  nodes: [dipdup_head_status!]!
-}
-
-"""
-aggregate fields of "dipdup_head_status"
-"""
-type dipdup_head_status_aggregate_fields {
-  count(columns: [dipdup_head_status_select_column!], distinct: Boolean): Int!
-
-  max: dipdup_head_status_max_fields
-
-  min: dipdup_head_status_min_fields
-}
-
-"""
 Boolean expression to filter rows from the table "dipdup_head_status". All fields are combined with a logical 'AND'.
 """
 input dipdup_head_status_bool_exp {
@@ -704,24 +485,6 @@ input dipdup_head_status_bool_exp {
   name: String_comparison_exp
 
   status: String_comparison_exp
-}
-
-"""
-aggregate max on columns
-"""
-type dipdup_head_status_max_fields {
-  name: String
-
-  status: String
-}
-
-"""
-aggregate min on columns
-"""
-type dipdup_head_status_min_fields {
-  name: String
-
-  status: String
 }
 
 """
@@ -746,55 +509,6 @@ enum dipdup_head_status_select_column {
   column name
   """
   status
-}
-
-"""
-aggregate stddev on columns
-"""
-type dipdup_head_stddev_fields {
-  level: Float
-}
-
-"""
-aggregate stddev_pop on columns
-"""
-type dipdup_head_stddev_pop_fields {
-  level: Float
-}
-
-"""
-aggregate stddev_samp on columns
-"""
-type dipdup_head_stddev_samp_fields {
-  level: Float
-}
-
-"""
-aggregate sum on columns
-"""
-type dipdup_head_sum_fields {
-  level: Int
-}
-
-"""
-aggregate var_pop on columns
-"""
-type dipdup_head_var_pop_fields {
-  level: Float
-}
-
-"""
-aggregate var_samp on columns
-"""
-type dipdup_head_var_samp_fields {
-  level: Float
-}
-
-"""
-aggregate variance on columns
-"""
-type dipdup_head_variance_fields {
-  level: Float
 }
 
 """
@@ -827,49 +541,6 @@ type dipdup_index {
 }
 
 """
-aggregated selection of "dipdup_index"
-"""
-type dipdup_index_aggregate {
-  aggregate: dipdup_index_aggregate_fields
-
-  nodes: [dipdup_index!]!
-}
-
-"""
-aggregate fields of "dipdup_index"
-"""
-type dipdup_index_aggregate_fields {
-  avg: dipdup_index_avg_fields
-
-  count(columns: [dipdup_index_select_column!], distinct: Boolean): Int!
-
-  max: dipdup_index_max_fields
-
-  min: dipdup_index_min_fields
-
-  stddev: dipdup_index_stddev_fields
-
-  stddev_pop: dipdup_index_stddev_pop_fields
-
-  stddev_samp: dipdup_index_stddev_samp_fields
-
-  sum: dipdup_index_sum_fields
-
-  var_pop: dipdup_index_var_pop_fields
-
-  var_samp: dipdup_index_var_samp_fields
-
-  variance: dipdup_index_variance_fields
-}
-
-"""
-aggregate avg on columns
-"""
-type dipdup_index_avg_fields {
-  level: Float
-}
-
-"""
 Boolean expression to filter rows from the table "dipdup_index". All fields are combined with a logical 'AND'.
 """
 input dipdup_index_bool_exp {
@@ -896,60 +567,6 @@ input dipdup_index_bool_exp {
   type: String_comparison_exp
 
   updated_at: timestamptz_comparison_exp
-}
-
-"""
-aggregate max on columns
-"""
-type dipdup_index_max_fields {
-  config_hash: String
-
-  created_at: timestamptz
-
-  level: Int
-
-  name: String
-
-  """
-  NEW: NEW\nSYNCING: SYNCING\nREALTIME: REALTIME\nROLLBACK: ROLLBACK\nONESHOT: ONESHOT
-  """
-  status: String
-
-  template: String
-
-  """
-  operation: operation\nbig_map: big_map\nhead: head\ntoken_transfer: token_transfer
-  """
-  type: String
-
-  updated_at: timestamptz
-}
-
-"""
-aggregate min on columns
-"""
-type dipdup_index_min_fields {
-  config_hash: String
-
-  created_at: timestamptz
-
-  level: Int
-
-  name: String
-
-  """
-  NEW: NEW\nSYNCING: SYNCING\nREALTIME: REALTIME\nROLLBACK: ROLLBACK\nONESHOT: ONESHOT
-  """
-  status: String
-
-  template: String
-
-  """
-  operation: operation\nbig_map: big_map\nhead: head\ntoken_transfer: token_transfer
-  """
-  type: String
-
-  updated_at: timestamptz
 }
 
 """
@@ -1026,52 +643,134 @@ enum dipdup_index_select_column {
 }
 
 """
-aggregate stddev on columns
+Model update created within versioned transactions
+
+
+columns and relationships of "dipdup_model_update"
 """
-type dipdup_index_stddev_fields {
-  level: Float
+type dipdup_model_update {
+  """
+  INSERT: INSERT\nUPDATE: UPDATE\nDELETE: DELETE
+  """
+  action: String!
+
+  created_at: timestamptz!
+
+  data("JSON select path" path: String): jsonb
+
+  id: Int!
+
+  index: String!
+
+  level: Int!
+
+  model_name: String!
+
+  model_pk: String!
+
+  updated_at: timestamptz!
 }
 
 """
-aggregate stddev_pop on columns
+Boolean expression to filter rows from the table "dipdup_model_update". All fields are combined with a logical 'AND'.
 """
-type dipdup_index_stddev_pop_fields {
-  level: Float
+input dipdup_model_update_bool_exp {
+  _and: [dipdup_model_update_bool_exp!]
+
+  _not: dipdup_model_update_bool_exp
+
+  _or: [dipdup_model_update_bool_exp!]
+
+  action: String_comparison_exp
+
+  created_at: timestamptz_comparison_exp
+
+  data: jsonb_comparison_exp
+
+  id: Int_comparison_exp
+
+  index: String_comparison_exp
+
+  level: Int_comparison_exp
+
+  model_name: String_comparison_exp
+
+  model_pk: String_comparison_exp
+
+  updated_at: timestamptz_comparison_exp
 }
 
 """
-aggregate stddev_samp on columns
+Ordering options when selecting data from "dipdup_model_update".
 """
-type dipdup_index_stddev_samp_fields {
-  level: Float
+input dipdup_model_update_order_by {
+  action: order_by
+
+  created_at: order_by
+
+  data: order_by
+
+  id: order_by
+
+  index: order_by
+
+  level: order_by
+
+  model_name: order_by
+
+  model_pk: order_by
+
+  updated_at: order_by
 }
 
 """
-aggregate sum on columns
+select columns of table "dipdup_model_update"
 """
-type dipdup_index_sum_fields {
-  level: Int
-}
+enum dipdup_model_update_select_column {
+  """
+  column name
+  """
+  action
 
-"""
-aggregate var_pop on columns
-"""
-type dipdup_index_var_pop_fields {
-  level: Float
-}
+  """
+  column name
+  """
+  created_at
 
-"""
-aggregate var_samp on columns
-"""
-type dipdup_index_var_samp_fields {
-  level: Float
-}
+  """
+  column name
+  """
+  data
 
-"""
-aggregate variance on columns
-"""
-type dipdup_index_variance_fields {
-  level: Float
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  index
+
+  """
+  column name
+  """
+  level
+
+  """
+  column name
+  """
+  model_name
+
+  """
+  column name
+  """
+  model_pk
+
+  """
+  column name
+  """
+  updated_at
 }
 
 """
@@ -1093,26 +792,6 @@ type dipdup_schema {
 }
 
 """
-aggregated selection of "dipdup_schema"
-"""
-type dipdup_schema_aggregate {
-  aggregate: dipdup_schema_aggregate_fields
-
-  nodes: [dipdup_schema!]!
-}
-
-"""
-aggregate fields of "dipdup_schema"
-"""
-type dipdup_schema_aggregate_fields {
-  count(columns: [dipdup_schema_select_column!], distinct: Boolean): Int!
-
-  max: dipdup_schema_max_fields
-
-  min: dipdup_schema_min_fields
-}
-
-"""
 Boolean expression to filter rows from the table "dipdup_schema". All fields are combined with a logical 'AND'.
 """
 input dipdup_schema_bool_exp {
@@ -1131,42 +810,6 @@ input dipdup_schema_bool_exp {
   reindex: String_comparison_exp
 
   updated_at: timestamptz_comparison_exp
-}
-
-"""
-aggregate max on columns
-"""
-type dipdup_schema_max_fields {
-  created_at: timestamptz
-
-  hash: String
-
-  name: String
-
-  """
-  manual: manual\nmigration: migration\nrollback: rollback\nconfig_modified: config_modified\nschema_modified: schema_modified
-  """
-  reindex: String
-
-  updated_at: timestamptz
-}
-
-"""
-aggregate min on columns
-"""
-type dipdup_schema_min_fields {
-  created_at: timestamptz
-
-  hash: String
-
-  name: String
-
-  """
-  manual: manual\nmigration: migration\nrollback: rollback\nconfig_modified: config_modified\nschema_modified: schema_modified
-  """
-  reindex: String
-
-  updated_at: timestamptz
 }
 
 """
@@ -1236,51 +879,6 @@ type dipdup_token_metadata {
 }
 
 """
-aggregated selection of "dipdup_token_metadata"
-"""
-type dipdup_token_metadata_aggregate {
-  aggregate: dipdup_token_metadata_aggregate_fields
-
-  nodes: [dipdup_token_metadata!]!
-}
-
-"""
-aggregate fields of "dipdup_token_metadata"
-"""
-type dipdup_token_metadata_aggregate_fields {
-  avg: dipdup_token_metadata_avg_fields
-
-  count(columns: [dipdup_token_metadata_select_column!], distinct: Boolean): Int!
-
-  max: dipdup_token_metadata_max_fields
-
-  min: dipdup_token_metadata_min_fields
-
-  stddev: dipdup_token_metadata_stddev_fields
-
-  stddev_pop: dipdup_token_metadata_stddev_pop_fields
-
-  stddev_samp: dipdup_token_metadata_stddev_samp_fields
-
-  sum: dipdup_token_metadata_sum_fields
-
-  var_pop: dipdup_token_metadata_var_pop_fields
-
-  var_samp: dipdup_token_metadata_var_samp_fields
-
-  variance: dipdup_token_metadata_variance_fields
-}
-
-"""
-aggregate avg on columns
-"""
-type dipdup_token_metadata_avg_fields {
-  id: Float
-
-  update_id: Float
-}
-
-"""
 Boolean expression to filter rows from the table "dipdup_token_metadata". All fields are combined with a logical 'AND'.
 """
 input dipdup_token_metadata_bool_exp {
@@ -1305,44 +903,6 @@ input dipdup_token_metadata_bool_exp {
   update_id: Int_comparison_exp
 
   updated_at: timestamptz_comparison_exp
-}
-
-"""
-aggregate max on columns
-"""
-type dipdup_token_metadata_max_fields {
-  contract: String
-
-  created_at: timestamptz
-
-  id: Int
-
-  network: String
-
-  token_id: String
-
-  update_id: Int
-
-  updated_at: timestamptz
-}
-
-"""
-aggregate min on columns
-"""
-type dipdup_token_metadata_min_fields {
-  contract: String
-
-  created_at: timestamptz
-
-  id: Int
-
-  network: String
-
-  token_id: String
-
-  update_id: Int
-
-  updated_at: timestamptz
 }
 
 """
@@ -1412,98 +972,15 @@ enum dipdup_token_metadata_select_column {
 }
 
 """
-aggregate stddev on columns
-"""
-type dipdup_token_metadata_stddev_fields {
-  id: Float
-
-  update_id: Float
-}
-
-"""
-aggregate stddev_pop on columns
-"""
-type dipdup_token_metadata_stddev_pop_fields {
-  id: Float
-
-  update_id: Float
-}
-
-"""
-aggregate stddev_samp on columns
-"""
-type dipdup_token_metadata_stddev_samp_fields {
-  id: Float
-
-  update_id: Float
-}
-
-"""
-aggregate sum on columns
-"""
-type dipdup_token_metadata_sum_fields {
-  id: Int
-
-  update_id: Int
-}
-
-"""
-aggregate var_pop on columns
-"""
-type dipdup_token_metadata_var_pop_fields {
-  id: Float
-
-  update_id: Float
-}
-
-"""
-aggregate var_samp on columns
-"""
-type dipdup_token_metadata_var_samp_fields {
-  id: Float
-
-  update_id: Float
-}
-
-"""
-aggregate variance on columns
-"""
-type dipdup_token_metadata_variance_fields {
-  id: Float
-
-  update_id: Float
-}
-
-"""
 columns and relationships of "indexing_status"
 """
 type indexing_status {
   """
-  COLLECTION: COLLECTION\nLEGACY_ORDERS: LEGACY_ORDERS
+  COLLECTION: COLLECTION\nNFT: NFT\nLEGACY_ORDERS: LEGACY_ORDERS\nV1_CLEANING: V1_CLEANING\nV1_FILL_FIX: V1_FILL_FIX
   """
   index: String!
 
   last_level: String!
-}
-
-"""
-aggregated selection of "indexing_status"
-"""
-type indexing_status_aggregate {
-  aggregate: indexing_status_aggregate_fields
-
-  nodes: [indexing_status!]!
-}
-
-"""
-aggregate fields of "indexing_status"
-"""
-type indexing_status_aggregate_fields {
-  count(columns: [indexing_status_select_column!], distinct: Boolean): Int!
-
-  max: indexing_status_max_fields
-
-  min: indexing_status_min_fields
 }
 
 """
@@ -1519,30 +996,6 @@ input indexing_status_bool_exp {
   index: String_comparison_exp
 
   last_level: String_comparison_exp
-}
-
-"""
-aggregate max on columns
-"""
-type indexing_status_max_fields {
-  """
-  COLLECTION: COLLECTION\nLEGACY_ORDERS: LEGACY_ORDERS
-  """
-  index: String
-
-  last_level: String
-}
-
-"""
-aggregate min on columns
-"""
-type indexing_status_min_fields {
-  """
-  COLLECTION: COLLECTION\nLEGACY_ORDERS: LEGACY_ORDERS
-  """
-  index: String
-
-  last_level: String
 }
 
 """
@@ -1631,26 +1084,6 @@ type legacy_orders {
 }
 
 """
-aggregated selection of "legacy_orders"
-"""
-type legacy_orders_aggregate {
-  aggregate: legacy_orders_aggregate_fields
-
-  nodes: [legacy_orders!]!
-}
-
-"""
-aggregate fields of "legacy_orders"
-"""
-type legacy_orders_aggregate_fields {
-  count(columns: [legacy_orders_select_column!], distinct: Boolean): Int!
-
-  max: legacy_orders_max_fields
-
-  min: legacy_orders_min_fields
-}
-
-"""
 Boolean expression to filter rows from the table "legacy_orders". All fields are combined with a logical 'AND'.
 """
 input legacy_orders_bool_exp {
@@ -1665,24 +1098,6 @@ input legacy_orders_bool_exp {
   hash: String_comparison_exp
 
   id: uuid_comparison_exp
-}
-
-"""
-aggregate max on columns
-"""
-type legacy_orders_max_fields {
-  hash: String
-
-  id: uuid
-}
-
-"""
-aggregate min on columns
-"""
-type legacy_orders_min_fields {
-  hash: String
-
-  id: uuid
 }
 
 """
@@ -1752,7 +1167,7 @@ type marketplace_activity {
   order_id: uuid!
 
   """
-  HEN: HEN\nOBJKT: OBJKT\nOBJKT_V2: OBJKT_V2\nRARIBLE_V1: RARIBLE_V1\nRARIBLE_V2: RARIBLE_V2
+  HEN: HEN\nTEIA_V1: TEIA_V1\nVERSUM_V1: VERSUM_V1\nOBJKT_V1: OBJKT_V1\nOBJKT_V2: OBJKT_V2\nRARIBLE_V1: RARIBLE_V1\nRARIBLE_V2: RARIBLE_V2\nFXHASH_V1: FXHASH_V1\nFXHASH_V2: FXHASH_V2
   """
   platform: String!
 
@@ -1773,57 +1188,6 @@ type marketplace_activity {
   GET_BID: GET_BID\nGET_FLOOR_BID: GET_FLOOR_BID\nORDER_LIST: LIST\nORDER_MATCH: SELL\nORDER_CANCEL: CANCEL_LIST\nCANCEL_BID: CANCEL_BID\nCANCEL_FLOOR_BID: CANCEL_FLOOR_BID\nMAKE_BID: MAKE_BID\nMAKE_FLOOR_BID: MAKE_FLOOR_BID\nTOKEN_MINT: MINT\nTOKEN_TRANSFER: TRANSFER\nTOKEN_BURN: BURN
   """
   type: String!
-}
-
-"""
-aggregated selection of "marketplace_activity"
-"""
-type marketplace_activity_aggregate {
-  aggregate: marketplace_activity_aggregate_fields
-
-  nodes: [marketplace_activity!]!
-}
-
-"""
-aggregate fields of "marketplace_activity"
-"""
-type marketplace_activity_aggregate_fields {
-  avg: marketplace_activity_avg_fields
-
-  count(columns: [marketplace_activity_select_column!], distinct: Boolean): Int!
-
-  max: marketplace_activity_max_fields
-
-  min: marketplace_activity_min_fields
-
-  stddev: marketplace_activity_stddev_fields
-
-  stddev_pop: marketplace_activity_stddev_pop_fields
-
-  stddev_samp: marketplace_activity_stddev_samp_fields
-
-  sum: marketplace_activity_sum_fields
-
-  var_pop: marketplace_activity_var_pop_fields
-
-  var_samp: marketplace_activity_var_samp_fields
-
-  variance: marketplace_activity_variance_fields
-}
-
-"""
-aggregate avg on columns
-"""
-type marketplace_activity_avg_fields {
-  make_value: Float
-
-  operation_counter: Float
-
-  operation_level: Float
-
-  operation_nonce: Float
-
-  take_value: Float
 }
 
 """
@@ -1877,124 +1241,6 @@ input marketplace_activity_bool_exp {
   taker: String_comparison_exp
 
   type: String_comparison_exp
-}
-
-"""
-aggregate max on columns
-"""
-type marketplace_activity_max_fields {
-  id: uuid
-
-  internal_order_id: String
-
-  """
-  ETH: ETH\nXTZ: XTZ\nFUNGIBLE_TOKEN: TEZOS_FT\nNON_FUNGIBLE_TOKEN: TEZOS_NFT\nMULTI_TOKEN: TEZOS_MT\nERC20: ERC20\nERC721: ERC721\nERC1155: ERC1155\nERC721_LAZY: ERC721_LAZY\nERC1155_LAZY: ERC1155_LAZY\nCOLLECTION: COLLECTION\nGEN_ART: GEN_ART
-  """
-  make_asset_class: String
-
-  make_contract: String
-
-  make_token_id: String
-
-  make_value: numeric
-
-  maker: String
-
-  network: String
-
-  operation_counter: Int
-
-  operation_hash: String
-
-  operation_level: Int
-
-  operation_nonce: Int
-
-  operation_timestamp: timestamptz
-
-  order_id: uuid
-
-  """
-  HEN: HEN\nOBJKT: OBJKT\nOBJKT_V2: OBJKT_V2\nRARIBLE_V1: RARIBLE_V1\nRARIBLE_V2: RARIBLE_V2
-  """
-  platform: String
-
-  """
-  ETH: ETH\nXTZ: XTZ\nFUNGIBLE_TOKEN: TEZOS_FT\nNON_FUNGIBLE_TOKEN: TEZOS_NFT\nMULTI_TOKEN: TEZOS_MT\nERC20: ERC20\nERC721: ERC721\nERC1155: ERC1155\nERC721_LAZY: ERC721_LAZY\nERC1155_LAZY: ERC1155_LAZY\nCOLLECTION: COLLECTION\nGEN_ART: GEN_ART
-  """
-  take_asset_class: String
-
-  take_contract: String
-
-  take_token_id: String
-
-  take_value: numeric
-
-  taker: String
-
-  """
-  GET_BID: GET_BID\nGET_FLOOR_BID: GET_FLOOR_BID\nORDER_LIST: LIST\nORDER_MATCH: SELL\nORDER_CANCEL: CANCEL_LIST\nCANCEL_BID: CANCEL_BID\nCANCEL_FLOOR_BID: CANCEL_FLOOR_BID\nMAKE_BID: MAKE_BID\nMAKE_FLOOR_BID: MAKE_FLOOR_BID\nTOKEN_MINT: MINT\nTOKEN_TRANSFER: TRANSFER\nTOKEN_BURN: BURN
-  """
-  type: String
-}
-
-"""
-aggregate min on columns
-"""
-type marketplace_activity_min_fields {
-  id: uuid
-
-  internal_order_id: String
-
-  """
-  ETH: ETH\nXTZ: XTZ\nFUNGIBLE_TOKEN: TEZOS_FT\nNON_FUNGIBLE_TOKEN: TEZOS_NFT\nMULTI_TOKEN: TEZOS_MT\nERC20: ERC20\nERC721: ERC721\nERC1155: ERC1155\nERC721_LAZY: ERC721_LAZY\nERC1155_LAZY: ERC1155_LAZY\nCOLLECTION: COLLECTION\nGEN_ART: GEN_ART
-  """
-  make_asset_class: String
-
-  make_contract: String
-
-  make_token_id: String
-
-  make_value: numeric
-
-  maker: String
-
-  network: String
-
-  operation_counter: Int
-
-  operation_hash: String
-
-  operation_level: Int
-
-  operation_nonce: Int
-
-  operation_timestamp: timestamptz
-
-  order_id: uuid
-
-  """
-  HEN: HEN\nOBJKT: OBJKT\nOBJKT_V2: OBJKT_V2\nRARIBLE_V1: RARIBLE_V1\nRARIBLE_V2: RARIBLE_V2
-  """
-  platform: String
-
-  """
-  ETH: ETH\nXTZ: XTZ\nFUNGIBLE_TOKEN: TEZOS_FT\nNON_FUNGIBLE_TOKEN: TEZOS_NFT\nMULTI_TOKEN: TEZOS_MT\nERC20: ERC20\nERC721: ERC721\nERC1155: ERC1155\nERC721_LAZY: ERC721_LAZY\nERC1155_LAZY: ERC1155_LAZY\nCOLLECTION: COLLECTION\nGEN_ART: GEN_ART
-  """
-  take_asset_class: String
-
-  take_contract: String
-
-  take_token_id: String
-
-  take_value: numeric
-
-  taker: String
-
-  """
-  GET_BID: GET_BID\nGET_FLOOR_BID: GET_FLOOR_BID\nORDER_LIST: LIST\nORDER_MATCH: SELL\nORDER_CANCEL: CANCEL_LIST\nCANCEL_BID: CANCEL_BID\nCANCEL_FLOOR_BID: CANCEL_FLOOR_BID\nMAKE_BID: MAKE_BID\nMAKE_FLOOR_BID: MAKE_FLOOR_BID\nTOKEN_MINT: MINT\nTOKEN_TRANSFER: TRANSFER\nTOKEN_BURN: BURN
-  """
-  type: String
 }
 
 """
@@ -2155,111 +1401,6 @@ enum marketplace_activity_select_column {
 }
 
 """
-aggregate stddev on columns
-"""
-type marketplace_activity_stddev_fields {
-  make_value: Float
-
-  operation_counter: Float
-
-  operation_level: Float
-
-  operation_nonce: Float
-
-  take_value: Float
-}
-
-"""
-aggregate stddev_pop on columns
-"""
-type marketplace_activity_stddev_pop_fields {
-  make_value: Float
-
-  operation_counter: Float
-
-  operation_level: Float
-
-  operation_nonce: Float
-
-  take_value: Float
-}
-
-"""
-aggregate stddev_samp on columns
-"""
-type marketplace_activity_stddev_samp_fields {
-  make_value: Float
-
-  operation_counter: Float
-
-  operation_level: Float
-
-  operation_nonce: Float
-
-  take_value: Float
-}
-
-"""
-aggregate sum on columns
-"""
-type marketplace_activity_sum_fields {
-  make_value: numeric
-
-  operation_counter: Int
-
-  operation_level: Int
-
-  operation_nonce: Int
-
-  take_value: numeric
-}
-
-"""
-aggregate var_pop on columns
-"""
-type marketplace_activity_var_pop_fields {
-  make_value: Float
-
-  operation_counter: Float
-
-  operation_level: Float
-
-  operation_nonce: Float
-
-  take_value: Float
-}
-
-"""
-aggregate var_samp on columns
-"""
-type marketplace_activity_var_samp_fields {
-  make_value: Float
-
-  operation_counter: Float
-
-  operation_level: Float
-
-  operation_nonce: Float
-
-  take_value: Float
-}
-
-"""
-aggregate variance on columns
-"""
-type marketplace_activity_variance_fields {
-  make_value: Float
-
-  operation_counter: Float
-
-  operation_level: Float
-
-  operation_nonce: Float
-
-  take_value: Float
-}
-
-"""
 columns and relationships of "marketplace_order"
 """
 type marketplace_order {
@@ -2301,7 +1442,7 @@ type marketplace_order {
   payouts("JSON select path" path: String): jsonb!
 
   """
-  HEN: HEN\nOBJKT: OBJKT\nOBJKT_V2: OBJKT_V2\nRARIBLE_V1: RARIBLE_V1\nRARIBLE_V2: RARIBLE_V2
+  HEN: HEN\nTEIA_V1: TEIA_V1\nVERSUM_V1: VERSUM_V1\nOBJKT_V1: OBJKT_V1\nOBJKT_V2: OBJKT_V2\nRARIBLE_V1: RARIBLE_V1\nRARIBLE_V2: RARIBLE_V2\nFXHASH_V1: FXHASH_V1\nFXHASH_V2: FXHASH_V2
   """
   platform: String!
 
@@ -2328,57 +1469,6 @@ type marketplace_order {
   take_value: numeric
 
   taker: String
-}
-
-"""
-aggregated selection of "marketplace_order"
-"""
-type marketplace_order_aggregate {
-  aggregate: marketplace_order_aggregate_fields
-
-  nodes: [marketplace_order!]!
-}
-
-"""
-aggregate fields of "marketplace_order"
-"""
-type marketplace_order_aggregate_fields {
-  avg: marketplace_order_avg_fields
-
-  count(columns: [marketplace_order_select_column!], distinct: Boolean): Int!
-
-  max: marketplace_order_max_fields
-
-  min: marketplace_order_min_fields
-
-  stddev: marketplace_order_stddev_fields
-
-  stddev_pop: marketplace_order_stddev_pop_fields
-
-  stddev_samp: marketplace_order_stddev_samp_fields
-
-  sum: marketplace_order_sum_fields
-
-  var_pop: marketplace_order_var_pop_fields
-
-  var_samp: marketplace_order_var_samp_fields
-
-  variance: marketplace_order_variance_fields
-}
-
-"""
-aggregate avg on columns
-"""
-type marketplace_order_avg_fields {
-  fill: Float
-
-  make_price: Float
-
-  make_value: Float
-
-  take_price: Float
-
-  take_value: Float
 }
 
 """
@@ -2444,136 +1534,6 @@ input marketplace_order_bool_exp {
   take_value: numeric_comparison_exp
 
   taker: String_comparison_exp
-}
-
-"""
-aggregate max on columns
-"""
-type marketplace_order_max_fields {
-  created_at: timestamptz
-
-  end_at: timestamptz
-
-  ended_at: timestamptz
-
-  fill: numeric
-
-  id: uuid
-
-  internal_order_id: String
-
-  last_updated_at: timestamptz
-
-  """
-  ETH: ETH\nXTZ: XTZ\nFUNGIBLE_TOKEN: TEZOS_FT\nNON_FUNGIBLE_TOKEN: TEZOS_NFT\nMULTI_TOKEN: TEZOS_MT\nERC20: ERC20\nERC721: ERC721\nERC1155: ERC1155\nERC721_LAZY: ERC721_LAZY\nERC1155_LAZY: ERC1155_LAZY\nCOLLECTION: COLLECTION\nGEN_ART: GEN_ART
-  """
-  make_asset_class: String
-
-  make_contract: String
-
-  make_price: numeric
-
-  make_token_id: String
-
-  make_value: numeric
-
-  maker: String
-
-  network: String
-
-  """
-  HEN: HEN\nOBJKT: OBJKT\nOBJKT_V2: OBJKT_V2\nRARIBLE_V1: RARIBLE_V1\nRARIBLE_V2: RARIBLE_V2
-  """
-  platform: String
-
-  salt: String
-
-  start_at: timestamptz
-
-  """
-  ACTIVE: ACTIVE\nFILLED: FILLED\nHISTORICAL: HISTORICAL\nINACTIVE: INACTIVE\nCANCELLED: CANCELLED
-  """
-  status: String
-
-  """
-  ETH: ETH\nXTZ: XTZ\nFUNGIBLE_TOKEN: TEZOS_FT\nNON_FUNGIBLE_TOKEN: TEZOS_NFT\nMULTI_TOKEN: TEZOS_MT\nERC20: ERC20\nERC721: ERC721\nERC1155: ERC1155\nERC721_LAZY: ERC721_LAZY\nERC1155_LAZY: ERC1155_LAZY\nCOLLECTION: COLLECTION\nGEN_ART: GEN_ART
-  """
-  take_asset_class: String
-
-  take_contract: String
-
-  take_price: numeric
-
-  take_token_id: String
-
-  take_value: numeric
-
-  taker: String
-}
-
-"""
-aggregate min on columns
-"""
-type marketplace_order_min_fields {
-  created_at: timestamptz
-
-  end_at: timestamptz
-
-  ended_at: timestamptz
-
-  fill: numeric
-
-  id: uuid
-
-  internal_order_id: String
-
-  last_updated_at: timestamptz
-
-  """
-  ETH: ETH\nXTZ: XTZ\nFUNGIBLE_TOKEN: TEZOS_FT\nNON_FUNGIBLE_TOKEN: TEZOS_NFT\nMULTI_TOKEN: TEZOS_MT\nERC20: ERC20\nERC721: ERC721\nERC1155: ERC1155\nERC721_LAZY: ERC721_LAZY\nERC1155_LAZY: ERC1155_LAZY\nCOLLECTION: COLLECTION\nGEN_ART: GEN_ART
-  """
-  make_asset_class: String
-
-  make_contract: String
-
-  make_price: numeric
-
-  make_token_id: String
-
-  make_value: numeric
-
-  maker: String
-
-  network: String
-
-  """
-  HEN: HEN\nOBJKT: OBJKT\nOBJKT_V2: OBJKT_V2\nRARIBLE_V1: RARIBLE_V1\nRARIBLE_V2: RARIBLE_V2
-  """
-  platform: String
-
-  salt: String
-
-  start_at: timestamptz
-
-  """
-  ACTIVE: ACTIVE\nFILLED: FILLED\nHISTORICAL: HISTORICAL\nINACTIVE: INACTIVE\nCANCELLED: CANCELLED
-  """
-  status: String
-
-  """
-  ETH: ETH\nXTZ: XTZ\nFUNGIBLE_TOKEN: TEZOS_FT\nNON_FUNGIBLE_TOKEN: TEZOS_NFT\nMULTI_TOKEN: TEZOS_MT\nERC20: ERC20\nERC721: ERC721\nERC1155: ERC1155\nERC721_LAZY: ERC721_LAZY\nERC1155_LAZY: ERC1155_LAZY\nCOLLECTION: COLLECTION\nGEN_ART: GEN_ART
-  """
-  take_asset_class: String
-
-  take_contract: String
-
-  take_price: numeric
-
-  take_token_id: String
-
-  take_value: numeric
-
-  taker: String
 }
 
 """
@@ -2775,111 +1735,6 @@ enum marketplace_order_select_column {
   taker
 }
 
-"""
-aggregate stddev on columns
-"""
-type marketplace_order_stddev_fields {
-  fill: Float
-
-  make_price: Float
-
-  make_value: Float
-
-  take_price: Float
-
-  take_value: Float
-}
-
-"""
-aggregate stddev_pop on columns
-"""
-type marketplace_order_stddev_pop_fields {
-  fill: Float
-
-  make_price: Float
-
-  make_value: Float
-
-  take_price: Float
-
-  take_value: Float
-}
-
-"""
-aggregate stddev_samp on columns
-"""
-type marketplace_order_stddev_samp_fields {
-  fill: Float
-
-  make_price: Float
-
-  make_value: Float
-
-  take_price: Float
-
-  take_value: Float
-}
-
-"""
-aggregate sum on columns
-"""
-type marketplace_order_sum_fields {
-  fill: numeric
-
-  make_price: numeric
-
-  make_value: numeric
-
-  take_price: numeric
-
-  take_value: numeric
-}
-
-"""
-aggregate var_pop on columns
-"""
-type marketplace_order_var_pop_fields {
-  fill: Float
-
-  make_price: Float
-
-  make_value: Float
-
-  take_price: Float
-
-  take_value: Float
-}
-
-"""
-aggregate var_samp on columns
-"""
-type marketplace_order_var_samp_fields {
-  fill: Float
-
-  make_price: Float
-
-  make_value: Float
-
-  take_price: Float
-
-  take_value: Float
-}
-
-"""
-aggregate variance on columns
-"""
-type marketplace_order_variance_fields {
-  fill: Float
-
-  make_price: Float
-
-  make_value: Float
-
-  take_price: Float
-
-  take_value: Float
-}
-
 scalar numeric
 
 """
@@ -2940,16 +1795,113 @@ enum order_by {
   desc_nulls_last
 }
 
+"""
+columns and relationships of "ownership"
+"""
+type ownership {
+  balance: numeric!
+
+  contract: String!
+
+  id: Int!
+
+  owner: String!
+
+  token_id: String!
+
+  updated: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "ownership". All fields are combined with a logical 'AND'.
+"""
+input ownership_bool_exp {
+  _and: [ownership_bool_exp!]
+
+  _not: ownership_bool_exp
+
+  _or: [ownership_bool_exp!]
+
+  balance: numeric_comparison_exp
+
+  contract: String_comparison_exp
+
+  id: Int_comparison_exp
+
+  owner: String_comparison_exp
+
+  token_id: String_comparison_exp
+
+  updated: timestamptz_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "ownership".
+"""
+input ownership_order_by {
+  balance: order_by
+
+  contract: order_by
+
+  id: order_by
+
+  owner: order_by
+
+  token_id: order_by
+
+  updated: order_by
+}
+
+"""
+select columns of table "ownership"
+"""
+enum ownership_select_column {
+  """
+  column name
+  """
+  balance
+
+  """
+  column name
+  """
+  contract
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  owner
+
+  """
+  column name
+  """
+  token_id
+
+  """
+  column name
+  """
+  updated
+}
+
 type query_root {
+  """
+  fetch data from the table: "collection"
+  """
+  collection("distinct select on columns" distinct_on: [collection_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [collection_order_by!], "filter the rows returned" where: collection_bool_exp): [collection!]!
+
+  """
+  fetch data from the table: "collection" using primary key columns
+  """
+  collection_by_pk(contract: String!): collection
+
   """
   fetch data from the table: "dipdup_contract"
   """
   dipdup_contract("distinct select on columns" distinct_on: [dipdup_contract_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_contract_order_by!], "filter the rows returned" where: dipdup_contract_bool_exp): [dipdup_contract!]!
-
-  """
-  fetch aggregated fields from the table: "dipdup_contract"
-  """
-  dipdup_contract_aggregate("distinct select on columns" distinct_on: [dipdup_contract_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_contract_order_by!], "filter the rows returned" where: dipdup_contract_bool_exp): dipdup_contract_aggregate!
 
   """
   fetch data from the table: "dipdup_contract" using primary key columns
@@ -2962,11 +1914,6 @@ type query_root {
   dipdup_contract_metadata("distinct select on columns" distinct_on: [dipdup_contract_metadata_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_contract_metadata_order_by!], "filter the rows returned" where: dipdup_contract_metadata_bool_exp): [dipdup_contract_metadata!]!
 
   """
-  fetch aggregated fields from the table: "dipdup_contract_metadata"
-  """
-  dipdup_contract_metadata_aggregate("distinct select on columns" distinct_on: [dipdup_contract_metadata_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_contract_metadata_order_by!], "filter the rows returned" where: dipdup_contract_metadata_bool_exp): dipdup_contract_metadata_aggregate!
-
-  """
   fetch data from the table: "dipdup_contract_metadata" using primary key columns
   """
   dipdup_contract_metadata_by_pk(id: Int!): dipdup_contract_metadata
@@ -2975,11 +1922,6 @@ type query_root {
   fetch data from the table: "dipdup_head"
   """
   dipdup_head("distinct select on columns" distinct_on: [dipdup_head_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_head_order_by!], "filter the rows returned" where: dipdup_head_bool_exp): [dipdup_head!]!
-
-  """
-  fetch aggregated fields from the table: "dipdup_head"
-  """
-  dipdup_head_aggregate("distinct select on columns" distinct_on: [dipdup_head_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_head_order_by!], "filter the rows returned" where: dipdup_head_bool_exp): dipdup_head_aggregate!
 
   """
   fetch data from the table: "dipdup_head" using primary key columns
@@ -2992,19 +1934,9 @@ type query_root {
   dipdup_head_status("distinct select on columns" distinct_on: [dipdup_head_status_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_head_status_order_by!], "filter the rows returned" where: dipdup_head_status_bool_exp): [dipdup_head_status!]!
 
   """
-  fetch aggregated fields from the table: "dipdup_head_status"
-  """
-  dipdup_head_status_aggregate("distinct select on columns" distinct_on: [dipdup_head_status_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_head_status_order_by!], "filter the rows returned" where: dipdup_head_status_bool_exp): dipdup_head_status_aggregate!
-
-  """
   fetch data from the table: "dipdup_index"
   """
   dipdup_index("distinct select on columns" distinct_on: [dipdup_index_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_index_order_by!], "filter the rows returned" where: dipdup_index_bool_exp): [dipdup_index!]!
-
-  """
-  fetch aggregated fields from the table: "dipdup_index"
-  """
-  dipdup_index_aggregate("distinct select on columns" distinct_on: [dipdup_index_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_index_order_by!], "filter the rows returned" where: dipdup_index_bool_exp): dipdup_index_aggregate!
 
   """
   fetch data from the table: "dipdup_index" using primary key columns
@@ -3012,14 +1944,19 @@ type query_root {
   dipdup_index_by_pk(name: String!): dipdup_index
 
   """
+  fetch data from the table: "dipdup_model_update"
+  """
+  dipdup_model_update("distinct select on columns" distinct_on: [dipdup_model_update_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_model_update_order_by!], "filter the rows returned" where: dipdup_model_update_bool_exp): [dipdup_model_update!]!
+
+  """
+  fetch data from the table: "dipdup_model_update" using primary key columns
+  """
+  dipdup_model_update_by_pk(id: Int!): dipdup_model_update
+
+  """
   fetch data from the table: "dipdup_schema"
   """
   dipdup_schema("distinct select on columns" distinct_on: [dipdup_schema_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_schema_order_by!], "filter the rows returned" where: dipdup_schema_bool_exp): [dipdup_schema!]!
-
-  """
-  fetch aggregated fields from the table: "dipdup_schema"
-  """
-  dipdup_schema_aggregate("distinct select on columns" distinct_on: [dipdup_schema_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_schema_order_by!], "filter the rows returned" where: dipdup_schema_bool_exp): dipdup_schema_aggregate!
 
   """
   fetch data from the table: "dipdup_schema" using primary key columns
@@ -3032,11 +1969,6 @@ type query_root {
   dipdup_token_metadata("distinct select on columns" distinct_on: [dipdup_token_metadata_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_token_metadata_order_by!], "filter the rows returned" where: dipdup_token_metadata_bool_exp): [dipdup_token_metadata!]!
 
   """
-  fetch aggregated fields from the table: "dipdup_token_metadata"
-  """
-  dipdup_token_metadata_aggregate("distinct select on columns" distinct_on: [dipdup_token_metadata_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_token_metadata_order_by!], "filter the rows returned" where: dipdup_token_metadata_bool_exp): dipdup_token_metadata_aggregate!
-
-  """
   fetch data from the table: "dipdup_token_metadata" using primary key columns
   """
   dipdup_token_metadata_by_pk(id: Int!): dipdup_token_metadata
@@ -3047,24 +1979,14 @@ type query_root {
   indexing_status("distinct select on columns" distinct_on: [indexing_status_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [indexing_status_order_by!], "filter the rows returned" where: indexing_status_bool_exp): [indexing_status!]!
 
   """
-  fetch aggregated fields from the table: "indexing_status"
-  """
-  indexing_status_aggregate("distinct select on columns" distinct_on: [indexing_status_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [indexing_status_order_by!], "filter the rows returned" where: indexing_status_bool_exp): indexing_status_aggregate!
-
-  """
   fetch data from the table: "indexing_status" using primary key columns
   """
-  indexing_status_by_pk("COLLECTION: COLLECTION\\nLEGACY_ORDERS: LEGACY_ORDERS" index: String!): indexing_status
+  indexing_status_by_pk("COLLECTION: COLLECTION\\nNFT: NFT\\nLEGACY_ORDERS: LEGACY_ORDERS\\nV1_CLEANING: V1_CLEANING\\nV1_FILL_FIX: V1_FILL_FIX" index: String!): indexing_status
 
   """
   fetch data from the table: "legacy_orders"
   """
   legacy_orders("distinct select on columns" distinct_on: [legacy_orders_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [legacy_orders_order_by!], "filter the rows returned" where: legacy_orders_bool_exp): [legacy_orders!]!
-
-  """
-  fetch aggregated fields from the table: "legacy_orders"
-  """
-  legacy_orders_aggregate("distinct select on columns" distinct_on: [legacy_orders_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [legacy_orders_order_by!], "filter the rows returned" where: legacy_orders_bool_exp): legacy_orders_aggregate!
 
   """
   fetch data from the table: "legacy_orders" using primary key columns
@@ -3077,11 +1999,6 @@ type query_root {
   marketplace_activity("distinct select on columns" distinct_on: [marketplace_activity_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [marketplace_activity_order_by!], "filter the rows returned" where: marketplace_activity_bool_exp): [marketplace_activity!]!
 
   """
-  fetch aggregated fields from the table: "marketplace_activity"
-  """
-  marketplace_activity_aggregate("distinct select on columns" distinct_on: [marketplace_activity_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [marketplace_activity_order_by!], "filter the rows returned" where: marketplace_activity_bool_exp): marketplace_activity_aggregate!
-
-  """
   fetch data from the table: "marketplace_activity" using primary key columns
   """
   marketplace_activity_by_pk(id: uuid!): marketplace_activity
@@ -3092,26 +2009,56 @@ type query_root {
   marketplace_order("distinct select on columns" distinct_on: [marketplace_order_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [marketplace_order_order_by!], "filter the rows returned" where: marketplace_order_bool_exp): [marketplace_order!]!
 
   """
-  fetch aggregated fields from the table: "marketplace_order"
-  """
-  marketplace_order_aggregate("distinct select on columns" distinct_on: [marketplace_order_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [marketplace_order_order_by!], "filter the rows returned" where: marketplace_order_bool_exp): marketplace_order_aggregate!
-
-  """
   fetch data from the table: "marketplace_order" using primary key columns
   """
   marketplace_order_by_pk(id: uuid!): marketplace_order
+
+  """
+  fetch data from the table: "ownership"
+  """
+  ownership("distinct select on columns" distinct_on: [ownership_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [ownership_order_by!], "filter the rows returned" where: ownership_bool_exp): [ownership!]!
+
+  """
+  fetch data from the table: "ownership" using primary key columns
+  """
+  ownership_by_pk(id: Int!): ownership
+
+  """
+  fetch data from the table: "token"
+  """
+  token("distinct select on columns" distinct_on: [token_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [token_order_by!], "filter the rows returned" where: token_bool_exp): [token!]!
+
+  """
+  fetch data from the table: "token" using primary key columns
+  """
+  token_by_pk(id: String!): token
+
+  """
+  fetch data from the table: "token_transfer"
+  """
+  token_transfer("distinct select on columns" distinct_on: [token_transfer_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [token_transfer_order_by!], "filter the rows returned" where: token_transfer_bool_exp): [token_transfer!]!
+
+  """
+  fetch data from the table: "token_transfer" using primary key columns
+  """
+  token_transfer_by_pk(id: Int!): token_transfer
 }
 
 type subscription_root {
   """
+  fetch data from the table: "collection"
+  """
+  collection("distinct select on columns" distinct_on: [collection_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [collection_order_by!], "filter the rows returned" where: collection_bool_exp): [collection!]!
+
+  """
+  fetch data from the table: "collection" using primary key columns
+  """
+  collection_by_pk(contract: String!): collection
+
+  """
   fetch data from the table: "dipdup_contract"
   """
   dipdup_contract("distinct select on columns" distinct_on: [dipdup_contract_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_contract_order_by!], "filter the rows returned" where: dipdup_contract_bool_exp): [dipdup_contract!]!
-
-  """
-  fetch aggregated fields from the table: "dipdup_contract"
-  """
-  dipdup_contract_aggregate("distinct select on columns" distinct_on: [dipdup_contract_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_contract_order_by!], "filter the rows returned" where: dipdup_contract_bool_exp): dipdup_contract_aggregate!
 
   """
   fetch data from the table: "dipdup_contract" using primary key columns
@@ -3124,11 +2071,6 @@ type subscription_root {
   dipdup_contract_metadata("distinct select on columns" distinct_on: [dipdup_contract_metadata_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_contract_metadata_order_by!], "filter the rows returned" where: dipdup_contract_metadata_bool_exp): [dipdup_contract_metadata!]!
 
   """
-  fetch aggregated fields from the table: "dipdup_contract_metadata"
-  """
-  dipdup_contract_metadata_aggregate("distinct select on columns" distinct_on: [dipdup_contract_metadata_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_contract_metadata_order_by!], "filter the rows returned" where: dipdup_contract_metadata_bool_exp): dipdup_contract_metadata_aggregate!
-
-  """
   fetch data from the table: "dipdup_contract_metadata" using primary key columns
   """
   dipdup_contract_metadata_by_pk(id: Int!): dipdup_contract_metadata
@@ -3137,11 +2079,6 @@ type subscription_root {
   fetch data from the table: "dipdup_head"
   """
   dipdup_head("distinct select on columns" distinct_on: [dipdup_head_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_head_order_by!], "filter the rows returned" where: dipdup_head_bool_exp): [dipdup_head!]!
-
-  """
-  fetch aggregated fields from the table: "dipdup_head"
-  """
-  dipdup_head_aggregate("distinct select on columns" distinct_on: [dipdup_head_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_head_order_by!], "filter the rows returned" where: dipdup_head_bool_exp): dipdup_head_aggregate!
 
   """
   fetch data from the table: "dipdup_head" using primary key columns
@@ -3154,19 +2091,9 @@ type subscription_root {
   dipdup_head_status("distinct select on columns" distinct_on: [dipdup_head_status_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_head_status_order_by!], "filter the rows returned" where: dipdup_head_status_bool_exp): [dipdup_head_status!]!
 
   """
-  fetch aggregated fields from the table: "dipdup_head_status"
-  """
-  dipdup_head_status_aggregate("distinct select on columns" distinct_on: [dipdup_head_status_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_head_status_order_by!], "filter the rows returned" where: dipdup_head_status_bool_exp): dipdup_head_status_aggregate!
-
-  """
   fetch data from the table: "dipdup_index"
   """
   dipdup_index("distinct select on columns" distinct_on: [dipdup_index_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_index_order_by!], "filter the rows returned" where: dipdup_index_bool_exp): [dipdup_index!]!
-
-  """
-  fetch aggregated fields from the table: "dipdup_index"
-  """
-  dipdup_index_aggregate("distinct select on columns" distinct_on: [dipdup_index_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_index_order_by!], "filter the rows returned" where: dipdup_index_bool_exp): dipdup_index_aggregate!
 
   """
   fetch data from the table: "dipdup_index" using primary key columns
@@ -3174,14 +2101,19 @@ type subscription_root {
   dipdup_index_by_pk(name: String!): dipdup_index
 
   """
+  fetch data from the table: "dipdup_model_update"
+  """
+  dipdup_model_update("distinct select on columns" distinct_on: [dipdup_model_update_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_model_update_order_by!], "filter the rows returned" where: dipdup_model_update_bool_exp): [dipdup_model_update!]!
+
+  """
+  fetch data from the table: "dipdup_model_update" using primary key columns
+  """
+  dipdup_model_update_by_pk(id: Int!): dipdup_model_update
+
+  """
   fetch data from the table: "dipdup_schema"
   """
   dipdup_schema("distinct select on columns" distinct_on: [dipdup_schema_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_schema_order_by!], "filter the rows returned" where: dipdup_schema_bool_exp): [dipdup_schema!]!
-
-  """
-  fetch aggregated fields from the table: "dipdup_schema"
-  """
-  dipdup_schema_aggregate("distinct select on columns" distinct_on: [dipdup_schema_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_schema_order_by!], "filter the rows returned" where: dipdup_schema_bool_exp): dipdup_schema_aggregate!
 
   """
   fetch data from the table: "dipdup_schema" using primary key columns
@@ -3194,11 +2126,6 @@ type subscription_root {
   dipdup_token_metadata("distinct select on columns" distinct_on: [dipdup_token_metadata_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_token_metadata_order_by!], "filter the rows returned" where: dipdup_token_metadata_bool_exp): [dipdup_token_metadata!]!
 
   """
-  fetch aggregated fields from the table: "dipdup_token_metadata"
-  """
-  dipdup_token_metadata_aggregate("distinct select on columns" distinct_on: [dipdup_token_metadata_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_token_metadata_order_by!], "filter the rows returned" where: dipdup_token_metadata_bool_exp): dipdup_token_metadata_aggregate!
-
-  """
   fetch data from the table: "dipdup_token_metadata" using primary key columns
   """
   dipdup_token_metadata_by_pk(id: Int!): dipdup_token_metadata
@@ -3209,24 +2136,14 @@ type subscription_root {
   indexing_status("distinct select on columns" distinct_on: [indexing_status_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [indexing_status_order_by!], "filter the rows returned" where: indexing_status_bool_exp): [indexing_status!]!
 
   """
-  fetch aggregated fields from the table: "indexing_status"
-  """
-  indexing_status_aggregate("distinct select on columns" distinct_on: [indexing_status_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [indexing_status_order_by!], "filter the rows returned" where: indexing_status_bool_exp): indexing_status_aggregate!
-
-  """
   fetch data from the table: "indexing_status" using primary key columns
   """
-  indexing_status_by_pk("COLLECTION: COLLECTION\\nLEGACY_ORDERS: LEGACY_ORDERS" index: String!): indexing_status
+  indexing_status_by_pk("COLLECTION: COLLECTION\\nNFT: NFT\\nLEGACY_ORDERS: LEGACY_ORDERS\\nV1_CLEANING: V1_CLEANING\\nV1_FILL_FIX: V1_FILL_FIX" index: String!): indexing_status
 
   """
   fetch data from the table: "legacy_orders"
   """
   legacy_orders("distinct select on columns" distinct_on: [legacy_orders_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [legacy_orders_order_by!], "filter the rows returned" where: legacy_orders_bool_exp): [legacy_orders!]!
-
-  """
-  fetch aggregated fields from the table: "legacy_orders"
-  """
-  legacy_orders_aggregate("distinct select on columns" distinct_on: [legacy_orders_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [legacy_orders_order_by!], "filter the rows returned" where: legacy_orders_bool_exp): legacy_orders_aggregate!
 
   """
   fetch data from the table: "legacy_orders" using primary key columns
@@ -3239,11 +2156,6 @@ type subscription_root {
   marketplace_activity("distinct select on columns" distinct_on: [marketplace_activity_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [marketplace_activity_order_by!], "filter the rows returned" where: marketplace_activity_bool_exp): [marketplace_activity!]!
 
   """
-  fetch aggregated fields from the table: "marketplace_activity"
-  """
-  marketplace_activity_aggregate("distinct select on columns" distinct_on: [marketplace_activity_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [marketplace_activity_order_by!], "filter the rows returned" where: marketplace_activity_bool_exp): marketplace_activity_aggregate!
-
-  """
   fetch data from the table: "marketplace_activity" using primary key columns
   """
   marketplace_activity_by_pk(id: uuid!): marketplace_activity
@@ -3254,14 +2166,39 @@ type subscription_root {
   marketplace_order("distinct select on columns" distinct_on: [marketplace_order_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [marketplace_order_order_by!], "filter the rows returned" where: marketplace_order_bool_exp): [marketplace_order!]!
 
   """
-  fetch aggregated fields from the table: "marketplace_order"
-  """
-  marketplace_order_aggregate("distinct select on columns" distinct_on: [marketplace_order_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [marketplace_order_order_by!], "filter the rows returned" where: marketplace_order_bool_exp): marketplace_order_aggregate!
-
-  """
   fetch data from the table: "marketplace_order" using primary key columns
   """
   marketplace_order_by_pk(id: uuid!): marketplace_order
+
+  """
+  fetch data from the table: "ownership"
+  """
+  ownership("distinct select on columns" distinct_on: [ownership_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [ownership_order_by!], "filter the rows returned" where: ownership_bool_exp): [ownership!]!
+
+  """
+  fetch data from the table: "ownership" using primary key columns
+  """
+  ownership_by_pk(id: Int!): ownership
+
+  """
+  fetch data from the table: "token"
+  """
+  token("distinct select on columns" distinct_on: [token_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [token_order_by!], "filter the rows returned" where: token_bool_exp): [token!]!
+
+  """
+  fetch data from the table: "token" using primary key columns
+  """
+  token_by_pk(id: String!): token
+
+  """
+  fetch data from the table: "token_transfer"
+  """
+  token_transfer("distinct select on columns" distinct_on: [token_transfer_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [token_transfer_order_by!], "filter the rows returned" where: token_transfer_bool_exp): [token_transfer!]!
+
+  """
+  fetch data from the table: "token_transfer" using primary key columns
+  """
+  token_transfer_by_pk(id: Int!): token_transfer
 }
 
 scalar timestamptz
@@ -3287,6 +2224,303 @@ input timestamptz_comparison_exp {
   _neq: timestamptz
 
   _nin: [timestamptz!]
+}
+
+"""
+columns and relationships of "token"
+"""
+type token {
+  contract: String!
+
+  deleted: Boolean!
+
+  id: String!
+
+  metadata_retries: Int!
+
+  metadata_synced: Boolean!
+
+  minted: numeric!
+
+  minted_at: timestamptz!
+
+  supply: numeric!
+
+  token_id: String!
+
+  tzkt_id: Int!
+
+  updated: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "token". All fields are combined with a logical 'AND'.
+"""
+input token_bool_exp {
+  _and: [token_bool_exp!]
+
+  _not: token_bool_exp
+
+  _or: [token_bool_exp!]
+
+  contract: String_comparison_exp
+
+  deleted: Boolean_comparison_exp
+
+  id: String_comparison_exp
+
+  metadata_retries: Int_comparison_exp
+
+  metadata_synced: Boolean_comparison_exp
+
+  minted: numeric_comparison_exp
+
+  minted_at: timestamptz_comparison_exp
+
+  supply: numeric_comparison_exp
+
+  token_id: String_comparison_exp
+
+  tzkt_id: Int_comparison_exp
+
+  updated: timestamptz_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "token".
+"""
+input token_order_by {
+  contract: order_by
+
+  deleted: order_by
+
+  id: order_by
+
+  metadata_retries: order_by
+
+  metadata_synced: order_by
+
+  minted: order_by
+
+  minted_at: order_by
+
+  supply: order_by
+
+  token_id: order_by
+
+  tzkt_id: order_by
+
+  updated: order_by
+}
+
+"""
+select columns of table "token"
+"""
+enum token_select_column {
+  """
+  column name
+  """
+  contract
+
+  """
+  column name
+  """
+  deleted
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  metadata_retries
+
+  """
+  column name
+  """
+  metadata_synced
+
+  """
+  column name
+  """
+  minted
+
+  """
+  column name
+  """
+  minted_at
+
+  """
+  column name
+  """
+  supply
+
+  """
+  column name
+  """
+  token_id
+
+  """
+  column name
+  """
+  tzkt_id
+
+  """
+  column name
+  """
+  updated
+}
+
+"""
+columns and relationships of "token_transfer"
+"""
+type token_transfer {
+  amount: numeric!
+
+  contract: String!
+
+  date: timestamptz!
+
+  from_address: String
+
+  hash: String
+
+  id: Int!
+
+  to_address: String
+
+  token_id: String!
+
+  """
+  GET_BID: GET_BID\nGET_FLOOR_BID: GET_FLOOR_BID\nORDER_LIST: LIST\nORDER_MATCH: SELL\nORDER_CANCEL: CANCEL_LIST\nCANCEL_BID: CANCEL_BID\nCANCEL_FLOOR_BID: CANCEL_FLOOR_BID\nMAKE_BID: MAKE_BID\nMAKE_FLOOR_BID: MAKE_FLOOR_BID\nTOKEN_MINT: MINT\nTOKEN_TRANSFER: TRANSFER\nTOKEN_BURN: BURN
+  """
+  type: String!
+
+  tzkt_token_id: Int!
+
+  tzkt_transaction_id: Int
+}
+
+"""
+Boolean expression to filter rows from the table "token_transfer". All fields are combined with a logical 'AND'.
+"""
+input token_transfer_bool_exp {
+  _and: [token_transfer_bool_exp!]
+
+  _not: token_transfer_bool_exp
+
+  _or: [token_transfer_bool_exp!]
+
+  amount: numeric_comparison_exp
+
+  contract: String_comparison_exp
+
+  date: timestamptz_comparison_exp
+
+  from_address: String_comparison_exp
+
+  hash: String_comparison_exp
+
+  id: Int_comparison_exp
+
+  to_address: String_comparison_exp
+
+  token_id: String_comparison_exp
+
+  type: String_comparison_exp
+
+  tzkt_token_id: Int_comparison_exp
+
+  tzkt_transaction_id: Int_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "token_transfer".
+"""
+input token_transfer_order_by {
+  amount: order_by
+
+  contract: order_by
+
+  date: order_by
+
+  from_address: order_by
+
+  hash: order_by
+
+  id: order_by
+
+  to_address: order_by
+
+  token_id: order_by
+
+  type: order_by
+
+  tzkt_token_id: order_by
+
+  tzkt_transaction_id: order_by
+}
+
+"""
+select columns of table "token_transfer"
+"""
+enum token_transfer_select_column {
+  """
+  column name
+  """
+  amount
+
+  """
+  column name
+  """
+  contract
+
+  """
+  column name
+  """
+  date
+
+  """
+  column name
+  """
+  from_address
+
+  """
+  column name
+  """
+  hash
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  to_address
+
+  """
+  column name
+  """
+  token_id
+
+  """
+  column name
+  """
+  type
+
+  """
+  column name
+  """
+  tzkt_token_id
+
+  """
+  column name
+  """
+  tzkt_transaction_id
 }
 
 scalar uuid

@@ -1,0 +1,51 @@
+fragment token on token {
+    id
+    metadata_synced
+    minted
+    minted_at
+    supply
+    token_id
+    updated
+    contract
+    deleted
+    metadata_retries
+    tzkt_id
+}
+
+query GetTokensByIds($ids: [String!]!) {
+    token(where: {id: {_in: $ids}}) {
+        ...token
+    }
+}
+
+query GetTokensAll($limit: Int!, $order_by: [token_order_by!]!) {
+    token(limit: $limit, order_by: $order_by) {
+        ...token
+    }
+}
+
+query GetTokensAllContinuationDesc($limit: Int!, $date: timestamptz!, $id: String!) {
+    token(where: {
+        _or: [{
+            updated: {_lt: $date}
+        },{
+            updated: {_eq: $date},
+            id: {_lt: $id}
+        }]
+    }, limit: $limit, order_by: [{updated: desc}, {id: desc}]) {
+        ...token
+    }
+}
+
+query GetTokensAllContinuationAsc($limit: Int!, $date: timestamptz!, $id: String!) {
+    token(where: {
+        _or: [{
+            updated: {_gt: $date}
+        },{
+            updated: {_eq: $date},
+            id: {_gt: $id}
+        }]
+    }, limit: $limit, order_by: [{updated: asc}, {id: asc}]) {
+        ...token
+    }
+}
