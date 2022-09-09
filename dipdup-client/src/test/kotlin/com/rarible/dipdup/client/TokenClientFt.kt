@@ -124,7 +124,7 @@ class TokenClientFt : BaseClientFt() {
         )
         assertThat(page.items).hasSize(1)
         val continuation = TimestampIdContinuation.parse(page.continuation)
-        assertThat(continuation.date.toEpochMilli() < 1662647955000).isTrue()
+        assertThat(continuation.date.toEpochMilli() < 1662647955000).isTrue
         assertThat(continuation.id).isNotEqualTo("KT1ME54FMgDcFjWPp272DzMHkeD2DuijwJfo:8")
     }
 
@@ -160,7 +160,7 @@ class TokenClientFt : BaseClientFt() {
         )
         assertThat(page.items).hasSize(1)
         val continuation = TimestampIdContinuation.parse(page.continuation)
-        assertThat(continuation.date.toEpochMilli() > 1662647955000).isTrue()
+        assertThat(continuation.date.toEpochMilli() > 1662647955000).isTrue
         assertThat(continuation.id).isNotEqualTo("KT1ME54FMgDcFjWPp272DzMHkeD2DuijwJfo:8")
     }
 

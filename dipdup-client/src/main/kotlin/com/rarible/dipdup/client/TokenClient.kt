@@ -2,11 +2,10 @@ package com.rarible.dipdup.client
 
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
-import com.rarible.dipdup.client.converter.convert
-import com.rarible.dipdup.client.converter.convertAll
-import com.rarible.dipdup.client.converter.convertAllContinuationAsc
-import com.rarible.dipdup.client.converter.convertAllContinuationDesc
-import com.rarible.dipdup.client.converter.convertByIds
+import com.rarible.dipdup.client.converter.TokenConverter.convertAll
+import com.rarible.dipdup.client.converter.TokenConverter.convertAllContinuationAsc
+import com.rarible.dipdup.client.converter.TokenConverter.convertAllContinuationDesc
+import com.rarible.dipdup.client.converter.TokenConverter.convertByIds
 import com.rarible.dipdup.client.core.model.DipDupToken
 import com.rarible.dipdup.client.core.model.TimestampIdContinuation
 import com.rarible.dipdup.client.exception.DipDupNotFound
@@ -59,7 +58,7 @@ class TokenClient(
     }
 
     private fun orderBy(id: Optional<order_by>?, updated: Optional<order_by>?) = Token_order_by(
-        null, null, id, null, null, null, null, null, null, null, updated
+        null, null, null, id, null, null, null, null, null, null, null, updated
     )
 
     private fun sort(sortAsc: Boolean) = when (sortAsc) {

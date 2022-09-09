@@ -123,6 +123,8 @@ columns and relationships of "collection"
 type collection {
   contract: String!
 
+  db_updated_at: timestamptz!
+
   metadata_retries: Int!
 
   metadata_synced: Boolean!
@@ -142,6 +144,8 @@ input collection_bool_exp {
 
   contract: String_comparison_exp
 
+  db_updated_at: timestamptz_comparison_exp
+
   metadata_retries: Int_comparison_exp
 
   metadata_synced: Boolean_comparison_exp
@@ -154,6 +158,8 @@ Ordering options when selecting data from "collection".
 """
 input collection_order_by {
   contract: order_by
+
+  db_updated_at: order_by
 
   metadata_retries: order_by
 
@@ -170,6 +176,11 @@ enum collection_select_column {
   column name
   """
   contract
+
+  """
+  column name
+  """
+  db_updated_at
 
   """
   column name
@@ -1803,7 +1814,7 @@ type ownership {
 
   contract: String!
 
-  id: Int!
+  id: String!
 
   owner: String!
 
@@ -1826,7 +1837,7 @@ input ownership_bool_exp {
 
   contract: String_comparison_exp
 
-  id: Int_comparison_exp
+  id: String_comparison_exp
 
   owner: String_comparison_exp
 
@@ -2021,7 +2032,7 @@ type query_root {
   """
   fetch data from the table: "ownership" using primary key columns
   """
-  ownership_by_pk(id: Int!): ownership
+  ownership_by_pk(id: String!): ownership
 
   """
   fetch data from the table: "token"
@@ -2178,7 +2189,7 @@ type subscription_root {
   """
   fetch data from the table: "ownership" using primary key columns
   """
-  ownership_by_pk(id: Int!): ownership
+  ownership_by_pk(id: String!): ownership
 
   """
   fetch data from the table: "token"
@@ -2232,6 +2243,8 @@ columns and relationships of "token"
 type token {
   contract: String!
 
+  db_updated_at: timestamptz!
+
   deleted: Boolean!
 
   id: String!
@@ -2265,6 +2278,8 @@ input token_bool_exp {
 
   contract: String_comparison_exp
 
+  db_updated_at: timestamptz_comparison_exp
+
   deleted: Boolean_comparison_exp
 
   id: String_comparison_exp
@@ -2291,6 +2306,8 @@ Ordering options when selecting data from "token".
 """
 input token_order_by {
   contract: order_by
+
+  db_updated_at: order_by
 
   deleted: order_by
 
@@ -2321,6 +2338,11 @@ enum token_select_column {
   column name
   """
   contract
+
+  """
+  column name
+  """
+  db_updated_at
 
   """
   column name
