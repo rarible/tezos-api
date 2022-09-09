@@ -14,10 +14,10 @@ class TokenClientFt : BaseClientFt() {
 
     // For local testing
 //    val local: ApolloClient =
-//        runBlocking { ApolloClient.Builder().serverUrl("http://127.0.0.1:49180/v1/graphql").build() }
+//        runBlocking { ApolloClient.Builder().serverUrl("http://192.168.1.63:49180/v1/graphql").build() }
 //    val tokenClient = TokenClient(local)
 
-        val tokenClient = TokenClient(client)
+   val tokenClient = TokenClient(client)
 
     @Test
     fun `should return token`() = runBlocking<Unit> {
@@ -87,7 +87,7 @@ class TokenClientFt : BaseClientFt() {
             }"""
         )
 
-        val page = tokenClient.getTokensAll(limit = 1, continuation = null, sortAsc = false)
+        val page = tokenClient.getTokensAll(limit = 1, showDeleted = true, continuation = null, sortAsc = false)
         assertThat(page.items).hasSize(1)
         assertThat(TimestampIdContinuation.parse(page.continuation)).isNotNull()
     }

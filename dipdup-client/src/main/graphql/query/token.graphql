@@ -18,14 +18,15 @@ query GetTokensByIds($ids: [String!]!) {
     }
 }
 
-query GetTokensAll($limit: Int!, $order_by: [token_order_by!]!) {
-    token(limit: $limit, order_by: $order_by) {
+query GetTokensAll($limit: Int!, $deleted: [Boolean!]!, $order_by: [token_order_by!]!) {
+    token(where: {deleted: {_in: $deleted}}, limit: $limit, order_by: $order_by) {
         ...token
     }
 }
 
-query GetTokensAllContinuationDesc($limit: Int!, $date: timestamptz!, $id: String!) {
+query GetTokensAllContinuationDesc($limit: Int!, $deleted: [Boolean!]!, $date: timestamptz!, $id: String!) {
     token(where: {
+        deleted: {_in: $deleted},
         _or: [{
             updated: {_lt: $date}
         },{
@@ -37,8 +38,9 @@ query GetTokensAllContinuationDesc($limit: Int!, $date: timestamptz!, $id: Strin
     }
 }
 
-query GetTokensAllContinuationAsc($limit: Int!, $date: timestamptz!, $id: String!) {
+query GetTokensAllContinuationAsc($limit: Int!, $deleted: [Boolean!]!, $date: timestamptz!, $id: String!) {
     token(where: {
+        deleted: {_in: $deleted},
         _or: [{
             updated: {_gt: $date}
         },{

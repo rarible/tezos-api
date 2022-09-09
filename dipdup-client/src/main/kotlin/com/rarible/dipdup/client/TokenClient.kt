@@ -30,12 +30,13 @@ class TokenClient(
 
     suspend fun getTokensAll(
         limit: Int = DEFAULT_PAGE,
+        showDeleted: Boolean = false,
         continuation: String?,
         sortAsc: Boolean = false
     ): Page<DipDupToken> {
         val tokens = if (continuation == null) {
             val request = GetTokensAllQuery(
-                limit, listOf(
+                limit, deleted(showDeleted), listOf(
                     orderBy(id = null, updated = sort(sortAsc)),
                     orderBy(id = sort(sortAsc), updated = null)
                 )
@@ -45,11 +46,11 @@ class TokenClient(
         } else {
             val parsed = TimestampIdContinuation.parse(continuation)
             if (sortAsc) {
-                val request = GetTokensAllContinuationAscQuery(limit, parsed.date.toString(), parsed.id)
+                val request = GetTokensAllContinuationAscQuery(limit, deleted(showDeleted), parsed.date.toString(), parsed.id)
                 val response = safeExecution(request)
                 convertAllContinuationAsc(response.token)
             } else {
-                val request = GetTokensAllContinuationDescQuery(limit, parsed.date.toString(), parsed.id)
+                val request = GetTokensAllContinuationDescQuery(limit, deleted(showDeleted), parsed.date.toString(), parsed.id)
                 val response = safeExecution(request)
                 convertAllContinuationDesc(response.token)
             }
@@ -64,6 +65,11 @@ class TokenClient(
     private fun sort(sortAsc: Boolean) = when (sortAsc) {
         true -> Optional.presentIfNotNull(order_by.asc)
         else -> Optional.presentIfNotNull(order_by.desc)
+    }
+
+    private fun deleted(showDeleted: Boolean) = when (showDeleted) {
+        true -> listOf(true, false)
+        else -> listOf(false)
     }
 
     companion object {
