@@ -33,7 +33,7 @@ class RoyaltiesHandler(
     }
 
     suspend fun processRoyalties(contract: String, tokenId: String): List<Part> {
-        logger.info("Checking royalties for token $contract:$tokenId")
+        logger.debug("Checking royalties for token $contract:$tokenId")
         var part: List<Part>
 
         when (contract) {
