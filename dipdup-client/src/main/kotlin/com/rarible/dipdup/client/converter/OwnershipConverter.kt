@@ -33,6 +33,6 @@ object OwnershipConverter {
         contract = source.contract,
         owner = source.owner,
         updated = OffsetDateTime.parse(source.updated.toString()).toInstant(),
-        balance = BigDecimal(source.balance.toString()),
+        balance = BigInteger(source.balance.toString()),
     )
 }

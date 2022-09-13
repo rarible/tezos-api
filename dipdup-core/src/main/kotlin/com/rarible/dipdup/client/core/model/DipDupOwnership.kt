@@ -10,5 +10,5 @@ data class DipDupOwnership(
         val contract: String,
         val tokenId: BigInteger,
         val owner: String,
-        val balance: BigDecimal
+        val balance: BigInteger
 ) : DipDupEntity

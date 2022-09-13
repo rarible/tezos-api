@@ -7,9 +7,9 @@ import java.time.Instant
 data class DipDupToken(
         override val id: String,
         val metadataSynced: Boolean,
-        val minted: BigDecimal,
+        val minted: BigInteger,
         val mintedAt: Instant,
-        val supply: BigDecimal,
+        val supply: BigInteger,
         val tokenId: BigInteger,
         override val updated: Instant,
         val contract: String,
