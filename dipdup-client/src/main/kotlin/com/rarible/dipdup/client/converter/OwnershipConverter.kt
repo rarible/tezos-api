@@ -33,6 +33,9 @@ object OwnershipConverter {
         contract = source.contract,
         owner = source.owner,
         updated = OffsetDateTime.parse(source.updated.toString()).toInstant(),
+
+        // TODO: changed to created field
+        created = OffsetDateTime.parse(source.updated.toString()).toInstant(),
         balance = BigInteger(source.balance.toString()),
     )
 }
