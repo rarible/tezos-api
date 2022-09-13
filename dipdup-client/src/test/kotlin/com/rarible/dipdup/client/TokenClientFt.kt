@@ -1,6 +1,5 @@
 package com.rarible.dipdup.client
 
-import com.apollographql.apollo3.ApolloClient
 import com.rarible.dipdup.client.core.model.DipDupToken
 import com.rarible.dipdup.client.core.model.TimestampIdContinuation
 import kotlinx.coroutines.runBlocking
@@ -50,13 +49,13 @@ class TokenClientFt : BaseClientFt() {
                 contract = "KT1Pz65ssbPF7Zv9Dh7ggqUkgAYNSuJ9iia7",
                 deleted = false,
                 id = "KT1Pz65ssbPF7Zv9Dh7ggqUkgAYNSuJ9iia7:1",
-                metadata_retries = 0,
-                metadata_synced = false,
+                metadataRetries = 0,
+                metadataSynced = false,
                 minted = BigDecimal("18000000.000000000000000000000000000000000000"),
-                minted_at = OffsetDateTime.parse("2022-01-25T16:45:09+00:00").toInstant(),
+                mintedAt = OffsetDateTime.parse("2022-01-25T16:45:09+00:00").toInstant(),
                 supply = BigDecimal("18000000.000000000000000000000000000000000000"),
-                token_id = BigInteger("1"),
-                tzkt_id = 2,
+                tokenId = BigInteger("1"),
+                tzktId = 2,
                 updated = OffsetDateTime.parse("2022-01-25T16:45:09+00:00").toInstant()
             )
         )

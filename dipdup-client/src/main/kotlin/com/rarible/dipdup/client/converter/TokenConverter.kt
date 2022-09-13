@@ -23,15 +23,15 @@ object TokenConverter {
 
     fun convert(source: Token) = DipDupToken(
         id = source.id,
-        metadata_synced = source.metadata_synced,
+        metadataSynced = source.metadata_synced,
         minted = BigDecimal(source.minted.toString()),
-        minted_at = OffsetDateTime.parse(source.minted_at.toString()).toInstant(),
+        mintedAt = OffsetDateTime.parse(source.minted_at.toString()).toInstant(),
         supply = BigDecimal(source.supply.toString()),
-        token_id = BigInteger(source.token_id),
+        tokenId = BigInteger(source.token_id),
         updated = OffsetDateTime.parse(source.updated.toString()).toInstant(),
         contract = source.contract,
         deleted = source.deleted,
-        metadata_retries = source.metadata_retries,
-        tzkt_id = source.tzkt_id
+        metadataRetries = source.metadata_retries,
+        tzktId = source.tzkt_id
     )
 }

@@ -1,6 +1,5 @@
 package com.rarible.dipdup.client
 
-import com.apollographql.apollo3.ApolloClient
 import com.rarible.dipdup.client.core.model.DipDupOwnership
 import com.rarible.dipdup.client.core.model.TimestampIdContinuation
 import kotlinx.coroutines.runBlocking
@@ -45,7 +44,7 @@ class OwnershipClientFt : BaseClientFt() {
             DipDupOwnership(
                 id = "KT1HS9P3RzaUuJjioPvPCJXH3Vk2wgmraAg5:0:tz1c1X8vD4pKV9TgV1cyosR7qdnkc8FTEyM1",
                 contract = "KT1HS9P3RzaUuJjioPvPCJXH3Vk2wgmraAg5",
-                token_id = BigInteger("0"),
+                tokenId = BigInteger("0"),
                 owner = "tz1c1X8vD4pKV9TgV1cyosR7qdnkc8FTEyM1",
                 balance = BigDecimal("50.000000000000000000000000000000000000"),
                 updated = OffsetDateTime.parse("2022-04-08T22:35:10Z").toInstant()

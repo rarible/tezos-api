@@ -29,7 +29,7 @@ object OwnershipConverter {
 
     fun convert(source: Ownership) = DipDupOwnership(
         id = source.id,
-        token_id = BigInteger(source.token_id),
+        tokenId = BigInteger(source.token_id),
         contract = source.contract,
         owner = source.owner,
         updated = OffsetDateTime.parse(source.updated.toString()).toInstant(),
