@@ -1,6 +1,6 @@
 package com.rarible.dipdup.client
 
-import com.rarible.dipdup.client.core.model.DipDupToken
+import com.rarible.dipdup.client.core.model.DipDupItem
 import com.rarible.dipdup.client.core.model.TimestampIdContinuation
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
@@ -45,7 +45,7 @@ class TokenClientFt : BaseClientFt() {
 
         val token = tokenClient.getTokenById("KT1Pz65ssbPF7Zv9Dh7ggqUkgAYNSuJ9iia7:1")
         assertThat(token).isEqualTo(
-            DipDupToken(
+            DipDupItem(
                 contract = "KT1Pz65ssbPF7Zv9Dh7ggqUkgAYNSuJ9iia7",
                 deleted = false,
                 id = "KT1Pz65ssbPF7Zv9Dh7ggqUkgAYNSuJ9iia7:1",

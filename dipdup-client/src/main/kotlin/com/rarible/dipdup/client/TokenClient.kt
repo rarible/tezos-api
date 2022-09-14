@@ -6,7 +6,7 @@ import com.rarible.dipdup.client.converter.TokenConverter.convertAll
 import com.rarible.dipdup.client.converter.TokenConverter.convertAllContinuationAsc
 import com.rarible.dipdup.client.converter.TokenConverter.convertAllContinuationDesc
 import com.rarible.dipdup.client.converter.TokenConverter.convertByIds
-import com.rarible.dipdup.client.core.model.DipDupToken
+import com.rarible.dipdup.client.core.model.DipDupItem
 import com.rarible.dipdup.client.core.model.TimestampIdContinuation
 import com.rarible.dipdup.client.exception.DipDupNotFound
 import com.rarible.dipdup.client.model.Page
@@ -17,11 +17,11 @@ class TokenClient(
     client: ApolloClient
 ) : BaseClient(client) {
 
-    suspend fun getTokenById(id: String): DipDupToken {
+    suspend fun getTokenById(id: String): DipDupItem {
         return getTokensByIds(listOf(id)).firstOrNull() ?: throw DipDupNotFound(id)
     }
 
-    suspend fun getTokensByIds(ids: List<String>): List<DipDupToken> {
+    suspend fun getTokensByIds(ids: List<String>): List<DipDupItem> {
         val request = GetTokensByIdsQuery(ids)
         val response = safeExecution(request)
         return convertByIds(response.token)
@@ -32,7 +32,7 @@ class TokenClient(
         showDeleted: Boolean = false,
         continuation: String?,
         sortAsc: Boolean = false
-    ): Page<DipDupToken> {
+    ): Page<DipDupItem> {
         val tokens = if (continuation == null) {
             val request = GetTokensAllQuery(
                 limit, deleted(showDeleted), listOf(

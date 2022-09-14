@@ -1,10 +1,9 @@
 package com.rarible.dipdup.client.core.model
 
-import java.math.BigDecimal
 import java.math.BigInteger
 import java.time.Instant
 
-data class DipDupToken(
+data class DipDupItem(
         override val id: String,
         val metadataSynced: Boolean,
         val minted: BigInteger,
