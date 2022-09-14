@@ -4,27 +4,21 @@ import com.rarible.core.kafka.RaribleKafkaConsumer
 import com.rarible.dipdup.client.core.model.DipDupActivity
 import com.rarible.dipdup.client.core.model.DipDupCollection
 import com.rarible.dipdup.client.core.model.DipDupOrder
+import com.rarible.dipdup.listener.model.DipDupItemEvent
+import com.rarible.dipdup.listener.model.DipDupOwnershipEvent
 import org.apache.kafka.clients.consumer.OffsetResetStrategy
 
 import java.util.*
 
 class DipDupEventsConsumerFactory(
-    private val network: String,
     private val brokerReplicaSet: String,
     val host: String,
-    val environment: String,
-    val username: String?,
-    val password: String?
+    val environment: String
 ) {
 
     private val clientIdPrefix = "$environment.$host.${UUID.randomUUID()}"
 
-    private val properties = if (username != null && password != null) mapOf(
-        "security.protocol" to "SASL_PLAINTEXT",
-        "sasl.mechanism" to "PLAIN",
-        "sasl.jaas.config" to "org.apache.kafka.common.security.plain.PlainLoginModule required " +
-                "username=\"$username\" password=\"$password\";"
-    ) else emptyMap()
+    private val properties = emptyMap<String, String>()
 
     fun createOrderConsumer(consumerGroup: String): RaribleKafkaConsumer<DipDupOrder> {
         return RaribleKafkaConsumer(
@@ -33,9 +27,7 @@ class DipDupEventsConsumerFactory(
             valueClass = DipDupOrder::class.java,
             consumerGroup = consumerGroup,
             offsetResetStrategy = OffsetResetStrategy.EARLIEST,
-            defaultTopic = if (username != null && password != null) "${DipDupTopicProvider.ORDER}_$network" else DipDupTopicProvider.getOrderTopic(
-                environment
-            ),
+            defaultTopic = DipDupTopicProvider.getOrderTopic(environment),
             bootstrapServers = brokerReplicaSet,
             properties = properties
         )
@@ -48,9 +40,7 @@ class DipDupEventsConsumerFactory(
             valueClass = DipDupActivity::class.java,
             consumerGroup = consumerGroup,
             offsetResetStrategy = OffsetResetStrategy.EARLIEST,
-            defaultTopic = if (username != null && password != null) "${DipDupTopicProvider.ACTIVITY}_$network" else DipDupTopicProvider.getActivityTopic(
-                environment
-            ),
+            defaultTopic = DipDupTopicProvider.getActivityTopic(environment),
             bootstrapServers = brokerReplicaSet,
             properties = properties
         )
@@ -63,9 +53,33 @@ class DipDupEventsConsumerFactory(
             valueClass = DipDupCollection::class.java,
             consumerGroup = consumerGroup,
             offsetResetStrategy = OffsetResetStrategy.EARLIEST,
-            defaultTopic = if (username != null && password != null) "${DipDupTopicProvider.COLLECTION}_$network" else DipDupTopicProvider.getCollectionTopic(
-                environment
-            ),
+            defaultTopic = DipDupTopicProvider.getCollectionTopic(environment),
+            bootstrapServers = brokerReplicaSet,
+            properties = properties
+        )
+    }
+
+    fun createItemConsumer(consumerGroup: String): RaribleKafkaConsumer<DipDupItemEvent> {
+        return RaribleKafkaConsumer(
+            clientId = "$clientIdPrefix.tezos.consumer.item",
+            valueDeserializerClass = DipDupDeserializer.ActivityJsonSerializer::class.java,
+            valueClass = DipDupItemEvent::class.java,
+            consumerGroup = consumerGroup,
+            offsetResetStrategy = OffsetResetStrategy.EARLIEST,
+            defaultTopic = DipDupTopicProvider.getItemTopic(environment),
+            bootstrapServers = brokerReplicaSet,
+            properties = properties
+        )
+    }
+
+    fun createOwnershipConsumer(consumerGroup: String): RaribleKafkaConsumer<DipDupOwnershipEvent> {
+        return RaribleKafkaConsumer(
+            clientId = "$clientIdPrefix.tezos.consumer.ownership",
+            valueDeserializerClass = DipDupDeserializer.ActivityJsonSerializer::class.java,
+            valueClass = DipDupOwnershipEvent::class.java,
+            consumerGroup = consumerGroup,
+            offsetResetStrategy = OffsetResetStrategy.EARLIEST,
+            defaultTopic = DipDupTopicProvider.getOwnershipTopic(environment),
             bootstrapServers = brokerReplicaSet,
             properties = properties
         )
