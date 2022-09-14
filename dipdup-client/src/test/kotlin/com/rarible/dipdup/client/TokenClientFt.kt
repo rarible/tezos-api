@@ -5,7 +5,6 @@ import com.rarible.dipdup.client.core.model.TimestampIdContinuation
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.math.BigDecimal
 import java.math.BigInteger
 import java.time.OffsetDateTime
 
@@ -51,9 +50,9 @@ class TokenClientFt : BaseClientFt() {
                 id = "KT1Pz65ssbPF7Zv9Dh7ggqUkgAYNSuJ9iia7:1",
                 metadataRetries = 0,
                 metadataSynced = false,
-                minted = BigDecimal("18000000.000000000000000000000000000000000000"),
+                minted = BigInteger("18000000"),
                 mintedAt = OffsetDateTime.parse("2022-01-25T16:45:09+00:00").toInstant(),
-                supply = BigDecimal("18000000.000000000000000000000000000000000000"),
+                supply = BigInteger("18000000"),
                 tokenId = BigInteger("1"),
                 tzktId = 2,
                 updated = OffsetDateTime.parse("2022-01-25T16:45:09+00:00").toInstant()

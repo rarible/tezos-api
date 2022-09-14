@@ -6,6 +6,7 @@ import com.rarible.dipdup.client.GetTokensAllQuery
 import com.rarible.dipdup.client.GetTokensByIdsQuery
 import com.rarible.dipdup.client.core.model.DipDupItem
 import com.rarible.dipdup.client.fragment.Token
+import java.math.BigDecimal
 import java.math.BigInteger
 import java.time.OffsetDateTime
 
@@ -23,9 +24,9 @@ object TokenConverter {
     fun convert(source: Token) = DipDupItem(
         id = source.id,
         metadataSynced = source.metadata_synced,
-        minted = BigInteger(source.minted.toString()),
+        minted = BigDecimal(source.minted.toString()).toBigInteger(),
         mintedAt = OffsetDateTime.parse(source.minted_at.toString()).toInstant(),
-        supply = BigInteger(source.supply.toString()),
+        supply = BigDecimal(source.supply.toString()).toBigInteger(),
         tokenId = BigInteger(source.token_id),
         updated = OffsetDateTime.parse(source.updated.toString()).toInstant(),
         contract = source.contract,

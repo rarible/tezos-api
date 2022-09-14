@@ -5,7 +5,6 @@ import com.rarible.dipdup.client.core.model.TimestampIdContinuation
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.math.BigDecimal
 import java.math.BigInteger
 import java.time.OffsetDateTime
 
@@ -46,8 +45,9 @@ class OwnershipClientFt : BaseClientFt() {
                 contract = "KT1HS9P3RzaUuJjioPvPCJXH3Vk2wgmraAg5",
                 tokenId = BigInteger("0"),
                 owner = "tz1c1X8vD4pKV9TgV1cyosR7qdnkc8FTEyM1",
-                balance = BigDecimal("50.000000000000000000000000000000000000"),
-                updated = OffsetDateTime.parse("2022-04-08T22:35:10Z").toInstant()
+                balance = BigInteger("50"),
+                updated = OffsetDateTime.parse("2022-04-08T22:35:10Z").toInstant(),
+                created = OffsetDateTime.parse("2022-04-08T22:35:10Z").toInstant()
             )
         )
     }

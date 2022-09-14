@@ -36,6 +36,6 @@ object OwnershipConverter {
 
         // TODO: changed to created field
         created = OffsetDateTime.parse(source.updated.toString()).toInstant(),
-        balance = BigInteger(source.balance.toString()),
+        balance = BigDecimal(source.balance.toString()).toBigInteger(),
     )
 }
