@@ -49,7 +49,7 @@ class DipDupEventsConsumerFactory(
     fun createCollectionConsumer(consumerGroup: String): RaribleKafkaConsumer<DipDupCollection> {
         return RaribleKafkaConsumer(
             clientId = "$clientIdPrefix.tezos.consumer.collection",
-            valueDeserializerClass = DipDupDeserializer.ActivityJsonSerializer::class.java,
+            valueDeserializerClass = DipDupDeserializer.CollectionJsonSerializer::class.java,
             valueClass = DipDupCollection::class.java,
             consumerGroup = consumerGroup,
             offsetResetStrategy = OffsetResetStrategy.EARLIEST,
@@ -62,7 +62,7 @@ class DipDupEventsConsumerFactory(
     fun createItemConsumer(consumerGroup: String): RaribleKafkaConsumer<DipDupItemEvent> {
         return RaribleKafkaConsumer(
             clientId = "$clientIdPrefix.tezos.consumer.item",
-            valueDeserializerClass = DipDupDeserializer.ActivityJsonSerializer::class.java,
+            valueDeserializerClass = DipDupDeserializer.ItemEventJsonSerializer::class.java,
             valueClass = DipDupItemEvent::class.java,
             consumerGroup = consumerGroup,
             offsetResetStrategy = OffsetResetStrategy.EARLIEST,
@@ -75,7 +75,7 @@ class DipDupEventsConsumerFactory(
     fun createOwnershipConsumer(consumerGroup: String): RaribleKafkaConsumer<DipDupOwnershipEvent> {
         return RaribleKafkaConsumer(
             clientId = "$clientIdPrefix.tezos.consumer.ownership",
-            valueDeserializerClass = DipDupDeserializer.ActivityJsonSerializer::class.java,
+            valueDeserializerClass = DipDupDeserializer.OwnershipEventJsonSerializer::class.java,
             valueClass = DipDupOwnershipEvent::class.java,
             consumerGroup = consumerGroup,
             offsetResetStrategy = OffsetResetStrategy.EARLIEST,

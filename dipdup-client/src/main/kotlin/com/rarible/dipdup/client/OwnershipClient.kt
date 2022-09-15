@@ -15,7 +15,7 @@ import com.rarible.dipdup.client.model.Page
 import com.rarible.dipdup.client.type.Ownership_order_by
 import com.rarible.dipdup.client.type.order_by
 
-class OwneshipClient(
+class OwnershipClient(
     client: ApolloClient
 ) : BaseClient(client) {
 

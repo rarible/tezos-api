@@ -4,6 +4,8 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.rarible.dipdup.client.core.model.DipDupOrder
 import com.rarible.dipdup.client.core.model.DipDupTransferActivity
 import com.rarible.dipdup.listener.config.DipDupDeserializer
+import com.rarible.dipdup.listener.model.DipDupItemEvent
+import com.rarible.dipdup.listener.model.DipDupOwnershipEvent
 import org.junit.jupiter.api.Test
 import org.assertj.core.api.Assertions.assertThat
 
@@ -185,5 +187,58 @@ class DeserializerTest {
             .readValue<DipDupOrder>(txt)
 
         assertThat(order).isNotNull
+    }
+
+    @Test
+    fun `should deserialize item update event`() {
+        val txt = """
+            {
+                "id": "60d7adce-ceec-4763-b030-a0d208834cd0",
+                "eventId": "60d7adce-ceec-4763-b030-a0d208834cd0",
+                "itemId": "KT1JBdb7DBfsDzcDzy7e6QG7hL49kcgYZb1U:52",
+                "item": {
+                    "id": "KT1JBdb7DBfsDzcDzy7e6QG7hL49kcgYZb1U:52",
+                    "contract": "KT1JBdb7DBfsDzcDzy7e6QG7hL49kcgYZb1U",
+                    "token_id": "52",
+                    "creators": [],
+                    "supply": "1",
+                    "minted_at": "2022-09-14T22:24:15+00:00",
+                    "updated": "2022-09-14T22:24:15+00:00",
+                    "deleted": false
+                },
+                "type": "UPDATE"
+            }
+        """.trimIndent()
+
+        val item = DipDupDeserializer.ItemEventJsonSerializer().createMapper()
+            .readValue<DipDupItemEvent>(txt)
+
+        assertThat(item).isNotNull
+    }
+
+    @Test
+    fun `should deserialize ownership update event`() {
+        val txt = """
+            {
+                "id": "0292f107-8f17-414c-a3c7-a0419e585111",
+                "eventId": "0292f107-8f17-414c-a3c7-a0419e585111",
+                "ownershipId": "KT1DWFQebdPGqgWuHLJgspqwAcVoTdqSkpQv:109:tz28UrPYfYtFqSghvBMTYuk7NtXE8pSJYEfj",
+                "ownership": {
+                    "id": "KT1DWFQebdPGqgWuHLJgspqwAcVoTdqSkpQv:109:tz28UrPYfYtFqSghvBMTYuk7NtXE8pSJYEfj",
+                    "contract": "KT1DWFQebdPGqgWuHLJgspqwAcVoTdqSkpQv",
+                    "token_id": "109",
+                    "owner": "tz28UrPYfYtFqSghvBMTYuk7NtXE8pSJYEfj",
+                    "balance": "1",
+                    "updated": "2022-09-14T20:02:50+00:00",
+                    "created": "2022-09-14T20:02:50+00:00"
+                },
+                "type": "UPDATE"
+            }
+        """.trimIndent()
+
+        val ownership = DipDupDeserializer.ItemEventJsonSerializer().createMapper()
+            .readValue<DipDupOwnershipEvent>(txt)
+
+        assertThat(ownership).isNotNull
     }
 }

@@ -15,7 +15,7 @@ class OwnershipClientFt : BaseClientFt() {
 //        runBlocking { ApolloClient.Builder().serverUrl("http://192.168.1.63:49180/v1/graphql").build() }
 //    val owneshipClient = OwneshipClient(local)
 
-   val owneshipClient = OwneshipClient(client)
+   val ownershipClient = OwnershipClient(client)
 
     @Test
     fun `should return ownership`() = runBlocking<Unit> {
@@ -38,7 +38,7 @@ class OwnershipClientFt : BaseClientFt() {
         )
 
         val ownership =
-            owneshipClient.getOwnershipById("KT1HS9P3RzaUuJjioPvPCJXH3Vk2wgmraAg5:0:tz1c1X8vD4pKV9TgV1cyosR7qdnkc8FTEyM1")
+            ownershipClient.getOwnershipById("KT1HS9P3RzaUuJjioPvPCJXH3Vk2wgmraAg5:0:tz1c1X8vD4pKV9TgV1cyosR7qdnkc8FTEyM1")
         assertThat(ownership).isEqualTo(
             DipDupOwnership(
                 id = "KT1HS9P3RzaUuJjioPvPCJXH3Vk2wgmraAg5:0:tz1c1X8vD4pKV9TgV1cyosR7qdnkc8FTEyM1",
@@ -72,7 +72,7 @@ class OwnershipClientFt : BaseClientFt() {
             }"""
         )
 
-        val page = owneshipClient.getOwnershipsAll(limit = 1, continuation = null, sortAsc = false)
+        val page = ownershipClient.getOwnershipsAll(limit = 1, continuation = null, sortAsc = false)
         assertThat(page.items).hasSize(1)
         assertThat(TimestampIdContinuation.parse(page.continuation)).isNotNull()
     }
@@ -97,7 +97,7 @@ class OwnershipClientFt : BaseClientFt() {
             }"""
         )
 
-        val page = owneshipClient.getOwnershipsAll(
+        val page = ownershipClient.getOwnershipsAll(
             limit = 1,
             continuation = "1662730295000_KT1ME54FMgDcFjWPp272DzMHkeD2DuijwJfo:14:tz1UqQsGsTnw39kwCyhVp2YwhsgKpbBMmNVb",
             sortAsc = false
@@ -128,7 +128,7 @@ class OwnershipClientFt : BaseClientFt() {
             }"""
         )
 
-        val page = owneshipClient.getOwnershipsAll(
+        val page = ownershipClient.getOwnershipsAll(
             limit = 1,
             continuation = "1662726170000_KT1HwULLUDRsNDdbFxGNviZ7xJByhCx5tuDL:2:tz1hSkdiNqtMoaEZan1JPt4AsWQtppGK5EYq",
             sortAsc = true
@@ -159,7 +159,7 @@ class OwnershipClientFt : BaseClientFt() {
             }"""
         )
 
-        val page = owneshipClient.getOwnershipsByItem(
+        val page = ownershipClient.getOwnershipsByItem(
             limit = 1,
             continuation = null,
             itemId = "KT1XsMpwriRTDRdD38QtmdeLqVQxt9eTL2ys:0"
@@ -188,7 +188,7 @@ class OwnershipClientFt : BaseClientFt() {
             }"""
         )
 
-        val page = owneshipClient.getOwnershipsByItem(
+        val page = ownershipClient.getOwnershipsByItem(
             limit = 1,
             continuation = "1656577825000_KT1XsMpwriRTDRdD38QtmdeLqVQxt9eTL2ys:0:tz2JLHVycezFDPzoQZ5Y1kjND1wY5wr9v8TU",
             itemId = "KT1XsMpwriRTDRdD38QtmdeLqVQxt9eTL2ys:0"
