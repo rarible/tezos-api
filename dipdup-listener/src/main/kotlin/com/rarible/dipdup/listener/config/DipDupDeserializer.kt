@@ -10,12 +10,13 @@ import com.rarible.dipdup.listener.model.DipDupItemEvent
 import com.rarible.dipdup.listener.model.DipDupOwnershipEvent
 import org.apache.kafka.common.header.Headers
 import org.slf4j.LoggerFactory
+import kotlin.reflect.KClass
 
 sealed class DipDupDeserializer : JsonDeserializer() {
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    abstract val classValue: Any
+    abstract val classValue: KClass<*>
 
     override fun createMapper(): ObjectMapper {
         val mapper = super.createMapper()
@@ -28,29 +29,31 @@ sealed class DipDupDeserializer : JsonDeserializer() {
             super.deserialize(topic, headers, data)
         } catch (e: Exception) {
             logger.error(
-                "Unable to deserialize data into class {}:\n{}",
-                classValue.javaClass.simpleName,
-                data?.let { String(it) })
+                "Unable to deserialize data into class {}:\n{}\ncause: {}",
+                classValue.simpleName,
+                data?.let { String(it) },
+                e.message
+            )
         }
     }
 
     class OrderJsonSerializer : DipDupDeserializer() {
-        override val classValue = DipDupOrder::class.java
+        override val classValue = DipDupOrder::class
     }
 
     class ActivityJsonSerializer : DipDupDeserializer() {
-        override val classValue = DipDupActivity::class.java
+        override val classValue = DipDupActivity::class
     }
 
     class CollectionJsonSerializer : DipDupDeserializer() {
-        override val classValue = DipDupCollection::class.java
+        override val classValue = DipDupCollection::class
     }
 
     class ItemEventJsonSerializer : DipDupDeserializer() {
-        override val classValue = DipDupItemEvent::class.java
+        override val classValue = DipDupItemEvent::class
     }
 
     class OwnershipEventJsonSerializer : DipDupDeserializer() {
-        override val classValue = DipDupOwnershipEvent::class.java
+        override val classValue = DipDupOwnershipEvent::class
     }
 }
