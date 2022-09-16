@@ -4,7 +4,6 @@ import java.util.UUID
 
 data class DipDupCollection(
     val id: UUID,
-    val network: String,
     val eventId: String,
     val collection: Collection,
     val type: EventType
