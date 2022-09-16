@@ -1,20 +1,17 @@
 package com.rarible.dipdup.client.core.model
 
-import java.util.UUID
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonNaming
+import java.time.Instant
 
+
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class DipDupCollection(
-    val id: UUID,
-    val eventId: String,
-    val collection: Collection,
-    val type: EventType
-) {
-
-    data class Collection(
-        val id: String,
-        val owner: String,
-        val name: String,
-        val minters: List<String>,
-        val standard: String,
-        val symbol: String?
-    )
-}
+    override val id: String,
+    override val updated: Instant,
+    val owner: String,
+    val name: String,
+    val symbol: String?,
+    val standard: String,
+    val minters: List<String> = emptyList()
+) : DipDupEntity
