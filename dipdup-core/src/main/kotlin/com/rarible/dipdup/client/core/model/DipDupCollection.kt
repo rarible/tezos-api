@@ -12,6 +12,6 @@ data class DipDupCollection(
     val owner: String,
     val name: String,
     val symbol: String?,
-    val standard: String,
+    val standard: String?,
     val minters: List<String> = emptyList()
 ) : DipDupEntity

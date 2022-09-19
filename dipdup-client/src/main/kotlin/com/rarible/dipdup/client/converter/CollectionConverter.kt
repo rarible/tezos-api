@@ -18,13 +18,31 @@ object CollectionConverter {
     fun convertAllContinuationDesc(source: List<GetCollectionsAllContinuationDescQuery.Collection_with_metum>) =
         source.map { convert(it.collection) }
 
-    fun convert(source: com.rarible.dipdup.client.fragment.Collection) = DipDupCollection(
-        id = source.contract,
-        owner = source.owner,
-        name = "Unnamed",
-        minters = listOf(),
-        standard = "",
-        symbol = null,
-        updated = OffsetDateTime.parse(source.db_updated_at.toString()).toInstant()
+    fun convert(source: com.rarible.dipdup.client.fragment.Collection): DipDupCollection {
+        val meta = convertMeta(source.metadata)
+        return DipDupCollection(
+            id = source.contract,
+            owner = source.owner,
+            name = meta?.name ?: "Unnamed Collection",
+            minters = listOf(),
+            standard = null,
+            symbol = null,
+            updated = OffsetDateTime.parse(source.db_updated_at.toString()).toInstant()
+        )
+    }
+
+    fun convertMeta(data: Any?): Meta? {
+        return if (data is Map<*, *>) {
+            val name = data.get("name").toString()
+            Meta(
+                name = name,
+                symbol = null
+            )
+        } else null
+    }
+
+    data class Meta(
+        val name: String?,
+        val symbol: String?
     )
 }
