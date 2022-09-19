@@ -2,8 +2,8 @@ package com.rarible.dipdup.listener.config
 
 import com.rarible.core.kafka.RaribleKafkaConsumer
 import com.rarible.dipdup.client.core.model.DipDupActivity
-import com.rarible.dipdup.client.core.model.DipDupCollection
 import com.rarible.dipdup.client.core.model.DipDupOrder
+import com.rarible.dipdup.listener.model.DipDupCollectionEvent
 import com.rarible.dipdup.listener.model.DipDupItemEvent
 import com.rarible.dipdup.listener.model.DipDupOwnershipEvent
 import org.apache.kafka.clients.consumer.OffsetResetStrategy
@@ -46,11 +46,11 @@ class DipDupEventsConsumerFactory(
         )
     }
 
-    fun createCollectionConsumer(consumerGroup: String): RaribleKafkaConsumer<DipDupCollection> {
+    fun createCollectionConsumer(consumerGroup: String): RaribleKafkaConsumer<DipDupCollectionEvent> {
         return RaribleKafkaConsumer(
             clientId = "$clientIdPrefix.tezos.consumer.collection",
             valueDeserializerClass = DipDupDeserializer.CollectionJsonSerializer::class.java,
-            valueClass = DipDupCollection::class.java,
+            valueClass = DipDupCollectionEvent::class.java,
             consumerGroup = consumerGroup,
             offsetResetStrategy = OffsetResetStrategy.EARLIEST,
             defaultTopic = DipDupTopicProvider.getCollectionTopic(environment),

@@ -7,4 +7,5 @@ data class DipDupCollectionEvent(
     val id: UUID,
     val eventId: String,
     val collection: DipDupCollection,
+    val type: String
 )
