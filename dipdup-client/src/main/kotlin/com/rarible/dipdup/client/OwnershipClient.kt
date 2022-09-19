@@ -78,7 +78,7 @@ class OwnershipClient(
     }
 
     private fun orderBy(id: Optional<order_by>?, updated: Optional<order_by>?) = Ownership_order_by(
-        null, null, id, null, null, updated
+        null, null, null, id, null, null, updated
     )
 
     private fun sort(sortAsc: Boolean) = when (sortAsc) {

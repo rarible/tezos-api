@@ -1,0 +1,44 @@
+fragment collection on collection_with_meta {
+    owner
+    metadata
+    contract
+    db_updated_at
+}
+
+query GetCollectionsByIds($ids: [String!]!) {
+    collection_with_meta(where: {contract: {_in: $ids}}) {
+        ...collection
+    }
+}
+
+query GetCollectionsAll($limit: Int!, $order_by: [collection_with_meta_order_by!]!) {
+    collection_with_meta(limit: $limit, order_by: $order_by) {
+        ...collection
+    }
+}
+
+query GetCollectionsAllContinuationDesc($limit: Int!, $date: timestamptz!, $id: String!) {
+    collection_with_meta(where: {
+        _or: [{
+            db_updated_at: {_lt: $date}
+        },{
+            db_updated_at: {_eq: $date},
+            contract: {_lt: $id}
+        }]
+    }, limit: $limit, order_by: [{db_updated_at: desc}, {contract: desc}]) {
+        ...collection
+    }
+}
+
+query GetCollectionsAllContinuationAsc($limit: Int!, $date: timestamptz!, $id: String!) {
+    collection_with_meta(where: {
+        _or: [{
+            db_updated_at: {_gt: $date}
+        },{
+            db_updated_at: {_eq: $date},
+            contract: {_gt: $id}
+        }]
+    }, limit: $limit, order_by: [{db_updated_at: asc}, {contract: asc}]) {
+        ...collection
+    }
+}

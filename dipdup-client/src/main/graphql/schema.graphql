@@ -117,6 +117,31 @@ input String_comparison_exp {
   _similar: String
 }
 
+scalar bigint
+
+"""
+Boolean expression to compare columns of type "bigint". All fields are combined with logical 'AND'.
+"""
+input bigint_comparison_exp {
+  _eq: bigint
+
+  _gt: bigint
+
+  _gte: bigint
+
+  _in: [bigint!]
+
+  _is_null: Boolean
+
+  _lt: bigint
+
+  _lte: bigint
+
+  _neq: bigint
+
+  _nin: [bigint!]
+}
+
 """
 columns and relationships of "collection"
 """
@@ -191,6 +216,76 @@ enum collection_select_column {
   column name
   """
   metadata_synced
+
+  """
+  column name
+  """
+  owner
+}
+
+"""
+columns and relationships of "collection_with_meta"
+"""
+type collection_with_meta {
+  contract: String
+
+  db_updated_at: timestamptz
+
+  metadata("JSON select path" path: String): jsonb
+
+  owner: String
+}
+
+"""
+Boolean expression to filter rows from the table "collection_with_meta". All fields are combined with a logical 'AND'.
+"""
+input collection_with_meta_bool_exp {
+  _and: [collection_with_meta_bool_exp!]
+
+  _not: collection_with_meta_bool_exp
+
+  _or: [collection_with_meta_bool_exp!]
+
+  contract: String_comparison_exp
+
+  db_updated_at: timestamptz_comparison_exp
+
+  metadata: jsonb_comparison_exp
+
+  owner: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "collection_with_meta".
+"""
+input collection_with_meta_order_by {
+  contract: order_by
+
+  db_updated_at: order_by
+
+  metadata: order_by
+
+  owner: order_by
+}
+
+"""
+select columns of table "collection_with_meta"
+"""
+enum collection_with_meta_select_column {
+  """
+  column name
+  """
+  contract
+
+  """
+  column name
+  """
+  db_updated_at
+
+  """
+  column name
+  """
+  metadata
 
   """
   column name
@@ -1814,6 +1909,8 @@ type ownership {
 
   contract: String!
 
+  created: timestamptz
+
   id: String!
 
   owner: String!
@@ -1837,6 +1934,8 @@ input ownership_bool_exp {
 
   contract: String_comparison_exp
 
+  created: timestamptz_comparison_exp
+
   id: String_comparison_exp
 
   owner: String_comparison_exp
@@ -1853,6 +1952,8 @@ input ownership_order_by {
   balance: order_by
 
   contract: order_by
+
+  created: order_by
 
   id: order_by
 
@@ -1876,6 +1977,11 @@ enum ownership_select_column {
   column name
   """
   contract
+
+  """
+  column name
+  """
+  created
 
   """
   column name
@@ -1910,6 +2016,11 @@ type query_root {
   collection_by_pk(contract: String!): collection
 
   """
+  fetch data from the table: "collection_with_meta"
+  """
+  collection_with_meta("distinct select on columns" distinct_on: [collection_with_meta_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [collection_with_meta_order_by!], "filter the rows returned" where: collection_with_meta_bool_exp): [collection_with_meta!]!
+
+  """
   fetch data from the table: "dipdup_contract"
   """
   dipdup_contract("distinct select on columns" distinct_on: [dipdup_contract_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_contract_order_by!], "filter the rows returned" where: dipdup_contract_bool_exp): [dipdup_contract!]!
@@ -2035,6 +2146,36 @@ type query_root {
   ownership_by_pk(id: String!): ownership
 
   """
+  fetch data from the table: "tezos_domains_domain"
+  """
+  tezos_domains_domain("distinct select on columns" distinct_on: [tezos_domains_domain_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tezos_domains_domain_order_by!], "filter the rows returned" where: tezos_domains_domain_bool_exp): [tezos_domains_domain!]!
+
+  """
+  fetch data from the table: "tezos_domains_domain" using primary key columns
+  """
+  tezos_domains_domain_by_pk(id: String!): tezos_domains_domain
+
+  """
+  fetch data from the table: "tezos_domains_record"
+  """
+  tezos_domains_record("distinct select on columns" distinct_on: [tezos_domains_record_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tezos_domains_record_order_by!], "filter the rows returned" where: tezos_domains_record_bool_exp): [tezos_domains_record!]!
+
+  """
+  fetch data from the table: "tezos_domains_record" using primary key columns
+  """
+  tezos_domains_record_by_pk(id: String!): tezos_domains_record
+
+  """
+  fetch data from the table: "tezos_domains_tld"
+  """
+  tezos_domains_tld("distinct select on columns" distinct_on: [tezos_domains_tld_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tezos_domains_tld_order_by!], "filter the rows returned" where: tezos_domains_tld_bool_exp): [tezos_domains_tld!]!
+
+  """
+  fetch data from the table: "tezos_domains_tld" using primary key columns
+  """
+  tezos_domains_tld_by_pk(id: String!): tezos_domains_tld
+
+  """
   fetch data from the table: "token"
   """
   token("distinct select on columns" distinct_on: [token_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [token_order_by!], "filter the rows returned" where: token_bool_exp): [token!]!
@@ -2053,6 +2194,16 @@ type query_root {
   fetch data from the table: "token_transfer" using primary key columns
   """
   token_transfer_by_pk(id: Int!): token_transfer
+
+  """
+  fetch data from the table: "tzprofiles"
+  """
+  tzprofiles("distinct select on columns" distinct_on: [tzprofiles_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tzprofiles_order_by!], "filter the rows returned" where: tzprofiles_bool_exp): [tzprofiles!]!
+
+  """
+  fetch data from the table: "tzprofiles" using primary key columns
+  """
+  tzprofiles_by_pk(account: String!): tzprofiles
 }
 
 type subscription_root {
@@ -2067,6 +2218,11 @@ type subscription_root {
   collection_by_pk(contract: String!): collection
 
   """
+  fetch data from the table: "collection_with_meta"
+  """
+  collection_with_meta("distinct select on columns" distinct_on: [collection_with_meta_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [collection_with_meta_order_by!], "filter the rows returned" where: collection_with_meta_bool_exp): [collection_with_meta!]!
+
+  """
   fetch data from the table: "dipdup_contract"
   """
   dipdup_contract("distinct select on columns" distinct_on: [dipdup_contract_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_contract_order_by!], "filter the rows returned" where: dipdup_contract_bool_exp): [dipdup_contract!]!
@@ -2192,6 +2348,36 @@ type subscription_root {
   ownership_by_pk(id: String!): ownership
 
   """
+  fetch data from the table: "tezos_domains_domain"
+  """
+  tezos_domains_domain("distinct select on columns" distinct_on: [tezos_domains_domain_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tezos_domains_domain_order_by!], "filter the rows returned" where: tezos_domains_domain_bool_exp): [tezos_domains_domain!]!
+
+  """
+  fetch data from the table: "tezos_domains_domain" using primary key columns
+  """
+  tezos_domains_domain_by_pk(id: String!): tezos_domains_domain
+
+  """
+  fetch data from the table: "tezos_domains_record"
+  """
+  tezos_domains_record("distinct select on columns" distinct_on: [tezos_domains_record_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tezos_domains_record_order_by!], "filter the rows returned" where: tezos_domains_record_bool_exp): [tezos_domains_record!]!
+
+  """
+  fetch data from the table: "tezos_domains_record" using primary key columns
+  """
+  tezos_domains_record_by_pk(id: String!): tezos_domains_record
+
+  """
+  fetch data from the table: "tezos_domains_tld"
+  """
+  tezos_domains_tld("distinct select on columns" distinct_on: [tezos_domains_tld_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tezos_domains_tld_order_by!], "filter the rows returned" where: tezos_domains_tld_bool_exp): [tezos_domains_tld!]!
+
+  """
+  fetch data from the table: "tezos_domains_tld" using primary key columns
+  """
+  tezos_domains_tld_by_pk(id: String!): tezos_domains_tld
+
+  """
   fetch data from the table: "token"
   """
   token("distinct select on columns" distinct_on: [token_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [token_order_by!], "filter the rows returned" where: token_bool_exp): [token!]!
@@ -2210,6 +2396,371 @@ type subscription_root {
   fetch data from the table: "token_transfer" using primary key columns
   """
   token_transfer_by_pk(id: Int!): token_transfer
+
+  """
+  fetch data from the table: "tzprofiles"
+  """
+  tzprofiles("distinct select on columns" distinct_on: [tzprofiles_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tzprofiles_order_by!], "filter the rows returned" where: tzprofiles_bool_exp): [tzprofiles!]!
+
+  """
+  fetch data from the table: "tzprofiles" using primary key columns
+  """
+  tzprofiles_by_pk(account: String!): tzprofiles
+}
+
+"""
+columns and relationships of "tezos_domains_domain"
+"""
+type tezos_domains_domain {
+  id: String!
+
+  owner: String!
+
+  """
+  An array relationship
+  """
+  records("distinct select on columns" distinct_on: [tezos_domains_record_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tezos_domains_record_order_by!], "filter the rows returned" where: tezos_domains_record_bool_exp): [tezos_domains_record!]!
+
+  """
+  An object relationship
+  """
+  tld: tezos_domains_tld!
+
+  tld_id: String!
+
+  token_id: bigint
+}
+
+"""
+order by aggregate values of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_aggregate_order_by {
+  avg: tezos_domains_domain_avg_order_by
+
+  count: order_by
+
+  max: tezos_domains_domain_max_order_by
+
+  min: tezos_domains_domain_min_order_by
+
+  stddev: tezos_domains_domain_stddev_order_by
+
+  stddev_pop: tezos_domains_domain_stddev_pop_order_by
+
+  stddev_samp: tezos_domains_domain_stddev_samp_order_by
+
+  sum: tezos_domains_domain_sum_order_by
+
+  var_pop: tezos_domains_domain_var_pop_order_by
+
+  var_samp: tezos_domains_domain_var_samp_order_by
+
+  variance: tezos_domains_domain_variance_order_by
+}
+
+"""
+order by avg() on columns of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_avg_order_by {
+  token_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "tezos_domains_domain". All fields are combined with a logical 'AND'.
+"""
+input tezos_domains_domain_bool_exp {
+  _and: [tezos_domains_domain_bool_exp!]
+
+  _not: tezos_domains_domain_bool_exp
+
+  _or: [tezos_domains_domain_bool_exp!]
+
+  id: String_comparison_exp
+
+  owner: String_comparison_exp
+
+  records: tezos_domains_record_bool_exp
+
+  tld: tezos_domains_tld_bool_exp
+
+  tld_id: String_comparison_exp
+
+  token_id: bigint_comparison_exp
+}
+
+"""
+order by max() on columns of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_max_order_by {
+  id: order_by
+
+  owner: order_by
+
+  tld_id: order_by
+
+  token_id: order_by
+}
+
+"""
+order by min() on columns of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_min_order_by {
+  id: order_by
+
+  owner: order_by
+
+  tld_id: order_by
+
+  token_id: order_by
+}
+
+"""
+Ordering options when selecting data from "tezos_domains_domain".
+"""
+input tezos_domains_domain_order_by {
+  id: order_by
+
+  owner: order_by
+
+  records_aggregate: tezos_domains_record_aggregate_order_by
+
+  tld: tezos_domains_tld_order_by
+
+  tld_id: order_by
+
+  token_id: order_by
+}
+
+"""
+select columns of table "tezos_domains_domain"
+"""
+enum tezos_domains_domain_select_column {
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  owner
+
+  """
+  column name
+  """
+  tld_id
+
+  """
+  column name
+  """
+  token_id
+}
+
+"""
+order by stddev() on columns of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_stddev_order_by {
+  token_id: order_by
+}
+
+"""
+order by stddev_pop() on columns of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_stddev_pop_order_by {
+  token_id: order_by
+}
+
+"""
+order by stddev_samp() on columns of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_stddev_samp_order_by {
+  token_id: order_by
+}
+
+"""
+order by sum() on columns of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_sum_order_by {
+  token_id: order_by
+}
+
+"""
+order by var_pop() on columns of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_var_pop_order_by {
+  token_id: order_by
+}
+
+"""
+order by var_samp() on columns of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_var_samp_order_by {
+  token_id: order_by
+}
+
+"""
+order by variance() on columns of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_variance_order_by {
+  token_id: order_by
+}
+
+"""
+columns and relationships of "tezos_domains_record"
+"""
+type tezos_domains_record {
+  address: String
+
+  """
+  An object relationship
+  """
+  domain: tezos_domains_domain!
+
+  domain_id: String!
+
+  id: String!
+}
+
+"""
+order by aggregate values of table "tezos_domains_record"
+"""
+input tezos_domains_record_aggregate_order_by {
+  count: order_by
+
+  max: tezos_domains_record_max_order_by
+
+  min: tezos_domains_record_min_order_by
+}
+
+"""
+Boolean expression to filter rows from the table "tezos_domains_record". All fields are combined with a logical 'AND'.
+"""
+input tezos_domains_record_bool_exp {
+  _and: [tezos_domains_record_bool_exp!]
+
+  _not: tezos_domains_record_bool_exp
+
+  _or: [tezos_domains_record_bool_exp!]
+
+  address: String_comparison_exp
+
+  domain: tezos_domains_domain_bool_exp
+
+  domain_id: String_comparison_exp
+
+  id: String_comparison_exp
+}
+
+"""
+order by max() on columns of table "tezos_domains_record"
+"""
+input tezos_domains_record_max_order_by {
+  address: order_by
+
+  domain_id: order_by
+
+  id: order_by
+}
+
+"""
+order by min() on columns of table "tezos_domains_record"
+"""
+input tezos_domains_record_min_order_by {
+  address: order_by
+
+  domain_id: order_by
+
+  id: order_by
+}
+
+"""
+Ordering options when selecting data from "tezos_domains_record".
+"""
+input tezos_domains_record_order_by {
+  address: order_by
+
+  domain: tezos_domains_domain_order_by
+
+  domain_id: order_by
+
+  id: order_by
+}
+
+"""
+select columns of table "tezos_domains_record"
+"""
+enum tezos_domains_record_select_column {
+  """
+  column name
+  """
+  address
+
+  """
+  column name
+  """
+  domain_id
+
+  """
+  column name
+  """
+  id
+}
+
+"""
+columns and relationships of "tezos_domains_tld"
+"""
+type tezos_domains_tld {
+  """
+  An array relationship
+  """
+  domains("distinct select on columns" distinct_on: [tezos_domains_domain_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tezos_domains_domain_order_by!], "filter the rows returned" where: tezos_domains_domain_bool_exp): [tezos_domains_domain!]!
+
+  id: String!
+
+  owner: String!
+}
+
+"""
+Boolean expression to filter rows from the table "tezos_domains_tld". All fields are combined with a logical 'AND'.
+"""
+input tezos_domains_tld_bool_exp {
+  _and: [tezos_domains_tld_bool_exp!]
+
+  _not: tezos_domains_tld_bool_exp
+
+  _or: [tezos_domains_tld_bool_exp!]
+
+  domains: tezos_domains_domain_bool_exp
+
+  id: String_comparison_exp
+
+  owner: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "tezos_domains_tld".
+"""
+input tezos_domains_tld_order_by {
+  domains_aggregate: tezos_domains_domain_aggregate_order_by
+
+  id: order_by
+
+  owner: order_by
+}
+
+"""
+select columns of table "tezos_domains_tld"
+"""
+enum tezos_domains_tld_select_column {
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  owner
 }
 
 scalar timestamptz
@@ -2543,6 +3094,186 @@ enum token_transfer_select_column {
   column name
   """
   tzkt_transaction_id
+}
+
+"""
+columns and relationships of "tzprofiles"
+"""
+type tzprofiles {
+  account: String!
+
+  alias: String
+
+  contract: String!
+
+  description: String
+
+  discord: String
+
+  domain_name: String
+
+  errored: Boolean!
+
+  ethereum: String
+
+  github: String
+
+  invalid_claims("JSON select path" path: String): jsonb!
+
+  logo: String
+
+  twitter: String
+
+  valid_claims("JSON select path" path: String): jsonb!
+
+  website: String
+}
+
+"""
+Boolean expression to filter rows from the table "tzprofiles". All fields are combined with a logical 'AND'.
+"""
+input tzprofiles_bool_exp {
+  _and: [tzprofiles_bool_exp!]
+
+  _not: tzprofiles_bool_exp
+
+  _or: [tzprofiles_bool_exp!]
+
+  account: String_comparison_exp
+
+  alias: String_comparison_exp
+
+  contract: String_comparison_exp
+
+  description: String_comparison_exp
+
+  discord: String_comparison_exp
+
+  domain_name: String_comparison_exp
+
+  errored: Boolean_comparison_exp
+
+  ethereum: String_comparison_exp
+
+  github: String_comparison_exp
+
+  invalid_claims: jsonb_comparison_exp
+
+  logo: String_comparison_exp
+
+  twitter: String_comparison_exp
+
+  valid_claims: jsonb_comparison_exp
+
+  website: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "tzprofiles".
+"""
+input tzprofiles_order_by {
+  account: order_by
+
+  alias: order_by
+
+  contract: order_by
+
+  description: order_by
+
+  discord: order_by
+
+  domain_name: order_by
+
+  errored: order_by
+
+  ethereum: order_by
+
+  github: order_by
+
+  invalid_claims: order_by
+
+  logo: order_by
+
+  twitter: order_by
+
+  valid_claims: order_by
+
+  website: order_by
+}
+
+"""
+select columns of table "tzprofiles"
+"""
+enum tzprofiles_select_column {
+  """
+  column name
+  """
+  account
+
+  """
+  column name
+  """
+  alias
+
+  """
+  column name
+  """
+  contract
+
+  """
+  column name
+  """
+  description
+
+  """
+  column name
+  """
+  discord
+
+  """
+  column name
+  """
+  domain_name
+
+  """
+  column name
+  """
+  errored
+
+  """
+  column name
+  """
+  ethereum
+
+  """
+  column name
+  """
+  github
+
+  """
+  column name
+  """
+  invalid_claims
+
+  """
+  column name
+  """
+  logo
+
+  """
+  column name
+  """
+  twitter
+
+  """
+  column name
+  """
+  valid_claims
+
+  """
+  column name
+  """
+  website
 }
 
 scalar uuid
