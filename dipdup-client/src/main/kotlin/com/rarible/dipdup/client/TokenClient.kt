@@ -22,7 +22,8 @@ class TokenClient(
     }
 
     suspend fun getTokensByIds(ids: List<String>): List<DipDupItem> {
-        val request = GetTokensByIdsQuery(ids)
+        val uuids = ids.map(::toUuid5)
+        val request = GetTokensByIdsQuery(uuids)
         val response = safeExecution(request)
         return convertByIds(response.token)
     }
@@ -45,11 +46,13 @@ class TokenClient(
         } else {
             val parsed = TimestampIdContinuation.parse(continuation)
             if (sortAsc) {
-                val request = GetTokensAllContinuationAscQuery(limit, deleted(showDeleted), parsed.date.toString(), parsed.id)
+                val request = GetTokensAllContinuationAscQuery(limit, deleted(showDeleted), parsed.date.toString(),
+                    toUuid5(parsed.id))
                 val response = safeExecution(request)
                 convertAllContinuationAsc(response.token)
             } else {
-                val request = GetTokensAllContinuationDescQuery(limit, deleted(showDeleted), parsed.date.toString(), parsed.id)
+                val request = GetTokensAllContinuationDescQuery(limit, deleted(showDeleted), parsed.date.toString(),
+                    toUuid5(parsed.id))
                 val response = safeExecution(request)
                 convertAllContinuationDesc(response.token)
             }
@@ -58,7 +61,7 @@ class TokenClient(
     }
 
     private fun orderBy(id: Optional<order_by>?, updated: Optional<order_by>?) = Token_order_by(
-        null, null, null, id, null, null, null, null, null, null, null, updated
+        null, null, null, null, id, null, null, null, null, null, null, null, null, null, updated
     )
 
     private fun sort(sortAsc: Boolean) = when (sortAsc) {

@@ -28,7 +28,7 @@ object OwnershipConverter {
         source.map { convert(it.ownership) }
 
     fun convert(source: Ownership) = DipDupOwnership(
-        id = source.id,
+        id = DipDupOwnership.ownershipId(source.contract, BigInteger(source.token_id), source.owner),
         tokenId = BigInteger(source.token_id),
         contract = source.contract,
         owner = source.owner,

@@ -2,6 +2,7 @@ package com.rarible.dipdup.client
 
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Query
+import com.rarible.dipdup.client.core.util.uuid5Oid
 import com.rarible.dipdup.client.exception.DipDupNotFound
 import com.rarible.dipdup.client.exception.ResponseError
 
@@ -14,5 +15,9 @@ abstract class BaseClient(
         response.errors?.let { throw ResponseError("${it} for ${request}") }
         checkNotNull(response.data) { throw DipDupNotFound("${request}") }
         return response.data!!
+    }
+
+    fun toUuid5(name: String): String {
+        return uuid5Oid(name).toString()
     }
 }

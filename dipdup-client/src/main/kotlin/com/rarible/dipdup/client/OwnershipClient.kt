@@ -24,7 +24,8 @@ class OwnershipClient(
     }
 
     suspend fun getOwnershipsByIds(ids: List<String>): List<DipDupOwnership> {
-        val request = GetOwnershipsByIdsQuery(ids)
+        val uuids = ids.map(::toUuid5)
+        val request = GetOwnershipsByIdsQuery(uuids)
         val response = safeExecution(request)
         return convertByIds(response.ownership)
     }
@@ -46,11 +47,11 @@ class OwnershipClient(
         } else {
             val parsed = TimestampIdContinuation.parse(continuation)
             if (sortAsc) {
-                val request = GetOwnershipsAllContinuationAscQuery(limit, parsed.date.toString(), parsed.id)
+                val request = GetOwnershipsAllContinuationAscQuery(limit, parsed.date.toString(), toUuid5(parsed.id))
                 val response = safeExecution(request)
                 convertAllContinuationAsc(response.ownership)
             } else {
-                val request = GetOwnershipsAllContinuationDescQuery(limit, parsed.date.toString(), parsed.id)
+                val request = GetOwnershipsAllContinuationDescQuery(limit, parsed.date.toString(), toUuid5(parsed.id))
                 val response = safeExecution(request)
                 convertAllContinuationDesc(response.ownership)
             }
@@ -70,7 +71,7 @@ class OwnershipClient(
             convertByItem(response.ownership)
         } else {
             val parsed = TimestampIdContinuation.parse(continuation)
-            val request = GetOwnershipsByItemContinuationQuery(limit, contract, token_id, parsed.id)
+            val request = GetOwnershipsByItemContinuationQuery(limit, contract, token_id, toUuid5(parsed.id))
             val response = safeExecution(request)
             convertByItemContinuation(response.ownership)
         }

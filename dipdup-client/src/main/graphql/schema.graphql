@@ -1909,9 +1909,9 @@ type ownership {
 
   contract: String!
 
-  created: timestamptz
+  created: timestamptz!
 
-  id: String!
+  id: uuid!
 
   owner: String!
 
@@ -1936,7 +1936,7 @@ input ownership_bool_exp {
 
   created: timestamptz_comparison_exp
 
-  id: String_comparison_exp
+  id: uuid_comparison_exp
 
   owner: String_comparison_exp
 
@@ -2143,7 +2143,17 @@ type query_root {
   """
   fetch data from the table: "ownership" using primary key columns
   """
-  ownership_by_pk(id: String!): ownership
+  ownership_by_pk(id: uuid!): ownership
+
+  """
+  fetch data from the table: "royalties"
+  """
+  royalties("distinct select on columns" distinct_on: [royalties_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [royalties_order_by!], "filter the rows returned" where: royalties_bool_exp): [royalties!]!
+
+  """
+  fetch data from the table: "royalties" using primary key columns
+  """
+  royalties_by_pk(id: uuid!): royalties
 
   """
   fetch data from the table: "tezos_domains_domain"
@@ -2183,7 +2193,7 @@ type query_root {
   """
   fetch data from the table: "token" using primary key columns
   """
-  token_by_pk(id: String!): token
+  token_by_pk(id: uuid!): token
 
   """
   fetch data from the table: "token_transfer"
@@ -2193,7 +2203,7 @@ type query_root {
   """
   fetch data from the table: "token_transfer" using primary key columns
   """
-  token_transfer_by_pk(id: Int!): token_transfer
+  token_transfer_by_pk(id: bigint!): token_transfer
 
   """
   fetch data from the table: "tzprofiles"
@@ -2204,6 +2214,76 @@ type query_root {
   fetch data from the table: "tzprofiles" using primary key columns
   """
   tzprofiles_by_pk(account: String!): tzprofiles
+}
+
+"""
+columns and relationships of "royalties"
+"""
+type royalties {
+  contract: String!
+
+  id: uuid!
+
+  parts("JSON select path" path: String): jsonb!
+
+  token_id: String!
+}
+
+"""
+Boolean expression to filter rows from the table "royalties". All fields are combined with a logical 'AND'.
+"""
+input royalties_bool_exp {
+  _and: [royalties_bool_exp!]
+
+  _not: royalties_bool_exp
+
+  _or: [royalties_bool_exp!]
+
+  contract: String_comparison_exp
+
+  id: uuid_comparison_exp
+
+  parts: jsonb_comparison_exp
+
+  token_id: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "royalties".
+"""
+input royalties_order_by {
+  contract: order_by
+
+  id: order_by
+
+  parts: order_by
+
+  token_id: order_by
+}
+
+"""
+select columns of table "royalties"
+"""
+enum royalties_select_column {
+  """
+  column name
+  """
+  contract
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  parts
+
+  """
+  column name
+  """
+  token_id
 }
 
 type subscription_root {
@@ -2345,7 +2425,17 @@ type subscription_root {
   """
   fetch data from the table: "ownership" using primary key columns
   """
-  ownership_by_pk(id: String!): ownership
+  ownership_by_pk(id: uuid!): ownership
+
+  """
+  fetch data from the table: "royalties"
+  """
+  royalties("distinct select on columns" distinct_on: [royalties_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [royalties_order_by!], "filter the rows returned" where: royalties_bool_exp): [royalties!]!
+
+  """
+  fetch data from the table: "royalties" using primary key columns
+  """
+  royalties_by_pk(id: uuid!): royalties
 
   """
   fetch data from the table: "tezos_domains_domain"
@@ -2385,7 +2475,7 @@ type subscription_root {
   """
   fetch data from the table: "token" using primary key columns
   """
-  token_by_pk(id: String!): token
+  token_by_pk(id: uuid!): token
 
   """
   fetch data from the table: "token_transfer"
@@ -2395,7 +2485,7 @@ type subscription_root {
   """
   fetch data from the table: "token_transfer" using primary key columns
   """
-  token_transfer_by_pk(id: Int!): token_transfer
+  token_transfer_by_pk(id: bigint!): token_transfer
 
   """
   fetch data from the table: "tzprofiles"
@@ -2794,11 +2884,13 @@ columns and relationships of "token"
 type token {
   contract: String!
 
+  creator: String
+
   db_updated_at: timestamptz!
 
   deleted: Boolean!
 
-  id: String!
+  id: uuid!
 
   metadata_retries: Int!
 
@@ -2808,11 +2900,15 @@ type token {
 
   minted_at: timestamptz!
 
+  royalties_retries: Int!
+
+  royalties_synced: Boolean!
+
   supply: numeric!
 
   token_id: String!
 
-  tzkt_id: Int!
+  tzkt_id: bigint!
 
   updated: timestamptz!
 }
@@ -2829,11 +2925,13 @@ input token_bool_exp {
 
   contract: String_comparison_exp
 
+  creator: String_comparison_exp
+
   db_updated_at: timestamptz_comparison_exp
 
   deleted: Boolean_comparison_exp
 
-  id: String_comparison_exp
+  id: uuid_comparison_exp
 
   metadata_retries: Int_comparison_exp
 
@@ -2843,11 +2941,15 @@ input token_bool_exp {
 
   minted_at: timestamptz_comparison_exp
 
+  royalties_retries: Int_comparison_exp
+
+  royalties_synced: Boolean_comparison_exp
+
   supply: numeric_comparison_exp
 
   token_id: String_comparison_exp
 
-  tzkt_id: Int_comparison_exp
+  tzkt_id: bigint_comparison_exp
 
   updated: timestamptz_comparison_exp
 }
@@ -2857,6 +2959,8 @@ Ordering options when selecting data from "token".
 """
 input token_order_by {
   contract: order_by
+
+  creator: order_by
 
   db_updated_at: order_by
 
@@ -2871,6 +2975,10 @@ input token_order_by {
   minted: order_by
 
   minted_at: order_by
+
+  royalties_retries: order_by
+
+  royalties_synced: order_by
 
   supply: order_by
 
@@ -2889,6 +2997,11 @@ enum token_select_column {
   column name
   """
   contract
+
+  """
+  column name
+  """
+  creator
 
   """
   column name
@@ -2928,6 +3041,16 @@ enum token_select_column {
   """
   column name
   """
+  royalties_retries
+
+  """
+  column name
+  """
+  royalties_synced
+
+  """
+  column name
+  """
   supply
 
   """
@@ -2960,7 +3083,7 @@ type token_transfer {
 
   hash: String
 
-  id: Int!
+  id: bigint!
 
   to_address: String
 
@@ -2971,9 +3094,9 @@ type token_transfer {
   """
   type: String!
 
-  tzkt_token_id: Int!
+  tzkt_token_id: bigint!
 
-  tzkt_transaction_id: Int
+  tzkt_transaction_id: bigint
 }
 
 """
@@ -2996,7 +3119,7 @@ input token_transfer_bool_exp {
 
   hash: String_comparison_exp
 
-  id: Int_comparison_exp
+  id: bigint_comparison_exp
 
   to_address: String_comparison_exp
 
@@ -3004,9 +3127,9 @@ input token_transfer_bool_exp {
 
   type: String_comparison_exp
 
-  tzkt_token_id: Int_comparison_exp
+  tzkt_token_id: bigint_comparison_exp
 
-  tzkt_transaction_id: Int_comparison_exp
+  tzkt_transaction_id: bigint_comparison_exp
 }
 
 """

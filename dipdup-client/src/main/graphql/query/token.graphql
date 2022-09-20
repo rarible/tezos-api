@@ -12,7 +12,7 @@ fragment token on token {
     tzkt_id
 }
 
-query GetTokensByIds($ids: [String!]!) {
+query GetTokensByIds($ids: [uuid!]!) {
     token(where: {id: {_in: $ids}}) {
         ...token
     }
@@ -24,7 +24,7 @@ query GetTokensAll($limit: Int!, $deleted: [Boolean!]!, $order_by: [token_order_
     }
 }
 
-query GetTokensAllContinuationDesc($limit: Int!, $deleted: [Boolean!]!, $date: timestamptz!, $id: String!) {
+query GetTokensAllContinuationDesc($limit: Int!, $deleted: [Boolean!]!, $date: timestamptz!, $id: uuid!) {
     token(where: {
         deleted: {_in: $deleted},
         _or: [{
@@ -38,7 +38,7 @@ query GetTokensAllContinuationDesc($limit: Int!, $deleted: [Boolean!]!, $date: t
     }
 }
 
-query GetTokensAllContinuationAsc($limit: Int!, $deleted: [Boolean!]!, $date: timestamptz!, $id: String!) {
+query GetTokensAllContinuationAsc($limit: Int!, $deleted: [Boolean!]!, $date: timestamptz!, $id: uuid!) {
     token(where: {
         deleted: {_in: $deleted},
         _or: [{

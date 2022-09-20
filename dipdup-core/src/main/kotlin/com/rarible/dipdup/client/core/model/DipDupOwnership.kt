@@ -14,4 +14,10 @@ data class DipDupOwnership(
         val tokenId: BigInteger,
         val owner: String,
         val balance: BigInteger
-) : DipDupEntity
+) : DipDupEntity {
+        companion object {
+                fun ownershipId(contract: String, tokenId: BigInteger, owner: String): String {
+                        return "$contract:$tokenId:$owner"
+                }
+        }
+}
