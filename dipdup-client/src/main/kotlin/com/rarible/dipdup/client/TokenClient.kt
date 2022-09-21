@@ -61,7 +61,7 @@ class TokenClient(
     }
 
     private fun orderBy(id: Optional<order_by>?, updated: Optional<order_by>?) = Token_order_by(
-        null, null, null, null, id, null, null, null, null, null, null, null, null, null, updated
+        null, null, null, null, id, null, null, null, null, null, updated
     )
 
     private fun sort(sortAsc: Boolean) = when (sortAsc) {

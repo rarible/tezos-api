@@ -150,10 +150,6 @@ type collection {
 
   db_updated_at: timestamptz!
 
-  metadata_retries: Int!
-
-  metadata_synced: Boolean!
-
   owner: String!
 }
 
@@ -171,10 +167,6 @@ input collection_bool_exp {
 
   db_updated_at: timestamptz_comparison_exp
 
-  metadata_retries: Int_comparison_exp
-
-  metadata_synced: Boolean_comparison_exp
-
   owner: String_comparison_exp
 }
 
@@ -185,10 +177,6 @@ input collection_order_by {
   contract: order_by
 
   db_updated_at: order_by
-
-  metadata_retries: order_by
-
-  metadata_synced: order_by
 
   owner: order_by
 }
@@ -206,16 +194,6 @@ enum collection_select_column {
   column name
   """
   db_updated_at
-
-  """
-  column name
-  """
-  metadata_retries
-
-  """
-  column name
-  """
-  metadata_synced
 
   """
   column name
@@ -1082,7 +1060,7 @@ columns and relationships of "indexing_status"
 """
 type indexing_status {
   """
-  COLLECTION: COLLECTION\nNFT: NFT\nLEGACY_ORDERS: LEGACY_ORDERS\nV1_CLEANING: V1_CLEANING\nV1_FILL_FIX: V1_FILL_FIX
+  COLLECTION: COLLECTION\nCOLLECTION_METADATA: COLLECTION_METADATA\nNFT: NFT\nNFT_METADATA: NFT_METADATA\nLEGACY_ORDERS: LEGACY_ORDERS\nV1_CLEANING: V1_CLEANING\nV1_FILL_FIX: V1_FILL_FIX
   """
   index: String!
 
@@ -1841,6 +1819,168 @@ enum marketplace_order_select_column {
   taker
 }
 
+"""
+columns and relationships of "metadata_collection"
+"""
+type metadata_collection {
+  contract: String!
+
+  metadata: String
+
+  metadata_retries: Int!
+
+  metadata_synced: Boolean!
+}
+
+"""
+Boolean expression to filter rows from the table "metadata_collection". All fields are combined with a logical 'AND'.
+"""
+input metadata_collection_bool_exp {
+  _and: [metadata_collection_bool_exp!]
+
+  _not: metadata_collection_bool_exp
+
+  _or: [metadata_collection_bool_exp!]
+
+  contract: String_comparison_exp
+
+  metadata: String_comparison_exp
+
+  metadata_retries: Int_comparison_exp
+
+  metadata_synced: Boolean_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "metadata_collection".
+"""
+input metadata_collection_order_by {
+  contract: order_by
+
+  metadata: order_by
+
+  metadata_retries: order_by
+
+  metadata_synced: order_by
+}
+
+"""
+select columns of table "metadata_collection"
+"""
+enum metadata_collection_select_column {
+  """
+  column name
+  """
+  contract
+
+  """
+  column name
+  """
+  metadata
+
+  """
+  column name
+  """
+  metadata_retries
+
+  """
+  column name
+  """
+  metadata_synced
+}
+
+"""
+columns and relationships of "metadata_token"
+"""
+type metadata_token {
+  contract: String!
+
+  id: uuid!
+
+  metadata: String
+
+  metadata_retries: Int!
+
+  metadata_synced: Boolean!
+
+  token_id: String!
+}
+
+"""
+Boolean expression to filter rows from the table "metadata_token". All fields are combined with a logical 'AND'.
+"""
+input metadata_token_bool_exp {
+  _and: [metadata_token_bool_exp!]
+
+  _not: metadata_token_bool_exp
+
+  _or: [metadata_token_bool_exp!]
+
+  contract: String_comparison_exp
+
+  id: uuid_comparison_exp
+
+  metadata: String_comparison_exp
+
+  metadata_retries: Int_comparison_exp
+
+  metadata_synced: Boolean_comparison_exp
+
+  token_id: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "metadata_token".
+"""
+input metadata_token_order_by {
+  contract: order_by
+
+  id: order_by
+
+  metadata: order_by
+
+  metadata_retries: order_by
+
+  metadata_synced: order_by
+
+  token_id: order_by
+}
+
+"""
+select columns of table "metadata_token"
+"""
+enum metadata_token_select_column {
+  """
+  column name
+  """
+  contract
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  metadata
+
+  """
+  column name
+  """
+  metadata_retries
+
+  """
+  column name
+  """
+  metadata_synced
+
+  """
+  column name
+  """
+  token_id
+}
+
 scalar numeric
 
 """
@@ -2103,7 +2243,7 @@ type query_root {
   """
   fetch data from the table: "indexing_status" using primary key columns
   """
-  indexing_status_by_pk("COLLECTION: COLLECTION\\nNFT: NFT\\nLEGACY_ORDERS: LEGACY_ORDERS\\nV1_CLEANING: V1_CLEANING\\nV1_FILL_FIX: V1_FILL_FIX" index: String!): indexing_status
+  indexing_status_by_pk("COLLECTION: COLLECTION\\nCOLLECTION_METADATA: COLLECTION_METADATA\\nNFT: NFT\\nNFT_METADATA: NFT_METADATA\\nLEGACY_ORDERS: LEGACY_ORDERS\\nV1_CLEANING: V1_CLEANING\\nV1_FILL_FIX: V1_FILL_FIX" index: String!): indexing_status
 
   """
   fetch data from the table: "legacy_orders"
@@ -2134,6 +2274,26 @@ type query_root {
   fetch data from the table: "marketplace_order" using primary key columns
   """
   marketplace_order_by_pk(id: uuid!): marketplace_order
+
+  """
+  fetch data from the table: "metadata_collection"
+  """
+  metadata_collection("distinct select on columns" distinct_on: [metadata_collection_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [metadata_collection_order_by!], "filter the rows returned" where: metadata_collection_bool_exp): [metadata_collection!]!
+
+  """
+  fetch data from the table: "metadata_collection" using primary key columns
+  """
+  metadata_collection_by_pk(contract: String!): metadata_collection
+
+  """
+  fetch data from the table: "metadata_token"
+  """
+  metadata_token("distinct select on columns" distinct_on: [metadata_token_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [metadata_token_order_by!], "filter the rows returned" where: metadata_token_bool_exp): [metadata_token!]!
+
+  """
+  fetch data from the table: "metadata_token" using primary key columns
+  """
+  metadata_token_by_pk(id: uuid!): metadata_token
 
   """
   fetch data from the table: "ownership"
@@ -2224,7 +2384,11 @@ type royalties {
 
   id: uuid!
 
-  parts("JSON select path" path: String): jsonb!
+  parts("JSON select path" path: String): jsonb
+
+  royalties_retries: Int!
+
+  royalties_synced: Boolean!
 
   token_id: String!
 }
@@ -2245,6 +2409,10 @@ input royalties_bool_exp {
 
   parts: jsonb_comparison_exp
 
+  royalties_retries: Int_comparison_exp
+
+  royalties_synced: Boolean_comparison_exp
+
   token_id: String_comparison_exp
 }
 
@@ -2257,6 +2425,10 @@ input royalties_order_by {
   id: order_by
 
   parts: order_by
+
+  royalties_retries: order_by
+
+  royalties_synced: order_by
 
   token_id: order_by
 }
@@ -2279,6 +2451,16 @@ enum royalties_select_column {
   column name
   """
   parts
+
+  """
+  column name
+  """
+  royalties_retries
+
+  """
+  column name
+  """
+  royalties_synced
 
   """
   column name
@@ -2385,7 +2567,7 @@ type subscription_root {
   """
   fetch data from the table: "indexing_status" using primary key columns
   """
-  indexing_status_by_pk("COLLECTION: COLLECTION\\nNFT: NFT\\nLEGACY_ORDERS: LEGACY_ORDERS\\nV1_CLEANING: V1_CLEANING\\nV1_FILL_FIX: V1_FILL_FIX" index: String!): indexing_status
+  indexing_status_by_pk("COLLECTION: COLLECTION\\nCOLLECTION_METADATA: COLLECTION_METADATA\\nNFT: NFT\\nNFT_METADATA: NFT_METADATA\\nLEGACY_ORDERS: LEGACY_ORDERS\\nV1_CLEANING: V1_CLEANING\\nV1_FILL_FIX: V1_FILL_FIX" index: String!): indexing_status
 
   """
   fetch data from the table: "legacy_orders"
@@ -2416,6 +2598,26 @@ type subscription_root {
   fetch data from the table: "marketplace_order" using primary key columns
   """
   marketplace_order_by_pk(id: uuid!): marketplace_order
+
+  """
+  fetch data from the table: "metadata_collection"
+  """
+  metadata_collection("distinct select on columns" distinct_on: [metadata_collection_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [metadata_collection_order_by!], "filter the rows returned" where: metadata_collection_bool_exp): [metadata_collection!]!
+
+  """
+  fetch data from the table: "metadata_collection" using primary key columns
+  """
+  metadata_collection_by_pk(contract: String!): metadata_collection
+
+  """
+  fetch data from the table: "metadata_token"
+  """
+  metadata_token("distinct select on columns" distinct_on: [metadata_token_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [metadata_token_order_by!], "filter the rows returned" where: metadata_token_bool_exp): [metadata_token!]!
+
+  """
+  fetch data from the table: "metadata_token" using primary key columns
+  """
+  metadata_token_by_pk(id: uuid!): metadata_token
 
   """
   fetch data from the table: "ownership"
@@ -2892,17 +3094,9 @@ type token {
 
   id: uuid!
 
-  metadata_retries: Int!
-
-  metadata_synced: Boolean!
-
   minted: numeric!
 
   minted_at: timestamptz!
-
-  royalties_retries: Int!
-
-  royalties_synced: Boolean!
 
   supply: numeric!
 
@@ -2933,17 +3127,9 @@ input token_bool_exp {
 
   id: uuid_comparison_exp
 
-  metadata_retries: Int_comparison_exp
-
-  metadata_synced: Boolean_comparison_exp
-
   minted: numeric_comparison_exp
 
   minted_at: timestamptz_comparison_exp
-
-  royalties_retries: Int_comparison_exp
-
-  royalties_synced: Boolean_comparison_exp
 
   supply: numeric_comparison_exp
 
@@ -2968,17 +3154,9 @@ input token_order_by {
 
   id: order_by
 
-  metadata_retries: order_by
-
-  metadata_synced: order_by
-
   minted: order_by
 
   minted_at: order_by
-
-  royalties_retries: order_by
-
-  royalties_synced: order_by
 
   supply: order_by
 
@@ -3021,32 +3199,12 @@ enum token_select_column {
   """
   column name
   """
-  metadata_retries
-
-  """
-  column name
-  """
-  metadata_synced
-
-  """
-  column name
-  """
   minted
 
   """
   column name
   """
   minted_at
-
-  """
-  column name
-  """
-  royalties_retries
-
-  """
-  column name
-  """
-  royalties_synced
 
   """
   column name

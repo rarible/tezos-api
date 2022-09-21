@@ -1,6 +1,5 @@
 fragment token on token {
     id
-    metadata_synced
     minted
     minted_at
     supply
@@ -8,7 +7,6 @@ fragment token on token {
     updated
     contract
     deleted
-    metadata_retries
     tzkt_id
 }
 

@@ -35,9 +35,7 @@ class TokenClientFt : BaseClientFt() {
                     "token_id": "3",
                     "supply": "1.000000000000000000000000000000000000",
                     "minted_at": "2022-09-20T09:50:45+00:00",
-                    "minted": "1.000000000000000000000000000000000000",
-                    "metadata_synced": false,
-                    "metadata_retries": 0
+                    "minted": "1.000000000000000000000000000000000000"
                   }
                 ]
               }
@@ -50,8 +48,6 @@ class TokenClientFt : BaseClientFt() {
                 contract = "KT1AxXMGmoQUH3wdDF5gqpANSGKHpTR4xsaj",
                 deleted = false,
                 id = "KT1AxXMGmoQUH3wdDF5gqpANSGKHpTR4xsaj:3",
-                metadataRetries = 0,
-                metadataSynced = false,
                 minted = BigInteger("1"),
                 mintedAt = OffsetDateTime.parse("2022-09-20T09:50:45Z").toInstant(),
                 supply = BigInteger("1"),
@@ -73,8 +69,6 @@ class TokenClientFt : BaseClientFt() {
                     "contract": "KT1HWoi3YovbJfzymqZMsW3ae3r4z4LzTDzp",
                     "deleted": false,
                     "id": "8f378bc9-d266-57f3-b117-59547e0215df",
-                    "metadata_retries": 0,
-                    "metadata_synced": false,
                     "minted": "1.000000000000000000000000000000000000",
                     "minted_at": "2022-09-08T14:57:10+00:00",
                     "supply": "1.000000000000000000000000000000000000",
@@ -103,8 +97,6 @@ class TokenClientFt : BaseClientFt() {
                     "contract": "KT1DtQV5qTnxdG49GbMRdKC8fg7bpvPLNcpm",
                     "deleted": true,
                     "id": "8f378bc9-d266-57f3-b117-59547e0215df",
-                    "metadata_retries": 0,
-                    "metadata_synced": false,
                     "minted": "1.000000000000000000000000000000000000",
                     "minted_at": "2022-09-08T14:37:30+00:00",
                     "supply": "0.000000000000000000000000000000000000",
@@ -139,8 +131,6 @@ class TokenClientFt : BaseClientFt() {
                     "contract": "KT1ME54FMgDcFjWPp272DzMHkeD2DuijwJfo",
                     "deleted": false,
                     "id": "8f378bc9-d266-57f3-b117-59547e0215df",
-                    "metadata_retries": 0,
-                    "metadata_synced": false,
                     "minted": "1.000000000000000000000000000000000000",
                     "minted_at": "2022-09-08T14:50:40+00:00",
                     "supply": "1.000000000000000000000000000000000000",
