@@ -26,7 +26,7 @@ package com.rarible.tzkt.model
 data class TokenInfo (
 
     /* Internal TzKT id (not the same as `tokenId`). */
-    val id: Int? = null,
+    val id: Long? = null,
 
     /* Contract, created the token. */
     val contract: Alias? = null,

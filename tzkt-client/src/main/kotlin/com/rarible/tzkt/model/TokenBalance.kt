@@ -30,7 +30,7 @@ package com.rarible.tzkt.model
 data class TokenBalance (
 
     /* Internal TzKT id.   **[sortable]** */
-    val id: Int,
+    val id: Long,
 
     /* Owner account.   Click on the field to expand more details. */
     val account: Alias? = null,
