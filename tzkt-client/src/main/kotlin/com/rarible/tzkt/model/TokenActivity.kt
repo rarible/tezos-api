@@ -31,7 +31,7 @@ package com.rarible.tzkt.model
 open class TokenActivity (
 
     /* Internal TzKT id.   **[sortable]** */
-    open val id: Int,
+    open val id: Long,
 
     /* Level of the block, at which the token transfer was made.   **[sortable]** */
     open val level: Int,

@@ -235,7 +235,7 @@ class TokenClient(
         }
     }
 
-    suspend fun balancesByIds(ids: List<Int>): List<TokenBalanceShort> {
+    suspend fun balancesByIds(ids: List<Long>): List<TokenBalanceShort> {
         return invoke<List<TokenBalanceShort>> {
             it.path(BASE_PATH_BALANCES)
                 .queryParam("token.id.in", ids.joinToString(","))
@@ -249,7 +249,7 @@ class TokenClient(
         return this.firstOrNull() ?: throw TzktNotFound("Token ${itemId} wasn't found")
     }
 
-    private suspend fun burnedByIds(ids: List<Int>) = coroutineScope {
+    private suspend fun burnedByIds(ids: List<Long>) = coroutineScope {
         val groups = ids.chunked(CHUNK_LIMIT)
         val balancesDeferred =
             groups
