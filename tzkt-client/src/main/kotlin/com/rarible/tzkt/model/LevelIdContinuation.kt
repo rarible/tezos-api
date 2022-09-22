@@ -2,7 +2,7 @@ package com.rarible.tzkt.model
 
 data class LevelIdContinuation(
     val level: Int,
-    val id: Int
+    val id: Long
 ) {
 
     override fun toString(): String {
@@ -13,7 +13,7 @@ data class LevelIdContinuation(
         fun parse(value: String?): LevelIdContinuation? {
             return value?.let {
                 val parsedContinuation = value.split("_")
-                LevelIdContinuation(parsedContinuation[0].toInt(), parsedContinuation[1].toInt())
+                LevelIdContinuation(parsedContinuation[0].toInt(), parsedContinuation[1].toLong())
             }
         }
     }

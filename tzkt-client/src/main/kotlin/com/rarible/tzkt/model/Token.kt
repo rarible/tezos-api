@@ -39,7 +39,7 @@ import java.math.BigInteger
 data class Token (
 
     /* Internal TzKT id (not the same as `tokenId`).   **[sortable]** */
-    val id: Int,
+    val id: Long,
 
     /* Contract, created the token. */
     val contract: Alias? = null,
