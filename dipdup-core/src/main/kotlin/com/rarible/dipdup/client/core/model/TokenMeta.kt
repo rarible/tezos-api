@@ -100,7 +100,7 @@ data class TokenMeta(
         private fun guessMime(value: String): String {
             return when {
                 value.lowercase().endsWith("jpeg") || value.lowercase().endsWith("jpg") -> "image/jpeg"
-                else -> ""
+                else -> "image/jpeg"
             }
         }
     }
