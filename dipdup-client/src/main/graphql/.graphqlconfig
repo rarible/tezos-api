@@ -4,7 +4,7 @@
   "extensions": {
     "endpoints": {
       "Default GraphQL Endpoint": {
-        "url": "https://rarible-mainnet.dipdup.net/v1/graphql",
+        "url": "http://localhost:49180/v1/graphql",
         "headers": {
           "user-agent": "JS GraphQL"
         },
