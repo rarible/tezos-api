@@ -3,6 +3,7 @@ package com.rarible.dipdup.client
 import com.apollographql.apollo3.ApolloClient
 import com.rarible.dipdup.client.core.model.DipDupItem
 import com.rarible.dipdup.client.core.model.TimestampIdContinuation
+import com.rarible.dipdup.client.core.model.TokenMeta
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -23,7 +24,7 @@ class TokenClientFt : BaseClientFt() {
         mock(
             """{
               "data": {
-                "token": [
+                "token_with_meta": [
                   {
                     "__typename": "token",
                     "contract": "KT1AxXMGmoQUH3wdDF5gqpANSGKHpTR4xsaj",
@@ -35,7 +36,8 @@ class TokenClientFt : BaseClientFt() {
                     "token_id": "3",
                     "supply": "1.000000000000000000000000000000000000",
                     "minted_at": "2022-09-20T09:50:45+00:00",
-                    "minted": "1.000000000000000000000000000000000000"
+                    "minted": "1.000000000000000000000000000000000000",
+                    "metadata": "{'artifactUri': 'ipfs://QmUpULc4JHvcnXbhUmhdf59XZo9o6oBg8wNbYPYd4Tgu8p', 'decimals': '0', 'name': 'Legio II - Sabina', 'symbol': 'LEGIO-II'}"
                   }
                 ]
               }
@@ -52,8 +54,16 @@ class TokenClientFt : BaseClientFt() {
                 mintedAt = OffsetDateTime.parse("2022-09-20T09:50:45Z").toInstant(),
                 supply = BigInteger("1"),
                 tokenId = BigInteger("3"),
-                tzktId = 120741,
-                updated = OffsetDateTime.parse("2022-09-20T09:50:45Z").toInstant()
+                tzktId = BigInteger("120741"),
+                updated = OffsetDateTime.parse("2022-09-20T09:50:45Z").toInstant(),
+                metadata = TokenMeta(
+                    name = "Legio II - Sabina",
+                    description = null,
+                    attributes = emptyList(),
+                    tags = emptyList(),
+                    content = listOf(
+                        TokenMeta.Content(uri = "ipfs://QmUpULc4JHvcnXbhUmhdf59XZo9o6oBg8wNbYPYd4Tgu8p", mimeType="image/jpeg", representation= TokenMeta.Representation.ORIGINAL))
+                )
             )
         )
     }
