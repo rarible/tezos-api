@@ -25,22 +25,7 @@ class CollectionClientFt : BaseClientFt() {
                   {
                     "__typename": "collection",
                     "owner": "tz2WFEmgnWqFY6FWBMFgrS4MW4c3pJRS8nzU",
-                    "metadata": {
-                      "name": "Test Taquito FA2 token Factory",
-                      "source": {
-                        "tools": [
-                          "FA2 Token Factory"
-                        ],
-                        "location": "https://www.github.com/claudebarde"
-                      },
-                      "license": {
-                        "name": "MIT"
-                      },
-                      "interfaces": [
-                        "TZIP-012"
-                      ],
-                      "description": "This is a test to retrieve tokens metadata when they are located in the storage of the contract in the big map %token_metadata"
-                    },
+                    "metadata": "{\"name\": \"Test Taquito FA2 token Factory\"}",
                     "contract": "KT1Pz65ssbPF7Zv9Dh7ggqUkgAYNSuJ9iia7",
                     "db_updated_at": "2022-09-12T16:08:47.783243+00:00"
                   }

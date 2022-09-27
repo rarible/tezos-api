@@ -1,5 +1,7 @@
 package com.rarible.dipdup.client.converter
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.rarible.dipdup.client.GetCollectionsAllContinuationAscQuery
 import com.rarible.dipdup.client.GetCollectionsAllContinuationDescQuery
 import com.rarible.dipdup.client.GetCollectionsAllQuery
@@ -31,14 +33,14 @@ object CollectionConverter {
         )
     }
 
-    fun convertMeta(data: Any?): Meta? {
-        return if (data is Map<*, *>) {
-            val name = data.get("name").toString()
+    fun convertMeta(data: String?): Meta? {
+        return if (data != null) {
+            val map: Map<String, Object> = ObjectMapper().readValue(data)
             Meta(
-                name = name,
+                map["name"]?.let { it.toString() },
                 symbol = null
             )
-        } else null
+        } else Meta(null ,null)
     }
 
     data class Meta(

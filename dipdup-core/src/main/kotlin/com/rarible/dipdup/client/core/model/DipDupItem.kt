@@ -16,7 +16,7 @@ data class DipDupItem(
         val contract: String,
         val deleted: Boolean,
         val tzktId: BigInteger,
-        val metadata: TokenMeta
+        val metadata: TokenMeta?
 ) : DipDupEntity {
         companion object {
                 fun itemId(contract: String, tokenId: BigInteger): String {
