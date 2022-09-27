@@ -1,8 +1,6 @@
 package com.rarible.dipdup.client.converter
 
-import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.module.kotlin.convertValue
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.rarible.dipdup.client.GetTokensAllContinuationAscQuery
 import com.rarible.dipdup.client.GetTokensAllContinuationDescQuery
@@ -10,13 +8,14 @@ import com.rarible.dipdup.client.GetTokensAllQuery
 import com.rarible.dipdup.client.GetTokensByIdsQuery
 import com.rarible.dipdup.client.core.model.DipDupItem
 import com.rarible.dipdup.client.core.model.TokenMeta
+import com.rarible.dipdup.client.core.util.MetaUtils
 import com.rarible.dipdup.client.fragment.Token
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.time.OffsetDateTime
 
 object TokenConverter {
-    val mapper = jacksonObjectMapper()
+    val mapper = MetaUtils.mapper()
 
     fun convertByIds(source: List<GetTokensByIdsQuery.Token_with_metum>) = source.map { convert(it.token) }
 
@@ -42,7 +41,6 @@ object TokenConverter {
 
     fun process_metadata(metadata: String?): TokenMeta {
         return if (!metadata.isNullOrEmpty()){
-            mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
             val map: Map<String, Any> = mapper.readValue(metadata)
             val meta: TokenMeta.TzktMeta = mapper.convertValue(adjustMeta(map))
             var tokenAttributes = meta.attributes

@@ -1,13 +1,12 @@
 package com.rarible.dipdup.client.converter
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.rarible.dipdup.client.GetCollectionsAllContinuationAscQuery
 import com.rarible.dipdup.client.GetCollectionsAllContinuationDescQuery
 import com.rarible.dipdup.client.GetCollectionsAllQuery
 import com.rarible.dipdup.client.GetCollectionsByIdsQuery
 import com.rarible.dipdup.client.core.model.DipDupCollection
+import com.rarible.dipdup.client.core.util.MetaUtils
 import java.time.OffsetDateTime
 
 object CollectionConverter {
@@ -36,9 +35,7 @@ object CollectionConverter {
 
     fun convertMeta(data: String?): Meta? {
         return if (data != null) {
-            val mapper = ObjectMapper()
-                .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
-            val map: Map<String, Object> = mapper.readValue(data)
+            val map: Map<String, Object> = MetaUtils.mapper().readValue(data)
             Meta(
                 map["name"]?.let { it.toString() },
                 symbol = null
