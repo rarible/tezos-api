@@ -1,24 +1,30 @@
 package com.rarible.dipdup.client.converter
 
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.module.kotlin.convertValue
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.rarible.dipdup.client.GetTokensAllContinuationAscQuery
 import com.rarible.dipdup.client.GetTokensAllContinuationDescQuery
 import com.rarible.dipdup.client.GetTokensAllQuery
 import com.rarible.dipdup.client.GetTokensByIdsQuery
 import com.rarible.dipdup.client.core.model.DipDupItem
+import com.rarible.dipdup.client.core.model.TokenMeta
 import com.rarible.dipdup.client.fragment.Token
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.time.OffsetDateTime
 
 object TokenConverter {
+    val mapper = jacksonObjectMapper()
 
-    fun convertByIds(source: List<GetTokensByIdsQuery.Token>) = source.map { convert(it.token) }
+    fun convertByIds(source: List<GetTokensByIdsQuery.Token_with_metum>) = source.map { convert(it.token) }
 
-    fun convertAll(source: List<GetTokensAllQuery.Token>) = source.map { convert(it.token) }
-    fun convertAllContinuationAsc(source: List<GetTokensAllContinuationAscQuery.Token>) =
+    fun convertAll(source: List<GetTokensAllQuery.Token_with_metum>) = source.map { convert(it.token) }
+    fun convertAllContinuationAsc(source: List<GetTokensAllContinuationAscQuery.Token_with_metum>) =
         source.map { convert(it.token) }
 
-    fun convertAllContinuationDesc(source: List<GetTokensAllContinuationDescQuery.Token>) =
+    fun convertAllContinuationDesc(source: List<GetTokensAllContinuationDescQuery.Token_with_metum>) =
         source.map { convert(it.token) }
 
     fun convert(source: Token) = DipDupItem(
@@ -30,6 +36,76 @@ object TokenConverter {
         updated = OffsetDateTime.parse(source.updated.toString()).toInstant(),
         contract = source.contract,
         deleted = source.deleted,
-        tzktId = source.tzkt_id.toString().toInt()
+        tzktId = source.tzkt_id.toString().toBigInteger(),
+        metadata = process_metadata(source.metadata)
     )
+
+    fun process_metadata(metadata: String?): TokenMeta {
+        return if (!metadata.isNullOrEmpty()){
+            mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+            val map: Map<String, Any> = mapper.readValue(metadata)
+            val meta: TokenMeta.TzktMeta = mapper.convertValue(adjustMeta(map))
+            var tokenAttributes = meta.attributes
+            TokenMeta(
+                name = meta.name ?: TokenMeta.UNTITLED,
+                description = meta.description,
+                content = meta.contents(),
+                attributes = tokenAttributes ?: emptyList(),
+                tags = meta.tags ?: emptyList()
+            )
+        } else {
+            TokenMeta(
+                name = TokenMeta.UNTITLED,
+                description = null,
+                content = emptyList(),
+                attributes = emptyList(),
+                tags = emptyList()
+            )
+        }
+
+    }
+
+    private fun adjustMeta(source: Map<String, *>): Map<String, *> {
+        val mutable = source.toMutableMap()
+        mutable["formats"] = adjustListMap(mutable["formats"])
+        mutable["creators"] = adjustList(mutable["creators"])
+        mutable["tags"] = adjustList(mutable["tags"])
+        if (mutable["attributes"] != null && mutable["attributes"] is List<*>) {
+            mutable["attributes"] = (mutable["attributes"] as List<Map<String, *>>)
+                .map { it.toMutableMap() }
+                .filter {
+                    it["key"] != null || it["name"] != null
+                }
+                .map {
+                    it["key"] = it["name"]
+
+                    // fill according to Attribute
+                    mapOf(
+                        "key" to it["key"],
+                        "value" to it["value"],
+                        "type" to it["type"],
+                        "format" to it["format"]
+                    )
+                }
+        } else {
+            mutable.remove("attributes")
+        }
+        return mutable.toMap()
+    }
+
+    private fun adjustListMap(source: Any?): List<Map<String, Object>> {
+        return when (source) {
+            is String -> mapper.readValue(source)
+            is List<*> -> source as List<Map<String, Object>>
+            else -> emptyList()
+        }
+    }
+
+    private fun adjustList(source: Any?): List<String> {
+        return when (source) {
+            is String -> listOf(source)
+            is List<*> -> source as List<String>
+            else -> emptyList()
+        }
+    }
 }

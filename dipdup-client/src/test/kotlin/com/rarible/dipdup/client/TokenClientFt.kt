@@ -3,6 +3,7 @@ package com.rarible.dipdup.client
 import com.apollographql.apollo3.ApolloClient
 import com.rarible.dipdup.client.core.model.DipDupItem
 import com.rarible.dipdup.client.core.model.TimestampIdContinuation
+import com.rarible.dipdup.client.core.model.TokenMeta
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -23,7 +24,7 @@ class TokenClientFt : BaseClientFt() {
         mock(
             """{
               "data": {
-                "token": [
+                "token_with_meta": [
                   {
                     "__typename": "token",
                     "contract": "KT1AxXMGmoQUH3wdDF5gqpANSGKHpTR4xsaj",
@@ -35,7 +36,8 @@ class TokenClientFt : BaseClientFt() {
                     "token_id": "3",
                     "supply": "1.000000000000000000000000000000000000",
                     "minted_at": "2022-09-20T09:50:45+00:00",
-                    "minted": "1.000000000000000000000000000000000000"
+                    "minted": "1.000000000000000000000000000000000000",
+                    "metadata": "{'artifactUri': 'ipfs://QmUpULc4JHvcnXbhUmhdf59XZo9o6oBg8wNbYPYd4Tgu8p', 'decimals': '0', 'name': 'Legio II - Sabina', 'symbol': 'LEGIO-II'}"
                   }
                 ]
               }
@@ -52,8 +54,16 @@ class TokenClientFt : BaseClientFt() {
                 mintedAt = OffsetDateTime.parse("2022-09-20T09:50:45Z").toInstant(),
                 supply = BigInteger("1"),
                 tokenId = BigInteger("3"),
-                tzktId = 120741,
-                updated = OffsetDateTime.parse("2022-09-20T09:50:45Z").toInstant()
+                tzktId = BigInteger("120741"),
+                updated = OffsetDateTime.parse("2022-09-20T09:50:45Z").toInstant(),
+                metadata = TokenMeta(
+                    name = "Legio II - Sabina",
+                    description = null,
+                    attributes = emptyList(),
+                    tags = emptyList(),
+                    content = listOf(
+                        TokenMeta.Content(uri = "ipfs://QmUpULc4JHvcnXbhUmhdf59XZo9o6oBg8wNbYPYd4Tgu8p", mimeType="image/jpeg", representation= TokenMeta.Representation.ORIGINAL))
+                )
             )
         )
     }
@@ -63,7 +73,7 @@ class TokenClientFt : BaseClientFt() {
         mock(
             """{
               "data": {
-                "token": [
+                "token_with_meta": [
                   {
                     "__typename": "token",
                     "contract": "KT1HWoi3YovbJfzymqZMsW3ae3r4z4LzTDzp",
@@ -74,7 +84,8 @@ class TokenClientFt : BaseClientFt() {
                     "supply": "1.000000000000000000000000000000000000",
                     "token_id": "20",
                     "tzkt_id": 113511,
-                    "updated": "2022-09-08T14:57:10+00:00"
+                    "updated": "2022-09-08T14:57:10+00:00",
+                    "metadata": "{'artifactUri': 'ipfs://QmUaSSCpDs75Mnfur1TRRzYPxxx4U6G3uCkzAByZaTqc9S/kryptosphere.mp4', 'attributes': [{'name': 'scanned', 'value': 'false'}, {'name': 'revealed', 'value': 'false'}, {'name': 'rarity', 'value': 'unknown'}], 'creators': ['Billyapp.live team'], 'decimals': 0, 'description': 'Crypto tour event by Kryptosphere, Marseille, 22/10/2022', 'displayUri': 'ipfs://QmUaSSCpDs75Mnfur1TRRzYPxxx4U6G3uCkzAByZaTqc9S/kryptosphere.png', 'formats': [{'mimeType': 'video/mp4', 'uri': 'ipfs://QmUaSSCpDs75Mnfur1TRRzYPxxx4U6G3uCkzAByZaTqc9S/kryptosphere.mp4'}, {'mimeType': 'image/png', 'uri': 'ipfs://QmUaSSCpDs75Mnfur1TRRzYPxxx4U6G3uCkzAByZaTqc9S/kryptosphere.png'}, {'mimeType': 'image/png', 'uri': 'ipfs://QmUaSSCpDs75Mnfur1TRRzYPxxx4U6G3uCkzAByZaTqc9S/kryptosphere_thumbnail.png'}], 'name': 'Crypto tour', 'rights': '©Billy 2022 Rights. All rights reserved.', 'royalties': {'decimals': 2, 'shares': {'tz1PJ5xxUFDAwgKHLMUPe5SL3eJkVehfiDL6': '10'}}, 'symbol': 'XTZ', 'thumbnailUri': 'ipfs://QmUaSSCpDs75Mnfur1TRRzYPxxx4U6G3uCkzAByZaTqc9S/kryptosphere_thumbnail.png'}"
                   }
                 ]
               }
@@ -91,7 +102,7 @@ class TokenClientFt : BaseClientFt() {
         mock(
             """{
               "data": {
-                "token": [
+                "token_with_meta": [
                   {
                     "__typename": "token",
                     "contract": "KT1DtQV5qTnxdG49GbMRdKC8fg7bpvPLNcpm",
@@ -102,7 +113,8 @@ class TokenClientFt : BaseClientFt() {
                     "supply": "0.000000000000000000000000000000000000",
                     "token_id": "260",
                     "tzkt_id": 113503,
-                    "updated": "2022-09-08T14:37:45+00:00"
+                    "updated": "2022-09-08T14:37:45+00:00",
+                    "metadata": "{'name': 'FFF', 'description': '', 'image': 'ipfs://ipfs/QmPe1W8XiUYdsvdpvgWVwekQ7cDQivRMak3YPX15vxvSJs/image.png', 'external_url': 'https://rinkeby.rarible.com/token/0x509fd4cdaa29be7b1fad251d8ea0fca2ca91eb60:18', 'attributes': [], 'decimals': 1, 'symbol': 'FFF'}"
                   }
                 ]
               }
@@ -125,7 +137,7 @@ class TokenClientFt : BaseClientFt() {
         mock(
             """{
               "data": {
-                "token": [
+                "token_with_meta": [
                   {
                     "__typename": "token",
                     "contract": "KT1ME54FMgDcFjWPp272DzMHkeD2DuijwJfo",
@@ -136,7 +148,8 @@ class TokenClientFt : BaseClientFt() {
                     "supply": "1.000000000000000000000000000000000000",
                     "token_id": "9",
                     "tzkt_id": 113509,
-                    "updated": "2022-09-08T14:50:40+00:00"
+                    "updated": "2022-09-08T14:50:40+00:00",
+                    "metadata": null
                   }
                 ]
               }

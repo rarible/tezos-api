@@ -1,4 +1,4 @@
-fragment token on token {
+fragment token on token_with_meta {
     id
     minted
     minted_at
@@ -8,22 +8,23 @@ fragment token on token {
     contract
     deleted
     tzkt_id
+    metadata
 }
 
 query GetTokensByIds($ids: [uuid!]!) {
-    token(where: {id: {_in: $ids}}) {
+    token_with_meta(where: {id: {_in: $ids}}) {
         ...token
     }
 }
 
-query GetTokensAll($limit: Int!, $deleted: [Boolean!]!, $order_by: [token_order_by!]!) {
-    token(where: {deleted: {_in: $deleted}}, limit: $limit, order_by: $order_by) {
+query GetTokensAll($limit: Int!, $deleted: [Boolean!]!, $order_by: [token_with_meta_order_by!]!) {
+    token_with_meta(where: {deleted: {_in: $deleted}}, limit: $limit, order_by: $order_by) {
         ...token
     }
 }
 
 query GetTokensAllContinuationDesc($limit: Int!, $deleted: [Boolean!]!, $date: timestamptz!, $id: uuid!) {
-    token(where: {
+    token_with_meta(where: {
         deleted: {_in: $deleted},
         _or: [{
             updated: {_lt: $date}
@@ -37,7 +38,7 @@ query GetTokensAllContinuationDesc($limit: Int!, $deleted: [Boolean!]!, $date: t
 }
 
 query GetTokensAllContinuationAsc($limit: Int!, $deleted: [Boolean!]!, $date: timestamptz!, $id: uuid!) {
-    token(where: {
+    token_with_meta(where: {
         deleted: {_in: $deleted},
         _or: [{
             updated: {_gt: $date}

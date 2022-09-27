@@ -209,7 +209,7 @@ type collection_with_meta {
 
   db_updated_at: timestamptz
 
-  metadata("JSON select path" path: String): jsonb
+  metadata: String
 
   owner: String
 }
@@ -228,7 +228,7 @@ input collection_with_meta_bool_exp {
 
   db_updated_at: timestamptz_comparison_exp
 
-  metadata: jsonb_comparison_exp
+  metadata: String_comparison_exp
 
   owner: String_comparison_exp
 }
@@ -1825,6 +1825,8 @@ columns and relationships of "metadata_collection"
 type metadata_collection {
   contract: String!
 
+  db_updated_at: timestamptz!
+
   metadata: String
 
   metadata_retries: Int!
@@ -1844,6 +1846,8 @@ input metadata_collection_bool_exp {
 
   contract: String_comparison_exp
 
+  db_updated_at: timestamptz_comparison_exp
+
   metadata: String_comparison_exp
 
   metadata_retries: Int_comparison_exp
@@ -1856,6 +1860,8 @@ Ordering options when selecting data from "metadata_collection".
 """
 input metadata_collection_order_by {
   contract: order_by
+
+  db_updated_at: order_by
 
   metadata: order_by
 
@@ -1872,6 +1878,11 @@ enum metadata_collection_select_column {
   column name
   """
   contract
+
+  """
+  column name
+  """
+  db_updated_at
 
   """
   column name
@@ -1894,6 +1905,8 @@ columns and relationships of "metadata_token"
 """
 type metadata_token {
   contract: String!
+
+  db_updated_at: timestamptz!
 
   id: uuid!
 
@@ -1918,6 +1931,8 @@ input metadata_token_bool_exp {
 
   contract: String_comparison_exp
 
+  db_updated_at: timestamptz_comparison_exp
+
   id: uuid_comparison_exp
 
   metadata: String_comparison_exp
@@ -1934,6 +1949,8 @@ Ordering options when selecting data from "metadata_token".
 """
 input metadata_token_order_by {
   contract: order_by
+
+  db_updated_at: order_by
 
   id: order_by
 
@@ -1954,6 +1971,11 @@ enum metadata_token_select_column {
   column name
   """
   contract
+
+  """
+  column name
+  """
+  db_updated_at
 
   """
   column name
@@ -2366,6 +2388,11 @@ type query_root {
   token_transfer_by_pk(id: bigint!): token_transfer
 
   """
+  fetch data from the table: "token_with_meta"
+  """
+  token_with_meta("distinct select on columns" distinct_on: [token_with_meta_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [token_with_meta_order_by!], "filter the rows returned" where: token_with_meta_bool_exp): [token_with_meta!]!
+
+  """
   fetch data from the table: "tzprofiles"
   """
   tzprofiles("distinct select on columns" distinct_on: [tzprofiles_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tzprofiles_order_by!], "filter the rows returned" where: tzprofiles_bool_exp): [tzprofiles!]!
@@ -2381,6 +2408,8 @@ columns and relationships of "royalties"
 """
 type royalties {
   contract: String!
+
+  db_updated_at: timestamptz!
 
   id: uuid!
 
@@ -2405,6 +2434,8 @@ input royalties_bool_exp {
 
   contract: String_comparison_exp
 
+  db_updated_at: timestamptz_comparison_exp
+
   id: uuid_comparison_exp
 
   parts: jsonb_comparison_exp
@@ -2421,6 +2452,8 @@ Ordering options when selecting data from "royalties".
 """
 input royalties_order_by {
   contract: order_by
+
+  db_updated_at: order_by
 
   id: order_by
 
@@ -2441,6 +2474,11 @@ enum royalties_select_column {
   column name
   """
   contract
+
+  """
+  column name
+  """
+  db_updated_at
 
   """
   column name
@@ -2688,6 +2726,11 @@ type subscription_root {
   fetch data from the table: "token_transfer" using primary key columns
   """
   token_transfer_by_pk(id: bigint!): token_transfer
+
+  """
+  fetch data from the table: "token_with_meta"
+  """
+  token_with_meta("distinct select on columns" distinct_on: [token_with_meta_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [token_with_meta_order_by!], "filter the rows returned" where: token_with_meta_bool_exp): [token_with_meta!]!
 
   """
   fetch data from the table: "tzprofiles"
@@ -3375,6 +3418,142 @@ enum token_transfer_select_column {
   column name
   """
   tzkt_transaction_id
+}
+
+"""
+columns and relationships of "token_with_meta"
+"""
+type token_with_meta {
+  contract: String
+
+  deleted: Boolean
+
+  id: uuid
+
+  metadata: String
+
+  minted: numeric
+
+  minted_at: timestamptz
+
+  supply: numeric
+
+  token_id: String
+
+  tzkt_id: bigint
+
+  updated: timestamptz
+}
+
+"""
+Boolean expression to filter rows from the table "token_with_meta". All fields are combined with a logical 'AND'.
+"""
+input token_with_meta_bool_exp {
+  _and: [token_with_meta_bool_exp!]
+
+  _not: token_with_meta_bool_exp
+
+  _or: [token_with_meta_bool_exp!]
+
+  contract: String_comparison_exp
+
+  deleted: Boolean_comparison_exp
+
+  id: uuid_comparison_exp
+
+  metadata: String_comparison_exp
+
+  minted: numeric_comparison_exp
+
+  minted_at: timestamptz_comparison_exp
+
+  supply: numeric_comparison_exp
+
+  token_id: String_comparison_exp
+
+  tzkt_id: bigint_comparison_exp
+
+  updated: timestamptz_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "token_with_meta".
+"""
+input token_with_meta_order_by {
+  contract: order_by
+
+  deleted: order_by
+
+  id: order_by
+
+  metadata: order_by
+
+  minted: order_by
+
+  minted_at: order_by
+
+  supply: order_by
+
+  token_id: order_by
+
+  tzkt_id: order_by
+
+  updated: order_by
+}
+
+"""
+select columns of table "token_with_meta"
+"""
+enum token_with_meta_select_column {
+  """
+  column name
+  """
+  contract
+
+  """
+  column name
+  """
+  deleted
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  metadata
+
+  """
+  column name
+  """
+  minted
+
+  """
+  column name
+  """
+  minted_at
+
+  """
+  column name
+  """
+  supply
+
+  """
+  column name
+  """
+  token_id
+
+  """
+  column name
+  """
+  tzkt_id
+
+  """
+  column name
+  """
+  updated
 }
 
 """

@@ -10,7 +10,7 @@ import com.rarible.dipdup.client.core.model.DipDupItem
 import com.rarible.dipdup.client.core.model.TimestampIdContinuation
 import com.rarible.dipdup.client.exception.DipDupNotFound
 import com.rarible.dipdup.client.model.Page
-import com.rarible.dipdup.client.type.Token_order_by
+import com.rarible.dipdup.client.type.Token_with_meta_order_by
 import com.rarible.dipdup.client.type.order_by
 
 class TokenClient(
@@ -25,7 +25,7 @@ class TokenClient(
         val uuids = ids.map(::toUuid5)
         val request = GetTokensByIdsQuery(uuids)
         val response = safeExecution(request)
-        return convertByIds(response.token)
+        return convertByIds(response.token_with_meta)
     }
 
     suspend fun getTokensAll(
@@ -42,26 +42,26 @@ class TokenClient(
                 )
             )
             val response = safeExecution(request)
-            convertAll(response.token)
+            convertAll(response.token_with_meta)
         } else {
             val parsed = TimestampIdContinuation.parse(continuation)
             if (sortAsc) {
                 val request = GetTokensAllContinuationAscQuery(limit, deleted(showDeleted), parsed.date.toString(),
                     toUuid5(parsed.id))
                 val response = safeExecution(request)
-                convertAllContinuationAsc(response.token)
+                convertAllContinuationAsc(response.token_with_meta)
             } else {
                 val request = GetTokensAllContinuationDescQuery(limit, deleted(showDeleted), parsed.date.toString(),
                     toUuid5(parsed.id))
                 val response = safeExecution(request)
-                convertAllContinuationDesc(response.token)
+                convertAllContinuationDesc(response.token_with_meta)
             }
         }
         return Page.of(tokens, limit)
     }
 
-    private fun orderBy(id: Optional<order_by>?, updated: Optional<order_by>?) = Token_order_by(
-        null, null, null, null, id, null, null, null, null, null, updated
+    private fun orderBy(id: Optional<order_by>?, updated: Optional<order_by>?) = Token_with_meta_order_by(
+        null, null, id, null, null, null, null, null, null, updated,
     )
 
     private fun sort(sortAsc: Boolean) = when (sortAsc) {

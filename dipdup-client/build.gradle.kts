@@ -11,6 +11,7 @@ dependencies {
     testImplementation("com.apollographql.apollo3:apollo-mockserver:$apolloVersion")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.1")
 }
 
 apollo {

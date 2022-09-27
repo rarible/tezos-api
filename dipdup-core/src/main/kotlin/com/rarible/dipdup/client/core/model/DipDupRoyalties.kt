@@ -6,20 +6,15 @@ import java.math.BigInteger
 import java.time.Instant
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
-data class DipDupItem(
+data class DipDupRoyalties(
         override val id: String,
-        val minted: BigInteger?,
-        val mintedAt: Instant,
-        val supply: BigInteger,
-        val tokenId: BigInteger,
         override val updated: Instant,
+        val tokenId: BigInteger,
         val contract: String,
-        val deleted: Boolean,
-        val tzktId: BigInteger,
-        val metadata: TokenMeta
-) : DipDupEntity {
+        val parts: List<Part>
+): DipDupEntity  {
         companion object {
-                fun itemId(contract: String, tokenId: BigInteger): String {
+                fun royaltiesId(contract: String, tokenId: BigInteger): String {
                         return "$contract:$tokenId"
                 }
         }
