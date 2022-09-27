@@ -1,5 +1,6 @@
 package com.rarible.dipdup.client.converter
 
+import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.rarible.dipdup.client.GetCollectionsAllContinuationAscQuery
@@ -35,7 +36,9 @@ object CollectionConverter {
 
     fun convertMeta(data: String?): Meta? {
         return if (data != null) {
-            val map: Map<String, Object> = ObjectMapper().readValue(data)
+            val mapper = ObjectMapper()
+                .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
+            val map: Map<String, Object> = mapper.readValue(data)
             Meta(
                 map["name"]?.let { it.toString() },
                 symbol = null
