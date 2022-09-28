@@ -44,11 +44,11 @@ class CollectionClient(
         } else {
             val parsed = TimestampIdContinuation.parse(continuation)
             if (sortAsc) {
-                val request = GetCollectionsAllContinuationAscQuery(limit, parsed.date.toString(), parsed.id)
+                val request = GetCollectionsAllContinuationAscQuery(limit, parsed.id)
                 val response = safeExecution(request)
                 convertAllContinuationAsc(response.collection_with_meta)
             } else {
-                val request = GetCollectionsAllContinuationDescQuery(limit, parsed.date.toString(), parsed.id)
+                val request = GetCollectionsAllContinuationDescQuery(limit, parsed.id)
                 val response = safeExecution(request)
                 convertAllContinuationDesc(response.collection_with_meta)
             }

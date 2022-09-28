@@ -17,27 +17,17 @@ query GetCollectionsAll($limit: Int!, $order_by: [collection_with_meta_order_by!
     }
 }
 
-query GetCollectionsAllContinuationDesc($limit: Int!, $date: timestamptz!, $id: String!) {
+query GetCollectionsAllContinuationDesc($limit: Int!, $id: String!) {
     collection_with_meta(where: {
-        _or: [{
-            db_updated_at: {_lt: $date}
-        },{
-            db_updated_at: {_eq: $date},
-            contract: {_lt: $id}
-        }]
+        contract: {_lt: $id}
     }, limit: $limit, order_by: [{db_updated_at: desc}, {contract: desc}]) {
         ...collection
     }
 }
 
-query GetCollectionsAllContinuationAsc($limit: Int!, $date: timestamptz!, $id: String!) {
+query GetCollectionsAllContinuationAsc($limit: Int!, $id: String!) {
     collection_with_meta(where: {
-        _or: [{
-            db_updated_at: {_gt: $date}
-        },{
-            db_updated_at: {_eq: $date},
-            contract: {_gt: $id}
-        }]
+        contract: {_lt: $id}
     }, limit: $limit, order_by: [{db_updated_at: asc}, {contract: asc}]) {
         ...collection
     }
