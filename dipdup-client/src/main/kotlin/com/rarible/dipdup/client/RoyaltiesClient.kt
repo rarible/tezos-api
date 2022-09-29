@@ -54,7 +54,7 @@ class RoyaltiesClient(
                 convertAllContinuationDesc(response.royalties)
             }
         }
-        return Page.of(tokens, limit)
+        return Page.of(tokens, limit) { TimestampIdContinuation(it.updated, it.id) }
     }
 
     private fun orderBy(id: Optional<order_by>?, updated: Optional<order_by>?) = Royalties_order_by(

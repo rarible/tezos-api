@@ -27,4 +27,11 @@ class CollectionClientIt {
         assertThat(collections).isNotNull
     }
 
+    // KT1GwtE3PeTxczqnqKwdFwxaZWgEKcg8xpY5
+    @Test
+    fun `should return collection`() = runBlocking<Unit> {
+        val collection = collectionClient.getCollectionById("KT1GwtE3PeTxczqnqKwdFwxaZWgEKcg8xpY5")
+        assertThat(collection).isNotNull
+    }
+
 }

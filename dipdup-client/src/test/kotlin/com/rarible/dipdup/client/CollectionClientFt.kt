@@ -39,7 +39,6 @@ class CollectionClientFt : BaseClientFt() {
             DipDupCollection(
                 id = "KT1Pz65ssbPF7Zv9Dh7ggqUkgAYNSuJ9iia7",
                 owner = "tz2WFEmgnWqFY6FWBMFgrS4MW4c3pJRS8nzU",
-                updated = OffsetDateTime.parse("2022-09-12T16:08:47.783243Z").toInstant(),
                 name = "Test Taquito FA2 token Factory",
                 symbol = null,
                 standard = null,
@@ -75,7 +74,7 @@ class CollectionClientFt : BaseClientFt() {
 
         val collections = collectionClient.getCollectionsAll(limit = 2, continuation = null, sortAsc = false)
         assertThat(collections.items).hasSize(2)
-        assertThat(collections.continuation).isEqualTo("1663572660559_KT1R9eGJniFyPmCtwFqv5K7U49pciVUD2vPH")
+        assertThat(collections.continuation).isEqualTo("KT1R9eGJniFyPmCtwFqv5K7U49pciVUD2vPH")
     }
 
     @Test
@@ -103,9 +102,9 @@ class CollectionClientFt : BaseClientFt() {
             }"""
         )
 
-        val collections = collectionClient.getCollectionsAll(limit = 2, continuation = "1663572660559_KT1R9eGJniFyPmCtwFqv5K7U49pciVUD2vPH", sortAsc = false)
+        val collections = collectionClient.getCollectionsAll(limit = 2, continuation = "KT1R9eGJniFyPmCtwFqv5K7U49pciVUD2vPH", sortAsc = false)
         assertThat(collections.items).hasSize(2)
-        assertThat(collections.continuation).isEqualTo("1663581720127_KT1KvFrpqm2mdbZ6dcTXCkqtoAfR7hq8r1VD")
+        assertThat(collections.continuation).isEqualTo("KT1KvFrpqm2mdbZ6dcTXCkqtoAfR7hq8r1VD")
     }
 
     @Test
@@ -133,8 +132,8 @@ class CollectionClientFt : BaseClientFt() {
             }"""
         )
 
-        val collections = collectionClient.getCollectionsAll(limit = 2, continuation = "1663572660559_KT1R9eGJniFyPmCtwFqv5K7U49pciVUD2vPH", sortAsc = true)
+        val collections = collectionClient.getCollectionsAll(limit = 2, continuation = "KT1R9eGJniFyPmCtwFqv5K7U49pciVUD2vPH", sortAsc = true)
         assertThat(collections.items).hasSize(2)
-        assertThat(collections.continuation).isEqualTo("1662734520407_KT1RL42TjespD4myAqomNdDaWBvgS1PokEZ9")
+        assertThat(collections.continuation).isEqualTo("KT1RL42TjespD4myAqomNdDaWBvgS1PokEZ9")
     }
 }

@@ -28,8 +28,7 @@ object CollectionConverter {
             name = meta?.name ?: "Unnamed Collection",
             minters = listOf(),
             standard = null,
-            symbol = null,
-            updated = OffsetDateTime.parse(source.db_updated_at.toString()).toInstant()
+            symbol = null
         )
     }
 

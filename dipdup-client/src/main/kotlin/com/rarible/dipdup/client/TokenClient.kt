@@ -57,7 +57,7 @@ class TokenClient(
                 convertAllContinuationDesc(response.token_with_meta)
             }
         }
-        return Page.of(tokens, limit)
+        return Page.of(tokens, limit) { TimestampIdContinuation(it.updated, it.id) }
     }
 
     private fun orderBy(id: Optional<order_by>?, updated: Optional<order_by>?) = Token_with_meta_order_by(

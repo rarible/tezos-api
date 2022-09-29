@@ -7,11 +7,10 @@ import java.time.Instant
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 data class DipDupCollection(
-    override val id: String,
-    override val updated: Instant,
+    val id: String,
     val owner: String,
     val name: String,
     val symbol: String?,
     val standard: String?,
     val minters: List<String> = emptyList()
-) : DipDupEntity
+)

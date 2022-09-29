@@ -42,18 +42,17 @@ class CollectionClient(
             val response = safeExecution(request)
             convertAll(response.collection_with_meta)
         } else {
-            val parsed = TimestampIdContinuation.parse(continuation)
             if (sortAsc) {
-                val request = GetCollectionsAllContinuationAscQuery(limit, parsed.id)
+                val request = GetCollectionsAllContinuationAscQuery(limit, continuation)
                 val response = safeExecution(request)
                 convertAllContinuationAsc(response.collection_with_meta)
             } else {
-                val request = GetCollectionsAllContinuationDescQuery(limit, parsed.id)
+                val request = GetCollectionsAllContinuationDescQuery(limit, continuation)
                 val response = safeExecution(request)
                 convertAllContinuationDesc(response.collection_with_meta)
             }
         }
-        return Page.of(collections, limit)
+        return Page.of(collections, limit)  { it.id }
     }
 
     private fun orderBy(id: Optional<order_by>?, updated: Optional<order_by>?) = Collection_with_meta_order_by(

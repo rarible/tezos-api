@@ -56,7 +56,7 @@ class OwnershipClient(
                 convertAllContinuationDesc(response.ownership)
             }
         }
-        return Page.of(ownerships, limit)
+        return Page.of(ownerships, limit) { TimestampIdContinuation(it.updated, it.id) }
     }
 
     suspend fun getOwnershipsByItem(
@@ -75,7 +75,7 @@ class OwnershipClient(
             val response = safeExecution(request)
             convertByItemContinuation(response.ownership)
         }
-        return Page.of(ownerships, limit)
+        return Page.of(ownerships, limit) { TimestampIdContinuation(it.updated, it.id) }
     }
 
     private fun orderBy(id: Optional<order_by>?, updated: Optional<order_by>?) = Ownership_order_by(
