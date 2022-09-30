@@ -6,8 +6,8 @@ fragment royalties on royalties {
     db_updated_at
 }
 
-query GetRoyaltiesByIds($ids: [String!]!) {
-    royalties(where: {contract: {_in: $ids}}) {
+query GetRoyaltiesByIds($ids: [uuid!]!) {
+    royalties(where: {id: {_in: $ids}}) {
         ...royalties
     }
 }
