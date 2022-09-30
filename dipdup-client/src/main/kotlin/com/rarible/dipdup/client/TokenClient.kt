@@ -14,10 +14,13 @@ import com.rarible.dipdup.client.exception.DipDupNotFound
 import com.rarible.dipdup.client.model.Page
 import com.rarible.dipdup.client.type.Token_order_by
 import com.rarible.dipdup.client.type.order_by
+import com.sun.org.slf4j.internal.LoggerFactory
 
 class TokenClient(
     client: ApolloClient
 ) : BaseClient(client) {
+
+    val logger = LoggerFactory.getLogger(javaClass)
 
     suspend fun getTokenById(id: String): DipDupItem {
         return getTokensByIds(listOf(id)).firstOrNull() ?: throw DipDupNotFound(id)
@@ -29,7 +32,12 @@ class TokenClient(
         val response = safeExecution(request)
         val data = response.metadata_token.firstOrNull()
         val metadata = data?.metadata.takeUnless { it.isNullOrEmpty() }?.let { processMetadata(it) }
-        return metadata ?: throw DipDupNotFound(id)
+        return if (metadata != null) {
+            metadata
+        } else {
+            logger.warn("DipDup metadata wasn't found for $id")
+            throw DipDupNotFound(id)
+        }
     }
 
     suspend fun getTokensByIds(ids: List<String>): List<DipDupItem> {

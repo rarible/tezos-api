@@ -11,7 +11,6 @@ data class TokenMeta(
 ) {
 
     companion object {
-        val EMPTY = TokenMeta(name = "Untitled")
         val UNTITLED = "Untitled"
     }
 
