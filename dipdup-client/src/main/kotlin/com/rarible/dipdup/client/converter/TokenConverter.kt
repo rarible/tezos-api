@@ -17,13 +17,13 @@ import java.time.OffsetDateTime
 object TokenConverter {
     val mapper = MetaUtils.mapper()
 
-    fun convertByIds(source: List<GetTokensByIdsQuery.Token_with_metum>) = source.map { convert(it.token) }
+    fun convertByIds(source: List<GetTokensByIdsQuery.Token>) = source.map { convert(it.token) }
 
-    fun convertAll(source: List<GetTokensAllQuery.Token_with_metum>) = source.map { convert(it.token) }
-    fun convertAllContinuationAsc(source: List<GetTokensAllContinuationAscQuery.Token_with_metum>) =
+    fun convertAll(source: List<GetTokensAllQuery.Token>) = source.map { convert(it.token) }
+    fun convertAllContinuationAsc(source: List<GetTokensAllContinuationAscQuery.Token>) =
         source.map { convert(it.token) }
 
-    fun convertAllContinuationDesc(source: List<GetTokensAllContinuationDescQuery.Token_with_metum>) =
+    fun convertAllContinuationDesc(source: List<GetTokensAllContinuationDescQuery.Token>) =
         source.map { convert(it.token) }
 
     fun convert(source: Token) = DipDupItem(
@@ -35,11 +35,10 @@ object TokenConverter {
         updated = OffsetDateTime.parse(source.updated.toString()).toInstant(),
         contract = source.contract,
         deleted = source.deleted,
-        tzktId = source.tzkt_id.toString().toBigInteger(),
-        metadata = process_metadata(source.metadata)
+        tzktId = source.tzkt_id.toString().toBigInteger()
     )
 
-    fun process_metadata(metadata: String?): TokenMeta {
+    fun processMetadata(metadata: String?): TokenMeta {
         return if (!metadata.isNullOrEmpty()){
             val map: Map<String, Any> = mapper.readValue(metadata)
             val meta: TokenMeta.TzktMeta = mapper.convertValue(adjustMeta(map))

@@ -17,14 +17,14 @@ class TokenClientFt : BaseClientFt() {
 //        runBlocking { ApolloClient.Builder().serverUrl("https://dev-tezos-indexer.rarible.org/v1/graphql").build() }
 //    val tokenClient = TokenClient(local)
 
-   val tokenClient = TokenClient(client)
+    val tokenClient = TokenClient(client)
 
     @Test
     fun `should return token`() = runBlocking<Unit> {
         mock(
             """{
               "data": {
-                "token_with_meta": [
+                "token": [
                   {
                     "__typename": "token",
                     "contract": "KT1AxXMGmoQUH3wdDF5gqpANSGKHpTR4xsaj",
@@ -44,7 +44,8 @@ class TokenClientFt : BaseClientFt() {
             }"""
         )
 
-        val token = tokenClient.getTokenById("KT1AxXMGmoQUH3wdDF5gqpANSGKHpTR4xsaj:3") // 53802e5b-8ff1-5db5-b3b3-2d5e610c7b14
+        val token =
+            tokenClient.getTokenById("KT1AxXMGmoQUH3wdDF5gqpANSGKHpTR4xsaj:3") // 53802e5b-8ff1-5db5-b3b3-2d5e610c7b14
         assertThat(token).isEqualTo(
             DipDupItem(
                 contract = "KT1AxXMGmoQUH3wdDF5gqpANSGKHpTR4xsaj",
@@ -55,14 +56,42 @@ class TokenClientFt : BaseClientFt() {
                 supply = BigInteger("1"),
                 tokenId = BigInteger("3"),
                 tzktId = BigInteger("120741"),
-                updated = OffsetDateTime.parse("2022-09-20T09:50:45Z").toInstant(),
-                metadata = TokenMeta(
-                    name = "Legio II - Sabina",
-                    description = null,
-                    attributes = emptyList(),
-                    tags = emptyList(),
-                    content = listOf(
-                        TokenMeta.Content(uri = "ipfs://QmUpULc4JHvcnXbhUmhdf59XZo9o6oBg8wNbYPYd4Tgu8p", mimeType="image/jpeg", representation= TokenMeta.Representation.ORIGINAL))
+                updated = OffsetDateTime.parse("2022-09-20T09:50:45Z").toInstant()
+            )
+        )
+    }
+
+    @Test
+    fun `should return token meta`() = runBlocking<Unit> {
+        mock(
+            """{
+              "data": {
+                "metadata_token": [
+                  {
+                    "id": "8f378bc9-d266-57f3-b117-59547e0215df",
+                    "contract": "KT1AxXMGmoQUH3wdDF5gqpANSGKHpTR4xsaj",
+                    "token_id": "3",
+                    "metadata": "{'artifactUri': 'ipfs://QmUpULc4JHvcnXbhUmhdf59XZo9o6oBg8wNbYPYd4Tgu8p', 'decimals': '0', 'name': 'Legio II - Sabina', 'symbol': 'LEGIO-II'}",
+                    "db_updated_at": "2022-09-20T10:04:23.840596+00:00"
+                  }
+                ]
+              }
+            }"""
+        )
+
+        val meta = tokenClient.getTokenMetaById("KT1AxXMGmoQUH3wdDF5gqpANSGKHpTR4xsaj:3") // 53802e5b-8ff1-5db5-b3b3-2d5e610c7b14
+        assertThat(meta).isEqualTo(
+            TokenMeta(
+                name = "Legio II - Sabina",
+                description = null,
+                attributes = emptyList(),
+                tags = emptyList(),
+                content = listOf(
+                    TokenMeta.Content(
+                        uri = "ipfs://QmUpULc4JHvcnXbhUmhdf59XZo9o6oBg8wNbYPYd4Tgu8p",
+                        mimeType = "image/jpeg",
+                        representation = TokenMeta.Representation.ORIGINAL
+                    )
                 )
             )
         )
@@ -73,7 +102,7 @@ class TokenClientFt : BaseClientFt() {
         mock(
             """{
               "data": {
-                "token_with_meta": [
+                "token": [
                   {
                     "__typename": "token",
                     "contract": "KT1HWoi3YovbJfzymqZMsW3ae3r4z4LzTDzp",
@@ -102,7 +131,7 @@ class TokenClientFt : BaseClientFt() {
         mock(
             """{
               "data": {
-                "token_with_meta": [
+                "token": [
                   {
                     "__typename": "token",
                     "contract": "KT1DtQV5qTnxdG49GbMRdKC8fg7bpvPLNcpm",
@@ -137,7 +166,7 @@ class TokenClientFt : BaseClientFt() {
         mock(
             """{
               "data": {
-                "token_with_meta": [
+                "token": [
                   {
                     "__typename": "token",
                     "contract": "KT1ME54FMgDcFjWPp272DzMHkeD2DuijwJfo",
