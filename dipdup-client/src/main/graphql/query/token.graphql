@@ -17,7 +17,7 @@ query GetTokensByIds($ids: [uuid!]!) {
 }
 
 query GetTokenMetaById($id: uuid!) {
-    metadata_token(where: {id: {_eq: $id}, metadata_synced: {_eq: true}}) {
+    metadata_token(where: {id: {_eq: $id}, metadata_synced: {_eq: true}, metadata: {_is_null: false}}) {
         id
         contract
         db_updated_at
