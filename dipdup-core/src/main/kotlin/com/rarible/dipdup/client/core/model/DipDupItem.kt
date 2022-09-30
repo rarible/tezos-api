@@ -15,7 +15,7 @@ data class DipDupItem(
         override val updated: Instant,
         val contract: String,
         val deleted: Boolean,
-        val tzktId: BigInteger
+        val tzktId: BigInteger?
 ) : DipDupEntity {
         companion object {
                 fun itemId(contract: String, tokenId: BigInteger): String {
