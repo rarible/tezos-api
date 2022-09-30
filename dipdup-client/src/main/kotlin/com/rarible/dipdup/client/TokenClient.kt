@@ -27,8 +27,9 @@ class TokenClient(
         val uuid = toUuid5(id)
         val request = GetTokenMetaByIdQuery(uuid)
         val response = safeExecution(request)
-        val metadata = response.metadata_token.firstOrNull()
-        return metadata?.let { processMetadata(it.metadata) } ?: throw DipDupNotFound(id)
+        val data = response.metadata_token.firstOrNull()
+        val metadata = data?.metadata.takeUnless { it.isNullOrEmpty() }?.let { processMetadata(it) }
+        return metadata ?: throw DipDupNotFound(id)
     }
 
     suspend fun getTokensByIds(ids: List<String>): List<DipDupItem> {
