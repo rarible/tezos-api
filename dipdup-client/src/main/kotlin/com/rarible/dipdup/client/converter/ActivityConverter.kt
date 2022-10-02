@@ -1,10 +1,10 @@
 package com.rarible.dipdup.client.converter
 
-import com.rarible.dipdup.client.GetActivitiesAscQuery
-import com.rarible.dipdup.client.GetActivitiesByIdsQuery
-import com.rarible.dipdup.client.GetActivitiesByItemAscQuery
-import com.rarible.dipdup.client.GetActivitiesByItemDescQuery
-import com.rarible.dipdup.client.GetActivitiesDescQuery
+import com.rarible.dipdup.client.GetOrderActivitiesAscQuery
+import com.rarible.dipdup.client.GetOrderActivitiesByIdsQuery
+import com.rarible.dipdup.client.GetOrderActivitiesByItemAscQuery
+import com.rarible.dipdup.client.GetOrderActivitiesByItemDescQuery
+import com.rarible.dipdup.client.GetOrderActivitiesDescQuery
 import com.rarible.dipdup.client.core.model.Asset
 import com.rarible.dipdup.client.core.model.DipDupActivity
 import com.rarible.dipdup.client.core.model.DipDupOrderCancelActivity
@@ -28,23 +28,23 @@ fun convert(source: Activity) = activityEvent(
     take = getAsset(source.take_asset_class, source.take_contract, source.take_token_id, source.take_value)
 )
 
-fun convertAllDesc(source: List<GetActivitiesDescQuery.Marketplace_activity>): List<DipDupActivity> {
+fun convertAllDesc(source: List<GetOrderActivitiesDescQuery.Marketplace_activity>): List<DipDupActivity> {
     return source.map { convert(it.activity) }
 }
 
-fun convertAllAsc(source: List<GetActivitiesAscQuery.Marketplace_activity>): List<DipDupActivity> {
+fun convertAllAsc(source: List<GetOrderActivitiesAscQuery.Marketplace_activity>): List<DipDupActivity> {
     return source.map { convert(it.activity) }
 }
 
-fun convertByItemDesc(source: List<GetActivitiesByItemDescQuery.Marketplace_activity>): List<DipDupActivity> {
+fun convertByItemDesc(source: List<GetOrderActivitiesByItemDescQuery.Marketplace_activity>): List<DipDupActivity> {
     return source.map { convert(it.activity) }
 }
 
-fun convertByItemAsc(source: List<GetActivitiesByItemAscQuery.Marketplace_activity>): List<DipDupActivity> {
+fun convertByItemAsc(source: List<GetOrderActivitiesByItemAscQuery.Marketplace_activity>): List<DipDupActivity> {
     return source.map { convert(it.activity) }
 }
 
-fun convertByIds(source: List<GetActivitiesByIdsQuery.Marketplace_activity>): List<DipDupActivity> {
+fun convertByIds(source: List<GetOrderActivitiesByIdsQuery.Marketplace_activity>): List<DipDupActivity> {
     return source.map { convert(it.activity) }
 }
 

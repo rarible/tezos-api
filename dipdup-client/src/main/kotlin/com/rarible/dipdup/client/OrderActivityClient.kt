@@ -29,7 +29,7 @@ class OrderActivityClient(
         val activities = when (sortAsc) {
             true -> convertAllAsc(
                 safeExecution(
-                    GetActivitiesAscQuery(
+                    GetOrderActivitiesAscQuery(
                         types.map { it.name },
                         limit,
                         date.toString(),
@@ -39,7 +39,7 @@ class OrderActivityClient(
             )
             else -> convertAllDesc(
                 safeExecution(
-                    GetActivitiesDescQuery(
+                    GetOrderActivitiesDescQuery(
                         types.map { it.name },
                         limit,
                         date.toString(),
@@ -63,7 +63,7 @@ class OrderActivityClient(
         val activities = when (sortAsc) {
             true -> convertByItemAsc(
                 safeExecution(
-                    GetActivitiesByItemAscQuery(
+                    GetOrderActivitiesByItemAscQuery(
                         types.map { it.name },
                         contract,
                         tokenId,
@@ -75,7 +75,7 @@ class OrderActivityClient(
             )
             else -> convertByItemDesc(
                 safeExecution(
-                    GetActivitiesByItemDescQuery(
+                    GetOrderActivitiesByItemDescQuery(
                         types.map { it.name },
                         contract,
                         tokenId,
@@ -90,7 +90,7 @@ class OrderActivityClient(
     }
 
     suspend fun getActivitiesByIds(ids: List<String>): List<DipDupActivity> {
-        val response = safeExecution(GetActivitiesByIdsQuery(ids))
+        val response = safeExecution(GetOrderActivitiesByIdsQuery(ids))
         return convertByIds(response.marketplace_activity)
     }
 
@@ -100,7 +100,7 @@ class OrderActivityClient(
             val parsed = DipDupActivityContinuation.parse(it)!!
             date = parsed.date
             if (isValidUUID(parsed.id)) {
-                val response = safeExecution(GetActivitiesByIdsQuery(listOf(parsed.id)))
+                val response = safeExecution(GetOrderActivitiesByIdsQuery(listOf(parsed.id)))
                 if (response.marketplace_activity.size > 0) {
                     id = response.marketplace_activity.first().activity.operation_counter
                 }

@@ -20,7 +20,7 @@ fragment activity on marketplace_activity {
     taker
 }
 
-query GetActivitiesDesc($types: [String!]!, $limit: Int!, $prevDate: timestamptz!, $prevId: Int!) {
+query GetOrderActivitiesDesc($types: [String!]!, $limit: Int!, $prevDate: timestamptz!, $prevId: Int!) {
     marketplace_activity(
         where: {_or: [
             {operation_timestamp: {_lt: $prevDate}},
@@ -33,7 +33,7 @@ query GetActivitiesDesc($types: [String!]!, $limit: Int!, $prevDate: timestamptz
     }
 }
 
-query GetActivitiesAsc($types: [String!]!, $limit: Int!, $prevDate: timestamptz!, $prevId: Int!) {
+query GetOrderActivitiesAsc($types: [String!]!, $limit: Int!, $prevDate: timestamptz!, $prevId: Int!) {
     marketplace_activity(
         where: {_or: [
             {operation_timestamp: {_gt: $prevDate}},
@@ -46,7 +46,7 @@ query GetActivitiesAsc($types: [String!]!, $limit: Int!, $prevDate: timestamptz!
     }
 }
 
-query GetActivitiesByItemDesc($types: [String!]!, $contract: String!, $tokenId: String!, $limit: Int!, $prevDate: timestamptz!, $prevId: Int!) {
+query GetOrderActivitiesByItemDesc($types: [String!]!, $contract: String!, $tokenId: String!, $limit: Int!, $prevDate: timestamptz!, $prevId: Int!) {
     marketplace_activity(
         where: {_or: [
             {operation_timestamp: {_lt: $prevDate}},
@@ -59,7 +59,7 @@ query GetActivitiesByItemDesc($types: [String!]!, $contract: String!, $tokenId: 
     }
 }
 
-query GetActivitiesByItemAsc($types: [String!]!, $contract: String!, $tokenId: String!, $limit: Int!, $prevDate: timestamptz!, $prevId: Int!) {
+query GetOrderActivitiesByItemAsc($types: [String!]!, $contract: String!, $tokenId: String!, $limit: Int!, $prevDate: timestamptz!, $prevId: Int!) {
     marketplace_activity(
         where: {_or: [
             {operation_timestamp: {_gt: $prevDate}},
@@ -72,7 +72,7 @@ query GetActivitiesByItemAsc($types: [String!]!, $contract: String!, $tokenId: S
     }
 }
 
-query GetActivitiesByIds($ids: [uuid!]!) {
+query GetOrderActivitiesByIds($ids: [uuid!]!) {
     marketplace_activity(
         where: {id: {_in: $ids}},
         order_by: {id: desc}
