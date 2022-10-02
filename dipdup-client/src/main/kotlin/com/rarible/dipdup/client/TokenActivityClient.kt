@@ -1,13 +1,12 @@
 package com.rarible.dipdup.client
 
 import com.apollographql.apollo3.ApolloClient
-import com.rarible.dipdup.client.converter.convertAllAsc
-import com.rarible.dipdup.client.converter.convertByIds
-import com.rarible.dipdup.client.converter.convertAllDesc
-import com.rarible.dipdup.client.converter.convertByItemAsc
-import com.rarible.dipdup.client.converter.convertByItemDesc
+import com.rarible.dipdup.client.converter.convertTokenActivitiesAllAsc
+import com.rarible.dipdup.client.converter.convertTokenActivitiesAllDesc
+import com.rarible.dipdup.client.converter.convertTokenActivitiesByItemAsc
+import com.rarible.dipdup.client.converter.convertTokenActivitiesByItemDesc
+import com.rarible.dipdup.client.converter.convertTokensActivitiesByIds
 import com.rarible.dipdup.client.core.model.DipDupActivity
-import com.rarible.dipdup.client.core.util.isValidUUID
 import com.rarible.dipdup.client.model.DipDupActivitiesPage
 import com.rarible.dipdup.client.model.DipDupActivityContinuation
 import com.rarible.dipdup.client.model.DipDupActivityType
@@ -15,7 +14,7 @@ import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 
-class OrderActivityClient(
+class TokenActivityClient(
     client: ApolloClient
 ) : BaseClient(client) {
 
@@ -25,27 +24,29 @@ class OrderActivityClient(
         continuation: String? = null,
         sortAsc: Boolean = false
     ): DipDupActivitiesPage {
-        val (date, id) = activityOperation(continuation, sortAsc)
+        var (date, id) = continuation?.let { DipDupActivityContinuation.parse(it) }
+            ?.let { Pair(it.date, it.id.toLong()) } ?: mockContinuation(sortAsc)
         val activities = when (sortAsc) {
-            true -> convertAllAsc(
+            false -> convertTokenActivitiesAllDesc(
                 safeExecution(
-                    GetOrderActivitiesAscQuery(
+                    GetTokenActivitiesDescQuery(
                         types.map { it.name },
                         limit,
                         date.toString(),
                         id
                     )
-                ).marketplace_activity
+                ).token_transfer
             )
-            else -> convertAllDesc(
+
+            else -> convertTokenActivitiesAllAsc(
                 safeExecution(
-                    GetOrderActivitiesDescQuery(
+                    GetTokenActivitiesAscQuery(
                         types.map { it.name },
                         limit,
                         date.toString(),
                         id
                     )
-                ).marketplace_activity
+                ).token_transfer
             )
         }
         return page(activities, limit)
@@ -59,11 +60,12 @@ class OrderActivityClient(
         continuation: String? = null,
         sortAsc: Boolean = false
     ): DipDupActivitiesPage {
-        val (date, id) = activityOperation(continuation, sortAsc)
+        var (date, id) = continuation?.let { DipDupActivityContinuation.parse(it) }
+            ?.let { Pair(it.date, it.id.toLong()) } ?: mockContinuation(sortAsc)
         val activities = when (sortAsc) {
-            true -> convertByItemAsc(
+            false -> convertTokenActivitiesByItemDesc(
                 safeExecution(
-                    GetOrderActivitiesByItemAscQuery(
+                    GetTokenActivitiesByItemDescQuery(
                         types.map { it.name },
                         contract,
                         tokenId,
@@ -71,11 +73,12 @@ class OrderActivityClient(
                         date.toString(),
                         id
                     )
-                ).marketplace_activity
+                ).token_transfer
             )
-            else -> convertByItemDesc(
+
+            else -> convertTokenActivitiesByItemAsc(
                 safeExecution(
-                    GetOrderActivitiesByItemDescQuery(
+                    GetTokenActivitiesByItemAscQuery(
                         types.map { it.name },
                         contract,
                         tokenId,
@@ -83,30 +86,15 @@ class OrderActivityClient(
                         date.toString(),
                         id
                     )
-                ).marketplace_activity
+                ).token_transfer
             )
         }
         return page(activities, limit)
     }
 
     suspend fun getActivitiesByIds(ids: List<String>): List<DipDupActivity> {
-        val response = safeExecution(GetOrderActivitiesByIdsQuery(ids))
-        return convertByIds(response.marketplace_activity)
-    }
-
-    suspend fun activityOperation(continuation: String?, sortAsc: Boolean): Pair<OffsetDateTime, Int> {
-        var (date, id) = mockContinuation(sortAsc)
-        continuation?.let {
-            val parsed = DipDupActivityContinuation.parse(it)!!
-            date = parsed.date
-            if (isValidUUID(parsed.id)) {
-                val response = safeExecution(GetOrderActivitiesByIdsQuery(listOf(parsed.id)))
-                if (response.marketplace_activity.size > 0) {
-                    id = response.marketplace_activity.first().order_activity.operation_counter
-                }
-            }
-        }
-        return date to id
+        val response = safeExecution(GetTokenActivitiesByIdsQuery(ids))
+        return convertTokensActivitiesByIds(response.token_transfer)
     }
 
     private fun page(activities: List<DipDupActivity>, limit: Int): DipDupActivitiesPage {
@@ -114,6 +102,7 @@ class OrderActivityClient(
             limit -> activities[limit - 1].let {
                 DipDupActivityContinuation(it.date, it.id).toString()
             }
+
             else -> null
         }
         return DipDupActivitiesPage(
@@ -122,11 +111,10 @@ class OrderActivityClient(
         )
     }
 
-    private fun mockContinuation(sortAsc: Boolean): Pair<OffsetDateTime, Int> {
+    private fun mockContinuation(sortAsc: Boolean): Pair<OffsetDateTime, Long> {
         return when (sortAsc) {
             true -> LocalDateTime.now().minusYears(1000).atOffset(ZoneOffset.UTC) to 0
-            else -> LocalDateTime.now().plusYears(1000).atOffset(ZoneOffset.UTC) to Int.MAX_VALUE
+            else -> LocalDateTime.now().plusYears(1000).atOffset(ZoneOffset.UTC) to Long.MAX_VALUE
         }
     }
-
 }

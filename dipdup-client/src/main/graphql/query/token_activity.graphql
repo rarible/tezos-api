@@ -1,0 +1,74 @@
+fragment token_activity on token_transfer {
+    id
+    amount
+    contract
+    date
+    from_address
+    hash
+    to_address
+    token_id
+    type
+    tzkt_token_id
+    tzkt_transaction_id
+}
+
+query GetTokenActivitiesDesc($types: [String!]!, $limit: Int!, $prevDate: timestamptz!, $prevId: bigint!) {
+    token_transfer(
+        where: {_or: [
+            {date: {_lt: $prevDate}},
+            {date: {_eq: $prevDate},
+                id: {_lt: $prevId}}], type: {_in: $types}}
+        order_by: {date: desc, id: desc},
+        limit: $limit
+    ) {
+        ...token_activity
+    }
+}
+
+query GetTokenActivitiesAsc($types: [String!]!, $limit: Int!, $prevDate: timestamptz!, $prevId: bigint!) {
+    token_transfer(
+        where: {_or: [
+            {date: {_gt: $prevDate}},
+            {date: {_eq: $prevDate},
+                id: {_gt: $prevId}}], type: {_in: $types}}
+        order_by: {date: asc, id: asc},
+        limit: $limit
+    ) {
+        ...token_activity
+    }
+}
+
+query GetTokenActivitiesByItemDesc($types: [String!]!, $contract: String!, $tokenId: String!, $limit: Int!, $prevDate: timestamptz!, $prevId: bigint!) {
+    token_transfer(
+        where: {_or: [
+            {date: {_lt: $prevDate}},
+            {date: {_eq: $prevDate},
+                id: {_lt: $prevId}}], type: {_in: $types}, contract: {_eq: $contract}, token_id: {_eq: $tokenId}}
+        order_by: {date: desc, id: desc},
+        limit: $limit
+    ) {
+        ...token_activity
+    }
+}
+
+query GetTokenActivitiesByItemAsc($types: [String!]!, $contract: String!, $tokenId: String!, $limit: Int!, $prevDate: timestamptz!, $prevId: bigint!) {
+    token_transfer(
+        where: {_or: [
+            {date: {_gt: $prevDate}},
+            {date: {_eq: $prevDate},
+                id: {_gt: $prevId}}], type: {_in: $types}, contract: {_eq: $contract}, token_id: {_eq: $tokenId}}
+        order_by: {date: asc, id: asc},
+        limit: $limit
+    ) {
+        ...token_activity
+    }
+}
+
+query GetTokenActivitiesByIds($ids: [bigint!]!) {
+    token_transfer(
+        where: {id: {_in: $ids}},
+        order_by: {id: desc}
+    ) {
+        ...token_activity
+    }
+}

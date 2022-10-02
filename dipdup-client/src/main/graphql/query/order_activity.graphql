@@ -1,4 +1,4 @@
-fragment activity on marketplace_activity {
+fragment order_activity on marketplace_activity {
     type
     id
     internal_order_id
@@ -29,7 +29,7 @@ query GetOrderActivitiesDesc($types: [String!]!, $limit: Int!, $prevDate: timest
         order_by: {operation_timestamp: desc, operation_counter: desc},
         limit: $limit
     ) {
-        ...activity
+        ...order_activity
     }
 }
 
@@ -42,7 +42,7 @@ query GetOrderActivitiesAsc($types: [String!]!, $limit: Int!, $prevDate: timesta
         order_by: {operation_timestamp: asc, operation_counter: asc},
         limit: $limit
     ) {
-        ...activity
+        ...order_activity
     }
 }
 
@@ -55,7 +55,7 @@ query GetOrderActivitiesByItemDesc($types: [String!]!, $contract: String!, $toke
         order_by: {operation_timestamp: desc, operation_counter: desc},
         limit: $limit
     ) {
-        ...activity
+        ...order_activity
     }
 }
 
@@ -68,7 +68,7 @@ query GetOrderActivitiesByItemAsc($types: [String!]!, $contract: String!, $token
         order_by: {operation_timestamp: asc, operation_counter: asc},
         limit: $limit
     ) {
-        ...activity
+        ...order_activity
     }
 }
 
@@ -77,6 +77,6 @@ query GetOrderActivitiesByIds($ids: [uuid!]!) {
         where: {id: {_in: $ids}},
         order_by: {id: desc}
     ) {
-        ...activity
+        ...order_activity
     }
 }
