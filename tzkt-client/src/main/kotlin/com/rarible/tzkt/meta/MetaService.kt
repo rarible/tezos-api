@@ -58,7 +58,7 @@ class MetaService(
         return if (null != token.metadata) {
             val meta: TzktMeta = mapper.convertValue(adjustMeta(token.metadata))
             var tokenAttributes = meta.attributes
-            if (token.contract?.address == knownAddresses.dogami || token.contract?.address == knownAddresses.dogamiGap) {
+            if (token.contract?.address in listOf(knownAddresses.dogami, knownAddresses.dogamiGap, knownAddresses.dogamiStar)) {
                 val attributesData: String = token.metadata["attributes"] as String
                 val attributes = Micheline.Companion.unpackFromString(attributesData) as MichelineSequence
                 tokenAttributes = getDogamiAttributes(attributes)
