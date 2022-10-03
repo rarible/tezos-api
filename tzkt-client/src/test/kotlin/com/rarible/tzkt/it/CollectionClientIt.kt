@@ -71,4 +71,14 @@ class CollectionClientIt {
         val collections = collectionClient.collectionsByIds(listOf("KT1Wu8T6APWm9hfn8cjkWthiPNVSRBeht7r3"))
         assertThat(collections).hasSize(1)
     }
+
+    @Test
+    fun `should return collections all by continuation`() = runBlocking<Unit> {
+        val collectionClient = client("https://api.tzkt.io")
+        val collections = collectionClient.collectionsAll(size = 10, continuation = null, sortAsc = false)
+        assertThat(collections.items).hasSize(10)
+
+        val collectionsNext = collectionClient.collectionsAll(size = 10, continuation = collections.continuation, sortAsc = false)
+        assertThat(collectionsNext.items).hasSize(10)
+    }
 }
