@@ -216,7 +216,7 @@ class ActivityClientTests : BaseClientTests() {
             ]
         """.trimIndent())
 
-        var activities = activityClient.getActivitiesByIds(listOf(23818305, 23820166).map { it.toString() })
+        var activities = activityClient.getActivitiesByIds(listOf(23818305, 23820166).map { it.toString() }, true)
 
         assertThat(activities).hasSize(2)
         assertThat(activities.first().tokenActivity.transactionHash).isNotEmpty
