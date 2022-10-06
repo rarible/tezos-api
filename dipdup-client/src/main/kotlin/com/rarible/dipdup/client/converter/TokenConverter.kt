@@ -34,6 +34,7 @@ object TokenConverter {
         supply = BigDecimal(source.supply.toString()).toBigInteger(),
         tokenId = BigInteger(source.token_id),
         updated = OffsetDateTime.parse(source.updated.toString()).toInstant(),
+        creator = source.creator,
         contract = source.contract,
         deleted = source.deleted,
         tzktId = source.tzkt_id.toString().toBigInteger()
