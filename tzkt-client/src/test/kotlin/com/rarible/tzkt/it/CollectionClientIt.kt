@@ -66,6 +66,7 @@ class CollectionClientIt {
     }
 
     @Test
+    @Disabled
     fun `should return collections`() = runBlocking<Unit> {
         val collectionClient = client("http://tezos-tzkt.testnet.rarible.int")
         val collections = collectionClient.collectionsByIds(listOf("KT1Wu8T6APWm9hfn8cjkWthiPNVSRBeht7r3"))
