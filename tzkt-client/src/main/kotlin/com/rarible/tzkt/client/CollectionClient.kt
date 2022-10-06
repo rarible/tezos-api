@@ -36,29 +36,29 @@ class CollectionClient(
     }
 
     suspend fun collectionsAll(size: Int = DEFAULT_SIZE, continuation: String?, sortAsc: Boolean = true): Page<Contract> {
+        val firstActivity = continuation?.let { collection(it, false).firstActivity }
         val collections = invoke<List<Contract>> { builder ->
             builder.path(BASE_PATH)
                 .queryParam("kind", "asset")
                 .queryParam("tzips.all", "fa2")
                 .apply {
                     size?.let { queryParam("limit", it) }
-                    continuation?.let { queryParam("offset", it) }
+                    firstActivity?.let { queryParam("offset.cr", it) }
                     queryParam("sort.${sorting(sortAsc)}", "firstActivity")
                 }
         }
-        return Page(collections, offset(continuation, collections))
+        return Page(collections, offset(size, collections))
     }
 
-    fun <T> offset(prevOffset: String?, items: List<T>): String? {
+    fun offset(size: Int, items: List<Contract>): String? {
         return when {
-            prevOffset == null && items.isNotEmpty() -> items.size.toString()
-            prevOffset != null && items.isNotEmpty() -> (prevOffset.toInt() + items.size).toString()
-            prevOffset != null && items.isEmpty() -> prevOffset
+            size == items.size -> items.last().address
             else -> null
         }
     }
 
     suspend fun collectionsByOwner(owner: String, size: Int = DEFAULT_SIZE, continuation: String?, sortAsc: Boolean = true): Page<Contract> {
+        val firstActivity = continuation?.let { collection(it, false).firstActivity }
         val collections = invoke<List<Contract>> { builder ->
             builder.path(BASE_PATH)
                 .queryParam("kind", "asset")
@@ -66,11 +66,11 @@ class CollectionClient(
                 .apply {
                     size?.let { queryParam("limit", it) }
                     queryParam("creator.eq", owner)
-                    continuation?.let { queryParam("offset", it) }
+                    firstActivity?.let { queryParam("offset.cr", it) }
                     queryParam("sort.${sorting(sortAsc)}", "firstActivity")
                 }
         }
-        return Page(collections, offset(continuation, collections))
+        return Page(collections, offset(size, collections))
     }
 
     suspend fun collectionType(contract: String): CollectionType {

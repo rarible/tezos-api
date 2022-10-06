@@ -25,13 +25,17 @@ class TokenActivityClient(
         wrapHash: Boolean = false
     ) = activitiesWrapper(null, null, size, continuation, sortAsc, types, wrapHash)
 
-    suspend fun getActivitiesByIds(ids: List<String>): List<TypedTokenActivity> {
+    suspend fun getActivitiesByIds(ids: List<String>, wrapHash: Boolean = false): List<TypedTokenActivity> {
         val activities: List<TokenActivity> = withBatch(ids) { batch ->
             invoke { builder ->
                 builder.path(BASE_PATH).queryParam("id.in", batch.joinToString(","))
             }
         }
-        return wrapWithHashes(activities.map(this::mapActivity))
+        return if (wrapHash) {
+            wrapWithHashes(activities.map(this::mapActivity))
+        } else {
+            activities.map(this::mapActivity)
+        }
     }
 
     suspend fun getActivitiesByItem(

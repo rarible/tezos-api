@@ -315,6 +315,7 @@ class CollectionClientTests : BaseClientTests() {
             }]
         """.trimIndent())
 
+        mockSingleAddress()
         mock("""
             [{
             	"type": "contract",
@@ -581,7 +582,8 @@ class CollectionClientTests : BaseClientTests() {
         prevId = 0
         val lastId = collections.items.last().firstActivity!!.toString()
         collections = collectionClient.collectionsAll(size, collections.continuation)
-        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=10&offset=10&sort.asc=firstActivity")
+        assertThat(request().path).isEqualTo("/v1/contracts/KT1AzrrdKcZQ7ApazLcya2VV83WaDrqbvSZr")
+        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=10&offset.cr=1365143&sort.asc=firstActivity")
         collections.items.forEach{
             assertThat(it.kind).isEqualTo("asset")
             assertThat(it.firstActivity).isGreaterThan(prevId)
@@ -839,6 +841,7 @@ class CollectionClientTests : BaseClientTests() {
             }]
         """.trimIndent())
 
+        mockSingleAddress()
         mock("""
             [{
             	"type": "contract",
@@ -1095,7 +1098,8 @@ class CollectionClientTests : BaseClientTests() {
             prevId = it.firstActivity!!
         }
         collections = collectionClient.collectionsAll(size, collections.continuation, false)
-        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=10&offset=10&sort.desc=firstActivity")
+        assertThat(request().path).isEqualTo("/v1/contracts/KT1Kgf6MWTDakEWakDbmh1XouVjhoPFor9MF")
+        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=10&offset.cr=1365143&sort.desc=firstActivity")
         collections.items.forEach{
             assertThat(it.kind).isEqualTo("asset")
             assertThat(it.firstActivity).isLessThan(prevId)
@@ -1220,6 +1224,7 @@ class CollectionClientTests : BaseClientTests() {
 
     @Test
     fun `should return collection by owner with continuation`() = runBlocking<Unit> {
+        mockSingleAddress()
         mock("""
             [{
             	"type": "contract",
@@ -1251,7 +1256,8 @@ class CollectionClientTests : BaseClientTests() {
         """.trimIndent())
 
         val collection = collectionClient.collectionsByOwner("tz1UBZUkXpKGhYsP5KtzDNqLLchwF4uHrGjw", 1, "1", false)
-        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=1&creator.eq=tz1UBZUkXpKGhYsP5KtzDNqLLchwF4uHrGjw&offset=1&sort.desc=firstActivity")
+        assertThat(request().path).isEqualTo("/v1/contracts/1")
+        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=1&creator.eq=tz1UBZUkXpKGhYsP5KtzDNqLLchwF4uHrGjw&offset.cr=1365143&sort.desc=firstActivity")
 
         assertThat(collection.items).hasSize(1)
         assertThat(collection.continuation).isNotNull
@@ -1414,5 +1420,37 @@ class CollectionClientTests : BaseClientTests() {
         val collection = collectionClient.collection("KT1UFkqihyjz1GhxM1hk78CjfcChsBbLGYMm")
         assertThat(collection.name).isEqualTo("123-000")
         assertThat(collection.symbol).isEqualTo("123")
+    }
+
+    fun mockSingleAddress() {
+        mock("""
+            {
+            	"type": "contract",
+            	"address": "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton",
+            	"kind": "asset",
+            	"tzips": ["fa2"],
+            	"alias": "hic et nunc NFTs",
+            	"balance": 0,
+            	"creator": {
+            		"alias": "hicetnunc2000lab",
+            		"address": "tz1UBZUkXpKGhYsP5KtzDNqLLchwF4uHrGjw"
+            	},
+            	"numContracts": 0,
+            	"activeTokensCount": 141,
+            	"tokenBalancesCount": 170,
+            	"tokenTransfersCount": 189,
+            	"numDelegations": 0,
+            	"numOriginations": 1,
+            	"numTransactions": 11065912,
+            	"numReveals": 0,
+            	"numMigrations": 0,
+            	"firstActivity": 1365143,
+            	"firstActivityTime": "2021-03-01T01:59:41Z",
+            	"lastActivity": 2274952,
+            	"lastActivityTime": "2022-04-12T15:04:44Z",
+            	"typeHash": 603828391,
+            	"codeHash": 1973375561
+            }
+        """.trimIndent())
     }
 }
