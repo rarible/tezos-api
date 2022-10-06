@@ -204,6 +204,7 @@ class DeserializerTest {
                     "supply": "1",
                     "minted_at": "2022-09-14T22:24:15+00:00",
                     "updated": "2022-09-14T22:24:15+00:00",
+                    "creator": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
                     "tzkt_id": 123,
                     "deleted": false
                 },
