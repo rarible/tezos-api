@@ -2413,7 +2413,7 @@ type royalties {
 
   id: uuid!
 
-  parts("JSON select path" path: String): jsonb
+  parts("JSON select path" path: String): jsonb!
 
   royalties_retries: Int!
 

@@ -6,6 +6,7 @@ fragment token on token {
     token_id
     updated
     contract
+    creator
     deleted
     tzkt_id
 }
