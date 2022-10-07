@@ -1,7 +1,7 @@
 package com.rarible.dipdup.client
 
-import com.apollographql.apollo3.ApolloClient
 import com.rarible.dipdup.client.core.model.DipDupItem
+import com.rarible.dipdup.client.core.model.Part
 import com.rarible.dipdup.client.core.model.TimestampIdContinuation
 import com.rarible.dipdup.client.core.model.TokenMeta
 import kotlinx.coroutines.runBlocking
@@ -58,7 +58,7 @@ class TokenClientFt : BaseClientFt() {
                 tokenId = BigInteger("3"),
                 tzktId = BigInteger("120741"),
                 updated = OffsetDateTime.parse("2022-09-20T09:50:45Z").toInstant(),
-                creator = "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb"
+                creators = listOf(Part("tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb", 10000))
             )
         )
     }

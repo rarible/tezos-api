@@ -15,7 +15,7 @@ data class DipDupItem(
         override val updated: Instant,
         val contract: String,
         val deleted: Boolean,
-        val creator: String,
+        val creators: List<Part>,
         val tzktId: BigInteger?
 ) : DipDupEntity {
         companion object {

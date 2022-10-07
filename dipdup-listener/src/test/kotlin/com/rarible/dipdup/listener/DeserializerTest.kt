@@ -200,11 +200,12 @@ class DeserializerTest {
                     "id": "KT1JBdb7DBfsDzcDzy7e6QG7hL49kcgYZb1U:52",
                     "contract": "KT1JBdb7DBfsDzcDzy7e6QG7hL49kcgYZb1U",
                     "token_id": "52",
-                    "creators": [],
                     "supply": "1",
                     "minted_at": "2022-09-14T22:24:15+00:00",
                     "updated": "2022-09-14T22:24:15+00:00",
-                    "creator": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+                    "creators": [{
+                        "part_account": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
+                        "part_value": 10000}],
                     "tzkt_id": 123,
                     "deleted": false
                 },
