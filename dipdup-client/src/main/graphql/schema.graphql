@@ -146,11 +146,17 @@ input bigint_comparison_exp {
 columns and relationships of "collection"
 """
 type collection {
-  contract: String!
-
   db_updated_at: timestamptz!
 
+  id: String!
+
+  minters("JSON select path" path: String): jsonb!
+
   owner: String!
+
+  standard: String!
+
+  symbol: String
 }
 
 """
@@ -163,22 +169,34 @@ input collection_bool_exp {
 
   _or: [collection_bool_exp!]
 
-  contract: String_comparison_exp
-
   db_updated_at: timestamptz_comparison_exp
 
+  id: String_comparison_exp
+
+  minters: jsonb_comparison_exp
+
   owner: String_comparison_exp
+
+  standard: String_comparison_exp
+
+  symbol: String_comparison_exp
 }
 
 """
 Ordering options when selecting data from "collection".
 """
 input collection_order_by {
-  contract: order_by
-
   db_updated_at: order_by
 
+  id: order_by
+
+  minters: order_by
+
   owner: order_by
+
+  standard: order_by
+
+  symbol: order_by
 }
 
 """
@@ -188,30 +206,51 @@ enum collection_select_column {
   """
   column name
   """
-  contract
-
-  """
-  column name
-  """
   db_updated_at
 
   """
   column name
   """
+  id
+
+  """
+  column name
+  """
+  minters
+
+  """
+  column name
+  """
   owner
+
+  """
+  column name
+  """
+  standard
+
+  """
+  column name
+  """
+  symbol
 }
 
 """
 columns and relationships of "collection_with_meta"
 """
 type collection_with_meta {
-  contract: String
-
   db_updated_at: timestamptz
+
+  id: String
 
   metadata: String
 
+  minters("JSON select path" path: String): jsonb
+
   owner: String
+
+  standard: String
+
+  symbol: String
 }
 
 """
@@ -224,26 +263,38 @@ input collection_with_meta_bool_exp {
 
   _or: [collection_with_meta_bool_exp!]
 
-  contract: String_comparison_exp
-
   db_updated_at: timestamptz_comparison_exp
+
+  id: String_comparison_exp
 
   metadata: String_comparison_exp
 
+  minters: jsonb_comparison_exp
+
   owner: String_comparison_exp
+
+  standard: String_comparison_exp
+
+  symbol: String_comparison_exp
 }
 
 """
 Ordering options when selecting data from "collection_with_meta".
 """
 input collection_with_meta_order_by {
-  contract: order_by
-
   db_updated_at: order_by
+
+  id: order_by
 
   metadata: order_by
 
+  minters: order_by
+
   owner: order_by
+
+  standard: order_by
+
+  symbol: order_by
 }
 
 """
@@ -253,12 +304,12 @@ enum collection_with_meta_select_column {
   """
   column name
   """
-  contract
+  db_updated_at
 
   """
   column name
   """
-  db_updated_at
+  id
 
   """
   column name
@@ -268,7 +319,22 @@ enum collection_with_meta_select_column {
   """
   column name
   """
+  minters
+
+  """
+  column name
+  """
   owner
+
+  """
+  column name
+  """
+  standard
+
+  """
+  column name
+  """
+  symbol
 }
 
 """
@@ -1823,9 +1889,9 @@ enum marketplace_order_select_column {
 columns and relationships of "metadata_collection"
 """
 type metadata_collection {
-  contract: String!
-
   db_updated_at: timestamptz!
+
+  id: String!
 
   metadata: String
 
@@ -1844,9 +1910,9 @@ input metadata_collection_bool_exp {
 
   _or: [metadata_collection_bool_exp!]
 
-  contract: String_comparison_exp
-
   db_updated_at: timestamptz_comparison_exp
+
+  id: String_comparison_exp
 
   metadata: String_comparison_exp
 
@@ -1859,9 +1925,9 @@ input metadata_collection_bool_exp {
 Ordering options when selecting data from "metadata_collection".
 """
 input metadata_collection_order_by {
-  contract: order_by
-
   db_updated_at: order_by
+
+  id: order_by
 
   metadata: order_by
 
@@ -1877,12 +1943,12 @@ enum metadata_collection_select_column {
   """
   column name
   """
-  contract
+  db_updated_at
 
   """
   column name
   """
-  db_updated_at
+  id
 
   """
   column name
@@ -2175,7 +2241,7 @@ type query_root {
   """
   fetch data from the table: "collection" using primary key columns
   """
-  collection_by_pk(contract: String!): collection
+  collection_by_pk(id: String!): collection
 
   """
   fetch data from the table: "collection_with_meta"
@@ -2305,7 +2371,7 @@ type query_root {
   """
   fetch data from the table: "metadata_collection" using primary key columns
   """
-  metadata_collection_by_pk(contract: String!): metadata_collection
+  metadata_collection_by_pk(id: String!): metadata_collection
 
   """
   fetch data from the table: "metadata_token"
@@ -2515,7 +2581,7 @@ type subscription_root {
   """
   fetch data from the table: "collection" using primary key columns
   """
-  collection_by_pk(contract: String!): collection
+  collection_by_pk(id: String!): collection
 
   """
   fetch data from the table: "collection_with_meta"
@@ -2645,7 +2711,7 @@ type subscription_root {
   """
   fetch data from the table: "metadata_collection" using primary key columns
   """
-  metadata_collection_by_pk(contract: String!): metadata_collection
+  metadata_collection_by_pk(id: String!): metadata_collection
 
   """
   fetch data from the table: "metadata_token"
@@ -3426,6 +3492,8 @@ columns and relationships of "token_with_meta"
 type token_with_meta {
   contract: String
 
+  creator: String
+
   deleted: Boolean
 
   id: uuid
@@ -3457,6 +3525,8 @@ input token_with_meta_bool_exp {
 
   contract: String_comparison_exp
 
+  creator: String_comparison_exp
+
   deleted: Boolean_comparison_exp
 
   id: uuid_comparison_exp
@@ -3481,6 +3551,8 @@ Ordering options when selecting data from "token_with_meta".
 """
 input token_with_meta_order_by {
   contract: order_by
+
+  creator: order_by
 
   deleted: order_by
 
@@ -3509,6 +3581,11 @@ enum token_with_meta_select_column {
   column name
   """
   contract
+
+  """
+  column name
+  """
+  creator
 
   """
   column name
