@@ -34,11 +34,18 @@ object TokenConverter {
         supply = BigDecimal(source.supply.toString()).toBigInteger(),
         tokenId = BigInteger(source.token_id),
         updated = OffsetDateTime.parse(source.updated.toString()).toInstant(),
-        creators = listOf(Part(source.creator, 10000)), // for now we have only one creator
+        creators = creators(source.creator),
         contract = source.contract,
         deleted = source.deleted,
         tzktId = source.tzkt_id.toString().toBigInteger()
     )
+
+    fun creators(source: String?): List<Part> { // for now, we have only one creator
+        return when(source) {
+            null -> emptyList()
+            else -> listOf(Part(source, 10000))
+        }
+    }
 
     fun processMetadata(metadata: String): TokenMeta {
         val map: Map<String, Any> = mapper.readValue(metadata)
