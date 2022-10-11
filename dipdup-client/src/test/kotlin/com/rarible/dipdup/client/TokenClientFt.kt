@@ -1,7 +1,7 @@
 package com.rarible.dipdup.client
 
-import com.apollographql.apollo3.ApolloClient
 import com.rarible.dipdup.client.core.model.DipDupItem
+import com.rarible.dipdup.client.core.model.Part
 import com.rarible.dipdup.client.core.model.TimestampIdContinuation
 import com.rarible.dipdup.client.core.model.TokenMeta
 import kotlinx.coroutines.runBlocking
@@ -30,6 +30,7 @@ class TokenClientFt : BaseClientFt() {
                     "contract": "KT1AxXMGmoQUH3wdDF5gqpANSGKHpTR4xsaj",
                     "db_updated_at": "2022-09-20T10:04:23.840596+00:00",
                     "deleted": false,
+                    "creator": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
                     "id": "8f378bc9-d266-57f3-b117-59547e0215df",
                     "updated": "2022-09-20T09:50:45+00:00",
                     "tzkt_id": "120741",
@@ -56,7 +57,8 @@ class TokenClientFt : BaseClientFt() {
                 supply = BigInteger("1"),
                 tokenId = BigInteger("3"),
                 tzktId = BigInteger("120741"),
-                updated = OffsetDateTime.parse("2022-09-20T09:50:45Z").toInstant()
+                updated = OffsetDateTime.parse("2022-09-20T09:50:45Z").toInstant(),
+                creators = listOf(Part("tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb", 10000))
             )
         )
     }
@@ -112,6 +114,7 @@ class TokenClientFt : BaseClientFt() {
                     "minted_at": "2022-09-08T14:57:10+00:00",
                     "supply": "1.000000000000000000000000000000000000",
                     "token_id": "20",
+                    "creator": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
                     "tzkt_id": 113511,
                     "updated": "2022-09-08T14:57:10+00:00",
                     "metadata": "{'artifactUri': 'ipfs://QmUaSSCpDs75Mnfur1TRRzYPxxx4U6G3uCkzAByZaTqc9S/kryptosphere.mp4', 'attributes': [{'name': 'scanned', 'value': 'false'}, {'name': 'revealed', 'value': 'false'}, {'name': 'rarity', 'value': 'unknown'}], 'creators': ['Billyapp.live team'], 'decimals': 0, 'description': 'Crypto tour event by Kryptosphere, Marseille, 22/10/2022', 'displayUri': 'ipfs://QmUaSSCpDs75Mnfur1TRRzYPxxx4U6G3uCkzAByZaTqc9S/kryptosphere.png', 'formats': [{'mimeType': 'video/mp4', 'uri': 'ipfs://QmUaSSCpDs75Mnfur1TRRzYPxxx4U6G3uCkzAByZaTqc9S/kryptosphere.mp4'}, {'mimeType': 'image/png', 'uri': 'ipfs://QmUaSSCpDs75Mnfur1TRRzYPxxx4U6G3uCkzAByZaTqc9S/kryptosphere.png'}, {'mimeType': 'image/png', 'uri': 'ipfs://QmUaSSCpDs75Mnfur1TRRzYPxxx4U6G3uCkzAByZaTqc9S/kryptosphere_thumbnail.png'}], 'name': 'Crypto tour', 'rights': '©Billy 2022 Rights. All rights reserved.', 'royalties': {'decimals': 2, 'shares': {'tz1PJ5xxUFDAwgKHLMUPe5SL3eJkVehfiDL6': '10'}}, 'symbol': 'XTZ', 'thumbnailUri': 'ipfs://QmUaSSCpDs75Mnfur1TRRzYPxxx4U6G3uCkzAByZaTqc9S/kryptosphere_thumbnail.png'}"
@@ -141,6 +144,7 @@ class TokenClientFt : BaseClientFt() {
                     "minted_at": "2022-09-08T14:37:30+00:00",
                     "supply": "0.000000000000000000000000000000000000",
                     "token_id": "260",
+                    "creator": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
                     "tzkt_id": 113503,
                     "updated": "2022-09-08T14:37:45+00:00",
                     "metadata": "{'name': 'FFF', 'description': '', 'image': 'ipfs://ipfs/QmPe1W8XiUYdsvdpvgWVwekQ7cDQivRMak3YPX15vxvSJs/image.png', 'external_url': 'https://rinkeby.rarible.com/token/0x509fd4cdaa29be7b1fad251d8ea0fca2ca91eb60:18', 'attributes': [], 'decimals': 1, 'symbol': 'FFF'}"
@@ -176,6 +180,7 @@ class TokenClientFt : BaseClientFt() {
                     "minted_at": "2022-09-08T14:50:40+00:00",
                     "supply": "1.000000000000000000000000000000000000",
                     "token_id": "9",
+                    "creator": "tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb",
                     "tzkt_id": 113509,
                     "updated": "2022-09-08T14:50:40+00:00",
                     "metadata": null

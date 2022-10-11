@@ -7,6 +7,7 @@ import com.rarible.dipdup.client.core.model.DipDupCollection
 import com.rarible.dipdup.client.core.model.DipDupOrder
 import com.rarible.dipdup.client.core.util.DateTimeDeserializer
 import com.rarible.dipdup.listener.model.DipDupItemEvent
+import com.rarible.dipdup.listener.model.DipDupItemMetaEvent
 import com.rarible.dipdup.listener.model.DipDupOwnershipEvent
 import org.apache.kafka.common.header.Headers
 import org.slf4j.LoggerFactory
@@ -51,6 +52,10 @@ sealed class DipDupDeserializer : JsonDeserializer() {
 
     class ItemEventJsonSerializer : DipDupDeserializer() {
         override val classValue = DipDupItemEvent::class
+    }
+
+    class ItemMetaEventJsonSerializer : DipDupDeserializer() {
+        override val classValue = DipDupItemMetaEvent::class
     }
 
     class OwnershipEventJsonSerializer : DipDupDeserializer() {

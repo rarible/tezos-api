@@ -59,6 +59,7 @@ class CollectionClientIt {
     }
 
     @Test
+    @Disabled
     fun `should return name for rarible collection`() = runBlocking<Unit> {
         val collectionClient = client("https://api.tzkt.io")
         val collection = collectionClient.collectionMeta("KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS")

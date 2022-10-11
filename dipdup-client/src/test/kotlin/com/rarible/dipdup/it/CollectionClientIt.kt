@@ -11,7 +11,7 @@ import org.junit.jupiter.api.condition.OS
 
 // this test will be disabled on jenkins
 @DisabledOnOs(OS.LINUX)
-@Disabled
+//@Disabled
 class CollectionClientIt {
 
     val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://dev-tezos-indexer.rarible.org/v1/graphql").build() }
@@ -30,7 +30,7 @@ class CollectionClientIt {
     // KT1GwtE3PeTxczqnqKwdFwxaZWgEKcg8xpY5
     @Test
     fun `should return collection`() = runBlocking<Unit> {
-        val collection = collectionClient.getCollectionById("KT1GwtE3PeTxczqnqKwdFwxaZWgEKcg8xpY5")
+        val collection = collectionClient.getCollectionById("KT1RuoaCbnZpMgdRpSoLfJUzSkGz1ZSiaYwj")
         assertThat(collection).isNotNull
     }
 

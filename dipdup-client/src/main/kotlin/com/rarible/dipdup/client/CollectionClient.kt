@@ -56,7 +56,7 @@ class CollectionClient(
     }
 
     private fun orderBy(id: Optional<order_by>?, updated: Optional<order_by>?) = Collection_with_meta_order_by(
-        id, updated, null, null
+        updated, id, null, null, null, null, null
     )
 
     private fun sort(sortAsc: Boolean) = when (sortAsc) {

@@ -7,9 +7,9 @@ import com.rarible.dipdup.client.GetTokensAllContinuationDescQuery
 import com.rarible.dipdup.client.GetTokensAllQuery
 import com.rarible.dipdup.client.GetTokensByIdsQuery
 import com.rarible.dipdup.client.core.model.DipDupItem
+import com.rarible.dipdup.client.core.model.Part
 import com.rarible.dipdup.client.core.model.TokenMeta
 import com.rarible.dipdup.client.core.util.MetaUtils
-import com.rarible.dipdup.client.exception.DipDupNotFound
 import com.rarible.dipdup.client.fragment.Token
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -34,10 +34,18 @@ object TokenConverter {
         supply = BigDecimal(source.supply.toString()).toBigInteger(),
         tokenId = BigInteger(source.token_id),
         updated = OffsetDateTime.parse(source.updated.toString()).toInstant(),
+        creators = creators(source.creator),
         contract = source.contract,
         deleted = source.deleted,
         tzktId = source.tzkt_id.toString().toBigInteger()
     )
+
+    fun creators(source: String?): List<Part> { // for now, we have only one creator
+        return when(source) {
+            null -> emptyList()
+            else -> listOf(Part(source, 10000))
+        }
+    }
 
     fun processMetadata(metadata: String): TokenMeta {
         val map: Map<String, Any> = mapper.readValue(metadata)

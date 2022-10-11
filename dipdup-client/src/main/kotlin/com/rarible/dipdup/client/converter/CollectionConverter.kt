@@ -23,7 +23,7 @@ object CollectionConverter {
     fun convert(source: com.rarible.dipdup.client.fragment.Collection): DipDupCollection {
         val meta = convertMeta(source.metadata)
         return DipDupCollection(
-            id = source.contract,
+            id = source.id,
             owner = source.owner,
             name = meta?.name ?: "Unnamed Collection",
             minters = listOf(),
@@ -34,13 +34,15 @@ object CollectionConverter {
 
     fun convertMeta(data: String?): Meta? {
         return if (data != null) {
-            val map: Map<String, Object> = MetaUtils.mapper().readValue(data)
+            val map: Map<String, Object> = MetaUtils.mapper().readValue(sanitizeJson(data))
             Meta(
                 map["name"]?.let { it.toString() },
                 symbol = null
             )
         } else Meta(null ,null)
     }
+
+    fun sanitizeJson(data: String) = data.replace("False", "false").replace("True", "true")
 
     data class Meta(
         val name: String?,

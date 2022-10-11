@@ -3,6 +3,7 @@ package com.rarible.dipdup.listener.config
 import com.rarible.core.kafka.RaribleKafkaConsumer
 import com.rarible.dipdup.client.core.model.DipDupActivity
 import com.rarible.dipdup.client.core.model.DipDupOrder
+import com.rarible.dipdup.listener.model.DipDupItemMetaEvent
 import com.rarible.dipdup.listener.model.DipDupCollectionEvent
 import com.rarible.dipdup.listener.model.DipDupItemEvent
 import com.rarible.dipdup.listener.model.DipDupOwnershipEvent
@@ -67,6 +68,19 @@ class DipDupEventsConsumerFactory(
             consumerGroup = consumerGroup,
             offsetResetStrategy = OffsetResetStrategy.EARLIEST,
             defaultTopic = DipDupTopicProvider.getItemTopic(environment),
+            bootstrapServers = brokerReplicaSet,
+            properties = properties
+        )
+    }
+
+    fun createItemMetaConsumer(consumerGroup: String): RaribleKafkaConsumer<DipDupItemMetaEvent> {
+        return RaribleKafkaConsumer(
+            clientId = "$clientIdPrefix.tezos.consumer.item.meta",
+            valueDeserializerClass = DipDupDeserializer.ItemMetaEventJsonSerializer::class.java,
+            valueClass = DipDupItemMetaEvent::class.java,
+            consumerGroup = consumerGroup,
+            offsetResetStrategy = OffsetResetStrategy.EARLIEST,
+            defaultTopic = DipDupTopicProvider.getItemMetaTopic(environment),
             bootstrapServers = brokerReplicaSet,
             properties = properties
         )

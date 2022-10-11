@@ -42,7 +42,7 @@ class TokenActivityClientIt {
 
     @Test
     fun `should return activities by id`() = runBlocking<Unit> {
-        val activities = tokenActivityClient.getActivitiesByIds(listOf("607293276162"))
+        val activities = tokenActivityClient.getActivitiesByIds(listOf("66548065632259"))
         assertThat(activities).hasSize(1)
     }
 
@@ -51,7 +51,7 @@ class TokenActivityClientIt {
         val page = tokenActivityClient.getActivitiesByItem(
             types = listOf(DipDupActivityType.MINT),
             contract = "KT1RuoaCbnZpMgdRpSoLfJUzSkGz1ZSiaYwj",
-            tokenId = "520",
+            tokenId = "552",
             limit = 1,
             continuation = null,
             sortAsc = false

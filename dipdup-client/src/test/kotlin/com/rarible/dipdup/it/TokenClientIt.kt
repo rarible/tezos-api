@@ -21,7 +21,7 @@ class TokenClientIt {
 
     @Test
     fun `should return token`() = runBlocking<Unit> {
-        val token = tokenClient.getTokenById("KT1RuoaCbnZpMgdRpSoLfJUzSkGz1ZSiaYwj:504")
+        val token = tokenClient.getTokenById("KT1RuoaCbnZpMgdRpSoLfJUzSkGz1ZSiaYwj:572")
         assertThat(token).isNotNull
     }
 
@@ -34,7 +34,7 @@ class TokenClientIt {
 
     @Test
     fun `should return meta`() = runBlocking<Unit> {
-        val meta = tokenClient.getTokenMetaById("KT1RuoaCbnZpMgdRpSoLfJUzSkGz1ZSiaYwj:504")
+        val meta = tokenClient.getTokenMetaById("KT1RuoaCbnZpMgdRpSoLfJUzSkGz1ZSiaYwj:570")
         assertThat(meta).isNotNull
     }
 

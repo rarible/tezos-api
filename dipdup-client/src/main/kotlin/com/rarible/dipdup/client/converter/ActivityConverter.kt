@@ -44,7 +44,8 @@ fun convert(source: Token_activity) = tokenActivity(
     id = source.id.toString(),
     date = OffsetDateTime.parse(source.date.toString()),
     transactionId = source.tzkt_transaction_id.toString(),
-    transferId = source.tzkt_transaction_id.toString(),
+    transferId = source.id.toString(),
+    hash = source.hash,
     contract = source.contract,
     tokenId = BigInteger(source.token_id),
     value = BigDecimal(source.amount.toString()),
@@ -146,7 +147,7 @@ fun orderActivity(
 }
 
 fun tokenActivity(
-    type: String, id: String, date: OffsetDateTime, transferId: String, contract: String, tokenId: BigInteger,
+    type: String, id: String, date: OffsetDateTime, transferId: String, hash: String?, contract: String, tokenId: BigInteger,
     value: BigDecimal, transactionId: String, from: String?, owner: String?
 ): DipDupActivity {
     return when (type) {
@@ -158,7 +159,7 @@ fun tokenActivity(
             contract = contract,
             tokenId = tokenId,
             value = value,
-            transactionId = transactionId,
+            transactionId = hash ?: transactionId,
             owner = owner!!
         )
         DipDupActivity.TRANSFER -> DipDupTransferActivity(
@@ -169,7 +170,7 @@ fun tokenActivity(
             contract = contract,
             tokenId = tokenId,
             value = value,
-            transactionId = transactionId,
+            transactionId = hash ?: transactionId,
             from = from!!,
             owner = owner!!
         )
@@ -181,7 +182,7 @@ fun tokenActivity(
             contract = contract,
             tokenId = tokenId,
             value = value,
-            transactionId = transactionId,
+            transactionId = hash ?: transactionId,
             owner = from!!
         )
         else -> throw RuntimeException("Unknown activity type: $type")
