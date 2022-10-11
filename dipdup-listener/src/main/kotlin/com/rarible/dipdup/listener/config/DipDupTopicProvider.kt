@@ -16,6 +16,9 @@ class DipDupTopicProvider {
         fun getItemTopic(environment: String): String =
             "protocol.$environment.tezos.indexer.item"
 
+        fun getItemMetaTopic(environment: String): String =
+            "protocol.$environment.tezos.indexer.item.meta"
+
         fun getOwnershipTopic(environment: String): String =
             "protocol.$environment.tezos.indexer.ownership"
 
