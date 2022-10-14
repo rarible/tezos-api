@@ -1,10 +1,12 @@
 package com.rarible.dipdup.client.graphql
 
 import com.rarible.dipdup.client.GetOrdersQuery
+import com.rarible.dipdup.client.core.model.TezosPlatform
 import com.rarible.dipdup.client.model.DipDupOrderSort
 
 data class GetOrdersCustomQuery(
     val statuses: List<String> = emptyList(),
+    val platforms: List<TezosPlatform>,
     val limit: Int,
     val sort: DipDupOrderSort,
     val prevId: String? = null,
@@ -15,8 +17,9 @@ data class GetOrdersCustomQuery(
     override fun document(): String {
         val conditions = mutableListOf<String>()
         if (statuses.isNotEmpty()) conditions.add("status: {_in: [${statuses.joinToString(",")}]}")
-        prevDate?.let { continuation(sort) }
-        return """
+        conditions.add("platform: {_in: [${platforms.joinToString(",")}]}")
+        prevDate?.let { conditions.add(continuation(sort)) }
+        val request = """
             query GetOrders(${'$'}limit: Int!) {
                 marketplace_order(
                     where: {${conditions.joinToString(",\n")}}
@@ -28,28 +31,32 @@ data class GetOrdersCustomQuery(
                 created_at
                 fill
                 ended_at
+                end_at
                 id
                 internal_order_id
                 last_updated_at
                 make_asset_class
                 make_contract
-                make_price
-                make_stock
                 make_token_id
                 make_value
+                make_price
                 maker
                 network
                 platform
-                started_at
+                start_at
                 salt
                 status
                 take_asset_class
                 take_contract
                 take_token_id
                 take_value
+                take_price
                 taker
+                origin_fees
+                payouts
             }
         """.trimIndent()
+        return request
     }
 
     fun continuation(sort: DipDupOrderSort) = when (sort) {

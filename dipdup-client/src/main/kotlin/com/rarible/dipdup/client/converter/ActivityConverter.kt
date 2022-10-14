@@ -1,23 +1,34 @@
 package com.rarible.dipdup.client.converter
 
-import com.rarible.dipdup.client.GetActivitiesAscQuery
-import com.rarible.dipdup.client.GetActivitiesByIdsQuery
-import com.rarible.dipdup.client.GetActivitiesByItemAscQuery
-import com.rarible.dipdup.client.GetActivitiesByItemDescQuery
-import com.rarible.dipdup.client.GetActivitiesDescQuery
+import com.rarible.dipdup.client.GetOrderActivitiesAscQuery
+import com.rarible.dipdup.client.GetOrderActivitiesByIdsQuery
+import com.rarible.dipdup.client.GetOrderActivitiesByItemAscQuery
+import com.rarible.dipdup.client.GetOrderActivitiesByItemDescQuery
+import com.rarible.dipdup.client.GetOrderActivitiesDescQuery
+import com.rarible.dipdup.client.GetTokenActivitiesAscQuery
+import com.rarible.dipdup.client.GetTokenActivitiesByIdsQuery
+import com.rarible.dipdup.client.GetTokenActivitiesByItemAscQuery
+import com.rarible.dipdup.client.GetTokenActivitiesByItemDescQuery
+import com.rarible.dipdup.client.GetTokenActivitiesDescQuery
 import com.rarible.dipdup.client.core.model.Asset
 import com.rarible.dipdup.client.core.model.DipDupActivity
+import com.rarible.dipdup.client.core.model.DipDupBurnActivity
+import com.rarible.dipdup.client.core.model.DipDupMintActivity
 import com.rarible.dipdup.client.core.model.DipDupOrderCancelActivity
 import com.rarible.dipdup.client.core.model.DipDupOrderListActivity
 import com.rarible.dipdup.client.core.model.DipDupOrderSellActivity
+import com.rarible.dipdup.client.core.model.DipDupTransferActivity
 import com.rarible.dipdup.client.core.model.TezosPlatform
-import com.rarible.dipdup.client.fragment.Activity
+import com.rarible.dipdup.client.fragment.Order_activity
+import com.rarible.dipdup.client.fragment.Token_activity
 import java.math.BigDecimal
+import java.math.BigInteger
 import java.time.OffsetDateTime
 
-fun convert(source: Activity) = activityEvent(
+fun convert(source: Order_activity) = orderActivity(
     type = source.type,
     id = source.id.toString(),
+    operationCounter = source.operation_counter,
     reverted = false,
     date = OffsetDateTime.parse(source.operation_timestamp.toString()),
     hash = source.operation_hash,
@@ -25,32 +36,65 @@ fun convert(source: Activity) = activityEvent(
     maker = source.maker,
     taker = source.taker,
     make = getAsset(source.make_asset_class, source.make_contract, source.make_token_id, source.make_value),
-    take = getAsset(source.take_asset_class, source.take_contract, source.take_token_id, source.take_value),
-    price = source.sell_price
+    take = getAsset(source.take_asset_class, source.take_contract, source.take_token_id, source.take_value)
 )
 
-fun convertAllDesc(source: List<GetActivitiesDescQuery.Marketplace_activity>): List<DipDupActivity> {
-    return source.map { convert(it.activity) }
+fun convert(source: Token_activity) = tokenActivity(
+    type = source.type,
+    id = source.id.toString(),
+    date = OffsetDateTime.parse(source.date.toString()),
+    transactionId = source.tzkt_transaction_id.toString(),
+    transferId = source.id.toString(),
+    hash = source.hash,
+    contract = source.contract,
+    tokenId = BigInteger(source.token_id),
+    value = BigDecimal(source.amount.toString()),
+    from = source.from_address,
+    owner = source.to_address
+)
+
+fun convertAllDesc(source: List<GetOrderActivitiesDescQuery.Marketplace_activity>): List<DipDupActivity> {
+    return source.map { convert(it.order_activity) }
 }
 
-fun convertAllAsc(source: List<GetActivitiesAscQuery.Marketplace_activity>): List<DipDupActivity> {
-    return source.map { convert(it.activity) }
+fun convertTokenActivitiesAllDesc(source: List<GetTokenActivitiesDescQuery.Token_transfer>): List<DipDupActivity> {
+    return source.map { convert(it.token_activity) }
 }
 
-fun convertByItemDesc(source: List<GetActivitiesByItemDescQuery.Marketplace_activity>): List<DipDupActivity> {
-    return source.map { convert(it.activity) }
+fun convertAllAsc(source: List<GetOrderActivitiesAscQuery.Marketplace_activity>): List<DipDupActivity> {
+    return source.map { convert(it.order_activity) }
 }
 
-fun convertByItemAsc(source: List<GetActivitiesByItemAscQuery.Marketplace_activity>): List<DipDupActivity> {
-    return source.map { convert(it.activity) }
+fun convertTokenActivitiesAllAsc(source: List<GetTokenActivitiesAscQuery.Token_transfer>): List<DipDupActivity> {
+    return source.map { convert(it.token_activity) }
 }
 
-fun convertByIds(source: List<GetActivitiesByIdsQuery.Marketplace_activity>): List<DipDupActivity> {
-    return source.map { convert(it.activity) }
+fun convertByItemDesc(source: List<GetOrderActivitiesByItemDescQuery.Marketplace_activity>): List<DipDupActivity> {
+    return source.map { convert(it.order_activity) }
 }
 
-fun activityEvent(
-    type: String, id: String,
+fun convertTokenActivitiesByItemDesc(source: List<GetTokenActivitiesByItemDescQuery.Token_transfer>): List<DipDupActivity> {
+    return source.map { convert(it.token_activity) }
+}
+
+fun convertByItemAsc(source: List<GetOrderActivitiesByItemAscQuery.Marketplace_activity>): List<DipDupActivity> {
+    return source.map { convert(it.order_activity) }
+}
+
+fun convertTokenActivitiesByItemAsc(source: List<GetTokenActivitiesByItemAscQuery.Token_transfer>): List<DipDupActivity> {
+    return source.map { convert(it.token_activity) }
+}
+
+fun convertByIds(source: List<GetOrderActivitiesByIdsQuery.Marketplace_activity>): List<DipDupActivity> {
+    return source.map { convert(it.order_activity) }
+}
+
+fun convertTokensActivitiesByIds(source: List<GetTokenActivitiesByIdsQuery.Token_transfer>): List<DipDupActivity> {
+    return source.map { convert(it.token_activity) }
+}
+
+fun orderActivity(
+    type: String, id: String, operationCounter: Int,
     date: OffsetDateTime,
     reverted: Boolean,
     hash: String,
@@ -59,34 +103,11 @@ fun activityEvent(
     taker: String?,
     make: Asset,
     take: Asset,
-    price: Any
 ): DipDupActivity {
     return when (type) {
         "LIST" -> DipDupOrderListActivity(
             id = id,
-            date = date,
-            reverted = reverted,
-            hash = hash,
-            source = source,
-            maker = maker,
-            make = make,
-            take = take,
-            price = BigDecimal(price.toString())
-        )
-        "SELL" -> DipDupOrderSellActivity(
-            id = id,
-            date = date,
-            reverted = reverted,
-            hash = hash,
-            source = source,
-            nft = make,
-            payment = take,
-            buyer = taker!!,
-            seller = maker,
-            price = BigDecimal(price.toString())
-        )
-        "CANCEL_LIST" -> DipDupOrderCancelActivity(
-            id = id,
+            operationCounter = operationCounter,
             date = date,
             reverted = reverted,
             hash = hash,
@@ -94,6 +115,75 @@ fun activityEvent(
             maker = maker,
             make = make,
             take = take
+        )
+
+        "SELL" -> DipDupOrderSellActivity(
+            id = id,
+            operationCounter = operationCounter,
+            date = date,
+            reverted = reverted,
+            hash = hash,
+            source = source,
+            nft = make,
+            payment = take,
+            buyer = taker!!,
+            seller = maker
+        )
+
+        "CANCEL_LIST" -> DipDupOrderCancelActivity(
+            id = id,
+            operationCounter = operationCounter,
+            date = date,
+            reverted = reverted,
+            hash = hash,
+            source = source,
+            maker = maker,
+            make = make,
+            take = take
+        )
+
+        else -> throw RuntimeException("Unknown activity type: $type")
+    }
+}
+
+fun tokenActivity(
+    type: String, id: String, date: OffsetDateTime, transferId: String, hash: String?, contract: String, tokenId: BigInteger,
+    value: BigDecimal, transactionId: String, from: String?, owner: String?
+): DipDupActivity {
+    return when (type) {
+        DipDupActivity.MINT -> DipDupMintActivity(
+            id = id,
+            date = date,
+            reverted = false,
+            transferId = transferId,
+            contract = contract,
+            tokenId = tokenId,
+            value = value,
+            transactionId = hash ?: transactionId,
+            owner = owner!!
+        )
+        DipDupActivity.TRANSFER -> DipDupTransferActivity(
+            id = id,
+            date = date,
+            reverted = false,
+            transferId = transferId,
+            contract = contract,
+            tokenId = tokenId,
+            value = value,
+            transactionId = hash ?: transactionId,
+            from = from!!,
+            owner = owner!!
+        )
+        DipDupActivity.BURN -> DipDupBurnActivity(
+            id = id,
+            date = date,
+            reverted = false,
+            transferId = transferId,
+            contract = contract,
+            tokenId = tokenId,
+            value = value,
+            transactionId = hash ?: transactionId,
+            owner = from!!
         )
         else -> throw RuntimeException("Unknown activity type: $type")
     }

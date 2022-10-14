@@ -1,0 +1,65 @@
+fragment ownership on ownership {
+    balance
+    contract
+    id
+    owner
+    token_id
+    updated
+}
+
+query GetOwnershipsByIds($ids: [uuid!]!) {
+    ownership(where: {id: {_in: $ids}}) {
+        ...ownership
+    }
+}
+
+query GetOwnershipsAll($limit: Int!, $order_by: [ownership_order_by!]!) {
+    ownership(limit: $limit, order_by: $order_by) {
+        ...ownership
+    }
+}
+
+query GetOwnershipsAllContinuationDesc($limit: Int!, $date: timestamptz!, $id: uuid!) {
+    ownership(where: {
+        _or: [{
+            updated: {_lt: $date}
+        },{
+            updated: {_eq: $date},
+            id: {_lt: $id}
+        }]
+    }, limit: $limit, order_by: [{updated: desc}, {id: desc}]) {
+        ...ownership
+    }
+}
+
+query GetOwnershipsAllContinuationAsc($limit: Int!, $date: timestamptz!, $id: uuid!) {
+    ownership(where: {
+        _or: [{
+            updated: {_gt: $date}
+        },{
+            updated: {_eq: $date},
+            id: {_gt: $id}
+        }]
+    }, limit: $limit, order_by: [{updated: asc}, {id: asc}]) {
+        ...ownership
+    }
+}
+
+query GetOwnershipsByItem($limit: Int!, $contract: String!, $token_id: String!) {
+    ownership(where: {
+        contract: {_eq: $contract},
+        token_id: {_eq: $token_id}
+    }, limit: $limit, order_by: {id: desc}) {
+        ...ownership
+    }
+}
+
+query GetOwnershipsByItemContinuation($limit: Int!, $contract: String!, $token_id: String!, $id: uuid!) {
+    ownership(where: {
+        contract: {_eq: $contract},
+        token_id: {_eq: $token_id},
+        id: {_lt: $id}
+    }, limit: $limit, order_by: {id: desc}) {
+        ...ownership
+    }
+}

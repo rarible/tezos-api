@@ -14,7 +14,7 @@
 package com.rarible.tzkt.model
 
 /**
- * 
+ *
  *
  * @param id Internal TzKT id.   **[sortable]**
  * @param account Owner account.   Click on the field to expand more details.
@@ -30,7 +30,7 @@ package com.rarible.tzkt.model
 data class TokenBalance (
 
     /* Internal TzKT id.   **[sortable]** */
-    val id: Int,
+    val id: Long,
 
     /* Owner account.   Click on the field to expand more details. */
     val account: Alias? = null,
@@ -56,5 +56,7 @@ data class TokenBalance (
     /* Timestamp of the block where the token balance was last changed. */
     val lastTime: java.time.OffsetDateTime
 
-)
+) {
+    fun ownershipId() = "${token?.contract?.address}:${token?.tokenId}:${account?.address}"
+}
 

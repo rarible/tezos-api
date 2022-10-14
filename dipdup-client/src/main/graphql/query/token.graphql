@@ -1,0 +1,62 @@
+fragment token on token {
+    id
+    minted
+    minted_at
+    supply
+    token_id
+    updated
+    contract
+    creator
+    deleted
+    tzkt_id
+}
+
+query GetTokensByIds($ids: [uuid!]!) {
+    token(where: {id: {_in: $ids}}) {
+        ...token
+    }
+}
+
+query GetTokenMetaById($id: uuid!) {
+    metadata_token(where: {id: {_eq: $id}, metadata_synced: {_eq: true}, metadata: {_is_null: false}}) {
+        id
+        contract
+        db_updated_at
+        metadata
+        token_id
+    }
+}
+
+query GetTokensAll($limit: Int!, $deleted: [Boolean!]!, $order_by: [token_order_by!]!) {
+    token(where: {deleted: {_in: $deleted}}, limit: $limit, order_by: $order_by) {
+        ...token
+    }
+}
+
+query GetTokensAllContinuationDesc($limit: Int!, $deleted: [Boolean!]!, $date: timestamptz!, $id: uuid!) {
+    token(where: {
+        deleted: {_in: $deleted},
+        _or: [{
+            updated: {_lt: $date}
+        },{
+            updated: {_eq: $date},
+            id: {_lt: $id}
+        }]
+    }, limit: $limit, order_by: [{updated: desc}, {id: desc}]) {
+        ...token
+    }
+}
+
+query GetTokensAllContinuationAsc($limit: Int!, $deleted: [Boolean!]!, $date: timestamptz!, $id: uuid!) {
+    token(where: {
+        deleted: {_in: $deleted},
+        _or: [{
+            updated: {_gt: $date}
+        },{
+            updated: {_eq: $date},
+            id: {_gt: $id}
+        }]
+    }, limit: $limit, order_by: [{updated: asc}, {id: asc}]) {
+        ...token
+    }
+}

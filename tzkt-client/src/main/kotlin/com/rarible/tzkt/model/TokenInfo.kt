@@ -14,7 +14,7 @@
 package com.rarible.tzkt.model
 
 /**
- * 
+ *
  *
  * @param id Internal TzKT id (not the same as `tokenId`).
  * @param contract Contract, created the token.
@@ -26,7 +26,7 @@ package com.rarible.tzkt.model
 data class TokenInfo (
 
     /* Internal TzKT id (not the same as `tokenId`). */
-    val id: Int? = null,
+    val id: Long? = null,
 
     /* Contract, created the token. */
     val contract: Alias? = null,
@@ -40,5 +40,7 @@ data class TokenInfo (
     /* Token metadata.   **[sortable]** */
     val metadata: Any? = null
 
-)
+) {
+    fun itemId() = "${contract?.address}:$tokenId"
+}
 

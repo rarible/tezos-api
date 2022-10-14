@@ -29,7 +29,7 @@ package com.rarible.tzkt.model
 data class BigMapKey (
 
     /* Internal Id, can be used for pagination */
-    val id: Int,
+    val id: Long,
 
     /* Bigmap key status (`true` - active, `false` - removed) */
     val active: Boolean,

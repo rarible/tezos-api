@@ -1,0 +1,34 @@
+fragment collection on collection_with_meta {
+    owner
+    metadata
+    id
+    db_updated_at
+}
+
+query GetCollectionsByIds($ids: [String!]!) {
+    collection_with_meta(where: {id: {_in: $ids}}) {
+        ...collection
+    }
+}
+
+query GetCollectionsAll($limit: Int!, $order_by: [collection_with_meta_order_by!]!) {
+    collection_with_meta(limit: $limit, order_by: $order_by) {
+        ...collection
+    }
+}
+
+query GetCollectionsAllContinuationDesc($limit: Int!, $id: String!) {
+    collection_with_meta(where: {
+        id: {_lt: $id}
+    }, limit: $limit, order_by: [{db_updated_at: desc}, {id: desc}]) {
+        ...collection
+    }
+}
+
+query GetCollectionsAllContinuationAsc($limit: Int!, $id: String!) {
+    collection_with_meta(where: {
+        id: {_lt: $id}
+    }, limit: $limit, order_by: [{db_updated_at: asc}, {id: asc}]) {
+        ...collection
+    }
+}

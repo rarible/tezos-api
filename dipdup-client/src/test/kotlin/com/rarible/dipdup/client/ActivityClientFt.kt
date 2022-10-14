@@ -1,7 +1,7 @@
 package com.rarible.dipdup.client
 
+import com.rarible.dipdup.client.model.DipDupActivityContinuation
 import com.rarible.dipdup.client.model.DipDupActivityType
-import com.rarible.dipdup.client.model.DipDupContinuation
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -30,8 +30,8 @@ class ActivityClientFt : BaseClientFt() {
                             "operation_hash": "oovjuGhB9iyvpP1cSMKYLuxZ7eGfRgea8YvF9V8MMNjsC4sxt72",
                             "operation_level": 569936,
                             "operation_timestamp": "2022-02-23T15:26:38+00:00",
-                            "platform": "Rarible",
-                            "sell_price": 1,
+                            "operation_counter": 13506274,
+                            "platform": "RARIBLE_V2",
                             "take_asset_class": "XTZ",
                             "take_contract": null,
                             "take_token_id": null,
@@ -52,8 +52,8 @@ class ActivityClientFt : BaseClientFt() {
                             "operation_hash": "oovjuGhB9iyvpP1cSMKYLuxZ7eGfRgea8YvF9V8MMNjsC4sxt72",
                             "operation_level": 569936,
                             "operation_timestamp": "2022-02-23T15:26:38+00:00",
-                            "platform": "Rarible",
-                            "sell_price": 1,
+                            "operation_counter": 13506274,
+                            "platform": "RARIBLE_V2",
                             "take_asset_class": "XTZ",
                             "take_contract": null,
                             "take_token_id": null,
@@ -66,7 +66,7 @@ class ActivityClientFt : BaseClientFt() {
 
         val page = activityClient.getActivitiesAll(listOf(DipDupActivityType.LIST, DipDupActivityType.SELL), 2)
         assertThat(page.activities).hasSize(2)
-        assertThat(DipDupContinuation.parse(page.continuation)).isNotNull
+        assertThat(DipDupActivityContinuation.parse(page.continuation)).isNotNull
     }
 
     @Test
@@ -92,8 +92,7 @@ class ActivityClientFt : BaseClientFt() {
                                 "operation_nonce": null,
                                 "operation_timestamp": "2021-09-25T17:14:34+00:00",
                                 "order_id": "72cc270d-13d8-5684-bf0c-f81bbb33129e",
-                                "platform": "Hen",
-                                "sell_price": 100,
+                                "platform": "HEN",
                                 "take_asset_class": "XTZ",
                                 "take_contract": null,
                                 "take_token_id": null,
@@ -117,8 +116,7 @@ class ActivityClientFt : BaseClientFt() {
                                 "operation_nonce": null,
                                 "operation_timestamp": "2021-08-23T19:48:36+00:00",
                                 "order_id": "1f4ee13b-7251-5ccb-bfc4-fe356c4ae01a",
-                                "platform": "Objkt",
-                                "sell_price": 1000,
+                                "platform": "OBJKT_V1",
                                 "take_asset_class": "XTZ",
                                 "take_contract": null,
                                 "take_token_id": null,
@@ -131,7 +129,7 @@ class ActivityClientFt : BaseClientFt() {
 
         val page = activityClient.getActivitiesByItem(listOf(DipDupActivityType.LIST, DipDupActivityType.SELL), "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton", "67798", 2)
         assertThat(page.activities).hasSize(2)
-        assertThat(DipDupContinuation.parse(page.continuation)).isNotNull
+        assertThat(DipDupActivityContinuation.parse(page.continuation)).isNotNull
     }
 
     @Test
@@ -157,8 +155,7 @@ class ActivityClientFt : BaseClientFt() {
                                 "operation_nonce": null,
                                 "operation_timestamp": "2021-07-23T01:01:14+00:00",
                                 "order_id": "dae5dec7-9d37-5d86-877a-003b5c404283",
-                                "platform": "Hen",
-                                "sell_price": 10,
+                                "platform": "HEN",
                                 "take_asset_class": "XTZ",
                                 "take_contract": null,
                                 "take_token_id": null,
@@ -169,7 +166,7 @@ class ActivityClientFt : BaseClientFt() {
                 }
             }""")
 
-        val page = activityClient.getActivitiesByItem(listOf(DipDupActivityType.LIST, DipDupActivityType.SELL), "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton", "67798", 2, "1626568810_f9ca8eed-5a6b-563b-a01e-177544176c01")
+        val page = activityClient.getActivitiesByItem(listOf(DipDupActivityType.LIST, DipDupActivityType.SELL), "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton", "67798", 2, "1626568810_12345")
         assertThat(page.activities).hasSize(1)
         assertThat(page.continuation).isNull()
     }
@@ -194,8 +191,8 @@ class ActivityClientFt : BaseClientFt() {
                             "operation_hash": "oovjuGhB9iyvpP1cSMKYLuxZ7eGfRgea8YvF9V8MMNjsC4sxt72",
                             "operation_level": 569936,
                             "operation_timestamp": "2022-02-23T15:26:38+00:00",
-                            "platform": "Rarible",
-                            "sell_price": 1,
+                            "operation_counter": 5699361,
+                            "platform": "RARIBLE_V2",
                             "take_asset_class": "XTZ",
                             "take_contract": null,
                             "take_token_id": null,
@@ -216,8 +213,8 @@ class ActivityClientFt : BaseClientFt() {
                             "operation_hash": "oovjuGhB9iyvpP1cSMKYLuxZ7eGfRgea8YvF9V8MMNjsC4sxt72",
                             "operation_level": 569936,
                             "operation_timestamp": "2022-02-23T15:26:38+00:00",
-                            "platform": "Rarible",
-                            "sell_price": 1,
+                            "operation_counter": 569936,
+                            "platform": "RARIBLE_V2",
                             "take_asset_class": "XTZ",
                             "take_contract": null,
                             "take_token_id": null,
@@ -228,7 +225,7 @@ class ActivityClientFt : BaseClientFt() {
                 }
             }""")
 
-        val page = activityClient.getActivitiesAll(listOf(DipDupActivityType.LIST, DipDupActivityType.SELL), 2, "1652908780_f9de2ba4-38cb-5c42-b7c2-661fddc21693", true)
+        val page = activityClient.getActivitiesAll(listOf(DipDupActivityType.LIST, DipDupActivityType.SELL), 2, "1652908780_12344", true)
         assertThat(page.activities).hasSize(2)
     }
 
@@ -252,8 +249,8 @@ class ActivityClientFt : BaseClientFt() {
                             "operation_hash": "oovjuGhB9iyvpP1cSMKYLuxZ7eGfRgea8YvF9V8MMNjsC4sxt72",
                             "operation_level": 569936,
                             "operation_timestamp": "2022-02-23T15:26:38+00:00",
-                            "platform": "Rarible",
-                            "sell_price": 1,
+                            "operation_counter": 12345,
+                            "platform": "RARIBLE_V2",
                             "take_asset_class": "XTZ",
                             "take_contract": null,
                             "take_token_id": null,

@@ -10,7 +10,8 @@ abstract class BaseClientFt {
     val mockServer = MockServer()
     val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl(mockServer.url()).build() }
 //    val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://rarible-mainnet.dipdup.net/v1/graphql").build() }
-//    val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://rarible-ithacanet.dipdup.net/v1/graphql").build() }
+//    val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://test-tezos-indexer.rarible.org/v1/graphql").build() }
+//    val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://tezos-indexer.rarible.org/v1/graphql").build() }
 //    val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("http://localhost:8081/v1/graphql").build() }
 
     fun mock(body: String) {

@@ -5,6 +5,8 @@ import com.rarible.tzkt.model.Page
 import com.rarible.tzkt.model.TokenActivity
 import com.rarible.tzkt.model.TypedTokenActivity
 import com.rarible.tzkt.model.TzktActivityContinuation
+import com.rarible.tzkt.utils.Tezos.NULL_ADDRESSES
+import com.rarible.tzkt.utils.Tezos.NULL_ADDRESSES_STRING
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -19,14 +21,21 @@ class TokenActivityClient(
         types: List<ActivityType> = emptyList(),
         size: Int = DEFAULT_SIZE,
         continuation: String?,
-        sortAsc: Boolean = true
-    ) = activitiesWrapper(null, null, size, continuation, sortAsc, types)
+        sortAsc: Boolean = true,
+        wrapHash: Boolean = false
+    ) = activitiesWrapper(null, null, size, continuation, sortAsc, types, wrapHash)
 
-    suspend fun getActivitiesByIds(ids: List<String>): List<TypedTokenActivity> {
-        val activities = invoke<List<TokenActivity>> { builder ->
-            builder.path(BASE_PATH).queryParam("id.in", ids.joinToString(","))
+    suspend fun getActivitiesByIds(ids: List<String>, wrapHash: Boolean = false): List<TypedTokenActivity> {
+        val activities: List<TokenActivity> = withBatch(ids) { batch ->
+            invoke { builder ->
+                builder.path(BASE_PATH).queryParam("id.in", batch.joinToString(","))
+            }
         }
-        return activities.map(this::mapActivity)
+        return if (wrapHash) {
+            wrapWithHashes(activities.map(this::mapActivity))
+        } else {
+            activities.map(this::mapActivity)
+        }
     }
 
     suspend fun getActivitiesByItem(
@@ -35,8 +44,9 @@ class TokenActivityClient(
         tokenId: String,
         size: Int = DEFAULT_SIZE,
         continuation: String?,
-        sortAsc: Boolean = true
-    ) = activitiesWrapper(contract, tokenId, size, continuation, sortAsc, types)
+        sortAsc: Boolean = true,
+        wrapHash: Boolean = false
+    ) = activitiesWrapper(contract, tokenId, size, continuation, sortAsc, types, wrapHash)
 
     private suspend fun activitiesWrapper(
         contract: String?,
@@ -44,16 +54,16 @@ class TokenActivityClient(
         size: Int = DEFAULT_SIZE,
         continuation: String?,
         sortAsc: Boolean = true,
-        types: List<ActivityType> = emptyList()
+        types: List<ActivityType> = emptyList(),
+        wrapHash: Boolean = false
     ) = coroutineScope {
         val parsed = continuation?.let { TzktActivityContinuation.parse(it) }
 
-        val prevGroups =
-            types.map {
-                async {
-                    activities(contract, tokenId, size, parsed?.date, null, sortAsc, it)
-                }
+        val prevGroups = types.map {
+            async {
+                activities(contract, tokenId, size, parsed?.date, null, sortAsc, it)
             }
+        }
 
         // If id was parsed we need to send additional requests
         val eqGoups = parsed?.id?.let { id ->
@@ -64,16 +74,15 @@ class TokenActivityClient(
             }
         } ?: emptyList()
 
-        val groups = (prevGroups.awaitAll() + eqGoups.awaitAll()).flatten()
+        val groups = (eqGoups.awaitAll() + prevGroups.awaitAll()).flatten().distinctBy { it.id }
         val activities = when (sortAsc) {
             true -> groups.sortedWith(compareBy({ it.timestamp }, { it.id }))
             else -> groups.sortedWith(compareBy({ it.timestamp }, { it.id })).reversed()
         }
-        Page.Get(
-            items = activities,
+        val slice = activities.subList(0, Integer.min(size, activities.size))
+        Page.Get(items = if (wrapHash) wrapWithHashes(slice) else wrapWithTransactionId(slice),
             size = size,
-            last = { TzktActivityContinuation(it.timestamp, it.id.toLong()).toString() }
-        )
+            last = { TzktActivityContinuation(it.timestamp, it.id.toLong()).toString() })
     }
 
     private suspend fun activities(
@@ -86,9 +95,7 @@ class TokenActivityClient(
         type: ActivityType? = null
     ): List<TypedTokenActivity> {
         val activities = invoke<List<TokenActivity>> { builder ->
-            builder.path(BASE_PATH)
-                .queryParam("token.standard", "fa2")
-                .queryParam("metadata.artifactUri.null", "false")
+            builder.path(BASE_PATH).queryParam("token.standard", "fa2").queryParam("metadata.artifactUri.null", "false")
                 .apply {
                     contract?.let { queryParam("token.contract", it) }
                     tokenId?.let { queryParam("token.tokenId", it) }
@@ -96,22 +103,26 @@ class TokenActivityClient(
                     when {
                         prevDate != null && prevId != null -> {
                             queryParam("timestamp.eq", prevDate.toString())
-                            queryParam("id.${sortPredicate(sortAsc)}", prevId.toString())
+                            queryParam("id.${direction(sortAsc)}", prevId.toString())
                         }
-                        prevDate != null -> queryParam("timestamp.${sortPredicate(sortAsc)}", prevDate.toString())
+                        prevDate != null -> {
+                            queryParam("timestamp.${direction(sortAsc)}", prevDate.toString())
+                        }
                     }
-                    queryParam("sort.${sorting(sortAsc)}", "timestamp")
+                    queryParam("sort.${sorting(sortAsc)}", "timestamp, id")
                     type?.let {
                         when (type) {
                             ActivityType.MINT -> {
                                 queryParam("from.null", "true")
+                                queryParam("to.ni", NULL_ADDRESSES_STRING)
                             }
                             ActivityType.BURN -> {
-                                queryParam("to.in", "$BURN_ADDRESS,$NULL_ADDRESS")
+                                queryParam("from.null", "false")
+                                queryParam("to.in", NULL_ADDRESSES_STRING)
                             }
                             ActivityType.TRANSFER -> {
-                                queryParam("from.null", "false")
-                                queryParam("to.in", "$BURN_ADDRESS,$NULL_ADDRESS")
+                                queryParam("from.ni", NULL_ADDRESSES_STRING)
+                                queryParam("to.ni", NULL_ADDRESSES_STRING)
                             }
                         }
                     }
@@ -122,17 +133,49 @@ class TokenActivityClient(
 
     private fun mapActivity(tokenActivity: TokenActivity): TypedTokenActivity {
         val type = when {
+            NULL_ADDRESSES.contains(tokenActivity.to?.address) -> ActivityType.BURN
             tokenActivity.from == null -> ActivityType.MINT
-            listOf(BURN_ADDRESS, NULL_ADDRESS, null).contains(tokenActivity.to?.address) -> ActivityType.BURN
             else -> ActivityType.TRANSFER
         }
         return TypedTokenActivity(type = type, tokenActivity)
     }
 
+    private suspend fun wrapWithHashes(activities: List<TypedTokenActivity>): List<TypedTokenActivity> {
+        val transactionIds = activities.mapNotNull { it.transactionId }.map { it.toString() }
+        val pairs: Map<Long, String> = if (transactionIds.isNotEmpty()) {
+            withBatch(transactionIds) {
+                invoke<List<TransactionItem>> { builder ->
+                    builder.path(BASE_TRANSACTION_PATH).queryParam("id.in", it.joinToString(","))
+                        .queryParam("select", "id,hash")
+                }.map { it.id to it.hash }
+            }.toMap()
+        } else {
+            emptyMap()
+        }
+        return activities.map {
+            when (it.tokenActivity.transactionId) {
+                null -> it
+                else -> it.addHash(pairs[it.tokenActivity.transactionId])
+            }
+        }
+    }
+
+    private fun wrapWithTransactionId(activities: List<TypedTokenActivity>): List<TypedTokenActivity> {
+        return activities.map {
+            when (it.tokenActivity.transactionId) {
+                null -> it
+                else -> it.addHash(it.tokenActivity.transactionId.toString())
+            }
+        }
+    }
+
     companion object {
         const val BASE_PATH = "v1/tokens/transfers"
-        const val BURN_ADDRESS = "tz1burnburnburnburnburnburnburjAYjjX"
-        const val NULL_ADDRESS = "tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU"
+        const val BASE_TRANSACTION_PATH = "v1/operations/transactions"
         const val DEFAULT_SIZE = 1000
     }
+
+    class TransactionItem(
+        val id: Long, val hash: String
+    )
 }

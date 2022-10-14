@@ -4,6 +4,7 @@ import com.rarible.tzkt.model.ActivityType
 import com.rarible.tzkt.model.TzktActivityContinuation
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.time.OffsetDateTime
 
@@ -115,14 +116,35 @@ class ActivityClientTests : BaseClientTests() {
             	"transactionId": 24276901
             }]
         """.trimIndent())
+        mock("""
+            [
+                {
+                    "id": 23818302,
+                    "hash": "ooqmgMXibYMtdzcNZ4mfV15hyWwxY1MHjj44U8nLMvYvsAywAAx"
+                },
+                {
+                    "id": 23820160,
+                    "hash": "ooFxmRy5Gk8aj7CTG54BtZVmcaEedtzXHA5NAv59LkBV2ikmmPL"
+                },
+                {
+                    "id": 24209723,
+                    "hash": "onkrZdHaH3Duk7kVvqsQxQtRgvCeYFxbCSxj1Ri6UWqZTAGyaDw"
+                },
+                {
+                    "id": 24276901,
+                    "hash": "ooQnGgktNiVhjKtDT8zeD9H2oCY4eAwj7b8MHxP8wWjf7gHnpYw"
+                }
+            ]
+        """.trimIndent())
 
         var activities = activityClient.getActivitiesAll(listOf(ActivityType.MINT, ActivityType.TRANSFER), 2, null, true)
         assertThat(TzktActivityContinuation.isValid(activities.continuation!!)).isTrue
         assertThat(activities.items).hasSize(2)
+        assertThat(activities.items.first().tokenActivity.transactionHash).isNotEmpty
         assertThat(mockServer.requestCount).isEqualTo(2)
         assertThat(requests()).isEqualTo(setOf(
-            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=2&sort.asc=timestamp&from.null=true",
-            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=2&sort.asc=timestamp&from.null=false&to.in=tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU")
+            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=2&sort.asc=timestamp,%20id&from.null=true&to.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU",
+            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&limit=2&sort.asc=timestamp,%20id&from.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&to.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU")
         )
     }
 
@@ -181,10 +203,23 @@ class ActivityClientTests : BaseClientTests() {
                 "transactionId": 23820160
             }
         ]""".trimIndent())
+        mock("""
+            [
+                {
+                    "id": 23818302,
+                    "hash": "ooqmgMXibYMtdzcNZ4mfV15hyWwxY1MHjj44U8nLMvYvsAywAAx"
+                },
+                {
+                    "id": 23820160,
+                    "hash": "ooFxmRy5Gk8aj7CTG54BtZVmcaEedtzXHA5NAv59LkBV2ikmmPL"
+                }
+            ]
+        """.trimIndent())
 
-        var activities = activityClient.getActivitiesByIds(listOf(23818305, 23820166).map { it.toString() })
+        var activities = activityClient.getActivitiesByIds(listOf(23818305, 23820166).map { it.toString() }, true)
 
         assertThat(activities).hasSize(2)
+        assertThat(activities.first().tokenActivity.transactionHash).isNotEmpty
         assertThat(request().path).isEqualTo("/v1/tokens/transfers?id.in=23818305,23820166")
     }
 
@@ -280,16 +315,33 @@ class ActivityClientTests : BaseClientTests() {
                 "transactionId": 41904711
             }]
         """.trimIndent())
+        mock("""
+            [
+                {
+                    "id": 225174019,
+                    "hash": "ooqmgMXibYMtdzcNZ4mfV15hyWwxY1MHjj44U8nLMvYvsAywAAx"
+                },
+                {
+                    "id": 225200218,
+                    "hash": "ooqmgMXibYMtdzcNZ4mfV15hyWwxY1MHjj44U8nLMvYvsAywAAx"
+                },
+                {
+                    "id": 41904711,
+                    "hash": "ooqmgMXibYMtdzcNZ4mfV15hyWwxY1MHjj44U8nLMvYvsAywAAx"
+                }
+            ]
+        """.trimIndent())
 
         var activities = activityClient.getActivitiesByItem(listOf(ActivityType.MINT, ActivityType.TRANSFER, ActivityType.BURN), "KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn", "0", 3, null, false)
 
         assertThat(activities.items).hasSize(3)
-        assertThat(activities.continuation.toString()).isEqualTo("1614340163_41904714")
+        assertThat(activities.items.first().tokenActivity.transactionHash).isNotEmpty
+        assertThat(activities.continuation.toString()).isEqualTo("1614340163000_41904714")
         assertThat(mockServer.requestCount).isEqualTo(3)
         assertThat(requests()).isEqualTo(setOf(
-            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&sort.desc=timestamp&from.null=true",
-            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&sort.desc=timestamp&from.null=false&to.in=tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU",
-            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&sort.desc=timestamp&to.in=tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU")
+            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&sort.desc=timestamp,%20id&from.null=true&to.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU",
+            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&sort.desc=timestamp,%20id&from.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&to.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU",
+            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&sort.desc=timestamp,%20id&from.null=false&to.in=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU")
         )
     }
 
@@ -388,19 +440,37 @@ class ActivityClientTests : BaseClientTests() {
         mock("[]")
         mock("[]")
         mock("[]")
+        mock("""
+            [
+                {
+                    "id": 225174019,
+                    "hash": "ooqmgMXibYMtdzcNZ4mfV15hyWwxY1MHjj44U8nLMvYvsAywAAx"
+                },
+                {
+                    "id": 225200218,
+                    "hash": "ooqmgMXibYMtdzcNZ4mfV15hyWwxY1MHjj44U8nLMvYvsAywAAx"
+                },
+                {
+                    "id": 41904711,
+                    "hash": "ooqmgMXibYMtdzcNZ4mfV15hyWwxY1MHjj44U8nLMvYvsAywAAx"
+                }
+            ]
+        """.trimIndent())
 
-        var activities = activityClient.getActivitiesByItem(listOf(ActivityType.MINT, ActivityType.TRANSFER, ActivityType.BURN), "KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn", "0", 3, "1614340163_41904714", true)
+        var activities = activityClient.getActivitiesByItem(listOf(ActivityType.MINT, ActivityType.TRANSFER, ActivityType.BURN), "KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn", "0", 3, "1614340163000_41904714", true, true)
 
         assertThat(activities.items).hasSize(3)
-        assertThat(activities.continuation.toString()).isEqualTo("1651850849_225200387")
-        assertThat(mockServer.requestCount).isEqualTo(6)
+        assertThat(activities.items.first().tokenActivity.transactionHash).isNotEmpty
+        assertThat(activities.continuation.toString()).isEqualTo("1651850849000_225200387")
+        assertThat(mockServer.requestCount).isEqualTo(7)
         assertThat(requests()).isEqualTo(setOf(
-            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.gt=2021-02-26T11:49:23Z&sort.asc=timestamp&from.null=true",
-            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.gt=2021-02-26T11:49:23Z&sort.asc=timestamp&from.null=false&to.in=tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU",
-            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.gt=2021-02-26T11:49:23Z&sort.asc=timestamp&to.in=tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU",
-            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.eq=2021-02-26T11:49:23Z&id.gt=41904714&sort.asc=timestamp&from.null=true",
-            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.eq=2021-02-26T11:49:23Z&id.gt=41904714&sort.asc=timestamp&from.null=false&to.in=tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU",
-            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.eq=2021-02-26T11:49:23Z&id.gt=41904714&sort.asc=timestamp&to.in=tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU")
+            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.gt=2021-02-26T11:49:23Z&sort.asc=timestamp,%20id&from.null=true&to.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU",
+            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.gt=2021-02-26T11:49:23Z&sort.asc=timestamp,%20id&from.null=false&to.in=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU",
+            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.gt=2021-02-26T11:49:23Z&sort.asc=timestamp,%20id&from.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&to.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU",
+            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.eq=2021-02-26T11:49:23Z&id.gt=41904714&sort.asc=timestamp,%20id&from.null=true&to.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU",
+            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.eq=2021-02-26T11:49:23Z&id.gt=41904714&sort.asc=timestamp,%20id&from.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&to.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU",
+            "/v1/tokens/transfers?token.standard=fa2&metadata.artifactUri.null=false&token.contract=KT1PWx2mnDueood7fEmfbBDKx1D9BAnnXitn&token.tokenId=0&limit=3&timestamp.eq=2021-02-26T11:49:23Z&id.gt=41904714&sort.asc=timestamp,%20id&from.null=false&to.in=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU",
+            "/v1/operations/transactions?id.in=41904711,225174019,225200218&select=id,hash")
         )
     }
 
@@ -464,9 +534,35 @@ class ActivityClientTests : BaseClientTests() {
             	"transactionId": 24209723
             }]
         """.trimIndent())
+        mock("""
+            [
+                {
+                    "id": 24209723,
+                    "hash": "ooqmgMXibYMtdzcNZ4mfV15hyWwxY1MHjj44U8nLMvYvsAywAAx"
+                },
+                {
+                    "id": 24209723,
+                    "hash": "ooqmgMXibYMtdzcNZ4mfV15hyWwxY1MHjj44U8nLMvYvsAywAAx"
+                }
+            ]
+        """.trimIndent())
+
 
         var activities = activityClient.getActivitiesAll(listOf(ActivityType.MINT), 2, TzktActivityContinuation(OffsetDateTime.now(), Long.MAX_VALUE).toString(), false)
         assertThat(TzktActivityContinuation.isValid(activities.continuation!!)).isTrue
         assertThat(activities.items).hasSize(2)
+        assertThat(activities.items.first().tokenActivity.transactionHash).isNotEmpty
+    }
+
+    // This's for testnet real indexer
+    @Disabled
+    @Test
+    fun `should return 1000 activities`() = runBlocking<Unit> {
+        val fileContent = ActivityClientTests::class.java.getResource("/testnet_transactions.txt").readText()
+        val ids = fileContent.split(",").map { it.trim() }
+        var activities = activityClient.getActivitiesByIds(ids)
+        assertThat(activities).hasSize(1000)
+        val hashes = activities.mapNotNull { it.transactionHash }
+        assertThat(hashes).hasSize(879) //maybe flaky
     }
 }

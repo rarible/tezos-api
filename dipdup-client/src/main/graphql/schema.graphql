@@ -143,6 +143,201 @@ input bigint_comparison_exp {
 }
 
 """
+columns and relationships of "collection"
+"""
+type collection {
+  db_updated_at: timestamptz!
+
+  id: String!
+
+  minters("JSON select path" path: String): jsonb!
+
+  owner: String!
+
+  standard: String!
+
+  symbol: String
+}
+
+"""
+Boolean expression to filter rows from the table "collection". All fields are combined with a logical 'AND'.
+"""
+input collection_bool_exp {
+  _and: [collection_bool_exp!]
+
+  _not: collection_bool_exp
+
+  _or: [collection_bool_exp!]
+
+  db_updated_at: timestamptz_comparison_exp
+
+  id: String_comparison_exp
+
+  minters: jsonb_comparison_exp
+
+  owner: String_comparison_exp
+
+  standard: String_comparison_exp
+
+  symbol: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "collection".
+"""
+input collection_order_by {
+  db_updated_at: order_by
+
+  id: order_by
+
+  minters: order_by
+
+  owner: order_by
+
+  standard: order_by
+
+  symbol: order_by
+}
+
+"""
+select columns of table "collection"
+"""
+enum collection_select_column {
+  """
+  column name
+  """
+  db_updated_at
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  minters
+
+  """
+  column name
+  """
+  owner
+
+  """
+  column name
+  """
+  standard
+
+  """
+  column name
+  """
+  symbol
+}
+
+"""
+columns and relationships of "collection_with_meta"
+"""
+type collection_with_meta {
+  db_updated_at: timestamptz
+
+  id: String
+
+  metadata: String
+
+  minters("JSON select path" path: String): jsonb
+
+  owner: String
+
+  standard: String
+
+  symbol: String
+}
+
+"""
+Boolean expression to filter rows from the table "collection_with_meta". All fields are combined with a logical 'AND'.
+"""
+input collection_with_meta_bool_exp {
+  _and: [collection_with_meta_bool_exp!]
+
+  _not: collection_with_meta_bool_exp
+
+  _or: [collection_with_meta_bool_exp!]
+
+  db_updated_at: timestamptz_comparison_exp
+
+  id: String_comparison_exp
+
+  metadata: String_comparison_exp
+
+  minters: jsonb_comparison_exp
+
+  owner: String_comparison_exp
+
+  standard: String_comparison_exp
+
+  symbol: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "collection_with_meta".
+"""
+input collection_with_meta_order_by {
+  db_updated_at: order_by
+
+  id: order_by
+
+  metadata: order_by
+
+  minters: order_by
+
+  owner: order_by
+
+  standard: order_by
+
+  symbol: order_by
+}
+
+"""
+select columns of table "collection_with_meta"
+"""
+enum collection_with_meta_select_column {
+  """
+  column name
+  """
+  db_updated_at
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  metadata
+
+  """
+  column name
+  """
+  minters
+
+  """
+  column name
+  """
+  owner
+
+  """
+  column name
+  """
+  standard
+
+  """
+  column name
+  """
+  symbol
+}
+
+"""
 columns and relationships of "dipdup_contract"
 """
 type dipdup_contract {
@@ -598,6 +793,137 @@ enum dipdup_index_select_column {
 }
 
 """
+Model update created within versioned transactions
+
+
+columns and relationships of "dipdup_model_update"
+"""
+type dipdup_model_update {
+  """
+  INSERT: INSERT\nUPDATE: UPDATE\nDELETE: DELETE
+  """
+  action: String!
+
+  created_at: timestamptz!
+
+  data("JSON select path" path: String): jsonb
+
+  id: Int!
+
+  index: String!
+
+  level: Int!
+
+  model_name: String!
+
+  model_pk: String!
+
+  updated_at: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "dipdup_model_update". All fields are combined with a logical 'AND'.
+"""
+input dipdup_model_update_bool_exp {
+  _and: [dipdup_model_update_bool_exp!]
+
+  _not: dipdup_model_update_bool_exp
+
+  _or: [dipdup_model_update_bool_exp!]
+
+  action: String_comparison_exp
+
+  created_at: timestamptz_comparison_exp
+
+  data: jsonb_comparison_exp
+
+  id: Int_comparison_exp
+
+  index: String_comparison_exp
+
+  level: Int_comparison_exp
+
+  model_name: String_comparison_exp
+
+  model_pk: String_comparison_exp
+
+  updated_at: timestamptz_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "dipdup_model_update".
+"""
+input dipdup_model_update_order_by {
+  action: order_by
+
+  created_at: order_by
+
+  data: order_by
+
+  id: order_by
+
+  index: order_by
+
+  level: order_by
+
+  model_name: order_by
+
+  model_pk: order_by
+
+  updated_at: order_by
+}
+
+"""
+select columns of table "dipdup_model_update"
+"""
+enum dipdup_model_update_select_column {
+  """
+  column name
+  """
+  action
+
+  """
+  column name
+  """
+  created_at
+
+  """
+  column name
+  """
+  data
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  index
+
+  """
+  column name
+  """
+  level
+
+  """
+  column name
+  """
+  model_name
+
+  """
+  column name
+  """
+  model_pk
+
+  """
+  column name
+  """
+  updated_at
+}
+
+"""
 columns and relationships of "dipdup_schema"
 """
 type dipdup_schema {
@@ -795,6 +1121,57 @@ enum dipdup_token_metadata_select_column {
   updated_at
 }
 
+"""
+columns and relationships of "indexing_status"
+"""
+type indexing_status {
+  """
+  COLLECTION: COLLECTION\nCOLLECTION_METADATA: COLLECTION_METADATA\nNFT: NFT\nNFT_METADATA: NFT_METADATA\nLEGACY_ORDERS: LEGACY_ORDERS\nV1_CLEANING: V1_CLEANING\nV1_FILL_FIX: V1_FILL_FIX
+  """
+  index: String!
+
+  last_level: String!
+}
+
+"""
+Boolean expression to filter rows from the table "indexing_status". All fields are combined with a logical 'AND'.
+"""
+input indexing_status_bool_exp {
+  _and: [indexing_status_bool_exp!]
+
+  _not: indexing_status_bool_exp
+
+  _or: [indexing_status_bool_exp!]
+
+  index: String_comparison_exp
+
+  last_level: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "indexing_status".
+"""
+input indexing_status_order_by {
+  index: order_by
+
+  last_level: order_by
+}
+
+"""
+select columns of table "indexing_status"
+"""
+enum indexing_status_select_column {
+  """
+  column name
+  """
+  index
+
+  """
+  column name
+  """
+  last_level
+}
+
 scalar jsonb
 
 """
@@ -846,6 +1223,65 @@ input jsonb_comparison_exp {
 }
 
 """
+columns and relationships of "legacy_orders"
+"""
+type legacy_orders {
+  data("JSON select path" path: String): jsonb!
+
+  hash: String!
+
+  id: uuid!
+}
+
+"""
+Boolean expression to filter rows from the table "legacy_orders". All fields are combined with a logical 'AND'.
+"""
+input legacy_orders_bool_exp {
+  _and: [legacy_orders_bool_exp!]
+
+  _not: legacy_orders_bool_exp
+
+  _or: [legacy_orders_bool_exp!]
+
+  data: jsonb_comparison_exp
+
+  hash: String_comparison_exp
+
+  id: uuid_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "legacy_orders".
+"""
+input legacy_orders_order_by {
+  data: order_by
+
+  hash: order_by
+
+  id: order_by
+}
+
+"""
+select columns of table "legacy_orders"
+"""
+enum legacy_orders_select_column {
+  """
+  column name
+  """
+  data
+
+  """
+  column name
+  """
+  hash
+
+  """
+  column name
+  """
+  id
+}
+
+"""
 columns and relationships of "marketplace_activity"
 """
 type marketplace_activity {
@@ -864,7 +1300,7 @@ type marketplace_activity {
 
   make_value: numeric!
 
-  maker: String!
+  maker: String
 
   network: String!
 
@@ -881,11 +1317,9 @@ type marketplace_activity {
   order_id: uuid!
 
   """
-  HEN: Hen\nOBJKT: Objkt\nOBJKT_V2: Objkt_v2\nRARIBLE: Rarible
+  HEN: HEN\nTEIA_V1: TEIA_V1\nVERSUM_V1: VERSUM_V1\nOBJKT_V1: OBJKT_V1\nOBJKT_V2: OBJKT_V2\nRARIBLE_V1: RARIBLE_V1\nRARIBLE_V2: RARIBLE_V2\nFXHASH_V1: FXHASH_V1\nFXHASH_V2: FXHASH_V2
   """
   platform: String!
-
-  sell_price: numeric!
 
   """
   ETH: ETH\nXTZ: XTZ\nFUNGIBLE_TOKEN: TEZOS_FT\nNON_FUNGIBLE_TOKEN: TEZOS_NFT\nMULTI_TOKEN: TEZOS_MT\nERC20: ERC20\nERC721: ERC721\nERC1155: ERC1155\nERC721_LAZY: ERC721_LAZY\nERC1155_LAZY: ERC1155_LAZY\nCOLLECTION: COLLECTION\nGEN_ART: GEN_ART
@@ -901,7 +1335,7 @@ type marketplace_activity {
   taker: String
 
   """
-  ORDER_LIST: LIST\nORDER_MATCH: SELL\nORDER_CANCEL: CANCEL_LIST\nTOKEN_MINT: MINT\nTOKEN_TRANSFER: TRANSFER\nTOKEN_BURN: BURN
+  GET_BID: GET_BID\nGET_FLOOR_BID: GET_FLOOR_BID\nORDER_LIST: LIST\nORDER_MATCH: SELL\nORDER_CANCEL: CANCEL_LIST\nCANCEL_BID: CANCEL_BID\nCANCEL_FLOOR_BID: CANCEL_FLOOR_BID\nMAKE_BID: MAKE_BID\nMAKE_FLOOR_BID: MAKE_FLOOR_BID\nTOKEN_MINT: MINT\nTOKEN_TRANSFER: TRANSFER\nTOKEN_BURN: BURN
   """
   type: String!
 }
@@ -945,8 +1379,6 @@ input marketplace_activity_bool_exp {
   order_id: uuid_comparison_exp
 
   platform: String_comparison_exp
-
-  sell_price: numeric_comparison_exp
 
   take_asset_class: String_comparison_exp
 
@@ -994,8 +1426,6 @@ input marketplace_activity_order_by {
   order_id: order_by
 
   platform: order_by
-
-  sell_price: order_by
 
   take_asset_class: order_by
 
@@ -1092,11 +1522,6 @@ enum marketplace_activity_select_column {
   """
   column name
   """
-  sell_price
-
-  """
-  column name
-  """
   take_asset_class
 
   """
@@ -1133,6 +1558,8 @@ type marketplace_order {
 
   created_at: timestamptz!
 
+  end_at: timestamptz
+
   ended_at: timestamptz
 
   fill: numeric!
@@ -1150,9 +1577,7 @@ type marketplace_order {
 
   make_contract: String
 
-  make_price: numeric!
-
-  make_stock: numeric!
+  make_price: numeric
 
   make_token_id: String
 
@@ -1162,14 +1587,18 @@ type marketplace_order {
 
   network: String!
 
+  origin_fees("JSON select path" path: String): jsonb!
+
+  payouts("JSON select path" path: String): jsonb!
+
   """
-  HEN: Hen\nOBJKT: Objkt\nOBJKT_V2: Objkt_v2\nRARIBLE: Rarible
+  HEN: HEN\nTEIA_V1: TEIA_V1\nVERSUM_V1: VERSUM_V1\nOBJKT_V1: OBJKT_V1\nOBJKT_V2: OBJKT_V2\nRARIBLE_V1: RARIBLE_V1\nRARIBLE_V2: RARIBLE_V2\nFXHASH_V1: FXHASH_V1\nFXHASH_V2: FXHASH_V2
   """
   platform: String!
 
-  salt: bigint!
+  salt: String!
 
-  started_at: timestamptz!
+  start_at: timestamptz!
 
   """
   ACTIVE: ACTIVE\nFILLED: FILLED\nHISTORICAL: HISTORICAL\nINACTIVE: INACTIVE\nCANCELLED: CANCELLED
@@ -1182,6 +1611,8 @@ type marketplace_order {
   take_asset_class: String
 
   take_contract: String
+
+  take_price: numeric
 
   take_token_id: String
 
@@ -1204,6 +1635,8 @@ input marketplace_order_bool_exp {
 
   created_at: timestamptz_comparison_exp
 
+  end_at: timestamptz_comparison_exp
+
   ended_at: timestamptz_comparison_exp
 
   fill: numeric_comparison_exp
@@ -1220,8 +1653,6 @@ input marketplace_order_bool_exp {
 
   make_price: numeric_comparison_exp
 
-  make_stock: numeric_comparison_exp
-
   make_token_id: String_comparison_exp
 
   make_value: numeric_comparison_exp
@@ -1230,17 +1661,23 @@ input marketplace_order_bool_exp {
 
   network: String_comparison_exp
 
+  origin_fees: jsonb_comparison_exp
+
+  payouts: jsonb_comparison_exp
+
   platform: String_comparison_exp
 
-  salt: bigint_comparison_exp
+  salt: String_comparison_exp
 
-  started_at: timestamptz_comparison_exp
+  start_at: timestamptz_comparison_exp
 
   status: String_comparison_exp
 
   take_asset_class: String_comparison_exp
 
   take_contract: String_comparison_exp
+
+  take_price: numeric_comparison_exp
 
   take_token_id: String_comparison_exp
 
@@ -1256,6 +1693,8 @@ input marketplace_order_order_by {
   cancelled: order_by
 
   created_at: order_by
+
+  end_at: order_by
 
   ended_at: order_by
 
@@ -1273,8 +1712,6 @@ input marketplace_order_order_by {
 
   make_price: order_by
 
-  make_stock: order_by
-
   make_token_id: order_by
 
   make_value: order_by
@@ -1283,17 +1720,23 @@ input marketplace_order_order_by {
 
   network: order_by
 
+  origin_fees: order_by
+
+  payouts: order_by
+
   platform: order_by
 
   salt: order_by
 
-  started_at: order_by
+  start_at: order_by
 
   status: order_by
 
   take_asset_class: order_by
 
   take_contract: order_by
+
+  take_price: order_by
 
   take_token_id: order_by
 
@@ -1315,6 +1758,11 @@ enum marketplace_order_select_column {
   column name
   """
   created_at
+
+  """
+  column name
+  """
+  end_at
 
   """
   column name
@@ -1359,11 +1807,6 @@ enum marketplace_order_select_column {
   """
   column name
   """
-  make_stock
-
-  """
-  column name
-  """
   make_token_id
 
   """
@@ -1384,6 +1827,16 @@ enum marketplace_order_select_column {
   """
   column name
   """
+  origin_fees
+
+  """
+  column name
+  """
+  payouts
+
+  """
+  column name
+  """
   platform
 
   """
@@ -1394,7 +1847,7 @@ enum marketplace_order_select_column {
   """
   column name
   """
-  started_at
+  start_at
 
   """
   column name
@@ -1414,6 +1867,11 @@ enum marketplace_order_select_column {
   """
   column name
   """
+  take_price
+
+  """
+  column name
+  """
   take_token_id
 
   """
@@ -1425,6 +1883,190 @@ enum marketplace_order_select_column {
   column name
   """
   taker
+}
+
+"""
+columns and relationships of "metadata_collection"
+"""
+type metadata_collection {
+  db_updated_at: timestamptz!
+
+  id: String!
+
+  metadata: String
+
+  metadata_retries: Int!
+
+  metadata_synced: Boolean!
+}
+
+"""
+Boolean expression to filter rows from the table "metadata_collection". All fields are combined with a logical 'AND'.
+"""
+input metadata_collection_bool_exp {
+  _and: [metadata_collection_bool_exp!]
+
+  _not: metadata_collection_bool_exp
+
+  _or: [metadata_collection_bool_exp!]
+
+  db_updated_at: timestamptz_comparison_exp
+
+  id: String_comparison_exp
+
+  metadata: String_comparison_exp
+
+  metadata_retries: Int_comparison_exp
+
+  metadata_synced: Boolean_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "metadata_collection".
+"""
+input metadata_collection_order_by {
+  db_updated_at: order_by
+
+  id: order_by
+
+  metadata: order_by
+
+  metadata_retries: order_by
+
+  metadata_synced: order_by
+}
+
+"""
+select columns of table "metadata_collection"
+"""
+enum metadata_collection_select_column {
+  """
+  column name
+  """
+  db_updated_at
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  metadata
+
+  """
+  column name
+  """
+  metadata_retries
+
+  """
+  column name
+  """
+  metadata_synced
+}
+
+"""
+columns and relationships of "metadata_token"
+"""
+type metadata_token {
+  contract: String!
+
+  db_updated_at: timestamptz!
+
+  id: uuid!
+
+  metadata: String
+
+  metadata_retries: Int!
+
+  metadata_synced: Boolean!
+
+  token_id: String!
+}
+
+"""
+Boolean expression to filter rows from the table "metadata_token". All fields are combined with a logical 'AND'.
+"""
+input metadata_token_bool_exp {
+  _and: [metadata_token_bool_exp!]
+
+  _not: metadata_token_bool_exp
+
+  _or: [metadata_token_bool_exp!]
+
+  contract: String_comparison_exp
+
+  db_updated_at: timestamptz_comparison_exp
+
+  id: uuid_comparison_exp
+
+  metadata: String_comparison_exp
+
+  metadata_retries: Int_comparison_exp
+
+  metadata_synced: Boolean_comparison_exp
+
+  token_id: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "metadata_token".
+"""
+input metadata_token_order_by {
+  contract: order_by
+
+  db_updated_at: order_by
+
+  id: order_by
+
+  metadata: order_by
+
+  metadata_retries: order_by
+
+  metadata_synced: order_by
+
+  token_id: order_by
+}
+
+"""
+select columns of table "metadata_token"
+"""
+enum metadata_token_select_column {
+  """
+  column name
+  """
+  contract
+
+  """
+  column name
+  """
+  db_updated_at
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  metadata
+
+  """
+  column name
+  """
+  metadata_retries
+
+  """
+  column name
+  """
+  metadata_synced
+
+  """
+  column name
+  """
+  token_id
 }
 
 scalar numeric
@@ -1487,7 +2129,125 @@ enum order_by {
   desc_nulls_last
 }
 
+"""
+columns and relationships of "ownership"
+"""
+type ownership {
+  balance: numeric!
+
+  contract: String!
+
+  created: timestamptz!
+
+  id: uuid!
+
+  owner: String!
+
+  token_id: String!
+
+  updated: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "ownership". All fields are combined with a logical 'AND'.
+"""
+input ownership_bool_exp {
+  _and: [ownership_bool_exp!]
+
+  _not: ownership_bool_exp
+
+  _or: [ownership_bool_exp!]
+
+  balance: numeric_comparison_exp
+
+  contract: String_comparison_exp
+
+  created: timestamptz_comparison_exp
+
+  id: uuid_comparison_exp
+
+  owner: String_comparison_exp
+
+  token_id: String_comparison_exp
+
+  updated: timestamptz_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "ownership".
+"""
+input ownership_order_by {
+  balance: order_by
+
+  contract: order_by
+
+  created: order_by
+
+  id: order_by
+
+  owner: order_by
+
+  token_id: order_by
+
+  updated: order_by
+}
+
+"""
+select columns of table "ownership"
+"""
+enum ownership_select_column {
+  """
+  column name
+  """
+  balance
+
+  """
+  column name
+  """
+  contract
+
+  """
+  column name
+  """
+  created
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  owner
+
+  """
+  column name
+  """
+  token_id
+
+  """
+  column name
+  """
+  updated
+}
+
 type query_root {
+  """
+  fetch data from the table: "collection"
+  """
+  collection("distinct select on columns" distinct_on: [collection_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [collection_order_by!], "filter the rows returned" where: collection_bool_exp): [collection!]!
+
+  """
+  fetch data from the table: "collection" using primary key columns
+  """
+  collection_by_pk(id: String!): collection
+
+  """
+  fetch data from the table: "collection_with_meta"
+  """
+  collection_with_meta("distinct select on columns" distinct_on: [collection_with_meta_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [collection_with_meta_order_by!], "filter the rows returned" where: collection_with_meta_bool_exp): [collection_with_meta!]!
+
   """
   fetch data from the table: "dipdup_contract"
   """
@@ -1534,6 +2294,16 @@ type query_root {
   dipdup_index_by_pk(name: String!): dipdup_index
 
   """
+  fetch data from the table: "dipdup_model_update"
+  """
+  dipdup_model_update("distinct select on columns" distinct_on: [dipdup_model_update_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_model_update_order_by!], "filter the rows returned" where: dipdup_model_update_bool_exp): [dipdup_model_update!]!
+
+  """
+  fetch data from the table: "dipdup_model_update" using primary key columns
+  """
+  dipdup_model_update_by_pk(id: Int!): dipdup_model_update
+
+  """
   fetch data from the table: "dipdup_schema"
   """
   dipdup_schema("distinct select on columns" distinct_on: [dipdup_schema_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_schema_order_by!], "filter the rows returned" where: dipdup_schema_bool_exp): [dipdup_schema!]!
@@ -1554,6 +2324,26 @@ type query_root {
   dipdup_token_metadata_by_pk(id: Int!): dipdup_token_metadata
 
   """
+  fetch data from the table: "indexing_status"
+  """
+  indexing_status("distinct select on columns" distinct_on: [indexing_status_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [indexing_status_order_by!], "filter the rows returned" where: indexing_status_bool_exp): [indexing_status!]!
+
+  """
+  fetch data from the table: "indexing_status" using primary key columns
+  """
+  indexing_status_by_pk("COLLECTION: COLLECTION\\nCOLLECTION_METADATA: COLLECTION_METADATA\\nNFT: NFT\\nNFT_METADATA: NFT_METADATA\\nLEGACY_ORDERS: LEGACY_ORDERS\\nV1_CLEANING: V1_CLEANING\\nV1_FILL_FIX: V1_FILL_FIX" index: String!): indexing_status
+
+  """
+  fetch data from the table: "legacy_orders"
+  """
+  legacy_orders("distinct select on columns" distinct_on: [legacy_orders_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [legacy_orders_order_by!], "filter the rows returned" where: legacy_orders_bool_exp): [legacy_orders!]!
+
+  """
+  fetch data from the table: "legacy_orders" using primary key columns
+  """
+  legacy_orders_by_pk(hash: String!): legacy_orders
+
+  """
   fetch data from the table: "marketplace_activity"
   """
   marketplace_activity("distinct select on columns" distinct_on: [marketplace_activity_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [marketplace_activity_order_by!], "filter the rows returned" where: marketplace_activity_bool_exp): [marketplace_activity!]!
@@ -1572,10 +2362,233 @@ type query_root {
   fetch data from the table: "marketplace_order" using primary key columns
   """
   marketplace_order_by_pk(id: uuid!): marketplace_order
+
+  """
+  fetch data from the table: "metadata_collection"
+  """
+  metadata_collection("distinct select on columns" distinct_on: [metadata_collection_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [metadata_collection_order_by!], "filter the rows returned" where: metadata_collection_bool_exp): [metadata_collection!]!
+
+  """
+  fetch data from the table: "metadata_collection" using primary key columns
+  """
+  metadata_collection_by_pk(id: String!): metadata_collection
+
+  """
+  fetch data from the table: "metadata_token"
+  """
+  metadata_token("distinct select on columns" distinct_on: [metadata_token_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [metadata_token_order_by!], "filter the rows returned" where: metadata_token_bool_exp): [metadata_token!]!
+
+  """
+  fetch data from the table: "metadata_token" using primary key columns
+  """
+  metadata_token_by_pk(id: uuid!): metadata_token
+
+  """
+  fetch data from the table: "ownership"
+  """
+  ownership("distinct select on columns" distinct_on: [ownership_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [ownership_order_by!], "filter the rows returned" where: ownership_bool_exp): [ownership!]!
+
+  """
+  fetch data from the table: "ownership" using primary key columns
+  """
+  ownership_by_pk(id: uuid!): ownership
+
+  """
+  fetch data from the table: "royalties"
+  """
+  royalties("distinct select on columns" distinct_on: [royalties_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [royalties_order_by!], "filter the rows returned" where: royalties_bool_exp): [royalties!]!
+
+  """
+  fetch data from the table: "royalties" using primary key columns
+  """
+  royalties_by_pk(id: uuid!): royalties
+
+  """
+  fetch data from the table: "tezos_domains_domain"
+  """
+  tezos_domains_domain("distinct select on columns" distinct_on: [tezos_domains_domain_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tezos_domains_domain_order_by!], "filter the rows returned" where: tezos_domains_domain_bool_exp): [tezos_domains_domain!]!
+
+  """
+  fetch data from the table: "tezos_domains_domain" using primary key columns
+  """
+  tezos_domains_domain_by_pk(id: String!): tezos_domains_domain
+
+  """
+  fetch data from the table: "tezos_domains_record"
+  """
+  tezos_domains_record("distinct select on columns" distinct_on: [tezos_domains_record_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tezos_domains_record_order_by!], "filter the rows returned" where: tezos_domains_record_bool_exp): [tezos_domains_record!]!
+
+  """
+  fetch data from the table: "tezos_domains_record" using primary key columns
+  """
+  tezos_domains_record_by_pk(id: String!): tezos_domains_record
+
+  """
+  fetch data from the table: "tezos_domains_tld"
+  """
+  tezos_domains_tld("distinct select on columns" distinct_on: [tezos_domains_tld_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tezos_domains_tld_order_by!], "filter the rows returned" where: tezos_domains_tld_bool_exp): [tezos_domains_tld!]!
+
+  """
+  fetch data from the table: "tezos_domains_tld" using primary key columns
+  """
+  tezos_domains_tld_by_pk(id: String!): tezos_domains_tld
+
+  """
+  fetch data from the table: "token"
+  """
+  token("distinct select on columns" distinct_on: [token_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [token_order_by!], "filter the rows returned" where: token_bool_exp): [token!]!
+
+  """
+  fetch data from the table: "token" using primary key columns
+  """
+  token_by_pk(id: uuid!): token
+
+  """
+  fetch data from the table: "token_transfer"
+  """
+  token_transfer("distinct select on columns" distinct_on: [token_transfer_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [token_transfer_order_by!], "filter the rows returned" where: token_transfer_bool_exp): [token_transfer!]!
+
+  """
+  fetch data from the table: "token_transfer" using primary key columns
+  """
+  token_transfer_by_pk(id: bigint!): token_transfer
+
+  """
+  fetch data from the table: "token_with_meta"
+  """
+  token_with_meta("distinct select on columns" distinct_on: [token_with_meta_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [token_with_meta_order_by!], "filter the rows returned" where: token_with_meta_bool_exp): [token_with_meta!]!
+
+  """
+  fetch data from the table: "tzprofiles"
+  """
+  tzprofiles("distinct select on columns" distinct_on: [tzprofiles_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tzprofiles_order_by!], "filter the rows returned" where: tzprofiles_bool_exp): [tzprofiles!]!
+
+  """
+  fetch data from the table: "tzprofiles" using primary key columns
+  """
+  tzprofiles_by_pk(account: String!): tzprofiles
+}
+
+"""
+columns and relationships of "royalties"
+"""
+type royalties {
+  contract: String!
+
+  db_updated_at: timestamptz!
+
+  id: uuid!
+
+  parts("JSON select path" path: String): jsonb!
+
+  royalties_retries: Int!
+
+  royalties_synced: Boolean!
+
+  token_id: String!
+}
+
+"""
+Boolean expression to filter rows from the table "royalties". All fields are combined with a logical 'AND'.
+"""
+input royalties_bool_exp {
+  _and: [royalties_bool_exp!]
+
+  _not: royalties_bool_exp
+
+  _or: [royalties_bool_exp!]
+
+  contract: String_comparison_exp
+
+  db_updated_at: timestamptz_comparison_exp
+
+  id: uuid_comparison_exp
+
+  parts: jsonb_comparison_exp
+
+  royalties_retries: Int_comparison_exp
+
+  royalties_synced: Boolean_comparison_exp
+
+  token_id: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "royalties".
+"""
+input royalties_order_by {
+  contract: order_by
+
+  db_updated_at: order_by
+
+  id: order_by
+
+  parts: order_by
+
+  royalties_retries: order_by
+
+  royalties_synced: order_by
+
+  token_id: order_by
+}
+
+"""
+select columns of table "royalties"
+"""
+enum royalties_select_column {
+  """
+  column name
+  """
+  contract
+
+  """
+  column name
+  """
+  db_updated_at
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  parts
+
+  """
+  column name
+  """
+  royalties_retries
+
+  """
+  column name
+  """
+  royalties_synced
+
+  """
+  column name
+  """
+  token_id
 }
 
 type subscription_root {
   """
+  fetch data from the table: "collection"
+  """
+  collection("distinct select on columns" distinct_on: [collection_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [collection_order_by!], "filter the rows returned" where: collection_bool_exp): [collection!]!
+
+  """
+  fetch data from the table: "collection" using primary key columns
+  """
+  collection_by_pk(id: String!): collection
+
+  """
+  fetch data from the table: "collection_with_meta"
+  """
+  collection_with_meta("distinct select on columns" distinct_on: [collection_with_meta_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [collection_with_meta_order_by!], "filter the rows returned" where: collection_with_meta_bool_exp): [collection_with_meta!]!
+
+  """
   fetch data from the table: "dipdup_contract"
   """
   dipdup_contract("distinct select on columns" distinct_on: [dipdup_contract_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_contract_order_by!], "filter the rows returned" where: dipdup_contract_bool_exp): [dipdup_contract!]!
@@ -1621,6 +2634,16 @@ type subscription_root {
   dipdup_index_by_pk(name: String!): dipdup_index
 
   """
+  fetch data from the table: "dipdup_model_update"
+  """
+  dipdup_model_update("distinct select on columns" distinct_on: [dipdup_model_update_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_model_update_order_by!], "filter the rows returned" where: dipdup_model_update_bool_exp): [dipdup_model_update!]!
+
+  """
+  fetch data from the table: "dipdup_model_update" using primary key columns
+  """
+  dipdup_model_update_by_pk(id: Int!): dipdup_model_update
+
+  """
   fetch data from the table: "dipdup_schema"
   """
   dipdup_schema("distinct select on columns" distinct_on: [dipdup_schema_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [dipdup_schema_order_by!], "filter the rows returned" where: dipdup_schema_bool_exp): [dipdup_schema!]!
@@ -1641,6 +2664,26 @@ type subscription_root {
   dipdup_token_metadata_by_pk(id: Int!): dipdup_token_metadata
 
   """
+  fetch data from the table: "indexing_status"
+  """
+  indexing_status("distinct select on columns" distinct_on: [indexing_status_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [indexing_status_order_by!], "filter the rows returned" where: indexing_status_bool_exp): [indexing_status!]!
+
+  """
+  fetch data from the table: "indexing_status" using primary key columns
+  """
+  indexing_status_by_pk("COLLECTION: COLLECTION\\nCOLLECTION_METADATA: COLLECTION_METADATA\\nNFT: NFT\\nNFT_METADATA: NFT_METADATA\\nLEGACY_ORDERS: LEGACY_ORDERS\\nV1_CLEANING: V1_CLEANING\\nV1_FILL_FIX: V1_FILL_FIX" index: String!): indexing_status
+
+  """
+  fetch data from the table: "legacy_orders"
+  """
+  legacy_orders("distinct select on columns" distinct_on: [legacy_orders_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [legacy_orders_order_by!], "filter the rows returned" where: legacy_orders_bool_exp): [legacy_orders!]!
+
+  """
+  fetch data from the table: "legacy_orders" using primary key columns
+  """
+  legacy_orders_by_pk(hash: String!): legacy_orders
+
+  """
   fetch data from the table: "marketplace_activity"
   """
   marketplace_activity("distinct select on columns" distinct_on: [marketplace_activity_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [marketplace_activity_order_by!], "filter the rows returned" where: marketplace_activity_bool_exp): [marketplace_activity!]!
@@ -1659,6 +2702,466 @@ type subscription_root {
   fetch data from the table: "marketplace_order" using primary key columns
   """
   marketplace_order_by_pk(id: uuid!): marketplace_order
+
+  """
+  fetch data from the table: "metadata_collection"
+  """
+  metadata_collection("distinct select on columns" distinct_on: [metadata_collection_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [metadata_collection_order_by!], "filter the rows returned" where: metadata_collection_bool_exp): [metadata_collection!]!
+
+  """
+  fetch data from the table: "metadata_collection" using primary key columns
+  """
+  metadata_collection_by_pk(id: String!): metadata_collection
+
+  """
+  fetch data from the table: "metadata_token"
+  """
+  metadata_token("distinct select on columns" distinct_on: [metadata_token_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [metadata_token_order_by!], "filter the rows returned" where: metadata_token_bool_exp): [metadata_token!]!
+
+  """
+  fetch data from the table: "metadata_token" using primary key columns
+  """
+  metadata_token_by_pk(id: uuid!): metadata_token
+
+  """
+  fetch data from the table: "ownership"
+  """
+  ownership("distinct select on columns" distinct_on: [ownership_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [ownership_order_by!], "filter the rows returned" where: ownership_bool_exp): [ownership!]!
+
+  """
+  fetch data from the table: "ownership" using primary key columns
+  """
+  ownership_by_pk(id: uuid!): ownership
+
+  """
+  fetch data from the table: "royalties"
+  """
+  royalties("distinct select on columns" distinct_on: [royalties_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [royalties_order_by!], "filter the rows returned" where: royalties_bool_exp): [royalties!]!
+
+  """
+  fetch data from the table: "royalties" using primary key columns
+  """
+  royalties_by_pk(id: uuid!): royalties
+
+  """
+  fetch data from the table: "tezos_domains_domain"
+  """
+  tezos_domains_domain("distinct select on columns" distinct_on: [tezos_domains_domain_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tezos_domains_domain_order_by!], "filter the rows returned" where: tezos_domains_domain_bool_exp): [tezos_domains_domain!]!
+
+  """
+  fetch data from the table: "tezos_domains_domain" using primary key columns
+  """
+  tezos_domains_domain_by_pk(id: String!): tezos_domains_domain
+
+  """
+  fetch data from the table: "tezos_domains_record"
+  """
+  tezos_domains_record("distinct select on columns" distinct_on: [tezos_domains_record_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tezos_domains_record_order_by!], "filter the rows returned" where: tezos_domains_record_bool_exp): [tezos_domains_record!]!
+
+  """
+  fetch data from the table: "tezos_domains_record" using primary key columns
+  """
+  tezos_domains_record_by_pk(id: String!): tezos_domains_record
+
+  """
+  fetch data from the table: "tezos_domains_tld"
+  """
+  tezos_domains_tld("distinct select on columns" distinct_on: [tezos_domains_tld_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tezos_domains_tld_order_by!], "filter the rows returned" where: tezos_domains_tld_bool_exp): [tezos_domains_tld!]!
+
+  """
+  fetch data from the table: "tezos_domains_tld" using primary key columns
+  """
+  tezos_domains_tld_by_pk(id: String!): tezos_domains_tld
+
+  """
+  fetch data from the table: "token"
+  """
+  token("distinct select on columns" distinct_on: [token_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [token_order_by!], "filter the rows returned" where: token_bool_exp): [token!]!
+
+  """
+  fetch data from the table: "token" using primary key columns
+  """
+  token_by_pk(id: uuid!): token
+
+  """
+  fetch data from the table: "token_transfer"
+  """
+  token_transfer("distinct select on columns" distinct_on: [token_transfer_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [token_transfer_order_by!], "filter the rows returned" where: token_transfer_bool_exp): [token_transfer!]!
+
+  """
+  fetch data from the table: "token_transfer" using primary key columns
+  """
+  token_transfer_by_pk(id: bigint!): token_transfer
+
+  """
+  fetch data from the table: "token_with_meta"
+  """
+  token_with_meta("distinct select on columns" distinct_on: [token_with_meta_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [token_with_meta_order_by!], "filter the rows returned" where: token_with_meta_bool_exp): [token_with_meta!]!
+
+  """
+  fetch data from the table: "tzprofiles"
+  """
+  tzprofiles("distinct select on columns" distinct_on: [tzprofiles_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tzprofiles_order_by!], "filter the rows returned" where: tzprofiles_bool_exp): [tzprofiles!]!
+
+  """
+  fetch data from the table: "tzprofiles" using primary key columns
+  """
+  tzprofiles_by_pk(account: String!): tzprofiles
+}
+
+"""
+columns and relationships of "tezos_domains_domain"
+"""
+type tezos_domains_domain {
+  id: String!
+
+  owner: String!
+
+  """
+  An array relationship
+  """
+  records("distinct select on columns" distinct_on: [tezos_domains_record_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tezos_domains_record_order_by!], "filter the rows returned" where: tezos_domains_record_bool_exp): [tezos_domains_record!]!
+
+  """
+  An object relationship
+  """
+  tld: tezos_domains_tld!
+
+  tld_id: String!
+
+  token_id: bigint
+}
+
+"""
+order by aggregate values of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_aggregate_order_by {
+  avg: tezos_domains_domain_avg_order_by
+
+  count: order_by
+
+  max: tezos_domains_domain_max_order_by
+
+  min: tezos_domains_domain_min_order_by
+
+  stddev: tezos_domains_domain_stddev_order_by
+
+  stddev_pop: tezos_domains_domain_stddev_pop_order_by
+
+  stddev_samp: tezos_domains_domain_stddev_samp_order_by
+
+  sum: tezos_domains_domain_sum_order_by
+
+  var_pop: tezos_domains_domain_var_pop_order_by
+
+  var_samp: tezos_domains_domain_var_samp_order_by
+
+  variance: tezos_domains_domain_variance_order_by
+}
+
+"""
+order by avg() on columns of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_avg_order_by {
+  token_id: order_by
+}
+
+"""
+Boolean expression to filter rows from the table "tezos_domains_domain". All fields are combined with a logical 'AND'.
+"""
+input tezos_domains_domain_bool_exp {
+  _and: [tezos_domains_domain_bool_exp!]
+
+  _not: tezos_domains_domain_bool_exp
+
+  _or: [tezos_domains_domain_bool_exp!]
+
+  id: String_comparison_exp
+
+  owner: String_comparison_exp
+
+  records: tezos_domains_record_bool_exp
+
+  tld: tezos_domains_tld_bool_exp
+
+  tld_id: String_comparison_exp
+
+  token_id: bigint_comparison_exp
+}
+
+"""
+order by max() on columns of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_max_order_by {
+  id: order_by
+
+  owner: order_by
+
+  tld_id: order_by
+
+  token_id: order_by
+}
+
+"""
+order by min() on columns of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_min_order_by {
+  id: order_by
+
+  owner: order_by
+
+  tld_id: order_by
+
+  token_id: order_by
+}
+
+"""
+Ordering options when selecting data from "tezos_domains_domain".
+"""
+input tezos_domains_domain_order_by {
+  id: order_by
+
+  owner: order_by
+
+  records_aggregate: tezos_domains_record_aggregate_order_by
+
+  tld: tezos_domains_tld_order_by
+
+  tld_id: order_by
+
+  token_id: order_by
+}
+
+"""
+select columns of table "tezos_domains_domain"
+"""
+enum tezos_domains_domain_select_column {
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  owner
+
+  """
+  column name
+  """
+  tld_id
+
+  """
+  column name
+  """
+  token_id
+}
+
+"""
+order by stddev() on columns of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_stddev_order_by {
+  token_id: order_by
+}
+
+"""
+order by stddev_pop() on columns of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_stddev_pop_order_by {
+  token_id: order_by
+}
+
+"""
+order by stddev_samp() on columns of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_stddev_samp_order_by {
+  token_id: order_by
+}
+
+"""
+order by sum() on columns of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_sum_order_by {
+  token_id: order_by
+}
+
+"""
+order by var_pop() on columns of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_var_pop_order_by {
+  token_id: order_by
+}
+
+"""
+order by var_samp() on columns of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_var_samp_order_by {
+  token_id: order_by
+}
+
+"""
+order by variance() on columns of table "tezos_domains_domain"
+"""
+input tezos_domains_domain_variance_order_by {
+  token_id: order_by
+}
+
+"""
+columns and relationships of "tezos_domains_record"
+"""
+type tezos_domains_record {
+  address: String
+
+  """
+  An object relationship
+  """
+  domain: tezos_domains_domain!
+
+  domain_id: String!
+
+  id: String!
+}
+
+"""
+order by aggregate values of table "tezos_domains_record"
+"""
+input tezos_domains_record_aggregate_order_by {
+  count: order_by
+
+  max: tezos_domains_record_max_order_by
+
+  min: tezos_domains_record_min_order_by
+}
+
+"""
+Boolean expression to filter rows from the table "tezos_domains_record". All fields are combined with a logical 'AND'.
+"""
+input tezos_domains_record_bool_exp {
+  _and: [tezos_domains_record_bool_exp!]
+
+  _not: tezos_domains_record_bool_exp
+
+  _or: [tezos_domains_record_bool_exp!]
+
+  address: String_comparison_exp
+
+  domain: tezos_domains_domain_bool_exp
+
+  domain_id: String_comparison_exp
+
+  id: String_comparison_exp
+}
+
+"""
+order by max() on columns of table "tezos_domains_record"
+"""
+input tezos_domains_record_max_order_by {
+  address: order_by
+
+  domain_id: order_by
+
+  id: order_by
+}
+
+"""
+order by min() on columns of table "tezos_domains_record"
+"""
+input tezos_domains_record_min_order_by {
+  address: order_by
+
+  domain_id: order_by
+
+  id: order_by
+}
+
+"""
+Ordering options when selecting data from "tezos_domains_record".
+"""
+input tezos_domains_record_order_by {
+  address: order_by
+
+  domain: tezos_domains_domain_order_by
+
+  domain_id: order_by
+
+  id: order_by
+}
+
+"""
+select columns of table "tezos_domains_record"
+"""
+enum tezos_domains_record_select_column {
+  """
+  column name
+  """
+  address
+
+  """
+  column name
+  """
+  domain_id
+
+  """
+  column name
+  """
+  id
+}
+
+"""
+columns and relationships of "tezos_domains_tld"
+"""
+type tezos_domains_tld {
+  """
+  An array relationship
+  """
+  domains("distinct select on columns" distinct_on: [tezos_domains_domain_select_column!], "limit the number of rows returned" limit: Int, "skip the first n rows. Use only with order_by" offset: Int, "sort the rows by one or more columns" order_by: [tezos_domains_domain_order_by!], "filter the rows returned" where: tezos_domains_domain_bool_exp): [tezos_domains_domain!]!
+
+  id: String!
+
+  owner: String!
+}
+
+"""
+Boolean expression to filter rows from the table "tezos_domains_tld". All fields are combined with a logical 'AND'.
+"""
+input tezos_domains_tld_bool_exp {
+  _and: [tezos_domains_tld_bool_exp!]
+
+  _not: tezos_domains_tld_bool_exp
+
+  _or: [tezos_domains_tld_bool_exp!]
+
+  domains: tezos_domains_domain_bool_exp
+
+  id: String_comparison_exp
+
+  owner: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "tezos_domains_tld".
+"""
+input tezos_domains_tld_order_by {
+  domains_aggregate: tezos_domains_domain_aggregate_order_by
+
+  id: order_by
+
+  owner: order_by
+}
+
+"""
+select columns of table "tezos_domains_tld"
+"""
+enum tezos_domains_tld_select_column {
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  owner
 }
 
 scalar timestamptz
@@ -1684,6 +3187,630 @@ input timestamptz_comparison_exp {
   _neq: timestamptz
 
   _nin: [timestamptz!]
+}
+
+"""
+columns and relationships of "token"
+"""
+type token {
+  contract: String!
+
+  creator: String
+
+  db_updated_at: timestamptz!
+
+  deleted: Boolean!
+
+  id: uuid!
+
+  minted: numeric!
+
+  minted_at: timestamptz!
+
+  supply: numeric!
+
+  token_id: String!
+
+  tzkt_id: bigint!
+
+  updated: timestamptz!
+}
+
+"""
+Boolean expression to filter rows from the table "token". All fields are combined with a logical 'AND'.
+"""
+input token_bool_exp {
+  _and: [token_bool_exp!]
+
+  _not: token_bool_exp
+
+  _or: [token_bool_exp!]
+
+  contract: String_comparison_exp
+
+  creator: String_comparison_exp
+
+  db_updated_at: timestamptz_comparison_exp
+
+  deleted: Boolean_comparison_exp
+
+  id: uuid_comparison_exp
+
+  minted: numeric_comparison_exp
+
+  minted_at: timestamptz_comparison_exp
+
+  supply: numeric_comparison_exp
+
+  token_id: String_comparison_exp
+
+  tzkt_id: bigint_comparison_exp
+
+  updated: timestamptz_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "token".
+"""
+input token_order_by {
+  contract: order_by
+
+  creator: order_by
+
+  db_updated_at: order_by
+
+  deleted: order_by
+
+  id: order_by
+
+  minted: order_by
+
+  minted_at: order_by
+
+  supply: order_by
+
+  token_id: order_by
+
+  tzkt_id: order_by
+
+  updated: order_by
+}
+
+"""
+select columns of table "token"
+"""
+enum token_select_column {
+  """
+  column name
+  """
+  contract
+
+  """
+  column name
+  """
+  creator
+
+  """
+  column name
+  """
+  db_updated_at
+
+  """
+  column name
+  """
+  deleted
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  minted
+
+  """
+  column name
+  """
+  minted_at
+
+  """
+  column name
+  """
+  supply
+
+  """
+  column name
+  """
+  token_id
+
+  """
+  column name
+  """
+  tzkt_id
+
+  """
+  column name
+  """
+  updated
+}
+
+"""
+columns and relationships of "token_transfer"
+"""
+type token_transfer {
+  amount: numeric!
+
+  contract: String!
+
+  date: timestamptz!
+
+  from_address: String
+
+  hash: String
+
+  id: bigint!
+
+  to_address: String
+
+  token_id: String!
+
+  """
+  GET_BID: GET_BID\nGET_FLOOR_BID: GET_FLOOR_BID\nORDER_LIST: LIST\nORDER_MATCH: SELL\nORDER_CANCEL: CANCEL_LIST\nCANCEL_BID: CANCEL_BID\nCANCEL_FLOOR_BID: CANCEL_FLOOR_BID\nMAKE_BID: MAKE_BID\nMAKE_FLOOR_BID: MAKE_FLOOR_BID\nTOKEN_MINT: MINT\nTOKEN_TRANSFER: TRANSFER\nTOKEN_BURN: BURN
+  """
+  type: String!
+
+  tzkt_token_id: bigint!
+
+  tzkt_transaction_id: bigint
+}
+
+"""
+Boolean expression to filter rows from the table "token_transfer". All fields are combined with a logical 'AND'.
+"""
+input token_transfer_bool_exp {
+  _and: [token_transfer_bool_exp!]
+
+  _not: token_transfer_bool_exp
+
+  _or: [token_transfer_bool_exp!]
+
+  amount: numeric_comparison_exp
+
+  contract: String_comparison_exp
+
+  date: timestamptz_comparison_exp
+
+  from_address: String_comparison_exp
+
+  hash: String_comparison_exp
+
+  id: bigint_comparison_exp
+
+  to_address: String_comparison_exp
+
+  token_id: String_comparison_exp
+
+  type: String_comparison_exp
+
+  tzkt_token_id: bigint_comparison_exp
+
+  tzkt_transaction_id: bigint_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "token_transfer".
+"""
+input token_transfer_order_by {
+  amount: order_by
+
+  contract: order_by
+
+  date: order_by
+
+  from_address: order_by
+
+  hash: order_by
+
+  id: order_by
+
+  to_address: order_by
+
+  token_id: order_by
+
+  type: order_by
+
+  tzkt_token_id: order_by
+
+  tzkt_transaction_id: order_by
+}
+
+"""
+select columns of table "token_transfer"
+"""
+enum token_transfer_select_column {
+  """
+  column name
+  """
+  amount
+
+  """
+  column name
+  """
+  contract
+
+  """
+  column name
+  """
+  date
+
+  """
+  column name
+  """
+  from_address
+
+  """
+  column name
+  """
+  hash
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  to_address
+
+  """
+  column name
+  """
+  token_id
+
+  """
+  column name
+  """
+  type
+
+  """
+  column name
+  """
+  tzkt_token_id
+
+  """
+  column name
+  """
+  tzkt_transaction_id
+}
+
+"""
+columns and relationships of "token_with_meta"
+"""
+type token_with_meta {
+  contract: String
+
+  creator: String
+
+  deleted: Boolean
+
+  id: uuid
+
+  metadata: String
+
+  minted: numeric
+
+  minted_at: timestamptz
+
+  supply: numeric
+
+  token_id: String
+
+  tzkt_id: bigint
+
+  updated: timestamptz
+}
+
+"""
+Boolean expression to filter rows from the table "token_with_meta". All fields are combined with a logical 'AND'.
+"""
+input token_with_meta_bool_exp {
+  _and: [token_with_meta_bool_exp!]
+
+  _not: token_with_meta_bool_exp
+
+  _or: [token_with_meta_bool_exp!]
+
+  contract: String_comparison_exp
+
+  creator: String_comparison_exp
+
+  deleted: Boolean_comparison_exp
+
+  id: uuid_comparison_exp
+
+  metadata: String_comparison_exp
+
+  minted: numeric_comparison_exp
+
+  minted_at: timestamptz_comparison_exp
+
+  supply: numeric_comparison_exp
+
+  token_id: String_comparison_exp
+
+  tzkt_id: bigint_comparison_exp
+
+  updated: timestamptz_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "token_with_meta".
+"""
+input token_with_meta_order_by {
+  contract: order_by
+
+  creator: order_by
+
+  deleted: order_by
+
+  id: order_by
+
+  metadata: order_by
+
+  minted: order_by
+
+  minted_at: order_by
+
+  supply: order_by
+
+  token_id: order_by
+
+  tzkt_id: order_by
+
+  updated: order_by
+}
+
+"""
+select columns of table "token_with_meta"
+"""
+enum token_with_meta_select_column {
+  """
+  column name
+  """
+  contract
+
+  """
+  column name
+  """
+  creator
+
+  """
+  column name
+  """
+  deleted
+
+  """
+  column name
+  """
+  id
+
+  """
+  column name
+  """
+  metadata
+
+  """
+  column name
+  """
+  minted
+
+  """
+  column name
+  """
+  minted_at
+
+  """
+  column name
+  """
+  supply
+
+  """
+  column name
+  """
+  token_id
+
+  """
+  column name
+  """
+  tzkt_id
+
+  """
+  column name
+  """
+  updated
+}
+
+"""
+columns and relationships of "tzprofiles"
+"""
+type tzprofiles {
+  account: String!
+
+  alias: String
+
+  contract: String!
+
+  description: String
+
+  discord: String
+
+  domain_name: String
+
+  errored: Boolean!
+
+  ethereum: String
+
+  github: String
+
+  invalid_claims("JSON select path" path: String): jsonb!
+
+  logo: String
+
+  twitter: String
+
+  valid_claims("JSON select path" path: String): jsonb!
+
+  website: String
+}
+
+"""
+Boolean expression to filter rows from the table "tzprofiles". All fields are combined with a logical 'AND'.
+"""
+input tzprofiles_bool_exp {
+  _and: [tzprofiles_bool_exp!]
+
+  _not: tzprofiles_bool_exp
+
+  _or: [tzprofiles_bool_exp!]
+
+  account: String_comparison_exp
+
+  alias: String_comparison_exp
+
+  contract: String_comparison_exp
+
+  description: String_comparison_exp
+
+  discord: String_comparison_exp
+
+  domain_name: String_comparison_exp
+
+  errored: Boolean_comparison_exp
+
+  ethereum: String_comparison_exp
+
+  github: String_comparison_exp
+
+  invalid_claims: jsonb_comparison_exp
+
+  logo: String_comparison_exp
+
+  twitter: String_comparison_exp
+
+  valid_claims: jsonb_comparison_exp
+
+  website: String_comparison_exp
+}
+
+"""
+Ordering options when selecting data from "tzprofiles".
+"""
+input tzprofiles_order_by {
+  account: order_by
+
+  alias: order_by
+
+  contract: order_by
+
+  description: order_by
+
+  discord: order_by
+
+  domain_name: order_by
+
+  errored: order_by
+
+  ethereum: order_by
+
+  github: order_by
+
+  invalid_claims: order_by
+
+  logo: order_by
+
+  twitter: order_by
+
+  valid_claims: order_by
+
+  website: order_by
+}
+
+"""
+select columns of table "tzprofiles"
+"""
+enum tzprofiles_select_column {
+  """
+  column name
+  """
+  account
+
+  """
+  column name
+  """
+  alias
+
+  """
+  column name
+  """
+  contract
+
+  """
+  column name
+  """
+  description
+
+  """
+  column name
+  """
+  discord
+
+  """
+  column name
+  """
+  domain_name
+
+  """
+  column name
+  """
+  errored
+
+  """
+  column name
+  """
+  ethereum
+
+  """
+  column name
+  """
+  github
+
+  """
+  column name
+  """
+  invalid_claims
+
+  """
+  column name
+  """
+  logo
+
+  """
+  column name
+  """
+  twitter
+
+  """
+  column name
+  """
+  valid_claims
+
+  """
+  column name
+  """
+  website
 }
 
 scalar uuid

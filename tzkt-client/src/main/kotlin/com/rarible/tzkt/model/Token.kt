@@ -13,6 +13,9 @@
 
 package com.rarible.tzkt.model
 
+import java.math.BigDecimal
+import java.math.BigInteger
+
 /**
  *
  *
@@ -36,7 +39,7 @@ package com.rarible.tzkt.model
 data class Token (
 
     /* Internal TzKT id (not the same as `tokenId`).   **[sortable]** */
-    val id: Int,
+    val id: Long,
 
     /* Contract, created the token. */
     val contract: Alias? = null,
@@ -87,5 +90,9 @@ data class Token (
     fun isNft(): Boolean {
         return this.metadata?.let { it["artifactUri"] != null } ?: false
     }
+
+    fun itemId() = "${contract?.address}:$tokenId"
+
+    fun isDeleted() = totalSupply?.let { BigDecimal(it) == BigDecimal.ZERO } ?: false
 }
 

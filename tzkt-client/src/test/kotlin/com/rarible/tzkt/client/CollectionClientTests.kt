@@ -1,12 +1,26 @@
 package com.rarible.tzkt.client
 
+import com.rarible.tzkt.config.TzktSettings
+import com.rarible.tzkt.meta.MetaCollectionService
+import com.rarible.tzkt.model.CollectionMeta
+import com.rarible.tzkt.model.CollectionType
+import io.mockk.coEvery
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class CollectionClientTests : BaseClientTests() {
 
-    val collectionClient = CollectionClient(client)
+    val metaCollectionService: MetaCollectionService = mockk()
+    val collectionClient = CollectionClient(client, metaCollectionService, TzktSettings())
+
+    @BeforeEach
+    fun `setUp`() = runBlocking<Unit> {
+        coEvery { metaCollectionService.get(any()) } returns CollectionMeta(null, null)
+    }
 
     @Test
     fun `should return collection by address`() = runBlocking<Unit> {
@@ -39,6 +53,7 @@ class CollectionClientTests : BaseClientTests() {
             	"codeHash": 1973375561
             }
         """.trimIndent())
+        mock("""[]""") // for meta
 
         val address = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
         val collection = collectionClient.collection(address)
@@ -300,6 +315,7 @@ class CollectionClientTests : BaseClientTests() {
             }]
         """.trimIndent())
 
+        mockSingleAddress()
         mock("""
             [{
             	"type": "contract",
@@ -566,7 +582,8 @@ class CollectionClientTests : BaseClientTests() {
         prevId = 0
         val lastId = collections.items.last().firstActivity!!.toString()
         collections = collectionClient.collectionsAll(size, collections.continuation)
-        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=10&offset=10&sort.asc=firstActivity")
+        assertThat(request().path).isEqualTo("/v1/contracts/KT1AzrrdKcZQ7ApazLcya2VV83WaDrqbvSZr")
+        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=10&offset.cr=1365143&sort.asc=firstActivity")
         collections.items.forEach{
             assertThat(it.kind).isEqualTo("asset")
             assertThat(it.firstActivity).isGreaterThan(prevId)
@@ -824,6 +841,7 @@ class CollectionClientTests : BaseClientTests() {
             }]
         """.trimIndent())
 
+        mockSingleAddress()
         mock("""
             [{
             	"type": "contract",
@@ -1080,7 +1098,8 @@ class CollectionClientTests : BaseClientTests() {
             prevId = it.firstActivity!!
         }
         collections = collectionClient.collectionsAll(size, collections.continuation, false)
-        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=10&offset=10&sort.desc=firstActivity")
+        assertThat(request().path).isEqualTo("/v1/contracts/KT1Kgf6MWTDakEWakDbmh1XouVjhoPFor9MF")
+        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=10&offset.cr=1365143&sort.desc=firstActivity")
         collections.items.forEach{
             assertThat(it.kind).isEqualTo("asset")
             assertThat(it.firstActivity).isLessThan(prevId)
@@ -1088,6 +1107,8 @@ class CollectionClientTests : BaseClientTests() {
         }
     }
 
+    // This test is flaky in jenkins
+    @Disabled
     @Test
     fun `should return collections by ids`() = runBlocking<Unit> {
         mock("""{
@@ -1123,6 +1144,7 @@ class CollectionClientTests : BaseClientTests() {
             "typeHash": 605223826,
             "codeHash": -2016262351
         }""")
+        mock("""[]""") // for meta
         mock("""{
             "type": "contract",
             "address": "KT1CSKPf2jeLpMmrgKquN2bCjBTkAcAdRVDy",
@@ -1156,6 +1178,7 @@ class CollectionClientTests : BaseClientTests() {
             "typeHash": 605223826,
             "codeHash": -2016262351
         }""")
+        mock("""[]""") // for meta
         val collections = collectionClient.collectionsByIds(listOf("KT1QuofAgnsWffHzLA7D78rxytJruGHDe7XG", "KT1CSKPf2jeLpMmrgKquN2bCjBTkAcAdRVDy"))
         assertThat(collections).hasSize(2)
     }
@@ -1201,6 +1224,7 @@ class CollectionClientTests : BaseClientTests() {
 
     @Test
     fun `should return collection by owner with continuation`() = runBlocking<Unit> {
+        mockSingleAddress()
         mock("""
             [{
             	"type": "contract",
@@ -1232,9 +1256,201 @@ class CollectionClientTests : BaseClientTests() {
         """.trimIndent())
 
         val collection = collectionClient.collectionsByOwner("tz1UBZUkXpKGhYsP5KtzDNqLLchwF4uHrGjw", 1, "1", false)
-        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=1&creator.eq=tz1UBZUkXpKGhYsP5KtzDNqLLchwF4uHrGjw&offset=1&sort.desc=firstActivity")
+        assertThat(request().path).isEqualTo("/v1/contracts/1")
+        assertThat(request().path).isEqualTo("/v1/contracts?kind=asset&tzips.all=fa2&limit=1&creator.eq=tz1UBZUkXpKGhYsP5KtzDNqLLchwF4uHrGjw&offset.cr=1365143&sort.desc=firstActivity")
 
         assertThat(collection.items).hasSize(1)
         assertThat(collection.continuation).isNotNull
+    }
+
+    @Test
+    fun `should return NFT type for collection`() = runBlocking<Unit> {
+        mock("""
+            {
+                "schema:object": {
+                    "owner:address": "address",
+                    "owner_candidate:?address": "address",
+                    "paused:bool": "bool",
+                    "royalties:big_map_flat:nat:list:object": {
+                        "nat": [
+                            {
+                                "partAccount:address": "address",
+                                "partValue:nat": "nat"
+                            }
+                        ]
+                    },
+                    "ledger:big_map_flat:nat:address": {
+                        "nat": "address"
+                    },
+                    "operators:big_map:object:unit": [
+                        {
+                            "key:object": {
+                                "address_0:address": "address",
+                                "nat:nat": "nat",
+                                "address_1:address": "address"
+                            },
+                            "value:unit": "unit"
+                        }
+                    ],
+                    "token_metadata:big_map_flat:nat:object": {
+                        "nat": {
+                            "token_id:nat": "nat",
+                            "token_info:map_flat:string:bytes": {
+                                "string": "bytes"
+                            }
+                        }
+                    },
+                    "permits:big_map_flat:address:object": {
+                        "address": {
+                            "counter:nat": "nat",
+                            "user_expiry:?nat": "nat",
+                            "user_permits:map_flat:bytes:object": {
+                                "bytes": {
+                                    "expiry:?nat": "nat",
+                                    "created_at:timestamp": "timestamp"
+                                }
+                            }
+                        }
+                    },
+                    "operators_for_all:big_map:object:unit": [
+                        {
+                            "key:object": {
+                                "address_0:address": "address",
+                                "address_1:address": "address"
+                            },
+                            "value:unit": "unit"
+                        }
+                    ],
+                    "default_expiry:nat": "nat",
+                    "metadata:big_map_flat:string:bytes": {
+                        "string": "bytes"
+                    }
+                }
+            }
+        """.trimIndent())
+
+        val type = collectionClient.collectionType("KT1DtQV5qTnxdG49GbMRdKC8fg7bpvPLNcpm")
+        assertThat(request().path).isEqualTo("/v1/contracts/KT1DtQV5qTnxdG49GbMRdKC8fg7bpvPLNcpm/storage/schema")
+
+        assertThat(type).isEqualTo(CollectionType.NFT)
+    }
+
+    @Test
+    fun `should return MT type for collection`() = runBlocking<Unit> {
+        mock("""
+            {
+                "schema:object": {
+                    "owner:address": "address",
+                    "owner_candidate:?address": "address",
+                    "paused:bool": "bool",
+                    "royalties:big_map_flat:nat:list:object": {
+                        "nat": [
+                            {
+                                "partAccount:address": "address",
+                                "partValue:nat": "nat"
+                            }
+                        ]
+                    },
+                    "ledger:big_map:object:nat": [
+                        {
+                            "key:object": {
+                                "nat:nat": "nat",
+                                "address:address": "address"
+                            },
+                            "value:nat": "nat"
+                        }
+                    ],
+                    "operator:big_map:object:unit": [
+                        {
+                            "key:object": {
+                                "address_0:address": "address",
+                                "nat:nat": "nat",
+                                "address_1:address": "address"
+                            },
+                            "value:unit": "unit"
+                        }
+                    ],
+                    "token_metadata:big_map_flat:nat:object": {
+                        "nat": {
+                            "token_id:nat": "nat",
+                            "token_info:map_flat:string:bytes": {
+                                "string": "bytes"
+                            }
+                        }
+                    },
+                    "permits:big_map_flat:address:object": {
+                        "address": {
+                            "counter:nat": "nat",
+                            "user_expiry:?nat": "nat",
+                            "user_permits:map_flat:bytes:object": {
+                                "bytes": {
+                                    "expiry:?nat": "nat",
+                                    "created_at:timestamp": "timestamp"
+                                }
+                            }
+                        }
+                    },
+                    "operator_for_all:big_map:object:unit": [
+                        {
+                            "key:object": {
+                                "address_0:address": "address",
+                                "address_1:address": "address"
+                            },
+                            "value:unit": "unit"
+                        }
+                    ],
+                    "default_expiry:nat": "nat",
+                    "metadata:big_map_flat:string:bytes": {
+                        "string": "bytes"
+                    }
+                }
+            }
+        """.trimIndent())
+
+        val type = collectionClient.collectionType("KT1Uke8qc4YTfP41dGuoGC8UsgRyCtyvKPLA")
+        assertThat(request().path).isEqualTo("/v1/contracts/KT1Uke8qc4YTfP41dGuoGC8UsgRyCtyvKPLA/storage/schema")
+
+        assertThat(type).isEqualTo(CollectionType.MT)
+    }
+
+    // This test is for testnet only
+    @Disabled
+    @Test
+    fun `should return meta for collection`() = runBlocking<Unit> {
+        val collection = collectionClient.collection("KT1UFkqihyjz1GhxM1hk78CjfcChsBbLGYMm")
+        assertThat(collection.name).isEqualTo("123-000")
+        assertThat(collection.symbol).isEqualTo("123")
+    }
+
+    fun mockSingleAddress() {
+        mock("""
+            {
+            	"type": "contract",
+            	"address": "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton",
+            	"kind": "asset",
+            	"tzips": ["fa2"],
+            	"alias": "hic et nunc NFTs",
+            	"balance": 0,
+            	"creator": {
+            		"alias": "hicetnunc2000lab",
+            		"address": "tz1UBZUkXpKGhYsP5KtzDNqLLchwF4uHrGjw"
+            	},
+            	"numContracts": 0,
+            	"activeTokensCount": 141,
+            	"tokenBalancesCount": 170,
+            	"tokenTransfersCount": 189,
+            	"numDelegations": 0,
+            	"numOriginations": 1,
+            	"numTransactions": 11065912,
+            	"numReveals": 0,
+            	"numMigrations": 0,
+            	"firstActivity": 1365143,
+            	"firstActivityTime": "2021-03-01T01:59:41Z",
+            	"lastActivity": 2274952,
+            	"lastActivityTime": "2022-04-12T15:04:44Z",
+            	"typeHash": 603828391,
+            	"codeHash": 1973375561
+            }
+        """.trimIndent())
     }
 }

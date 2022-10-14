@@ -1,14 +1,17 @@
 package com.rarible.tzkt.client
 
+import com.rarible.tzkt.config.TzktSettings
 import com.rarible.tzkt.model.ItemId
 import com.rarible.tzkt.model.OwnershipId
+import com.rarible.tzkt.model.TzktNotFound
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.Test
 
 class OwnershipClientTests : BaseClientTests() {
 
-    val ownershipClient = OwnershipClient(client)
+    val ownershipClient = OwnershipClient(client, TzktSettings())
 
     @Test
     fun `should return ownership by ownership id`() = runBlocking<Unit> {
@@ -148,12 +151,12 @@ class OwnershipClientTests : BaseClientTests() {
         var contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
         var tokenId = "631268"
         val ownerships = ownershipClient.ownershipsByToken(ItemId(contract, tokenId).toString(), 2, null, true)
-        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268&limit=2&sort.asc=id")
+        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&sort.asc=lastTime,id&balance.gt=0&limit=2")
         ownerships.items.forEach {
             assertThat(it.token?.tokenId).isEqualTo(tokenId)
             assertThat(it.token?.contract?.address).isEqualTo(contract)
         }
-        assertThat(ownerships.continuation).isEqualTo("6924058")
+        assertThat(ownerships.continuation).isEqualTo("1642612650000_KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:631268:tz1NRh1vTn3b38m7Gg2qP81dqb5Kr2BAjwJV")
     }
 
     @Test
@@ -239,12 +242,204 @@ class OwnershipClientTests : BaseClientTests() {
         var contract = "KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton"
         var tokenId = "631268"
         val ownerships = ownershipClient.ownershipsByToken(ItemId(contract, tokenId).toString(), 2, "6924058", true)
-        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268&limit=2&offset.cr=6924058&sort.asc=id")
+        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.contract=KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton&token.tokenId=631268&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&sort.asc=lastTime,id&balance.gt=0&limit=2")
         ownerships.items.forEach {
             assertThat(it.token?.tokenId).isEqualTo(tokenId)
             assertThat(it.token?.contract?.address).isEqualTo(contract)
         }
-        assertThat(ownerships.continuation).isEqualTo("7146690")
+        assertThat(ownerships.continuation).isEqualTo("1642607010000_KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:631268:tz1ciFAFNfaPY4562dHy7BbCqf4vG39kLJa1")
     }
 
+    @Test
+    fun `should return all ownerships`() = runBlocking<Unit> {
+        mock("""
+            [
+                {
+                    "id": 121041,
+                    "account": {
+                        "address": "tz2GaDTjRHyEbpoHwtzvGWJRRHhaQbsy9nxi"
+                    },
+                    "token": {
+                        "id": 75279,
+                        "contract": {
+                            "address": "KT1Pm2H31abC73TfgiJTJrKfzozobFxfFy5a"
+                        },
+                        "tokenId": "51",
+                        "standard": "fa2",
+                        "metadata": {
+                            "date": "2022-07-01T09:49:07.000Z",
+                            "name": "Ranunculus albusmachina",
+                            "tags": [
+                                "AI Herbarium"
+                            ],
+                            "minter": "tz1QCMomemFVu1GZtP7zRGPXwNCw3jcAQ3Dp",
+                            "creators": [],
+                            "decimals": "0",
+                            "signature": "YRyAOxnxgQwPwun5Pit56XzKKE5Q7OarHmh1jbDL9vDv88nFHPmgM4jBlWMV",
+                            "displayUri": "ipfs://QmeTQv4jLUnP4Vf6PNAEv6ZnaZASxYjYFvWd1d2x8efiZN",
+                            "publishers": [
+                                "Tezos"
+                            ],
+                            "artifactUri": "ipfs://QmeTQv4jLUnP4Vf6PNAEv6ZnaZASxYjYFvWd1d2x8efiZN",
+                            "description": "Marco Violet-Vianello, Metavert AI Herbarium, 2022, Digital image, 1024x1024 pixels, edition 1 of 1.  MET.HER.011.",
+                            "contributors": [],
+                            "thumbnailUri": "ipfs://QmeTQv4jLUnP4Vf6PNAEv6ZnaZASxYjYFvWd1d2x8efiZN",
+                            "isBooleanAmount": false
+                        }
+                    },
+                    "balance": "1",
+                    "transfersCount": 1,
+                    "firstLevel": 798297,
+                    "firstTime": "2022-07-05T07:29:10Z",
+                    "lastLevel": 798297,
+                    "lastTime": "2022-07-05T07:29:10Z"
+                },
+                {
+                    "id": 121040,
+                    "account": {
+                        "address": "tz1QCMomemFVu1GZtP7zRGPXwNCw3jcAQ3Dp"
+                    },
+                    "token": {
+                        "id": 75279,
+                        "contract": {
+                            "address": "KT1Pm2H31abC73TfgiJTJrKfzozobFxfFy5a"
+                        },
+                        "tokenId": "51",
+                        "standard": "fa2",
+                        "metadata": {
+                            "date": "2022-07-01T09:49:07.000Z",
+                            "name": "Ranunculus albusmachina",
+                            "tags": [
+                                "AI Herbarium"
+                            ],
+                            "minter": "tz1QCMomemFVu1GZtP7zRGPXwNCw3jcAQ3Dp",
+                            "creators": [],
+                            "decimals": "0",
+                            "signature": "YRyAOxnxgQwPwun5Pit56XzKKE5Q7OarHmh1jbDL9vDv88nFHPmgM4jBlWMV",
+                            "displayUri": "ipfs://QmeTQv4jLUnP4Vf6PNAEv6ZnaZASxYjYFvWd1d2x8efiZN",
+                            "publishers": [
+                                "Tezos"
+                            ],
+                            "artifactUri": "ipfs://QmeTQv4jLUnP4Vf6PNAEv6ZnaZASxYjYFvWd1d2x8efiZN",
+                            "description": "Marco Violet-Vianello, Metavert AI Herbarium, 2022, Digital image, 1024x1024 pixels, edition 1 of 1.  MET.HER.011.",
+                            "contributors": [],
+                            "thumbnailUri": "ipfs://QmeTQv4jLUnP4Vf6PNAEv6ZnaZASxYjYFvWd1d2x8efiZN",
+                            "isBooleanAmount": false
+                        }
+                    },
+                    "balance": "9",
+                    "transfersCount": 2,
+                    "firstLevel": 798297,
+                    "firstTime": "2022-07-05T07:29:10Z",
+                    "lastLevel": 798297,
+                    "lastTime": "2022-07-05T07:29:10Z"
+                }
+            ]
+        """.trimIndent())
+
+        val ownerships = ownershipClient.ownershipsAll(null, 2)
+        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.standard=fa2&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&balance.gt=0&sort.desc=lastTime,id&limit=2")
+        assertThat(ownerships.items).hasSize(2)
+        assertThat(ownerships.continuation).isEqualTo("1657006150000_KT1Pm2H31abC73TfgiJTJrKfzozobFxfFy5a:51:tz1QCMomemFVu1GZtP7zRGPXwNCw3jcAQ3Dp")
+    }
+
+    @Test
+    fun `should return all ownerships with continuation`() = runBlocking<Unit> {
+        mock("""
+            [
+                {
+                    "id": 121039,
+                    "account": {
+                        "address": "tz2GaDTjRHyEbpoHwtzvGWJRRHhaQbsy9nxi"
+                    },
+                    "token": {
+                        "id": 75278,
+                        "contract": {
+                            "address": "KT1Pm2H31abC73TfgiJTJrKfzozobFxfFy5a"
+                        },
+                        "tokenId": "49",
+                        "standard": "fa2",
+                        "metadata": {
+                            "date": "2022-07-01T09:49:01.000Z",
+                            "name": "Alcea striata artificiens",
+                            "tags": [
+                                "AI Herbarium"
+                            ],
+                            "minter": "tz1QCMomemFVu1GZtP7zRGPXwNCw3jcAQ3Dp",
+                            "creators": [],
+                            "decimals": "0",
+                            "signature": "B51uf6kxJhL8aTYS9MipyCf9Lsp5RMkvTmyGF7chtDL4aDja5NpNNYa6dMve",
+                            "displayUri": "ipfs://QmYEFu1AQ3pe7c8Bjn3D6Ca6mPPcVge7YQ16WTh8dcUnoz",
+                            "publishers": [
+                                "Tezos"
+                            ],
+                            "artifactUri": "ipfs://QmYEFu1AQ3pe7c8Bjn3D6Ca6mPPcVge7YQ16WTh8dcUnoz",
+                            "description": "Marco Violet-Vianello, Metavert AI Herbarium, 2022, Digital image, 1024x1024 pixels, edition 1 of 1.  MET.HER.009.",
+                            "contributors": [],
+                            "thumbnailUri": "ipfs://QmYEFu1AQ3pe7c8Bjn3D6Ca6mPPcVge7YQ16WTh8dcUnoz",
+                            "isBooleanAmount": false
+                        }
+                    },
+                    "balance": "1",
+                    "transfersCount": 1,
+                    "firstLevel": 798297,
+                    "firstTime": "2022-07-05T07:29:10Z",
+                    "lastLevel": 798297,
+                    "lastTime": "2022-07-05T07:29:10Z"
+                },
+                {
+                    "id": 121038,
+                    "account": {
+                        "address": "tz1QCMomemFVu1GZtP7zRGPXwNCw3jcAQ3Dp"
+                    },
+                    "token": {
+                        "id": 75278,
+                        "contract": {
+                            "address": "KT1Pm2H31abC73TfgiJTJrKfzozobFxfFy5a"
+                        },
+                        "tokenId": "49",
+                        "standard": "fa2",
+                        "metadata": {
+                            "date": "2022-07-01T09:49:01.000Z",
+                            "name": "Alcea striata artificiens",
+                            "tags": [
+                                "AI Herbarium"
+                            ],
+                            "minter": "tz1QCMomemFVu1GZtP7zRGPXwNCw3jcAQ3Dp",
+                            "creators": [],
+                            "decimals": "0",
+                            "signature": "B51uf6kxJhL8aTYS9MipyCf9Lsp5RMkvTmyGF7chtDL4aDja5NpNNYa6dMve",
+                            "displayUri": "ipfs://QmYEFu1AQ3pe7c8Bjn3D6Ca6mPPcVge7YQ16WTh8dcUnoz",
+                            "publishers": [
+                                "Tezos"
+                            ],
+                            "artifactUri": "ipfs://QmYEFu1AQ3pe7c8Bjn3D6Ca6mPPcVge7YQ16WTh8dcUnoz",
+                            "description": "Marco Violet-Vianello, Metavert AI Herbarium, 2022, Digital image, 1024x1024 pixels, edition 1 of 1.  MET.HER.009.",
+                            "contributors": [],
+                            "thumbnailUri": "ipfs://QmYEFu1AQ3pe7c8Bjn3D6Ca6mPPcVge7YQ16WTh8dcUnoz",
+                            "isBooleanAmount": false
+                        }
+                    },
+                    "balance": "9",
+                    "transfersCount": 2,
+                    "firstLevel": 798297,
+                    "firstTime": "2022-07-05T07:29:10Z",
+                    "lastLevel": 798297,
+                    "lastTime": "2022-07-05T07:29:10Z"
+                }
+            ]
+        """.trimIndent())
+
+        val ownerships = ownershipClient.ownershipsAll("121040", 2)
+        assertThat(request().path).isEqualTo("/v1/tokens/balances?token.standard=fa2&account.ni=null,tz1burnburnburnburnburnburnburjAYjjX,tz1Ke2h7sDdakHJQh8WX4Z372du1KChsksyU&balance.gt=0&sort.desc=lastTime,id&limit=2")
+        assertThat(ownerships.items).hasSize(2)
+        assertThat(ownerships.continuation).isEqualTo("1657006150000_KT1Pm2H31abC73TfgiJTJrKfzozobFxfFy5a:49:tz1QCMomemFVu1GZtP7zRGPXwNCw3jcAQ3Dp")
+    }
+
+    @Test
+    fun `should return 404 if owner is burn address`() = runBlocking<Unit> {
+        assertThrows<TzktNotFound> {
+            ownershipClient.ownershipById("KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS:73086:tz1burnburnburnburnburnburnburjAYjjX")
+        }
+    }
 }

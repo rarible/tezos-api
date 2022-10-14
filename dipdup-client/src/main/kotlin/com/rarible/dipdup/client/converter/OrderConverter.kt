@@ -3,6 +3,7 @@ package com.rarible.dipdup.client.converter
 import com.rarible.dipdup.client.GetOrderByIdQuery
 import com.rarible.dipdup.client.GetOrdersByIdsQuery
 import com.rarible.dipdup.client.GetOrdersByItemQuery
+import com.rarible.dipdup.client.GetOrdersByMakerQuery
 import com.rarible.dipdup.client.GetOrdersQuery
 import com.rarible.dipdup.client.GetOrdersTakeContractsByMakeCollectionQuery
 import com.rarible.dipdup.client.GetOrdersTakeContractsByMakeItemQuery
@@ -24,18 +25,21 @@ fun convert(source: GetOrderByIdQuery.Marketplace_order_by_pk) = DipDupOrder(
     cancelled = source.cancelled,
     createdAt = OffsetDateTime.parse(source.created_at.toString()),
     endedAt = source.ended_at?.let { OffsetDateTime.parse(it.toString()) },
-    startedAt = OffsetDateTime.parse(source.started_at.toString()),
+    endAt = source.end_at?.let { OffsetDateTime.parse(it.toString()) },
+    startAt = OffsetDateTime.parse(source.start_at.toString()),
     fill = BigDecimal(source.fill.toString()),
     lastUpdatedAt = OffsetDateTime.parse(source.last_updated_at.toString()),
     make = getAsset(source.make_asset_class, source.make_contract, source.make_token_id, source.make_value),
+    makePrice = source.make_price?.let { BigDecimal(it.toString()) },
     maker = source.maker,
     take = getAsset(source.take_asset_class, source.take_contract, source.take_token_id, source.take_value),
+    takePrice = source.take_price?.let { BigDecimal(it.toString()) },
     taker = source.taker,
     platform = TezosPlatform.valueOf(source.platform),
     status = OrderStatus.valueOf(source.status),
     salt = BigInteger(source.salt.toString()),
-    makeStock = BigDecimal(source.make_stock.toString()),
-    makePrice = BigDecimal(source.make_price.toString())
+    originFees = getParts(source.origin_fees),
+    payouts = getParts(source.payouts)
 )
 
 fun convertAll(source: List<GetOrdersQuery.Marketplace_order>, limit: Int): DipDupOrdersPage {
@@ -66,28 +70,43 @@ fun convertByItem(source: List<GetOrdersByItemQuery.Marketplace_order>, limit: I
     )
 }
 
+fun convertByMaker(source: List<GetOrdersByMakerQuery.Marketplace_order>, limit: Int): DipDupOrdersPage {
+    val continuation = when {
+        source.size == limit -> convert(source[limit - 1].order)
+            .let { DipDupContinuation(it.lastUpdatedAt, UUID.fromString(it.id)) }.toString()
+        else -> null
+    }
+    return DipDupOrdersPage(
+        source.subList(0, min(source.size, limit)).map { convert(it.order) },
+        continuation = continuation
+    )
+}
+
 fun convert(source: Order) = DipDupOrder(
     id = source.id.toString(),
     cancelled = source.cancelled,
     createdAt = OffsetDateTime.parse(source.created_at.toString()),
     endedAt = source.ended_at?.let { OffsetDateTime.parse(it.toString()) },
-    startedAt = OffsetDateTime.parse(source.started_at.toString()),
+    endAt = source.end_at?.let { OffsetDateTime.parse(it.toString()) },
+    startAt = OffsetDateTime.parse(source.start_at.toString()),
     fill = BigDecimal(source.fill.toString()),
     lastUpdatedAt = OffsetDateTime.parse(source.last_updated_at.toString()),
     make = getAsset(source.make_asset_class, source.make_contract, source.make_token_id, source.make_value),
+    makePrice = source.make_price?.let { BigDecimal(it.toString()) },
     maker = source.maker,
     take = getAsset(source.take_asset_class, source.take_contract, source.take_token_id, source.take_value),
+    takePrice = source.make_price?.let { BigDecimal(it.toString()) },
     taker = source.taker,
     platform = TezosPlatform.valueOf(source.platform),
     status = OrderStatus.valueOf(source.status),
     salt = BigInteger(source.salt.toString()),
-    makeStock = BigDecimal(source.make_stock.toString()),
-    makePrice = BigDecimal(source.make_price.toString())
+    originFees = getParts(source.origin_fees),
+    payouts = getParts(source.payouts)
 )
 
 fun convert(source: com.rarible.dipdup.client.fragment.AssetType) =
-    when (source.take_contract) {
-        null -> Asset.XTZ()
+    when (source.take_asset_class) {
+        "XTZ" -> Asset.XTZ()
         else -> Asset.FT(contract = source.take_contract, tokenId = BigInteger(source.take_token_id))
     }
 

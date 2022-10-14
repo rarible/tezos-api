@@ -1,6 +1,7 @@
 package com.rarible.tzkt.client
 
 import com.rarible.tzkt.config.KnownAddresses
+import com.rarible.tzkt.config.TzktSettings
 import com.rarible.tzkt.meta.MetaService
 import com.rarible.tzkt.model.TokenMeta
 import com.rarible.tzkt.model.TokenMeta.Representation
@@ -21,6 +22,9 @@ class TokenClientMetaTests : BaseClientTests() {
     val ROYALTIES_MANAGER = "KT1HNNrmCk1fpqveRDz8Fvww2GM4gPzmA7fo"
     val BIDOU_8x8 = "KT1MxDwChiDwd6WBVs24g1NjERUoK622ZEFp"
     val BIDOU_24x24 = "KT1TR1ErEQPTdtaJ7hbvKTJSa1tsGnHGZTpf"
+    val DOGAMI = "KT1NVvPsNDChrLRH5K2cy6Sc9r1uuUwdiZQd"
+    val DOGAMI_GAP = "KT1CAbPGHUWvkSA9bxMPkqSgabgsjtmRYEda"
+    val DOGAMI_STAR = "KT1HtNSkJxpbQc2496JfmxHwZk23RnTB81ey"
 
     val config = KnownAddresses(
         hen = HEN,
@@ -32,12 +36,16 @@ class TokenClientMetaTests : BaseClientTests() {
         versum = VERSUM,
         royaltiesManager = ROYALTIES_MANAGER,
         bidou8x8 = BIDOU_8x8,
-        bidou24x24 = BIDOU_24x24
+        bidou24x24 = BIDOU_24x24,
+        dogami = DOGAMI,
+        dogamiGap = DOGAMI_GAP,
+        dogamiStar = DOGAMI_STAR
     )
 
     val bigMapKeyClient = BigMapKeyClient(client)
-    val metaService = MetaService(mapper, bigMapKeyClient, config)
-    val tokenClient = TokenClient(client, metaService, mockk())
+    val ipfsClient = IPFSClient(client, mapper)
+    val metaService = MetaService(mapper, bigMapKeyClient, ipfsClient, config)
+    val tokenClient = TokenClient(client, metaService, mockk(), TzktSettings())
 
     @Test
     fun `should return meta from hen`() = runBlocking<Unit> {
@@ -91,7 +99,7 @@ class TokenClientMetaTests : BaseClientTests() {
         val meta = tokenClient.tokenMeta("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:2453767")
 
         assertThat(meta.name).isEqualTo("Smoking area 07")
-        assertThat(meta.attributes).hasSize(3)
+        assertThat(meta.tags).hasSize(3)
         assertThat(meta.content.first()).isEqualTo(
             TokenMeta.Content(
                 uri = "ipfs://QmUfR1S71rA7krc8YZTZbSwHEToJ2ZjNsbcQuTLfLyfLH2",
@@ -99,7 +107,7 @@ class TokenClientMetaTests : BaseClientTests() {
                 representation = Representation.ORIGINAL
             )
         )
-        assertThat(meta.attributes.map { it.key }).containsAll(listOf("pixelart", "gif", "goodvibe"))
+        assertThat(meta.tags).containsAll(listOf("pixelart", "gif", "goodvibe"))
         assertThat(meta.description).isEqualTo("Cappadocia, I miss you! What a magical place. Let's have some cay, Turkish delight, baklava and enjoy the balloon ride. ")
     }
 
@@ -227,7 +235,7 @@ class TokenClientMetaTests : BaseClientTests() {
         val meta = tokenClient.tokenMeta("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:2453767")
 
         assertThat(meta.name).isEqualTo("Thinker 02: To share")
-        assertThat(meta.attributes).hasSize(3)
+        assertThat(meta.tags).hasSize(3)
         assertThat(meta.content).contains(
             TokenMeta.Content(
                 uri = "ipfs://QmTnMV5yQiSYAxWcFMyYZR5oZj84vuhVFU2Co7i1StVUpW",
@@ -249,7 +257,7 @@ class TokenClientMetaTests : BaseClientTests() {
                 representation = Representation.BIG
             )
         )
-        assertThat(meta.attributes.map { it.key }).containsAll(listOf("thinker","share","fantasy"))
+        assertThat(meta.tags).containsAll(listOf("thinker","share","fantasy"))
         assertThat(meta.description).isEqualTo("Sharing is growing")
     }
 
@@ -381,5 +389,130 @@ class TokenClientMetaTests : BaseClientTests() {
             )
         )
         assertThat(meta.attributes.map { it.key }).containsAll(listOf("creator", "creator_name"))
+    }
+
+    @Test
+    fun `should return meta from ipfs (with tzkt not providing meta)`() = runBlocking<Unit> {
+        mock(
+            """
+                [
+                    {
+                        "id": 2399760,
+                        "contract": {
+                            "address": "KT1PKFgv1ZrDVJoYcWczT1eDpw7qezbjxwKw"
+                        },
+                        "tokenId": "38",
+                        "standard": "fa2",
+                        "firstLevel": 2203301,
+                        "firstTime": "2022-03-17T07:49:44Z",
+                        "lastLevel": 2203301,
+                        "lastTime": "2022-03-17T07:49:44Z",
+                        "transfersCount": 1,
+                        "balancesCount": 1,
+                        "holdersCount": 1,
+                        "totalMinted": "5",
+                        "totalBurned": "0",
+                        "totalSupply": "5"
+                    }
+                ]
+            """.trimIndent()
+        )
+        mock(
+            """
+                {
+                	"id": 21154224,
+                	"active": true,
+                	"hash": "expru5TKqwxDRYQUdNBnFH9byzyLDYppZGbof8MPP8MFkxRdjBja9b",
+                	"key": "38",
+                	"value": {
+                		"token_id": "38",
+                		"token_info": {
+                			"": "697066733a2f2f516d4e705a5077696d4e6f35446d385454714e6b4b576f5931446e69673674786a73564c77626931683144614362"
+                		}
+                	},
+                	"firstLevel": 2203301,
+                	"lastLevel": 2203301,
+                	"updates": 1
+                }
+            """.trimIndent()
+        )
+        mock(
+            """
+                {
+                	"name": "FFC 032",
+                	"decimals": 0,
+                	"description": "Fabulous Architectural Flourish 032 from the city of Capreesh ",
+                	"artifactUri": "ipfs://QmSAgKM9HsHA9KEiQxqKiVdHY4agLfsTnZQVeU7CquT68G/image.jpeg",
+                	"displayUri": "ipfs://QmSAgKM9HsHA9KEiQxqKiVdHY4agLfsTnZQVeU7CquT68G/image.jpeg",
+                	"attributes": [],
+                	"formats": [{
+                		"mimeType": "image/jpeg",
+                		"fileSize": 13487767,
+                		"fileName": "FFC_032.jpg",
+                		"uri": "ipfs://QmSAgKM9HsHA9KEiQxqKiVdHY4agLfsTnZQVeU7CquT68G/image.jpeg"
+                	}]
+                }
+            """.trimIndent()
+        )
+
+        val meta = tokenClient.tokenMeta("KT1PKFgv1ZrDVJoYcWczT1eDpw7qezbjxwKw:38")
+        assertThat(meta.name).isEqualTo("FFC 032")
+        assertThat(meta.tags).hasSize(0)
+        assertThat(meta.content).contains(
+            TokenMeta.Content(
+                uri = "ipfs://QmSAgKM9HsHA9KEiQxqKiVdHY4agLfsTnZQVeU7CquT68G/image.jpeg",
+                mimeType = "image/jpeg",
+                representation = Representation.ORIGINAL
+            )
+        )
+        assertThat(meta.description).isEqualTo("Fabulous Architectural Flourish 032 from the city of Capreesh ")
+    }
+
+    @Test
+    fun `should return content from display & artifact uri`() = runBlocking<Unit> {
+        mock("""[{
+                    "id": 1231620,
+                    "contract": {
+                        "alias": "Rarible",
+                        "address": "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS"
+                    },
+                    "tokenId": "3905",
+                    "standard": "fa2",
+                    "firstLevel": 1951143,
+                    "firstTime": "2021-12-16T21:41:16Z",
+                    "lastLevel": 1951143,
+                    "lastTime": "2021-12-16T21:41:16Z",
+                    "transfersCount": 1,
+                    "balancesCount": 1,
+                    "holdersCount": 1,
+                    "totalMinted": "1",
+                    "totalBurned": "0",
+                    "totalSupply": "1",
+                    "metadata": {
+                        "name": "Nest ",
+                        "attributes": [],
+                        "displayUri": "ipfs://QmVahURZU7xaNn3u714ZrSkAQbQm542qEXeNp9Zhd56jHB/image.jpeg",
+                        "artifactUri": "ipfs://QmVahURZU7xaNn3u714ZrSkAQbQm542qEXeNp9Zhd56jHB/image.jpeg",
+                        "description": "Maybe one day this white hawk will pass above our house\n\nشايد روزي اين باز سپيد گذر كند از خانه ما\n\n\nLocation: asalem,gilan,iran\n\n",
+                        "externalUri": "https://rarible.com/token/KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS:3905"
+                    }
+                }]""".trimIndent())
+
+        val meta = tokenClient.tokenMeta("KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS:3905")
+        assertThat(meta.name).isEqualTo("Nest ")
+        assertThat(meta.content).contains(
+            TokenMeta.Content(
+                uri = "ipfs://QmVahURZU7xaNn3u714ZrSkAQbQm542qEXeNp9Zhd56jHB/image.jpeg",
+                mimeType = "image/jpeg",
+                representation = Representation.PREVIEW
+            )
+        )
+        assertThat(meta.content).contains(
+            TokenMeta.Content(
+                uri = "ipfs://QmVahURZU7xaNn3u714ZrSkAQbQm542qEXeNp9Zhd56jHB/image.jpeg",
+                mimeType = "image/jpeg",
+                representation = Representation.ORIGINAL
+            )
+        )
     }
 }

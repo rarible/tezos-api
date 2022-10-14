@@ -4,29 +4,33 @@ fragment order on marketplace_order {
     created_at
     fill
     ended_at
+    end_at
     id
     internal_order_id
     last_updated_at
     make_asset_class
     make_contract
-    make_price
-    make_stock
     make_token_id
     make_value
+    make_price
     maker
     network
     platform
-    started_at
+    start_at
     salt
     status
     take_asset_class
     take_contract
     take_token_id
     take_value
+    take_price
     taker
+    origin_fees
+    payouts
 }
 
 fragment assetType on marketplace_order {
+    take_asset_class
     take_contract
     take_token_id
 }
@@ -62,27 +66,30 @@ query GetOrderById($id: uuid!) {
         cancelled
         created_at
         ended_at
+        end_at
         fill
         id
         internal_order_id
         last_updated_at
         make_asset_class
         make_contract
-        make_price
-        make_stock
         make_token_id
         make_value
+        make_price
         maker
         network
         platform
         salt
-        started_at
+        start_at
         status
         take_asset_class
         take_contract
         take_token_id
         take_value
+        take_price
         taker
+        origin_fees
+        payouts
     }
 }
 
@@ -96,6 +103,15 @@ query GetOrdersByIds($ids: [uuid!]!) {
 }
 
 query GetOrdersByItem($limit: Int!) {
+    marketplace_order(
+        limit: $limit
+        order_by: {last_updated_at: desc, id: desc}
+    ) {
+        ...order
+    }
+}
+
+query GetOrdersByMaker($limit: Int!) {
     marketplace_order(
         limit: $limit
         order_by: {last_updated_at: desc, id: desc}

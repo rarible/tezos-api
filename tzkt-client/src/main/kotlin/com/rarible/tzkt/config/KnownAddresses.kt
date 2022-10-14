@@ -10,5 +10,8 @@ data class KnownAddresses(
     val versum: String,
     val royaltiesManager: String,
     val bidou8x8: String,
-    val bidou24x24: String
-    )
+    val bidou24x24: String,
+    val dogami: String,
+    val dogamiGap: String,
+    val dogamiStar: String
+)

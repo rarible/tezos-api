@@ -1,0 +1,45 @@
+fragment royalties on royalties {
+    id
+    contract
+    token_id
+    parts
+    db_updated_at
+}
+
+query GetRoyaltiesByIds($ids: [uuid!]!) {
+    royalties(where: {id: {_in: $ids}}) {
+        ...royalties
+    }
+}
+
+query GetRoyaltiesAll($limit: Int!, $order_by: [royalties_order_by!]!) {
+    royalties(limit: $limit, order_by: $order_by) {
+        ...royalties
+    }
+}
+
+query GetRoyaltiesAllContinuationDesc($limit: Int!, $date: timestamptz!, $id: uuid!) {
+    royalties(where: {
+        _or: [{
+            db_updated_at: {_lt: $date}
+        },{
+            db_updated_at: {_eq: $date},
+            id: {_lt: $id}
+        }]
+    }, limit: $limit, order_by: [{db_updated_at: desc}, {id: desc}]) {
+        ...royalties
+    }
+}
+
+query GetRoyaltiesAllContinuationAsc($limit: Int!, $date: timestamptz!, $id: uuid!) {
+    royalties(where: {
+        _or: [{
+            db_updated_at: {_gt: $date}
+        },{
+            db_updated_at: {_eq: $date},
+            id: {_gt: $id}
+        }]
+    }, limit: $limit, order_by: [{db_updated_at: asc}, {id: asc}]) {
+        ...royalties
+    }
+}

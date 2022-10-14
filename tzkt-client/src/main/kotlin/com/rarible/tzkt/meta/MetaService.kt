@@ -3,28 +3,75 @@ package com.rarible.tzkt.meta
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.convertValue
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.rarible.tzkt.client.BigMapKeyClient
+import com.rarible.tzkt.client.IPFSClient
 import com.rarible.tzkt.config.KnownAddresses
+import com.rarible.tzkt.model.BigMapKey
 import com.rarible.tzkt.model.Token
 import com.rarible.tzkt.model.TokenMeta
 import com.rarible.tzkt.model.TokenMeta.Attribute
 import com.rarible.tzkt.model.TokenMeta.Content
 import com.rarible.tzkt.model.TokenMeta.Representation
 import com.rarible.tzkt.tokens.BidouHandler
+import it.airgap.tezos.michelson.micheline.Micheline
+import it.airgap.tezos.michelson.micheline.MichelineLiteral
+import it.airgap.tezos.michelson.micheline.MichelinePrimitiveApplication
+import it.airgap.tezos.michelson.micheline.MichelineSequence
+import it.airgap.tezos.michelson.packer.unpackFromString
 import kotlinx.coroutines.runBlocking
+import okio.ByteString.Companion.decodeHex
+import org.slf4j.LoggerFactory
 
-class MetaService(private val mapper: ObjectMapper, private val bigMapKeyClient: BigMapKeyClient, private val knownAddresses: KnownAddresses) {
+fun processURI(uri: String): String {
+    return if (uri.contains("ipfs://ipfs/")) {
+        "ipfs://" + uri.split("ipfs://ipfs/")[1]
+    } else
+        uri
+}
 
-    fun meta(token: Token): TokenMeta {
+fun getDogamiAttributes(data: MichelineSequence): List<Attribute> {
+    var attributes: MutableList<Attribute> = mutableListOf()
+    data.nodes.forEach {
+        it as MichelinePrimitiveApplication
+        val key = (it.args.first() as MichelineLiteral.String).string
+        attributes.add(
+            Attribute(
+                key = key,
+                value = ((it.args.last() as MichelinePrimitiveApplication)
+                    .args.last() as MichelineLiteral.String).string
+            )
+        )
+    }
+    return attributes
+}
+
+class MetaService(
+    private val mapper: ObjectMapper,
+    private val bigMapKeyClient: BigMapKeyClient,
+    private val ipfsClient: IPFSClient,
+    private val knownAddresses: KnownAddresses
+) {
+    val logger = LoggerFactory.getLogger(javaClass)
+
+    suspend fun meta(token: Token): TokenMeta {
         return if (null != token.metadata) {
-            val meta: TzktMeta = mapper.convertValue(token.metadata)
+            val meta: TzktMeta = mapper.convertValue(adjustMeta(token.metadata))
+            var tokenAttributes = meta.attributes
+            if (token.contract?.address in listOf(knownAddresses.dogami, knownAddresses.dogamiGap, knownAddresses.dogamiStar)) {
+                val attributesData: String = token.metadata["attributes"] as String
+                val attributes = Micheline.Companion.unpackFromString(attributesData) as MichelineSequence
+                tokenAttributes = getDogamiAttributes(attributes)
+            }
             TokenMeta(
                 name = meta.name ?: TokenMeta.UNTITLED,
                 description = meta.description,
                 content = meta.contents(),
-                attributes = meta.attrs()
+                attributes = tokenAttributes ?: emptyList(),
+                tags = meta.tags ?: emptyList()
             )
         } else {
+            var meta: TokenMeta?
             when (token.contract?.address) {
                 knownAddresses.bidou8x8, knownAddresses.bidou24x24 -> {
                     val bidouHandler = BidouHandler(bigMapKeyClient)
@@ -32,7 +79,7 @@ class MetaService(private val mapper: ObjectMapper, private val bigMapKeyClient:
                         bidouHandler.getData(token.contract.address, token.tokenId!!)
                     }
                     if (properties != null) {
-                        TokenMeta(
+                        meta = TokenMeta(
                             name = properties.tokenName,
                             description = properties.tokenDescription,
                             content = listOf(
@@ -55,11 +102,85 @@ class MetaService(private val mapper: ObjectMapper, private val bigMapKeyClient:
                             )
                         )
                     } else {
-                        TokenMeta.EMPTY
+                        meta = TokenMeta.EMPTY
                     }
                 }
-                else -> TokenMeta.EMPTY
+                else -> meta = TokenMeta.EMPTY
             }
+            if (meta == TokenMeta.EMPTY) {
+                var ipfsMeta: TzktMeta? = null
+                try {
+                    var tokenMetadata: BigMapKey?
+                    tokenMetadata =
+                        bigMapKeyClient.bigMapKeyWithName(token.contract!!.address, "token_metadata", token.tokenId!!)
+                    val metadataMap = tokenMetadata.value as LinkedHashMap<String, String>
+                    val metadata = metadataMap["token_info"] as LinkedHashMap<String, String>
+                    var uri = metadata[""]?.decodeHex()?.utf8()
+                    if (!uri.isNullOrEmpty()) {
+                        uri = processURI(uri)
+                        val ipfsData = ipfsClient.fetchIpfsDataFromBlockchain(uri)
+                        ipfsMeta = mapper.convertValue(adjustMeta(mapper.convertValue(ipfsData)))
+                    }
+                } catch (e: Exception) {
+                    logger.warn("Could not parse metadata for token ${token.contract!!.address}:${token.tokenId!!} from IPFS metadata: ${e.message}")
+                }
+                meta = if (ipfsMeta != null) {
+                    TokenMeta(
+                        name = ipfsMeta.name ?: TokenMeta.UNTITLED,
+                        description = ipfsMeta.description,
+                        content = ipfsMeta.contents(),
+                        attributes = ipfsMeta.attributes ?: emptyList(),
+                        tags = ipfsMeta.tags ?: emptyList()
+                    )
+                } else {
+                    TokenMeta.EMPTY
+                }
+            }
+            return meta
+        }
+    }
+
+    private fun adjustMeta(source: Map<String, *>): Map<String, *> {
+        val mutable = source.toMutableMap()
+        mutable["formats"] = adjustListMap(mutable["formats"])
+        mutable["creators"] = adjustList(mutable["creators"])
+        mutable["tags"] = adjustList(mutable["tags"])
+        if (mutable["attributes"] != null && mutable["attributes"] is List<*>) {
+            mutable["attributes"] = (mutable["attributes"] as List<Map<String, *>>)
+                .map { it.toMutableMap() }
+                .filter {
+                    it["key"] != null || it["name"] != null
+                }
+                .map {
+                    it["key"] = it["name"]
+
+                    // fill according to Attribute
+                    mapOf(
+                        "key" to it["key"],
+                        "value" to it["value"],
+                        "type" to it["type"],
+                        "format" to it["format"]
+                    )
+                }
+        } else {
+            mutable.remove("attributes")
+        }
+        return mutable.toMap()
+    }
+
+    private fun adjustListMap(source: Any?): List<Map<String, Object>> {
+        return when (source) {
+            is String -> mapper.readValue(source)
+            is List<*> -> source as List<Map<String, Object>>
+            else -> emptyList()
+        }
+    }
+
+    private fun adjustList(source: Any?): List<String> {
+        return when (source) {
+            is String -> listOf(source)
+            is List<*> -> source as List<String>
+            else -> emptyList()
         }
     }
 
@@ -67,7 +188,8 @@ class MetaService(private val mapper: ObjectMapper, private val bigMapKeyClient:
     data class TzktMeta(
         val name: String? = null,
         val description: String? = null,
-        val tags: List<String> = emptyList(),
+        val tags: List<String>? = emptyList(),
+        val attributes: List<Attribute>? = emptyList(),
         val symbol: String? = null,
         val creators: List<String> = emptyList(),
         val formats: List<TzktContent> = emptyList(),
@@ -79,18 +201,37 @@ class MetaService(private val mapper: ObjectMapper, private val bigMapKeyClient:
 
         @JsonIgnoreProperties(ignoreUnknown = true)
         data class TzktContent(
-            val uri: String,
-            val mimeType: String
+            val uri: String?,
+            val mimeType: String?
         )
 
-        fun attrs() = tags.map { Attribute(it) }
-
-        fun contents() = formats.map {
-            Content(
-                uri = it.uri,
-                mimeType = it.mimeType,
-                representation = representation(it)
-            )
+        fun contents(): List<TokenMeta.Content> {
+            var contents = formats.filter { it.uri != null && it.mimeType != null }.map {
+                Content(
+                    uri = it.uri?.let { itURI -> processURI(itURI) },
+                    mimeType = it.mimeType!!,
+                    representation = representation(it)
+                )
+            }.toMutableList()
+            if (contents.count { it.representation == Representation.PREVIEW } == 0 && displayUri != null) {
+                contents.add(
+                    Content(
+                        uri = processURI(displayUri),
+                        mimeType = guessMime(displayUri),
+                        representation = Representation.PREVIEW
+                    )
+                )
+            }
+            if (contents.count { it.representation == Representation.ORIGINAL } == 0 && artifactUri != null) {
+                contents.add(
+                    Content(
+                        uri = processURI(artifactUri),
+                        mimeType = guessMime(artifactUri),
+                        representation = Representation.ORIGINAL
+                    )
+                )
+            }
+            return contents
         }
 
         private fun representation(content: TzktContent): Representation {
@@ -100,6 +241,12 @@ class MetaService(private val mapper: ObjectMapper, private val bigMapKeyClient:
                 else -> Representation.BIG
             }
         }
-    }
 
+        private fun guessMime(value: String): String {
+            return when {
+                value.lowercase().endsWith("jpeg") || value.lowercase().endsWith("jpg") -> "image/jpeg"
+                else -> ""
+            }
+        }
+    }
 }
