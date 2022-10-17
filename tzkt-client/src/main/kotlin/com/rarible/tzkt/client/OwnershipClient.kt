@@ -57,7 +57,7 @@ class OwnershipClient(
     suspend fun ownershipsByIds(ownershipIds: List<String>) = coroutineScope {
         val distinctIds = ownershipIds.distinct()
         if (distinctIds.isEmpty()) emptyList<TokenBalance>()
-        when(settings.useOwnershipsBatch) {
+        val balances = when(settings.useOwnershipsBatch) {
             true -> {
                 invokePost({
                     it.path(BASE_PATH)
@@ -65,6 +65,7 @@ class OwnershipClient(
             }
             else -> distinctIds.map { async { ownershipById(it) } }.awaitAll()
         }
+        balances.filter { it.balance != "0" }// we need to filter empty
     }
 
     suspend fun ownershipById(ownershipId: String): TokenBalance {
