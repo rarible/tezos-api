@@ -9,7 +9,7 @@ import java.time.Instant
 data class DipDupCollection(
     val id: String,
     val owner: String,
-    val name: String,
+    val name: String?,
     val symbol: String?,
     val standard: String?,
     val minters: List<String> = emptyList()

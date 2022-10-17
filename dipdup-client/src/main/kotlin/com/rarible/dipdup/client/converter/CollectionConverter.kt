@@ -7,9 +7,11 @@ import com.rarible.dipdup.client.GetCollectionsAllQuery
 import com.rarible.dipdup.client.GetCollectionsByIdsQuery
 import com.rarible.dipdup.client.core.model.DipDupCollection
 import com.rarible.dipdup.client.core.util.MetaUtils
-import java.time.OffsetDateTime
+import com.sun.org.slf4j.internal.LoggerFactory
 
 object CollectionConverter {
+
+    val logger = LoggerFactory.getLogger(javaClass)
 
     fun convertByIds(source: List<GetCollectionsByIdsQuery.Collection_with_metum>) = source.map { convert(it.collection) }
 
@@ -21,15 +23,27 @@ object CollectionConverter {
         source.map { convert(it.collection) }
 
     fun convert(source: com.rarible.dipdup.client.fragment.Collection): DipDupCollection {
-        val meta = convertMeta(source.metadata)
-        return DipDupCollection(
-            id = source.id,
-            owner = source.owner,
-            name = meta?.name ?: "Unnamed Collection",
-            minters = listOf(),
-            standard = null,
-            symbol = null
-        )
+        return try {
+            val meta = convertMeta(source.metadata)
+            DipDupCollection(
+                id = source.id,
+                owner = source.owner,
+                name = meta?.name ?: "Unnamed Collection",
+                minters = listOf(),
+                standard = null,
+                symbol = null
+            )
+        } catch (ex: Exception) {
+            logger.warn("Wrong meta format for collection", ex)
+            DipDupCollection(
+                id = source.id,
+                owner = source.owner,
+                name = "Unnamed Collection",
+                minters = listOf(),
+                standard = null,
+                symbol = null
+            )
+        }
     }
 
     fun convertMeta(data: String?): Meta? {
