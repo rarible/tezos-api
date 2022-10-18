@@ -28,6 +28,12 @@ class RoyaltiesClient(
         return convertByIds(response.royalties)
     }
 
+    suspend fun insertRoyalty() {
+        var request = InsertRoyaltyMutation()
+        client.mutation(request).execute()
+
+    }
+
     suspend fun getRoyaltiesAll(
         limit: Int = DEFAULT_PAGE,
         continuation: String?,

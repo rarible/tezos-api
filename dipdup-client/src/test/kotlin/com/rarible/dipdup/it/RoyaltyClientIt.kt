@@ -11,15 +11,15 @@ import org.junit.jupiter.api.condition.OS
 
 // this test will be disabled on jenkins
 @DisabledOnOs(OS.LINUX)
-@Disabled
+//@Disabled
 class RoyaltyClientIt {
 
-    val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://dev-tezos-indexer.rarible.org/v1/graphql").build() }
+    val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://testnet-tezos-indexer.rarible.org/v1/graphql").build() }
     val royaltyClient = RoyaltiesClient(client)
 
     @Test
     fun `should return royalty`() = runBlocking<Unit> {
-        val royalty = royaltyClient.getRoyaltiesById("KT1RuoaCbnZpMgdRpSoLfJUzSkGz1ZSiaYwj:504")
+        val royalty = royaltyClient.getRoyaltiesById("KT1Dc1j7mnB2X6cdXDgfvb1hytXDTWrFs1iN:28")
         assertThat(royalty).isNotNull
     }
 }

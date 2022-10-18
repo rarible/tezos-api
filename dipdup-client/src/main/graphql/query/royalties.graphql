@@ -43,3 +43,14 @@ query GetRoyaltiesAllContinuationAsc($limit: Int!, $date: timestamptz!, $id: uui
         ...royalties
     }
 }
+
+mutation InsertRoyalty($id: uuid!) {
+    insertRoyalty(object: {id: $id}) {
+        parts
+        contract
+        id
+        royalties_retries
+        royalties_synced
+        token_id
+    }
+}
