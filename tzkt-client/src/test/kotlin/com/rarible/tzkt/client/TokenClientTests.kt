@@ -566,6 +566,27 @@ class TokenClientTests : BaseClientTests() {
         assertThat(page1.items).hasSize(1)
         assertThat(page1.continuation).isNotEmpty
 
+        mock(
+            """[{
+            "id": 1,
+            "contract": {
+                "alias": "test",
+                "address": "KT1S95Dyj2QrJpSnAbHRUSUZr7DhuFqssrog"
+            },
+            "tokenId": "0",
+            "standard": "fa2",
+            "firstLevel": 889166,
+            "firstTime": "2020-03-31T15:12:51Z",
+            "lastLevel": 2280800,
+            "lastTime": "2022-04-14T16:51:14Z",
+            "transfersCount": 97188,
+            "balancesCount": 3029,
+            "holdersCount": 1179,
+            "totalMinted": "2",
+            "totalBurned": "0",
+            "totalSupply": "2"
+        }]"""
+        )
         mock(""" [{
                     "id": 12277744,
                     "token.contract.address": "KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS",
@@ -602,7 +623,8 @@ class TokenClientTests : BaseClientTests() {
         assertThat(requests()).isEqualTo(setOf(
             "/v1/tokens/balances?account=tz1gqL7i1s578qj3NzgKmu6C5j3RdSBewGBo&token.standard=fa2&limit=1&balance.gt=0&sort.desc=id&select=id,token.contract.address,token.tokenId",
             "/v1/tokens?contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&tokenId.in=76999",
-            "/v1/tokens/balances?account=tz1gqL7i1s578qj3NzgKmu6C5j3RdSBewGBo&token.standard=fa2&limit=2&id.lt=12277692&balance.gt=0&sort.desc=id&select=id,token.contract.address,token.tokenId",
+            "/v1/tokens?contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&tokenId.in=77272",
+            "/v1/tokens/balances?account=tz1gqL7i1s578qj3NzgKmu6C5j3RdSBewGBo&token.standard=fa2&limit=2&id.lt=1&balance.gt=0&sort.desc=id&select=id,token.contract.address,token.tokenId",
             "/v1/tokens?contract=KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS&tokenId.in=77263")
         )
     }
