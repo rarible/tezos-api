@@ -11,6 +11,21 @@ fragment token on token {
     tzkt_id
 }
 
+fragment token_by_owner on token_by_owner {
+    id
+    minted
+    minted_at
+    supply
+    token_id
+    updated
+    contract
+    creator
+    deleted
+    item_id
+    tzkt_id
+    owner
+}
+
 query GetTokensByIds($ids: [uuid!]!) {
     token(where: {id: {_in: $ids}}) {
         ...token
@@ -58,5 +73,71 @@ query GetTokensAllContinuationAsc($limit: Int!, $deleted: [Boolean!]!, $date: ti
         }]
     }, limit: $limit, order_by: [{updated: asc}, {id: asc}]) {
         ...token
+    }
+}
+
+query GetTokensByOwner($address: String!, $limit: Int!) {
+    token_by_owner(where: {
+        owner: {_eq: $address}
+    }, limit: $limit, order_by: [{updated: desc}, {item_id: desc}]) {
+        ...token_by_owner
+    }
+}
+
+query GetTokensByOwnerContinuationDesc($address: String!, $limit: Int!, $date: timestamptz!, $id: String!) {
+    token_by_owner(where: {
+        owner: {_eq: $address},
+        _or: [{
+            updated: {_lt: $date}
+        },{
+            updated: {_eq: $date},
+            item_id: {_lt: $id}
+        }]
+    }, limit: $limit, order_by: [{updated: desc}, {item_id: desc}]) {
+        ...token_by_owner
+    }
+}
+
+query GetTokensByCreator($address: String!, $limit: Int!) {
+    token_by_owner(where: {
+        creator: {_eq: $address}
+    }, limit: $limit, order_by: [{updated: desc}, {item_id: desc}]) {
+        ...token_by_owner
+    }
+}
+
+query GetTokensByCreatorContinuationDesc($address: String!, $limit: Int!, $date: timestamptz!, $id: String!) {
+    token_by_owner(where: {
+        creator: {_eq: $address},
+        _or: [{
+            updated: {_lt: $date}
+        },{
+            updated: {_eq: $date},
+            item_id: {_lt: $id}
+        }]
+    }, limit: $limit, order_by: [{updated: desc}, {item_id: desc}]) {
+        ...token_by_owner
+    }
+}
+
+query GetTokensByCollection($address: String!, $limit: Int!) {
+    token_by_owner(where: {
+        contract: {_eq: $address}
+    }, limit: $limit, order_by: [{updated: desc}, {item_id: desc}]) {
+        ...token_by_owner
+    }
+}
+
+query GetTokensByCollectionContinuationDesc($address: String!, $limit: Int!, $date: timestamptz!, $id: String!) {
+    token_by_owner(where: {
+        contract: {_eq: $address},
+        _or: [{
+            updated: {_lt: $date}
+        },{
+            updated: {_eq: $date},
+            item_id: {_lt: $id}
+        }]
+    }, limit: $limit, order_by: [{updated: desc}, {item_id: desc}]) {
+        ...token_by_owner
     }
 }

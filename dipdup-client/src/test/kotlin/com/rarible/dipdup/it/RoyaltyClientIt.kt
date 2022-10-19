@@ -1,14 +1,14 @@
 package com.rarible.dipdup.it
 
 import com.apollographql.apollo3.ApolloClient
-import com.apollographql.apollo3.api.http.HttpRequest
-import com.apollographql.apollo3.api.http.HttpResponse
-import com.apollographql.apollo3.network.http.HttpInterceptor
-import com.apollographql.apollo3.network.http.HttpInterceptorChain
 import com.rarible.dipdup.client.RoyaltiesClient
+import com.rarible.dipdup.client.client.AuthorizationInterceptor
 import com.rarible.dipdup.client.core.model.DipDupRoyalties
+import com.rarible.dipdup.client.core.model.Part
+import com.rarible.dipdup.client.core.util.uuid5Oid
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.DisabledOnOs
 import org.junit.jupiter.api.condition.OS
@@ -36,22 +36,16 @@ class RoyaltyClientIt {
     }
 
     @Test
+    @Disabled
     fun `should save royalty`() = runBlocking<Unit> {
-        val id = UUID.randomUUID()
+        val id = uuid5Oid("KT1Dc1j7mnB2X6cdXDgfvb1hytXDTWrFs1iN:1")
         val royalty = DipDupRoyalties(
             id = id.toString(),
             updated = Instant.now(),
             tokenId = BigInteger.ONE,
-            contract = "KTtest",
-            parts = listOf()
+            contract = "KT1Dc1j7mnB2X6cdXDgfvb1hytXDTWrFs1iN",
+            parts = listOf(Part("tz1fbKDvLgwjnuXDcVDUW8JdPTAsna5VhvKD", 1))
         )
         royaltyClient.insertRoyalty(royalty)
-        println(royalty)
-    }
-
-    class AuthorizationInterceptor(val token: String) : HttpInterceptor {
-        override suspend fun intercept(request: HttpRequest,  chain: HttpInterceptorChain): HttpResponse {
-            return chain.proceed(request.newBuilder().addHeader("X-Hasura-Admin-Secret", token).build())
-        }
     }
 }

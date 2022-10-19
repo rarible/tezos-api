@@ -37,9 +37,12 @@ class RoyaltiesClient(
     suspend fun insertRoyalty(royalty: DipDupRoyalties) {
         val roInput = Royalties_insert_input(
             Optional.presentIfNotNull(royalty.contract),
-            Optional.presentIfNotNull("${Instant.now().toString()}"),
+            Optional.presentIfNotNull("${Instant.now()}"),
             Optional.presentIfNotNull(royalty.id),
-            Optional.presentIfNotNull(emptyList<Part>()),
+            Optional.presentIfNotNull(royalty.parts.map { mapOf(
+                "part_account" to it.account,
+                "part_value" to it.value.toString())
+            }),
             Optional.presentIfNotNull(1),
             Optional.presentIfNotNull(true),
             Optional.presentIfNotNull(royalty.tokenId.toString())

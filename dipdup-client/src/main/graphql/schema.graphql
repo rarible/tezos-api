@@ -7321,6 +7321,46 @@ type query_root {
     where: token_bool_exp
   ): token_aggregate!
 
+  """
+  fetch data from the table: "token_by_owner"
+  """
+  token_by_owner(
+    """distinct select on columns"""
+    distinct_on: [token_by_owner_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [token_by_owner_order_by!]
+
+    """filter the rows returned"""
+    where: token_by_owner_bool_exp
+  ): [token_by_owner!]!
+
+  """
+  fetch aggregated fields from the table: "token_by_owner"
+  """
+  token_by_owner_aggregate(
+    """distinct select on columns"""
+    distinct_on: [token_by_owner_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [token_by_owner_order_by!]
+
+    """filter the rows returned"""
+    where: token_by_owner_bool_exp
+  ): token_by_owner_aggregate!
+
   """fetch data from the table: "token" using primary key columns"""
   token_by_pk(id: uuid!): token
 
@@ -8687,6 +8727,46 @@ type subscription_root {
     where: token_bool_exp
   ): token_aggregate!
 
+  """
+  fetch data from the table: "token_by_owner"
+  """
+  token_by_owner(
+    """distinct select on columns"""
+    distinct_on: [token_by_owner_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [token_by_owner_order_by!]
+
+    """filter the rows returned"""
+    where: token_by_owner_bool_exp
+  ): [token_by_owner!]!
+
+  """
+  fetch aggregated fields from the table: "token_by_owner"
+  """
+  token_by_owner_aggregate(
+    """distinct select on columns"""
+    distinct_on: [token_by_owner_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [token_by_owner_order_by!]
+
+    """filter the rows returned"""
+    where: token_by_owner_bool_exp
+  ): token_by_owner_aggregate!
+
   """fetch data from the table: "token" using primary key columns"""
   token_by_pk(id: uuid!): token
 
@@ -9619,6 +9699,221 @@ input token_bool_exp {
   token_id: String_comparison_exp
   tzkt_id: bigint_comparison_exp
   updated: timestamptz_comparison_exp
+}
+
+"""
+columns and relationships of "token_by_owner"
+"""
+type token_by_owner {
+  contract: String
+  creator: String
+  db_updated_at: timestamptz
+  deleted: Boolean
+  id: uuid
+  item_id: String
+  minted: numeric
+  minted_at: timestamptz
+  owner: String
+  supply: numeric
+  token_id: String
+  tzkt_id: bigint
+  updated: timestamptz
+}
+
+"""
+aggregated selection of "token_by_owner"
+"""
+type token_by_owner_aggregate {
+  aggregate: token_by_owner_aggregate_fields
+  nodes: [token_by_owner!]!
+}
+
+"""
+aggregate fields of "token_by_owner"
+"""
+type token_by_owner_aggregate_fields {
+  avg: token_by_owner_avg_fields
+  count(columns: [token_by_owner_select_column!], distinct: Boolean): Int!
+  max: token_by_owner_max_fields
+  min: token_by_owner_min_fields
+  stddev: token_by_owner_stddev_fields
+  stddev_pop: token_by_owner_stddev_pop_fields
+  stddev_samp: token_by_owner_stddev_samp_fields
+  sum: token_by_owner_sum_fields
+  var_pop: token_by_owner_var_pop_fields
+  var_samp: token_by_owner_var_samp_fields
+  variance: token_by_owner_variance_fields
+}
+
+"""aggregate avg on columns"""
+type token_by_owner_avg_fields {
+  minted: Float
+  supply: Float
+  tzkt_id: Float
+}
+
+"""
+Boolean expression to filter rows from the table "token_by_owner". All fields are combined with a logical 'AND'.
+"""
+input token_by_owner_bool_exp {
+  _and: [token_by_owner_bool_exp!]
+  _not: token_by_owner_bool_exp
+  _or: [token_by_owner_bool_exp!]
+  contract: String_comparison_exp
+  creator: String_comparison_exp
+  db_updated_at: timestamptz_comparison_exp
+  deleted: Boolean_comparison_exp
+  id: uuid_comparison_exp
+  item_id: String_comparison_exp
+  minted: numeric_comparison_exp
+  minted_at: timestamptz_comparison_exp
+  owner: String_comparison_exp
+  supply: numeric_comparison_exp
+  token_id: String_comparison_exp
+  tzkt_id: bigint_comparison_exp
+  updated: timestamptz_comparison_exp
+}
+
+"""aggregate max on columns"""
+type token_by_owner_max_fields {
+  contract: String
+  creator: String
+  db_updated_at: timestamptz
+  id: uuid
+  item_id: String
+  minted: numeric
+  minted_at: timestamptz
+  owner: String
+  supply: numeric
+  token_id: String
+  tzkt_id: bigint
+  updated: timestamptz
+}
+
+"""aggregate min on columns"""
+type token_by_owner_min_fields {
+  contract: String
+  creator: String
+  db_updated_at: timestamptz
+  id: uuid
+  item_id: String
+  minted: numeric
+  minted_at: timestamptz
+  owner: String
+  supply: numeric
+  token_id: String
+  tzkt_id: bigint
+  updated: timestamptz
+}
+
+"""Ordering options when selecting data from "token_by_owner"."""
+input token_by_owner_order_by {
+  contract: order_by
+  creator: order_by
+  db_updated_at: order_by
+  deleted: order_by
+  id: order_by
+  item_id: order_by
+  minted: order_by
+  minted_at: order_by
+  owner: order_by
+  supply: order_by
+  token_id: order_by
+  tzkt_id: order_by
+  updated: order_by
+}
+
+"""
+select columns of table "token_by_owner"
+"""
+enum token_by_owner_select_column {
+  """column name"""
+  contract
+
+  """column name"""
+  creator
+
+  """column name"""
+  db_updated_at
+
+  """column name"""
+  deleted
+
+  """column name"""
+  id
+
+  """column name"""
+  item_id
+
+  """column name"""
+  minted
+
+  """column name"""
+  minted_at
+
+  """column name"""
+  owner
+
+  """column name"""
+  supply
+
+  """column name"""
+  token_id
+
+  """column name"""
+  tzkt_id
+
+  """column name"""
+  updated
+}
+
+"""aggregate stddev on columns"""
+type token_by_owner_stddev_fields {
+  minted: Float
+  supply: Float
+  tzkt_id: Float
+}
+
+"""aggregate stddev_pop on columns"""
+type token_by_owner_stddev_pop_fields {
+  minted: Float
+  supply: Float
+  tzkt_id: Float
+}
+
+"""aggregate stddev_samp on columns"""
+type token_by_owner_stddev_samp_fields {
+  minted: Float
+  supply: Float
+  tzkt_id: Float
+}
+
+"""aggregate sum on columns"""
+type token_by_owner_sum_fields {
+  minted: numeric
+  supply: numeric
+  tzkt_id: bigint
+}
+
+"""aggregate var_pop on columns"""
+type token_by_owner_var_pop_fields {
+  minted: Float
+  supply: Float
+  tzkt_id: Float
+}
+
+"""aggregate var_samp on columns"""
+type token_by_owner_var_samp_fields {
+  minted: Float
+  supply: Float
+  tzkt_id: Float
+}
+
+"""aggregate variance on columns"""
+type token_by_owner_variance_fields {
+  minted: Float
+  supply: Float
+  tzkt_id: Float
 }
 
 """
