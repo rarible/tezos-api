@@ -142,13 +142,19 @@ class TokenClient(
     }
 
     suspend fun tokensByOwner(owner: String, size: Int = DEFAULT_SIZE, continuation: String?): Page<Token> {
+        val nextToken = continuation?.let {
+            val parsed = TimestampIdContinuation.parse(continuation)!!
+            token(parsed.id, false, false)
+        }
         val balances = invoke<List<TokenBalanceShort>> { builder ->
             builder.path(BASE_PATH_BALANCES)
                 .apply {
                     queryParam("account", owner)
                     queryParam("token.standard", "fa2")
                     queryParam("limit", size)
-                    continuation?.let { queryParam("id.lt", it) }
+                    nextToken?.let {
+                        queryParam("id.lt", it.id)
+                    }
                     queryParam("balance.gt", 0)
                     queryParam("sort.desc", "id")
                     queryParam("select", "id,token.contract.address,token.tokenId")
@@ -163,6 +169,10 @@ class TokenClient(
     }
 
     suspend fun tokensByCreator(creator: String, size: Int = DEFAULT_SIZE, continuation: String?): Page<Token> {
+        val nextToken = continuation?.let {
+            val parsed = TimestampIdContinuation.parse(continuation)!!
+            token(parsed.id, false, false)
+        }
         val transfers = invoke<List<TokenActivity>> { builder ->
             builder.path(BASE_PATH_TRANSFERS)
                 .apply {
@@ -170,7 +180,9 @@ class TokenClient(
                     queryParam("to", creator)
                     queryParam("token.standard", "fa2")
                     queryParam("limit", size)
-                    continuation?.let { queryParam("id.lt", it) }
+                    nextToken?.let {
+                        queryParam("id.lt", it.id)
+                    }
                     queryParam("sort.desc", "id")
                 }
         }
@@ -182,12 +194,18 @@ class TokenClient(
     }
 
     suspend fun tokensByCollection(collection: String, size: Int = DEFAULT_SIZE, continuation: String?): Page<Token> {
+        val nextToken = continuation?.let {
+            val parsed = TimestampIdContinuation.parse(continuation)!!
+            token(parsed.id, false, false)
+        }
         val balances = invoke<List<TokenBalanceShort>> { builder ->
             builder.path(BASE_PATH_BALANCES)
                 .apply {
                     queryParam("token.contract", collection)
                     queryParam("limit", size)
-                    continuation?.let { queryParam("id.lt", it) }
+                    nextToken?.let {
+                        queryParam("id.lt", it.id)
+                    }
                     queryParam("balance.gt", 0)
                     queryParam("account.ni", Tezos.NULL_ADDRESSES_STRING)
                     queryParam("sort.desc", "id")
@@ -281,7 +299,10 @@ class TokenClient(
         val tokens = tokens(tokensIds, false, checkBalance)
         return Page(
             items = tokens,
-            continuation = nextContinuation?.let { it.toString() }
+            continuation = nextContinuation?.let {
+                val last = tokens.last()!!
+                TimestampIdContinuation(last.lastTime!!.toInstant(), last.itemId()).toString()
+            }
         )
     }
 
