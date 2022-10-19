@@ -31,21 +31,15 @@ class RoyaltyClientIt {
 
     @Test
     fun `should return royalty`() = runBlocking<Unit> {
-        val royalty = royaltyClient.getRoyaltiesById("KT1Dc1j7mnB2X6cdXDgfvb1hytXDTWrFs1iN:28")
+        val royalty = royaltyClient.getRoyaltiesById("KT1Dc1j7mnB2X6cdXDgfvb1hytXDTWrFs1iN:12345")
         assertThat(royalty).isNotNull
     }
 
     @Test
     @Disabled
     fun `should save royalty`() = runBlocking<Unit> {
-        val id = uuid5Oid("KT1Dc1j7mnB2X6cdXDgfvb1hytXDTWrFs1iN:1")
-        val royalty = DipDupRoyalties(
-            id = id.toString(),
-            updated = Instant.now(),
-            tokenId = BigInteger.ONE,
-            contract = "KT1Dc1j7mnB2X6cdXDgfvb1hytXDTWrFs1iN",
-            parts = listOf(Part("tz1fbKDvLgwjnuXDcVDUW8JdPTAsna5VhvKD", 1))
-        )
-        royaltyClient.insertRoyalty(royalty)
+        val itemId = "KT1Dc1j7mnB2X6cdXDgfvb1hytXDTWrFs1iN:12345"
+        val parts = listOf(Part("tz1fbKDvLgwjnuXDcVDUW8JdPTAsna5VhvKD", 1))
+        royaltyClient.insertRoyalty(itemId, parts)
     }
 }

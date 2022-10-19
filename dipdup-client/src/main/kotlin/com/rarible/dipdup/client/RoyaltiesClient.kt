@@ -9,6 +9,7 @@ import com.rarible.dipdup.client.converter.RoyaltiesConverter.convertByIds
 import com.rarible.dipdup.client.core.model.DipDupRoyalties
 import com.rarible.dipdup.client.core.model.Part
 import com.rarible.dipdup.client.core.model.TimestampIdContinuation
+import com.rarible.dipdup.client.core.util.uuid5Oid
 import com.rarible.dipdup.client.exception.DipDupNotFound
 import com.rarible.dipdup.client.model.Page
 import com.rarible.dipdup.client.type.Royalties_insert_input
@@ -34,22 +35,24 @@ class RoyaltiesClient(
         return convertByIds(response.royalties)
     }
 
-    suspend fun insertRoyalty(royalty: DipDupRoyalties) {
+    suspend fun insertRoyalty(itemId: String, parts: List<Part>) {
+        val id = uuid5Oid(itemId)
+        val (contract, tokenId) = itemId.split(":")
         val roInput = Royalties_insert_input(
-            Optional.presentIfNotNull(royalty.contract),
+            Optional.presentIfNotNull(contract),
             Optional.presentIfNotNull("${Instant.now()}"),
-            Optional.presentIfNotNull(royalty.id),
-            Optional.presentIfNotNull(royalty.parts.map { mapOf(
+            Optional.presentIfNotNull(id.toString()),
+            Optional.presentIfNotNull(parts.map { mapOf(
                 "part_account" to it.account,
                 "part_value" to it.value.toString())
             }),
             Optional.presentIfNotNull(1),
             Optional.presentIfNotNull(true),
-            Optional.presentIfNotNull(royalty.tokenId.toString())
+            Optional.presentIfNotNull(tokenId)
         )
         val request = InsertRoyaltyMutation(roInput)
         val response = client.mutation(request).execute()
-        logger.info("Saved royalty for item ${royalty.contract}:${royalty.tokenId} status: ${response.errors}")
+        logger.info("Saved royalty for item $itemId status: ${response.errors}")
     }
 
     suspend fun getRoyaltiesAll(
