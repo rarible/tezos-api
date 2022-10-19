@@ -14,7 +14,7 @@ import com.rarible.dipdup.client.exception.DipDupNotFound
 import com.rarible.dipdup.client.model.Page
 import com.rarible.dipdup.client.type.Token_order_by
 import com.rarible.dipdup.client.type.order_by
-import com.sun.org.slf4j.internal.LoggerFactory
+import org.slf4j.LoggerFactory
 
 class TokenClient(
     client: ApolloClient

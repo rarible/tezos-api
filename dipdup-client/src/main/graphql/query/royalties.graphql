@@ -44,8 +44,8 @@ query GetRoyaltiesAllContinuationAsc($limit: Int!, $date: timestamptz!, $id: uui
     }
 }
 
-mutation InsertRoyalty($id: uuid!) {
-    insertRoyalty(object: {id: $id}) {
+mutation InsertRoyalty($royalty: royalties_insert_input!) {
+    insert_royalties_one(object: $royalty) {
         parts
         contract
         id

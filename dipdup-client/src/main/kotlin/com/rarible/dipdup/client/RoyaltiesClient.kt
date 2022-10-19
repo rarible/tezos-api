@@ -7,15 +7,21 @@ import com.rarible.dipdup.client.converter.RoyaltiesConverter.convertAllContinua
 import com.rarible.dipdup.client.converter.RoyaltiesConverter.convertAllContinuationDesc
 import com.rarible.dipdup.client.converter.RoyaltiesConverter.convertByIds
 import com.rarible.dipdup.client.core.model.DipDupRoyalties
+import com.rarible.dipdup.client.core.model.Part
 import com.rarible.dipdup.client.core.model.TimestampIdContinuation
 import com.rarible.dipdup.client.exception.DipDupNotFound
 import com.rarible.dipdup.client.model.Page
+import com.rarible.dipdup.client.type.Royalties_insert_input
 import com.rarible.dipdup.client.type.Royalties_order_by
 import com.rarible.dipdup.client.type.order_by
+import org.slf4j.LoggerFactory
+import java.time.Instant
 
 class RoyaltiesClient(
     client: ApolloClient
 ) : BaseClient(client) {
+
+    val logger = LoggerFactory.getLogger(javaClass)
 
     suspend fun getRoyaltiesById(id: String): DipDupRoyalties {
         return getRoyaltiesByIds(listOf(id)).firstOrNull() ?: throw DipDupNotFound(id)
@@ -28,10 +34,19 @@ class RoyaltiesClient(
         return convertByIds(response.royalties)
     }
 
-    suspend fun insertRoyalty() {
-        var request = InsertRoyaltyMutation()
-        client.mutation(request).execute()
-
+    suspend fun insertRoyalty(royalty: DipDupRoyalties) {
+        val roInput = Royalties_insert_input(
+            Optional.presentIfNotNull(royalty.contract),
+            Optional.presentIfNotNull("${Instant.now().toString()}"),
+            Optional.presentIfNotNull(royalty.id),
+            Optional.presentIfNotNull(emptyList<Part>()),
+            Optional.presentIfNotNull(1),
+            Optional.presentIfNotNull(true),
+            Optional.presentIfNotNull(royalty.tokenId.toString())
+        )
+        val request = InsertRoyaltyMutation(roInput)
+        val response = client.mutation(request).execute()
+        logger.info("Saved royalty for item ${royalty.contract}:${royalty.tokenId} status: ${response.errors}")
     }
 
     suspend fun getRoyaltiesAll(
