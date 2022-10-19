@@ -14,7 +14,8 @@ import preparedClient
 @DisabledOnOs(OS.LINUX)
 class OwnershipClientIt {
 
-    val client = preparedClient("https://api.tzkt.io")
+//    val client = preparedClient("https://api.tzkt.io")
+    val client = preparedClient("http://tezos-tzkt.rarible.int")
 //    val client = preparedClient("http://tezos-tzkt.testnet.rarible.int")
     val ownershipClient = OwnershipClient(client, TzktSettings(useOwnershipsBatch = true))
 
@@ -42,7 +43,6 @@ class OwnershipClientIt {
         assertThat(ids).hasSize(total)
     }
 
-    @Disabled
     @Test
     fun `should return ownerships with continuation for token`() = runBlocking<Unit> {
         var total = 10_000
@@ -50,7 +50,7 @@ class OwnershipClientIt {
         val ids = setOf<String>().toMutableSet()
         var continuation: String? = null
         while (current < total) {
-            val page = ownershipClient.ownershipsByToken("KT1BRhcRAdLia3XQT1mPSofHyrmYpRddgj3s:6", 1000, continuation)
+            val page = ownershipClient.ownershipsByToken("KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi:1010612", 1000, continuation)
             continuation = page.continuation
             current += page.items.size
             ids.addAll(page.items.map { it.ownershipId() })
@@ -59,10 +59,11 @@ class OwnershipClientIt {
         assertThat(ids).hasSize(total)
     }
 
-    @Disabled
     @Test
     fun `should return ownerships in batch`() = runBlocking<Unit> {
-        val ownerships = ownershipClient.ownershipsByIds(listOf("KT1MmTE786dG3mgzKsa9uWqhoWpMbUtEMXQC:12:tz1QNpkxEufumXqpVkK24HyYi3gca9HzjJZ6"))
+        val ownerships = ownershipClient.ownershipsByIds(listOf(
+            "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi:1010612:tz1LHPjJnsu2pnkis24pFfNRTi4bR3qh8Cec",
+        "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi:1010612:tz1LMjedRiL41Vnd6JAa6acTPLSNX5idTZ2T"))
         assertThat(ownerships).hasSize(1)
     }
 }

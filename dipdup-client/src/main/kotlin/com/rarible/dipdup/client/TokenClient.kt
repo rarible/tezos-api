@@ -5,7 +5,13 @@ import com.apollographql.apollo3.api.Optional
 import com.rarible.dipdup.client.converter.TokenConverter.convertAll
 import com.rarible.dipdup.client.converter.TokenConverter.convertAllContinuationAsc
 import com.rarible.dipdup.client.converter.TokenConverter.convertAllContinuationDesc
+import com.rarible.dipdup.client.converter.TokenConverter.convertByCollection
+import com.rarible.dipdup.client.converter.TokenConverter.convertByCollectionContinuation
+import com.rarible.dipdup.client.converter.TokenConverter.convertByCreator
+import com.rarible.dipdup.client.converter.TokenConverter.convertByCreatorContinuation
 import com.rarible.dipdup.client.converter.TokenConverter.convertByIds
+import com.rarible.dipdup.client.converter.TokenConverter.convertByOwner
+import com.rarible.dipdup.client.converter.TokenConverter.convertByOwnerContinuation
 import com.rarible.dipdup.client.converter.TokenConverter.processMetadata
 import com.rarible.dipdup.client.core.model.DipDupItem
 import com.rarible.dipdup.client.core.model.TimestampIdContinuation
@@ -14,7 +20,7 @@ import com.rarible.dipdup.client.exception.DipDupNotFound
 import com.rarible.dipdup.client.model.Page
 import com.rarible.dipdup.client.type.Token_order_by
 import com.rarible.dipdup.client.type.order_by
-import com.sun.org.slf4j.internal.LoggerFactory
+import org.slf4j.LoggerFactory
 
 class TokenClient(
     client: ApolloClient
@@ -75,6 +81,60 @@ class TokenClient(
                 val response = safeExecution(request)
                 convertAllContinuationDesc(response.token)
             }
+        }
+        return Page.of(tokens, limit) { TimestampIdContinuation(it.updated, it.id) }
+    }
+
+    suspend fun getTokensByOwner(
+        owner: String,
+        limit: Int = DEFAULT_PAGE,
+        continuation: String?
+    ): Page<DipDupItem> {
+        val tokens = if (continuation == null) {
+            val request = GetTokensByOwnerQuery(owner, limit)
+            val response = safeExecution(request)
+            convertByOwner(response.token_by_owner)
+        } else {
+            val parsed = TimestampIdContinuation.parse(continuation)
+            val request = GetTokensByOwnerContinuationDescQuery(owner, limit, parsed.date.toString(), parsed.id)
+            val response = safeExecution(request)
+            convertByOwnerContinuation(response.token_by_owner)
+        }
+        return Page.of(tokens, limit) { TimestampIdContinuation(it.updated, it.id) }
+    }
+
+    suspend fun getTokensByCreator(
+        creator: String,
+        limit: Int = DEFAULT_PAGE,
+        continuation: String?
+    ): Page<DipDupItem> {
+        val tokens = if (continuation == null) {
+            val request = GetTokensByCreatorQuery(creator, limit)
+            val response = safeExecution(request)
+            convertByCreator(response.token_by_owner)
+        } else {
+            val parsed = TimestampIdContinuation.parse(continuation)
+            val request = GetTokensByCreatorContinuationDescQuery(creator, limit, parsed.date.toString(), parsed.id)
+            val response = safeExecution(request)
+            convertByCreatorContinuation(response.token_by_owner)
+        }
+        return Page.of(tokens, limit) { TimestampIdContinuation(it.updated, it.id) }
+    }
+
+    suspend fun getTokensByCollection(
+        creator: String,
+        limit: Int = DEFAULT_PAGE,
+        continuation: String?
+    ): Page<DipDupItem> {
+        val tokens = if (continuation == null) {
+            val request = GetTokensByCollectionQuery(creator, limit)
+            val response = safeExecution(request)
+            convertByCollection(response.token_by_owner)
+        } else {
+            val parsed = TimestampIdContinuation.parse(continuation)
+            val request = GetTokensByCollectionContinuationDescQuery(creator, limit, parsed.date.toString(), parsed.id)
+            val response = safeExecution(request)
+            convertByCollectionContinuation(response.token_by_owner)
         }
         return Page.of(tokens, limit) { TimestampIdContinuation(it.updated, it.id) }
     }
