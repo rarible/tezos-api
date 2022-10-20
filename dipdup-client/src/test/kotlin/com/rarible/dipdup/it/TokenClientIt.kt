@@ -2,9 +2,11 @@ package com.rarible.dipdup.it
 
 import com.apollographql.apollo3.ApolloClient
 import com.rarible.dipdup.client.TokenClient
+import com.rarible.dipdup.client.client.AuthorizationInterceptor
 import com.rarible.dipdup.client.exception.DipDupNotFound
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.condition.DisabledOnOs
@@ -15,7 +17,12 @@ import org.junit.jupiter.api.condition.OS
 //@Disabled
 class TokenClientIt {
 
-    val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://testnet-tezos-indexer.rarible.org/v1/graphql").build() }
+    val client: ApolloClient = runBlocking {
+        ApolloClient.Builder()
+            .serverUrl("https://testnet-tezos-indexer.rarible.org/v1/graphql")
+//            .addHttpInterceptor(AuthorizationInterceptor(""))
+            .build()
+    }
     val tokenClient = TokenClient(client)
 
     @Test
@@ -71,6 +78,13 @@ class TokenClientIt {
         assertThat(tokens2.continuation).isNotNull
 
         assertThat(tokens1).isNotEqualTo(tokens2)
+    }
+
+    @Test
+    @Disabled
+    fun `should remove token meta`() = runBlocking<Unit> {
+        val token = tokenClient.removeTokenMetaById("KT1Qvfy45PkSn6kLddmZk39KE4LWhTvMcunp:494")
+        assertThat(token).isNotNull
     }
 
 }

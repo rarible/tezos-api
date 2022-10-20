@@ -141,3 +141,11 @@ query GetTokensByCollectionContinuationDesc($address: String!, $limit: Int!, $da
         ...token_by_owner
     }
 }
+
+mutation RemoveTokenIdMeta($id: uuid!) {
+    update_metadata_token_by_pk(pk_columns: {id: $id},
+        _set: {metadata_retries: 0, metadata_synced: false}
+    ) {
+        id
+    }
+}

@@ -24,7 +24,7 @@ class RoyaltyClientIt {
     val client: ApolloClient = runBlocking {
         ApolloClient.Builder()
             .serverUrl("https://testnet-tezos-indexer.rarible.org/v1/graphql")
-            .addHttpInterceptor(AuthorizationInterceptor("er4oivAtW7U2ToO3TW4nScoc"))
+//            .addHttpInterceptor(AuthorizationInterceptor(""))
             .build()
     }
     val royaltyClient = RoyaltiesClient(client)

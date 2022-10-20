@@ -46,6 +46,13 @@ class TokenClient(
         }
     }
 
+    suspend fun removeTokenMetaById(id: String) {
+        val uuid = toUuid5(id)
+        val request = RemoveTokenIdMetaMutation(uuid)
+        val response = client.mutation(request).execute()
+        logger.info("Saved royalty for item $id status: ${response.errors}")
+    }
+
     suspend fun getTokensByIds(ids: List<String>): List<DipDupItem> {
         val uuids = ids.map(::toUuid5)
         val request = GetTokensByIdsQuery(uuids)
