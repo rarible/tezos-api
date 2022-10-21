@@ -5,12 +5,19 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.rarible.dipdup.client.GetTokensAllContinuationAscQuery
 import com.rarible.dipdup.client.GetTokensAllContinuationDescQuery
 import com.rarible.dipdup.client.GetTokensAllQuery
+import com.rarible.dipdup.client.GetTokensByCollectionContinuationDescQuery
+import com.rarible.dipdup.client.GetTokensByCollectionQuery
+import com.rarible.dipdup.client.GetTokensByCreatorContinuationDescQuery
+import com.rarible.dipdup.client.GetTokensByCreatorQuery
 import com.rarible.dipdup.client.GetTokensByIdsQuery
+import com.rarible.dipdup.client.GetTokensByOwnerContinuationDescQuery
+import com.rarible.dipdup.client.GetTokensByOwnerQuery
 import com.rarible.dipdup.client.core.model.DipDupItem
 import com.rarible.dipdup.client.core.model.Part
 import com.rarible.dipdup.client.core.model.TokenMeta
 import com.rarible.dipdup.client.core.util.MetaUtils
 import com.rarible.dipdup.client.fragment.Token
+import com.rarible.dipdup.client.fragment.Token_by_owner
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.time.OffsetDateTime
@@ -28,6 +35,31 @@ object TokenConverter {
         source.map { convert(it.token) }
 
     fun convert(source: Token) = DipDupItem(
+        id = DipDupItem.itemId(source.contract, BigInteger(source.token_id)),
+        minted = BigDecimal(source.minted.toString()).toBigInteger(),
+        mintedAt = OffsetDateTime.parse(source.minted_at.toString()).toInstant(),
+        supply = BigDecimal(source.supply.toString()).toBigInteger(),
+        tokenId = BigInteger(source.token_id),
+        updated = OffsetDateTime.parse(source.updated.toString()).toInstant(),
+        creators = creators(source.creator),
+        contract = source.contract,
+        deleted = source.deleted,
+        tzktId = source.tzkt_id.toString().toBigInteger()
+    )
+
+    fun convertByOwner(source: List<GetTokensByOwnerQuery.Token_by_owner>) = source.map { convert(it.token_by_owner) }
+    fun convertByOwnerContinuation(source: List<GetTokensByOwnerContinuationDescQuery.Token_by_owner>) =
+        source.map { convert(it.token_by_owner) }
+
+    fun convertByCreator(source: List<GetTokensByCreatorQuery.Token_by_owner>) = source.map { convert(it.token_by_owner) }
+    fun convertByCreatorContinuation(source: List<GetTokensByCreatorContinuationDescQuery.Token_by_owner>) =
+        source.map { convert(it.token_by_owner) }
+
+    fun convertByCollection(source: List<GetTokensByCollectionQuery.Token_by_owner>) = source.map { convert(it.token_by_owner) }
+    fun convertByCollectionContinuation(source: List<GetTokensByCollectionContinuationDescQuery.Token_by_owner>) =
+        source.map { convert(it.token_by_owner) }
+
+    fun convert(source: Token_by_owner) = DipDupItem(
         id = DipDupItem.itemId(source.contract, BigInteger(source.token_id)),
         minted = BigDecimal(source.minted.toString()).toBigInteger(),
         mintedAt = OffsetDateTime.parse(source.minted_at.toString()).toInstant(),

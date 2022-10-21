@@ -7,15 +7,22 @@ import com.rarible.dipdup.client.converter.RoyaltiesConverter.convertAllContinua
 import com.rarible.dipdup.client.converter.RoyaltiesConverter.convertAllContinuationDesc
 import com.rarible.dipdup.client.converter.RoyaltiesConverter.convertByIds
 import com.rarible.dipdup.client.core.model.DipDupRoyalties
+import com.rarible.dipdup.client.core.model.Part
 import com.rarible.dipdup.client.core.model.TimestampIdContinuation
+import com.rarible.dipdup.client.core.util.uuid5Oid
 import com.rarible.dipdup.client.exception.DipDupNotFound
 import com.rarible.dipdup.client.model.Page
+import com.rarible.dipdup.client.type.Royalties_insert_input
 import com.rarible.dipdup.client.type.Royalties_order_by
 import com.rarible.dipdup.client.type.order_by
+import org.slf4j.LoggerFactory
+import java.time.Instant
 
 class RoyaltiesClient(
     client: ApolloClient
 ) : BaseClient(client) {
+
+    val logger = LoggerFactory.getLogger(javaClass)
 
     suspend fun getRoyaltiesById(id: String): DipDupRoyalties {
         return getRoyaltiesByIds(listOf(id)).firstOrNull() ?: throw DipDupNotFound(id)
@@ -26,6 +33,26 @@ class RoyaltiesClient(
         val request = GetRoyaltiesByIdsQuery(uuids)
         val response = safeExecution(request)
         return convertByIds(response.royalties)
+    }
+
+    suspend fun insertRoyalty(itemId: String, parts: List<Part>) {
+        val id = uuid5Oid(itemId)
+        val (contract, tokenId) = itemId.split(":")
+        val roInput = Royalties_insert_input(
+            Optional.presentIfNotNull(contract),
+            Optional.presentIfNotNull("${Instant.now()}"),
+            Optional.presentIfNotNull(id.toString()),
+            Optional.presentIfNotNull(parts.map { mapOf(
+                "part_account" to it.account,
+                "part_value" to it.value.toString())
+            }),
+            Optional.presentIfNotNull(1),
+            Optional.presentIfNotNull(true),
+            Optional.presentIfNotNull(tokenId)
+        )
+        val request = InsertRoyaltyMutation(roInput)
+        val response = client.mutation(request).execute()
+        logger.info("Saved royalty for item $itemId status: ${response.errors}")
     }
 
     suspend fun getRoyaltiesAll(

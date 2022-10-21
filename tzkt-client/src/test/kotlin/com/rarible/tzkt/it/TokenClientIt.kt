@@ -44,8 +44,8 @@ class TokenClientIt {
     val DOGAMI_GAP = "KT1CAbPGHUWvkSA9bxMPkqSgabgsjtmRYEda"
     val DOGAMI_STAR = "KT1HtNSkJxpbQc2496JfmxHwZk23RnTB81ey"
 
-    val client = preparedClient("https://api.tzkt.io")
-//    val client = preparedClient("http://tezos-tzkt.testnet.rarible.int")
+//    val client = preparedClient("https://api.tzkt.io")
+    val client = preparedClient("https://api.ghostnet.tzkt.io")
 
     val config = KnownAddresses(
         hen = HEN,
@@ -209,7 +209,7 @@ class TokenClientIt {
 
     @Test
     fun `shouldn have royalty`() = runBlocking<Unit> {
-        val page = handler.processRoyalties("KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS:68056")
+        val page = handler.processRoyalties("KT1Dc1j7mnB2X6cdXDgfvb1hytXDTWrFs1iN:28")
         assertThat(page.first().address).isEqualTo("tz1hFesk6GV6fT3vak68zz5JxdZ5kK81rvRB")
     }
 

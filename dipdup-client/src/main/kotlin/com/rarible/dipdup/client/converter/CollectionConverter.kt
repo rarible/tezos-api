@@ -7,7 +7,7 @@ import com.rarible.dipdup.client.GetCollectionsAllQuery
 import com.rarible.dipdup.client.GetCollectionsByIdsQuery
 import com.rarible.dipdup.client.core.model.DipDupCollection
 import com.rarible.dipdup.client.core.util.MetaUtils
-import com.sun.org.slf4j.internal.LoggerFactory
+import org.slf4j.LoggerFactory
 
 object CollectionConverter {
 
