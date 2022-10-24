@@ -47,6 +47,7 @@ class OrderClientFt : BaseClientFt() {
                         "take_contract": null,
                         "take_token_id": null,
                         "take_value": 1,
+                        "is_bid": false,
                         "taker": null,
                         "origin_fees": [
                             {
@@ -84,6 +85,7 @@ class OrderClientFt : BaseClientFt() {
                         "take_contract": null,
                         "take_token_id": null,
                         "take_value": 1,
+                        "is_bid": false,
                         "taker": null,
                         "origin_fees": [
                             {
@@ -121,6 +123,7 @@ class OrderClientFt : BaseClientFt() {
                         "take_contract": null,
                         "take_token_id": null,
                         "take_value": 1,
+                        "is_bid": false,
                         "taker": null,
                         "origin_fees": [
                             {
@@ -184,6 +187,7 @@ class OrderClientFt : BaseClientFt() {
                         "take_contract": null,
                         "take_token_id": null,
                         "take_value": 1,
+                        "is_bid": false,
                         "taker": null,
                         "origin_fees": [],
                         "payouts": []
@@ -211,6 +215,7 @@ class OrderClientFt : BaseClientFt() {
                         "take_contract": null,
                         "take_token_id": null,
                         "take_value": 1,
+                        "is_bid": false,
                         "taker": null,
                         "origin_fees": [],
                         "payouts": []
@@ -259,6 +264,7 @@ class OrderClientFt : BaseClientFt() {
                             "take_contract": null,
                             "take_token_id": null,
                             "take_value": 1,
+                            "is_bid": false,
                             "taker": null,
                             "origin_fees": [],
                             "payouts": []
@@ -286,6 +292,7 @@ class OrderClientFt : BaseClientFt() {
                             "take_contract": null,
                             "take_token_id": null,
                             "take_value": 1,
+                            "is_bid": false,
                             "taker": null,
                             "origin_fees": [],
                             "payouts": []
@@ -327,6 +334,7 @@ class OrderClientFt : BaseClientFt() {
                     "take_contract": null,
                     "take_token_id": null,
                     "take_value": 1,
+                    "is_bid": false,
                     "taker": null,
                     "origin_fees": [],
                     "payouts": []
@@ -374,6 +382,7 @@ class OrderClientFt : BaseClientFt() {
                     "take_contract": null,
                     "take_token_id": null,
                     "take_value": 1,
+                    "is_bid": false,
                     "taker": null,
                     "origin_fees": [],
                     "payouts": []
@@ -421,6 +430,7 @@ class OrderClientFt : BaseClientFt() {
                     "take_contract": "KT1JwfYcy2uGBg4tS8t8w5CnJotJmF5kN2J3",
                     "take_token_id": "123",
                     "take_value": 1,
+                    "is_bid": false,
                     "taker": null,
                     "origin_fees": [],
                     "payouts": []
@@ -468,6 +478,7 @@ class OrderClientFt : BaseClientFt() {
                             "take_contract": null,
                             "take_token_id": null,
                             "take_value": 1,
+                            "is_bid": false,
                             "taker": null,
                             "origin_fees": [],
                             "payouts": []
@@ -495,6 +506,7 @@ class OrderClientFt : BaseClientFt() {
                             "take_contract": null,
                             "take_token_id": null,
                             "take_value": 1,
+                            "is_bid": false,
                             "taker": null,
                             "origin_fees": [],
                             "payouts": []
@@ -536,7 +548,7 @@ class OrderClientFt : BaseClientFt() {
               }
             }
         """.trimIndent())
-        val types = orderClient.getOrdersCurrenciesByItem("KT1FaGrMVr6rvfHsfbPSAPgRabsPMiQeaTin", "1")
+        val types = orderClient.getSellOrdersCurrenciesByItem("KT1FaGrMVr6rvfHsfbPSAPgRabsPMiQeaTin", "1")
 
         assertThat(types).hasSize(2)
         assertThat(types).contains(Asset.XTZ())
@@ -565,7 +577,7 @@ class OrderClientFt : BaseClientFt() {
               }
             }
         """.trimIndent())
-        val types = orderClient.getOrdersCurrenciesByCollection("KT1FaGrMVr6rvfHsfbPSAPgRabsPMiQeaTin")
+        val types = orderClient.getSellOrdersCurrenciesByCollection("KT1FaGrMVr6rvfHsfbPSAPgRabsPMiQeaTin")
 
         assertThat(types).hasSize(2)
         assertThat(types).contains(Asset.XTZ())
@@ -608,6 +620,7 @@ class OrderClientFt : BaseClientFt() {
                     "take_contract": null,
                     "take_token_id": null,
                     "take_value": 1,
+                    "is_bid": false,
                     "taker": null,
                     "origin_fees": [],
                     "payouts": []

@@ -101,7 +101,7 @@ class OrderClient(
         return convertByMaker(response.marketplace_order, size)
     }
 
-    suspend fun getOrdersCurrenciesByItem(
+    suspend fun getSellOrdersCurrenciesByItem(
         contract: String,
         tokenId: String
     ): List<Asset.AssetType> {
@@ -109,10 +109,25 @@ class OrderClient(
         return convert(response)
     }
 
-    suspend fun getOrdersCurrenciesByCollection(
+    suspend fun getSellOrdersCurrenciesByCollection(
         contract: String
     ): List<Asset.AssetType> {
         val response = safeExecution(GetOrdersTakeContractsByMakeCollectionQuery(contract))
+        return convert(response)
+    }
+
+    suspend fun getBidOrdersCurrenciesByItem(
+        contract: String,
+        tokenId: String
+    ): List<Asset.AssetType> {
+        val response = safeExecution(GetOrdersMakeContractsByTakeItemQuery(contract, tokenId))
+        return convert(response)
+    }
+
+    suspend fun getBidOrdersCurrenciesByCollection(
+        contract: String
+    ): List<Asset.AssetType> {
+        val response = safeExecution(GetOrdersMakeContractsByTakeCollectionQuery(contract))
         return convert(response)
     }
 

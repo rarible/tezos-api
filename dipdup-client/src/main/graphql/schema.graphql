@@ -3253,6 +3253,7 @@ type marketplace_order {
   fill: numeric!
   id: uuid!
   internal_order_id: String!
+  is_bid: Boolean!
   last_updated_at: timestamptz!
 
   """
@@ -3351,6 +3352,7 @@ input marketplace_order_bool_exp {
   fill: numeric_comparison_exp
   id: uuid_comparison_exp
   internal_order_id: String_comparison_exp
+  is_bid: Boolean_comparison_exp
   last_updated_at: timestamptz_comparison_exp
   make_asset_class: String_comparison_exp
   make_contract: String_comparison_exp
@@ -3427,6 +3429,7 @@ input marketplace_order_insert_input {
   fill: numeric
   id: uuid
   internal_order_id: String
+  is_bid: Boolean
   last_updated_at: timestamptz
 
   """
@@ -3582,6 +3585,7 @@ input marketplace_order_order_by {
   fill: order_by
   id: order_by
   internal_order_id: order_by
+  is_bid: order_by
   last_updated_at: order_by
   make_asset_class: order_by
   make_contract: order_by
@@ -3639,6 +3643,9 @@ enum marketplace_order_select_column {
 
   """column name"""
   internal_order_id
+
+  """column name"""
+  is_bid
 
   """column name"""
   last_updated_at
@@ -3712,6 +3719,7 @@ input marketplace_order_set_input {
   fill: numeric
   id: uuid
   internal_order_id: String
+  is_bid: Boolean
   last_updated_at: timestamptz
 
   """
@@ -3810,6 +3818,9 @@ enum marketplace_order_update_column {
 
   """column name"""
   internal_order_id
+
+  """column name"""
+  is_bid
 
   """column name"""
   last_updated_at

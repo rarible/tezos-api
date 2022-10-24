@@ -63,7 +63,7 @@ class OrderClientIt {
 
     @Test
     fun `should return currency for legacy order`() = runBlocking<Unit> {
-        val page = orderClient.getOrdersCurrenciesByItem("KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS", "46075")
+        val page = orderClient.getSellOrdersCurrenciesByItem("KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS", "46075")
         assertThat(page).hasSize(1)
     }
 

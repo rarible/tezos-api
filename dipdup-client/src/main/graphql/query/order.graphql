@@ -17,6 +17,7 @@ fragment order on marketplace_order {
     network
     platform
     start_at
+    is_bid
     salt
     status
     take_asset_class
@@ -33,6 +34,12 @@ fragment takeType on marketplace_order {
     take_asset_class
     take_contract
     take_token_id
+}
+
+fragment makeType on marketplace_order {
+    make_asset_class
+    make_contract
+    make_token_id
 }
 
 query GetOrders($limit: Int!) {
@@ -58,6 +65,24 @@ query GetOrdersTakeContractsByMakeCollection($token: String!) {
         distinct_on: [take_contract, take_token_id]
     ) {
         ...takeType
+    }
+}
+
+query GetOrdersMakeContractsByTakeItem($token: String!, $tokenId: String!) {
+    marketplace_order(
+        where: {take_contract: {_eq: $token}, take_token_id: {_eq: $tokenId}}
+        distinct_on: [make_contract, make_token_id]
+    ) {
+        ...makeType
+    }
+}
+
+query GetOrdersMakeContractsByTakeCollection($token: String!) {
+    marketplace_order(
+        where: {take_contract: {_eq: $token}}
+        distinct_on: [make_contract, make_token_id]
+    ) {
+        ...makeType
     }
 }
 

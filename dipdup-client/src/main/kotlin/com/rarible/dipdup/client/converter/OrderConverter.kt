@@ -4,6 +4,8 @@ import com.rarible.dipdup.client.GetOrderByIdQuery
 import com.rarible.dipdup.client.GetOrdersByIdsQuery
 import com.rarible.dipdup.client.GetOrdersByItemQuery
 import com.rarible.dipdup.client.GetOrdersByMakerQuery
+import com.rarible.dipdup.client.GetOrdersMakeContractsByTakeCollectionQuery
+import com.rarible.dipdup.client.GetOrdersMakeContractsByTakeItemQuery
 import com.rarible.dipdup.client.GetOrdersQuery
 import com.rarible.dipdup.client.GetOrdersTakeContractsByMakeCollectionQuery
 import com.rarible.dipdup.client.GetOrdersTakeContractsByMakeItemQuery
@@ -110,10 +112,24 @@ fun convert(source: com.rarible.dipdup.client.fragment.TakeType) =
         else -> Asset.FT(contract = source.take_contract, tokenId = BigInteger(source.take_token_id))
     }
 
+fun convert(source: com.rarible.dipdup.client.fragment.MakeType) =
+    when (source.make_asset_class) {
+        "XTZ" -> Asset.XTZ()
+        else -> Asset.FT(contract = source.make_contract, tokenId = BigInteger(source.make_token_id))
+    }
+
 fun convert(source: GetOrdersTakeContractsByMakeItemQuery.Data): List<Asset.AssetType> = source.marketplace_order.map {
     convert(it.takeType)
 }
 
 fun convert(source: GetOrdersTakeContractsByMakeCollectionQuery.Data): List<Asset.AssetType> = source.marketplace_order.map {
     convert(it.takeType)
+}
+
+fun convert(source: GetOrdersMakeContractsByTakeItemQuery.Data): List<Asset.AssetType> = source.marketplace_order.map {
+    convert(it.makeType)
+}
+
+fun convert(source: GetOrdersMakeContractsByTakeCollectionQuery.Data): List<Asset.AssetType> = source.marketplace_order.map {
+    convert(it.makeType)
 }
