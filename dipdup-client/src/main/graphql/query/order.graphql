@@ -29,7 +29,7 @@ fragment order on marketplace_order {
     payouts
 }
 
-fragment assetType on marketplace_order {
+fragment takeType on marketplace_order {
     take_asset_class
     take_contract
     take_token_id
@@ -48,7 +48,7 @@ query GetOrdersTakeContractsByMakeItem($token: String!, $tokenId: String!) {
         where: {make_contract: {_eq: $token}, make_token_id: {_eq: $tokenId}}
         distinct_on: [take_contract, take_token_id]
     ) {
-        ...assetType
+        ...takeType
     }
 }
 
@@ -57,7 +57,7 @@ query GetOrdersTakeContractsByMakeCollection($token: String!) {
         where: {make_contract: {_eq: $token}}
         distinct_on: [take_contract, take_token_id]
     ) {
-        ...assetType
+        ...takeType
     }
 }
 

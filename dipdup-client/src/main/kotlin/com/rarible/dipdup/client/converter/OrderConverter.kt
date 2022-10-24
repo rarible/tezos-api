@@ -104,16 +104,16 @@ fun convert(source: Order) = DipDupOrder(
     payouts = getParts(source.payouts)
 )
 
-fun convert(source: com.rarible.dipdup.client.fragment.AssetType) =
+fun convert(source: com.rarible.dipdup.client.fragment.TakeType) =
     when (source.take_asset_class) {
         "XTZ" -> Asset.XTZ()
         else -> Asset.FT(contract = source.take_contract, tokenId = BigInteger(source.take_token_id))
     }
 
 fun convert(source: GetOrdersTakeContractsByMakeItemQuery.Data): List<Asset.AssetType> = source.marketplace_order.map {
-    convert(it.assetType)
+    convert(it.takeType)
 }
 
 fun convert(source: GetOrdersTakeContractsByMakeCollectionQuery.Data): List<Asset.AssetType> = source.marketplace_order.map {
-    convert(it.assetType)
+    convert(it.takeType)
 }

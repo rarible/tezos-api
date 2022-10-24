@@ -13,6 +13,9 @@ import com.rarible.dipdup.client.GetTokenActivitiesDescQuery
 import com.rarible.dipdup.client.core.model.Asset
 import com.rarible.dipdup.client.core.model.DipDupActivity
 import com.rarible.dipdup.client.core.model.DipDupBurnActivity
+import com.rarible.dipdup.client.core.model.DipDupCancelBidActivity
+import com.rarible.dipdup.client.core.model.DipDupGetBidActivity
+import com.rarible.dipdup.client.core.model.DipDupMakeBidActivity
 import com.rarible.dipdup.client.core.model.DipDupMintActivity
 import com.rarible.dipdup.client.core.model.DipDupOrderCancelActivity
 import com.rarible.dipdup.client.core.model.DipDupOrderListActivity
@@ -23,6 +26,7 @@ import com.rarible.dipdup.client.fragment.Order_activity
 import com.rarible.dipdup.client.fragment.Token_activity
 import java.math.BigDecimal
 import java.math.BigInteger
+import java.math.MathContext
 import java.time.OffsetDateTime
 
 fun convert(source: Order_activity) = orderActivity(
@@ -105,7 +109,7 @@ fun orderActivity(
     take: Asset,
 ): DipDupActivity {
     return when (type) {
-        "LIST" -> DipDupOrderListActivity(
+        DipDupActivity.LIST -> DipDupOrderListActivity(
             id = id,
             operationCounter = operationCounter,
             date = date,
@@ -116,8 +120,7 @@ fun orderActivity(
             make = make,
             take = take
         )
-
-        "SELL" -> DipDupOrderSellActivity(
+        DipDupActivity.SELL -> DipDupOrderSellActivity(
             id = id,
             operationCounter = operationCounter,
             date = date,
@@ -129,8 +132,7 @@ fun orderActivity(
             buyer = taker!!,
             seller = maker
         )
-
-        "CANCEL_LIST" -> DipDupOrderCancelActivity(
+        DipDupActivity.CANCEL_LIST -> DipDupOrderCancelActivity(
             id = id,
             operationCounter = operationCounter,
             date = date,
@@ -141,7 +143,39 @@ fun orderActivity(
             make = make,
             take = take
         )
-
+        DipDupActivity.MAKE_BID -> DipDupMakeBidActivity(
+            id = id,
+            date = date,
+            reverted = reverted,
+            hash = hash,
+            source = source,
+            maker = maker,
+            make = make,
+            take = take,
+            price = price(make.assetValue, take.assetValue)
+        )
+        DipDupActivity.GET_BID -> DipDupGetBidActivity(
+            id = id,
+            date = date,
+            reverted = reverted,
+            hash = hash,
+            source = source,
+            nft = take,
+            payment = make,
+            seller = taker!!,
+            buyer = maker,
+            price = price(make.assetValue, take.assetValue)
+        )
+        DipDupActivity.CANCEL_BID -> DipDupCancelBidActivity(
+            id = id,
+            date = date,
+            reverted = reverted,
+            hash = hash,
+            source = source,
+            maker = maker,
+            make = make,
+            take = take
+        )
         else -> throw RuntimeException("Unknown activity type: $type")
     }
 }
@@ -188,5 +222,12 @@ fun tokenActivity(
         else -> throw RuntimeException("Unknown activity type: $type")
     }
 }
+
+fun price(value: BigDecimal, makeValue: BigDecimal) =
+    try {
+        value.divide(makeValue, MathContext.DECIMAL128)
+    } catch (e: Exception) {
+        value
+    }
 
 

@@ -9,7 +9,7 @@ import java.time.OffsetDateTime
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = DipDupActivity.TYPE)
 @JsonSubTypes(
     JsonSubTypes.Type(value = DipDupOrderListActivity::class, name = DipDupActivity.LIST),
-    JsonSubTypes.Type(value = DipDupOrderCancelActivity::class, name = DipDupActivity.CANCEL),
+    JsonSubTypes.Type(value = DipDupOrderCancelActivity::class, name = DipDupActivity.CANCEL_LIST),
     JsonSubTypes.Type(value = DipDupOrderSellActivity::class, name = DipDupActivity.SELL),
 
     JsonSubTypes.Type(value = DipDupMintActivity::class, name = DipDupActivity.MINT),
@@ -32,7 +32,7 @@ sealed class DipDupActivity {
     companion object {
         const val TYPE = "type"
         const val LIST = "LIST"
-        const val CANCEL = "CANCEL_LIST"
+        const val CANCEL_LIST = "CANCEL_LIST"
         const val SELL = "SELL"
         const val MINT = "MINT"
         const val TRANSFER = "TRANSFER"
