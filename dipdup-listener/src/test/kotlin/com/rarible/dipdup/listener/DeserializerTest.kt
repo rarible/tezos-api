@@ -4,6 +4,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.rarible.dipdup.client.core.model.DipDupOrder
 import com.rarible.dipdup.client.core.model.DipDupTransferActivity
 import com.rarible.dipdup.listener.config.DipDupDeserializer
+import com.rarible.dipdup.listener.model.DipDupCollectionEvent
 import com.rarible.dipdup.listener.model.DipDupItemEvent
 import com.rarible.dipdup.listener.model.DipDupOwnershipEvent
 import org.junit.jupiter.api.Test
@@ -241,6 +242,19 @@ class DeserializerTest {
 
         val ownership = DipDupDeserializer.ItemEventJsonSerializer().createMapper()
             .readValue<DipDupOwnershipEvent>(txt)
+
+        assertThat(ownership).isNotNull
+    }
+
+    @Test
+    fun `should deserialize collection event`() {
+        val txt = """
+            {"id": "c29b4246-22fc-52b3-b651-c45a3df4e22d", "eventId": "c29b4246-22fc-52b3-b651-c45a3df4e22d", 
+            "collection": {"id": "KT1SNNJRbYj8MWmtrqaWQLTxFfKwniB8nQNu", "owner": "tz1Pd5qKoPhvsn6Q9JT5MhibpuZVfsBpQGLK", "name": null, "minters": [], "standard": "fa2", "symbol": null}, "type": "UPDATE"}
+        """.trimIndent()
+
+        val ownership = DipDupDeserializer.CollectionJsonSerializer().createMapper()
+            .readValue<DipDupCollectionEvent>(txt)
 
         assertThat(ownership).isNotNull
     }

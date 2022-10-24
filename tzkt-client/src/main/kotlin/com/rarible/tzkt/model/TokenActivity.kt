@@ -58,7 +58,7 @@ open class TokenActivity (
     open val transactionHash: String? = null,
 
     /* Internal TzKT id of the origination operation, caused the token transfer. */
-    open val originationId: Int? = null,
+    open val originationId: Long? = null,
 
     /* Internal TzKT id of the migration operation, caused the token transfer. */
     open val migrationId: Int? = null
