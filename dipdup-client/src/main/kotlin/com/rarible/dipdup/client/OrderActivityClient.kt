@@ -99,11 +99,9 @@ class OrderActivityClient(
         continuation?.let {
             val parsed = DipDupActivityContinuation.parse(it)!!
             date = parsed.date
-            if (isValidUUID(parsed.id)) {
-                val response = safeExecution(GetOrderActivitiesByIdsQuery(listOf(parsed.id)))
-                if (response.marketplace_activity.size > 0) {
-                    id = response.marketplace_activity.first().order_activity.operation_counter
-                }
+            val response = safeExecution(GetOrderActivitiesByIdsQuery(listOf(parsed.id)))
+            if (response.marketplace_activity.size > 0) {
+                id = response.marketplace_activity.first().order_activity.operation_counter
             }
         }
         return date to id
