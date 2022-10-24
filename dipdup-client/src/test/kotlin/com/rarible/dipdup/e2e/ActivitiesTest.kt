@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 // this test will be disabled on jenkins
-//@Disabled
+@Disabled
 class ActivitiesTest {
 
     val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://dev-tezos-indexer.rarible.org/v1/graphql").build() }

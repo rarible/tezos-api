@@ -42,8 +42,9 @@ fragment makeType on marketplace_order {
     make_token_id
 }
 
-query GetOrders($limit: Int!) {
+query GetOrders($limit: Int!, $isBid: Boolean!) {
     marketplace_order(
+        where: {is_bid: {_eq: $isBid}}
         limit: $limit
     ) {
         ...order
@@ -120,15 +121,16 @@ query GetOrderById($id: uuid!) {
 
 query GetOrdersByIds($ids: [uuid!]!) {
     marketplace_order(
-        where: {id: {_in: $ids}},
+        where: {id: {_in: $ids}}
         order_by: {id: asc}
     ) {
         ...order
     }
 }
 
-query GetOrdersByItem($limit: Int!) {
+query GetOrdersByItem($limit: Int!, $isBid: Boolean!) {
     marketplace_order(
+        where: {is_bid: {_eq: $isBid}}
         limit: $limit
         order_by: {last_updated_at: desc, id: desc}
     ) {
@@ -136,8 +138,9 @@ query GetOrdersByItem($limit: Int!) {
     }
 }
 
-query GetOrdersByMaker($limit: Int!) {
+query GetOrdersByMaker($limit: Int!, $isBid: Boolean!) {
     marketplace_order(
+        where: {is_bid: {_eq: $isBid}}
         limit: $limit
         order_by: {last_updated_at: desc, id: desc}
     ) {

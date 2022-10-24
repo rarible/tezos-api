@@ -12,8 +12,9 @@ data class GetOrdersByItemCustomQuery(
     val platforms: List<TezosPlatform>,
     val limit: Int,
     val prevId: String? = null,
-    val prevDate: String? = null
-) : GetOrdersByItemQuery(limit) {
+    val prevDate: String? = null,
+    val isBid: Boolean = false
+) : GetOrdersByItemQuery(limit, isBid) {
 
     // Apollo couldn't generate dynamic query, that's why we do it here
     override fun document(): String {
@@ -30,6 +31,7 @@ data class GetOrdersByItemCustomQuery(
                 conditions.add("take_token_id: {_eq: \"${raw[1]}\"}")
             }
         }
+        conditions.add("is_bid: {_eq: $isBid}")
         if (statuses.isNotEmpty()) conditions.add("status: {_in: [${statuses.joinToString(",")}]}")
         conditions.add("platform: {_in: [${platforms.joinToString(",")}]}")
         prevDate?.let { conditions.add("""

@@ -32,6 +32,7 @@ class OrderClient(
     suspend fun getOrdersAll(
         statuses: List<OrderStatus>,
         platforms: List<TezosPlatform> = listOf(TezosPlatform.RARIBLE_V1, TezosPlatform.RARIBLE_V2),
+        isBid: Boolean = false,
         sort: DipDupOrderSort? = DipDupOrderSort.LAST_UPDATE_DESC,
         size: Int = DEFAULT_PAGE,
         continuation: String?
@@ -43,7 +44,8 @@ class OrderClient(
             limit = size,
             sort = sort ?: DipDupOrderSort.LAST_UPDATE_DESC,
             prevId = parsedContinuation?.let { it.id.toString() },
-            prevDate = parsedContinuation?.let { it.date.toString() }
+            prevDate = parsedContinuation?.let { it.date.toString() },
+            isBid = isBid
         ))
         return convertAll(response.marketplace_order, size)
     }
@@ -60,6 +62,7 @@ class OrderClient(
         currencyId: String,
         statuses: List<OrderStatus>,
         platforms: List<TezosPlatform> = listOf(TezosPlatform.RARIBLE_V1, TezosPlatform.RARIBLE_V2),
+        isBid: Boolean = false,
         size: Int = DEFAULT_PAGE,
         continuation: String?
     ): DipDupOrdersPage {
@@ -74,7 +77,8 @@ class OrderClient(
                 platforms = platforms,
                 limit = size,
                 prevId = parsedContinuation?.let { it.id.toString() },
-                prevDate = parsedContinuation?.let { it.date.toString() }
+                prevDate = parsedContinuation?.let { it.date.toString() },
+                isBid = isBid
             )
         )
         return convertByItem(response.marketplace_order, size)
@@ -84,6 +88,7 @@ class OrderClient(
         makers: List<String>,
         statuses: List<OrderStatus>,
         platforms: List<TezosPlatform> = listOf(TezosPlatform.RARIBLE_V1, TezosPlatform.RARIBLE_V2),
+        isBid: Boolean = false,
         size: Int = DEFAULT_PAGE,
         continuation: String?
     ): DipDupOrdersPage {
@@ -95,7 +100,8 @@ class OrderClient(
                 platforms = platforms,
                 limit = size,
                 prevId = parsedContinuation?.let { it.id.toString() },
-                prevDate = parsedContinuation?.let { it.date.toString() }
+                prevDate = parsedContinuation?.let { it.date.toString() },
+                isBid = isBid
             )
         )
         return convertByMaker(response.marketplace_order, size)
