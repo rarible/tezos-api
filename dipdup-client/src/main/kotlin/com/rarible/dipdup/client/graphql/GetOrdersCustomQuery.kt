@@ -12,7 +12,7 @@ data class GetOrdersCustomQuery(
     val prevId: String? = null,
     val prevDate: String? = null,
     val isBid: Boolean? = null
-) : GetOrdersQuery(limit, isBid) {
+) : GetOrdersQuery(limit) {
 
     // Apollo couldn't generate dynamic query, that's why we do it here
     override fun document(): String {
@@ -46,6 +46,7 @@ data class GetOrdersCustomQuery(
                 network
                 platform
                 start_at
+                is_bid
                 salt
                 status
                 take_asset_class

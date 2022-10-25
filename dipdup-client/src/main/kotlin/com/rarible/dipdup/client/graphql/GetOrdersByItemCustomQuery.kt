@@ -70,6 +70,7 @@ data class GetOrdersByItemCustomQuery(
                 network
                 platform
                 start_at
+                is_bid
                 salt
                 status
                 take_asset_class

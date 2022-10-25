@@ -45,7 +45,7 @@ class OrderClientIt {
     @ParameterizedTest
     @MethodSource("allPlatforms")
     fun `should have orders`(platform: TezosPlatform) = runBlocking<Unit> {
-        orderClient.getOrdersAll(listOf(), listOf(platform), false, DipDupOrderSort.LAST_UPDATE_DESC, 1, null).apply {
+        orderClient.getOrdersAll(listOf(), listOf(platform), DipDupOrderSort.LAST_UPDATE_DESC, false, 1, null).apply {
             assertThat(orders).hasSize(1)
 
             val order = orders.first()
@@ -87,8 +87,8 @@ class OrderClientIt {
             val orders = orderClient.getOrdersAll(
                 listOf(),
                 listOf(TezosPlatform.HEN),
-                false,
                 DipDupOrderSort.LAST_UPDATE_ASC,
+                false,
                 1000, continuation
             )
             continuation = orders.continuation

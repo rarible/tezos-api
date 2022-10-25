@@ -42,9 +42,8 @@ fragment makeType on marketplace_order {
     make_token_id
 }
 
-query GetOrders($limit: Int!, $isBid: Boolean!) {
+query GetOrders($limit: Int!) {
     marketplace_order(
-        where: {is_bid: {_eq: $isBid}}
         limit: $limit
     ) {
         ...order
@@ -107,6 +106,7 @@ query GetOrderById($id: uuid!) {
         platform
         salt
         start_at
+        is_bid
         status
         take_asset_class
         take_contract
