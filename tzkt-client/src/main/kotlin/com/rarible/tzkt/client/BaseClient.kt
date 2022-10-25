@@ -1,7 +1,7 @@
 package com.rarible.tzkt.client
 
 import com.rarible.tzkt.model.TzktNotFound
-import com.rarible.tzkt.model.TzktValidationException
+import com.rarible.tzkt.model.TzktBadRequest
 import com.rarible.tzkt.utils.flatMapAsync
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -32,7 +32,7 @@ abstract class BaseClient(
                 .retrieve()
                 .awaitBodyOrNull<T>()
         } catch (ex: WebClientResponseException) {
-            if (ex.statusCode == HttpStatus.BAD_REQUEST) throw TzktValidationException(ex.statusText)
+            if (ex.statusCode == HttpStatus.BAD_REQUEST) throw TzktBadRequest(ex)
             else throw ex
         }
         return body ?: throw TzktNotFound("Empty response for url: $build")
@@ -51,7 +51,7 @@ abstract class BaseClient(
                 .retrieve()
                 .awaitBody()
         } catch (ex: WebClientResponseException) {
-            if (ex.statusCode == HttpStatus.BAD_REQUEST) throw TzktValidationException(ex.statusText)
+            if (ex.statusCode == HttpStatus.BAD_REQUEST) throw TzktBadRequest(ex)
             else throw ex
         }
     }
@@ -68,7 +68,7 @@ abstract class BaseClient(
                 .retrieve()
                 .awaitBody()
         } catch (ex: WebClientResponseException) {
-            if (ex.statusCode == HttpStatus.BAD_REQUEST) throw TzktValidationException(ex.statusText)
+            if (ex.statusCode == HttpStatus.BAD_REQUEST) throw TzktBadRequest(ex)
             else throw ex
         }
     }
