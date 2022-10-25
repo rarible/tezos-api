@@ -4,6 +4,9 @@ import com.apollographql.apollo3.ApolloClient
 import com.rarible.dipdup.client.OrderActivityClient
 import com.rarible.dipdup.client.TokenActivityClient
 import com.rarible.dipdup.client.core.model.DipDupBurnActivity
+import com.rarible.dipdup.client.core.model.DipDupCancelBidActivity
+import com.rarible.dipdup.client.core.model.DipDupGetBidActivity
+import com.rarible.dipdup.client.core.model.DipDupMakeBidActivity
 import com.rarible.dipdup.client.core.model.DipDupMintActivity
 import com.rarible.dipdup.client.core.model.DipDupOrderCancelActivity
 import com.rarible.dipdup.client.core.model.DipDupOrderListActivity
@@ -18,7 +21,7 @@ import org.junit.jupiter.api.Test
 @Disabled
 class ActivitiesTest {
 
-    val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://testnet-tezos-indexer.rarible.org/v1/graphql").build() }
+    val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://dev-tezos-indexer.rarible.org/v1/graphql").build() }
     val tokenActivityClient = TokenActivityClient(client)
     val orderActivityClient = OrderActivityClient(client)
 
@@ -36,6 +39,9 @@ class ActivitiesTest {
                     is DipDupOrderListActivity -> DipDupActivityType.LIST
                     is DipDupOrderCancelActivity -> DipDupActivityType.CANCEL_LIST
                     is DipDupOrderSellActivity -> DipDupActivityType.SELL
+                    is DipDupMakeBidActivity -> DipDupActivityType.MAKE_BID
+                    is DipDupGetBidActivity -> DipDupActivityType.GET_BID
+                    is DipDupCancelBidActivity -> DipDupActivityType.CANCEL_BID
                     else -> throw RuntimeException("Unsupported: $it")
                 }
                 val current = types[t] ?: 0

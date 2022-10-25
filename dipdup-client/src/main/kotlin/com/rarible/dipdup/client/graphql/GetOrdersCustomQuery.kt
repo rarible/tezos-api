@@ -10,8 +10,9 @@ data class GetOrdersCustomQuery(
     val limit: Int,
     val sort: DipDupOrderSort,
     val prevId: String? = null,
-    val prevDate: String? = null
-) : GetOrdersQuery(limit) {
+    val prevDate: String? = null,
+    val isBid: Boolean? = null
+) : GetOrdersQuery(limit, isBid) {
 
     // Apollo couldn't generate dynamic query, that's why we do it here
     override fun document(): String {
@@ -19,6 +20,7 @@ data class GetOrdersCustomQuery(
         if (statuses.isNotEmpty()) conditions.add("status: {_in: [${statuses.joinToString(",")}]}")
         conditions.add("platform: {_in: [${platforms.joinToString(",")}]}")
         prevDate?.let { conditions.add(continuation(sort)) }
+        isBid?.let { conditions.add("is_bid: {_eq: $isBid}") }
         val request = """
             query GetOrders(${'$'}limit: Int!) {
                 marketplace_order(

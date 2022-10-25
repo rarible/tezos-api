@@ -33,6 +33,7 @@ class OrderClient(
         statuses: List<OrderStatus>,
         platforms: List<TezosPlatform> = listOf(TezosPlatform.RARIBLE_V1, TezosPlatform.RARIBLE_V2),
         sort: DipDupOrderSort? = DipDupOrderSort.LAST_UPDATE_DESC,
+        isBid: Boolean? = null,
         size: Int = DEFAULT_PAGE,
         continuation: String?
     ): DipDupOrdersPage {
@@ -43,7 +44,8 @@ class OrderClient(
             limit = size,
             sort = sort ?: DipDupOrderSort.LAST_UPDATE_DESC,
             prevId = parsedContinuation?.let { it.id.toString() },
-            prevDate = parsedContinuation?.let { it.date.toString() }
+            prevDate = parsedContinuation?.let { it.date.toString() },
+            isBid = isBid
         ))
         return convertAll(response.marketplace_order, size)
     }
@@ -60,6 +62,7 @@ class OrderClient(
         currencyId: String,
         statuses: List<OrderStatus>,
         platforms: List<TezosPlatform> = listOf(TezosPlatform.RARIBLE_V1, TezosPlatform.RARIBLE_V2),
+        isBid: Boolean = false,
         size: Int = DEFAULT_PAGE,
         continuation: String?
     ): DipDupOrdersPage {
@@ -74,7 +77,8 @@ class OrderClient(
                 platforms = platforms,
                 limit = size,
                 prevId = parsedContinuation?.let { it.id.toString() },
-                prevDate = parsedContinuation?.let { it.date.toString() }
+                prevDate = parsedContinuation?.let { it.date.toString() },
+                isBid = isBid
             )
         )
         return convertByItem(response.marketplace_order, size)
@@ -84,6 +88,7 @@ class OrderClient(
         makers: List<String>,
         statuses: List<OrderStatus>,
         platforms: List<TezosPlatform> = listOf(TezosPlatform.RARIBLE_V1, TezosPlatform.RARIBLE_V2),
+        isBid: Boolean = false,
         size: Int = DEFAULT_PAGE,
         continuation: String?
     ): DipDupOrdersPage {
@@ -95,13 +100,14 @@ class OrderClient(
                 platforms = platforms,
                 limit = size,
                 prevId = parsedContinuation?.let { it.id.toString() },
-                prevDate = parsedContinuation?.let { it.date.toString() }
+                prevDate = parsedContinuation?.let { it.date.toString() },
+                isBid = isBid
             )
         )
         return convertByMaker(response.marketplace_order, size)
     }
 
-    suspend fun getOrdersCurrenciesByItem(
+    suspend fun getSellOrdersCurrenciesByItem(
         contract: String,
         tokenId: String
     ): List<Asset.AssetType> {
@@ -109,10 +115,25 @@ class OrderClient(
         return convert(response)
     }
 
-    suspend fun getOrdersCurrenciesByCollection(
+    suspend fun getSellOrdersCurrenciesByCollection(
         contract: String
     ): List<Asset.AssetType> {
         val response = safeExecution(GetOrdersTakeContractsByMakeCollectionQuery(contract))
+        return convert(response)
+    }
+
+    suspend fun getBidOrdersCurrenciesByItem(
+        contract: String,
+        tokenId: String
+    ): List<Asset.AssetType> {
+        val response = safeExecution(GetOrdersMakeContractsByTakeItemQuery(contract, tokenId))
+        return convert(response)
+    }
+
+    suspend fun getBidOrdersCurrenciesByCollection(
+        contract: String
+    ): List<Asset.AssetType> {
+        val response = safeExecution(GetOrdersMakeContractsByTakeCollectionQuery(contract))
         return convert(response)
     }
 

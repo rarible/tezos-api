@@ -9,8 +9,9 @@ data class GetOrderByMakerCustomQuery(
     val platforms: List<TezosPlatform>,
     val limit: Int,
     val prevId: String? = null,
-    val prevDate: String? = null
-) : GetOrdersByMakerQuery(limit) {
+    val prevDate: String? = null,
+    val isBid: Boolean = false
+) : GetOrdersByMakerQuery(limit, isBid) {
     // Apollo couldn't generate dynamic query, that's why we do it here
     override fun document(): String {
         val conditions = mutableListOf<String>()
@@ -28,6 +29,7 @@ data class GetOrderByMakerCustomQuery(
                 }
             ]
         """.trimIndent()) }
+        conditions.add("is_bid: {_eq: $isBid}")
         return """
             query GetOrdersByMaker(${'$'}limit: Int!) {
                 marketplace_order(

@@ -45,17 +45,17 @@ class OrderClientIt {
     @ParameterizedTest
     @MethodSource("allPlatforms")
     fun `should have orders`(platform: TezosPlatform) = runBlocking<Unit> {
-        orderClient.getOrdersAll(listOf(), listOf(platform), DipDupOrderSort.LAST_UPDATE_DESC, 1, null).apply {
+        orderClient.getOrdersAll(listOf(), listOf(platform), false, DipDupOrderSort.LAST_UPDATE_DESC, 1, null).apply {
             assertThat(orders).hasSize(1)
 
             val order = orders.first()
             val make = order.make.assetType as Asset.MT
             val take = order.take.assetType as Asset.XTZ
-            orderClient.getOrdersByItem(make.contract, make.tokenId.toString(), null, "XTZ", listOf(), listOf(platform), 1, null).apply {
+            orderClient.getOrdersByItem(make.contract, make.tokenId.toString(), null, "XTZ", listOf(), listOf(platform), false, 1, null).apply {
                 assertThat(orders).hasSize(1)
             }
 
-            orderClient.getOrdersByMakers(listOf(order.maker), listOf(), listOf(platform), 1, null).apply {
+            orderClient.getOrdersByMakers(listOf(order.maker), listOf(), listOf(platform), false, 1, null).apply {
                 assertThat(orders).hasSize(1)
             }
         }
@@ -63,7 +63,7 @@ class OrderClientIt {
 
     @Test
     fun `should return currency for legacy order`() = runBlocking<Unit> {
-        val page = orderClient.getOrdersCurrenciesByItem("KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS", "46075")
+        val page = orderClient.getSellOrdersCurrenciesByItem("KT18pVpRXKPY2c4U2yFEGSH3ZnhB2kL8kwXS", "46075")
         assertThat(page).hasSize(1)
     }
 
@@ -87,6 +87,7 @@ class OrderClientIt {
             val orders = orderClient.getOrdersAll(
                 listOf(),
                 listOf(TezosPlatform.HEN),
+                false,
                 DipDupOrderSort.LAST_UPDATE_ASC,
                 1000, continuation
             )

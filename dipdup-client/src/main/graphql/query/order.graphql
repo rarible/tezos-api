@@ -17,6 +17,7 @@ fragment order on marketplace_order {
     network
     platform
     start_at
+    is_bid
     salt
     status
     take_asset_class
@@ -29,14 +30,21 @@ fragment order on marketplace_order {
     payouts
 }
 
-fragment assetType on marketplace_order {
+fragment takeType on marketplace_order {
     take_asset_class
     take_contract
     take_token_id
 }
 
-query GetOrders($limit: Int!) {
+fragment makeType on marketplace_order {
+    make_asset_class
+    make_contract
+    make_token_id
+}
+
+query GetOrders($limit: Int!, $isBid: Boolean!) {
     marketplace_order(
+        where: {is_bid: {_eq: $isBid}}
         limit: $limit
     ) {
         ...order
@@ -48,7 +56,7 @@ query GetOrdersTakeContractsByMakeItem($token: String!, $tokenId: String!) {
         where: {make_contract: {_eq: $token}, make_token_id: {_eq: $tokenId}}
         distinct_on: [take_contract, take_token_id]
     ) {
-        ...assetType
+        ...takeType
     }
 }
 
@@ -57,7 +65,25 @@ query GetOrdersTakeContractsByMakeCollection($token: String!) {
         where: {make_contract: {_eq: $token}}
         distinct_on: [take_contract, take_token_id]
     ) {
-        ...assetType
+        ...takeType
+    }
+}
+
+query GetOrdersMakeContractsByTakeItem($token: String!, $tokenId: String!) {
+    marketplace_order(
+        where: {take_contract: {_eq: $token}, take_token_id: {_eq: $tokenId}}
+        distinct_on: [make_contract, make_token_id]
+    ) {
+        ...makeType
+    }
+}
+
+query GetOrdersMakeContractsByTakeCollection($token: String!) {
+    marketplace_order(
+        where: {take_contract: {_eq: $token}}
+        distinct_on: [make_contract, make_token_id]
+    ) {
+        ...makeType
     }
 }
 
@@ -95,15 +121,16 @@ query GetOrderById($id: uuid!) {
 
 query GetOrdersByIds($ids: [uuid!]!) {
     marketplace_order(
-        where: {id: {_in: $ids}},
+        where: {id: {_in: $ids}}
         order_by: {id: asc}
     ) {
         ...order
     }
 }
 
-query GetOrdersByItem($limit: Int!) {
+query GetOrdersByItem($limit: Int!, $isBid: Boolean!) {
     marketplace_order(
+        where: {is_bid: {_eq: $isBid}}
         limit: $limit
         order_by: {last_updated_at: desc, id: desc}
     ) {
@@ -111,8 +138,9 @@ query GetOrdersByItem($limit: Int!) {
     }
 }
 
-query GetOrdersByMaker($limit: Int!) {
+query GetOrdersByMaker($limit: Int!, $isBid: Boolean!) {
     marketplace_order(
+        where: {is_bid: {_eq: $isBid}}
         limit: $limit
         order_by: {last_updated_at: desc, id: desc}
     ) {
