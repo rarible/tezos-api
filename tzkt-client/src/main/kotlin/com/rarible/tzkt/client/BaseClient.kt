@@ -1,10 +1,13 @@
 package com.rarible.tzkt.client
 
 import com.rarible.tzkt.model.TzktNotFound
+import com.rarible.tzkt.model.TzktValidationException
 import com.rarible.tzkt.utils.flatMapAsync
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.WebClientResponseException
 import org.springframework.web.reactive.function.client.awaitBody
 import org.springframework.web.reactive.function.client.awaitBodyOrNull
 import org.springframework.web.util.UriBuilder
@@ -18,41 +21,56 @@ abstract class BaseClient(
 
     suspend inline fun <reified T : Any> invoke(crossinline builder: (b: UriBuilder) -> UriBuilder): T {
         var build: URI? = null
-        val body = webClient.get()
-            .uri {
-                build = builder(it).build()
-                logger.info("Request to $build")
-                build
-            }
-            .accept(APPLICATION_JSON)
-            .retrieve()
-            .awaitBodyOrNull<T>()
+        val body = try {
+            webClient.get()
+                .uri {
+                    build = builder(it).build()
+                    logger.info("Request to $build")
+                    build
+                }
+                .accept(APPLICATION_JSON)
+                .retrieve()
+                .awaitBodyOrNull<T>()
+        } catch (ex: WebClientResponseException) {
+            if (ex.statusCode == HttpStatus.BAD_REQUEST) throw TzktValidationException(ex.statusText)
+            else throw ex
+        }
         return body ?: throw TzktNotFound("Empty response for url: $build")
     }
 
     suspend inline fun <reified T : Any> invokePost(crossinline builder: (b: UriBuilder) -> UriBuilder, body: Any): T {
-        return webClient.post()
-            .uri {
-                val build = builder(it).build()
-                logger.info("Request to ${build}")
-                build
-            }
-            .accept(APPLICATION_JSON)
-            .bodyValue(body)
-            .retrieve()
-            .awaitBody()
+        return try {
+            webClient.post()
+                .uri {
+                    val build = builder(it).build()
+                    logger.info("Request to ${build}")
+                    build
+                }
+                .accept(APPLICATION_JSON)
+                .bodyValue(body)
+                .retrieve()
+                .awaitBody()
+        } catch (ex: WebClientResponseException) {
+            if (ex.statusCode == HttpStatus.BAD_REQUEST) throw TzktValidationException(ex.statusText)
+            else throw ex
+        }
     }
 
     suspend inline fun <reified T : Any> invokeURI(crossinline builder: (b: UriBuilder) -> URI): T {
-        return webClient.get()
-            .uri {
-                val build = builder(it)
-                logger.info("Request to ${build}")
-                build
-            }
+        return try {
+            webClient.get()
+                .uri {
+                    val build = builder(it)
+                    logger.info("Request to ${build}")
+                    build
+                }
                 .accept(APPLICATION_JSON)
-            .retrieve()
-            .awaitBody()
+                .retrieve()
+                .awaitBody()
+        } catch (ex: WebClientResponseException) {
+            if (ex.statusCode == HttpStatus.BAD_REQUEST) throw TzktValidationException(ex.statusText)
+            else throw ex
+        }
     }
 
     suspend inline fun <T> withBatch(
