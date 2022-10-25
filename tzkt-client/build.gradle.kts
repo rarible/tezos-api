@@ -2,6 +2,7 @@
 val mockHttpVersion: String by project
 val mockkVersion: String by project
 val rfksystemsVersion: String by project
+val raribleCommonVersion: String by project
 
 dependencies {
     implementation("com.github.airgap-it:tezos-kotlin-sdk:0.0.2")
@@ -15,6 +16,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("com.rfksystems:blake2b:$rfksystemsVersion")
+    implementation("com.rarible.core:rarible-core-client:$raribleCommonVersion")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("com.squareup.okhttp3:mockwebserver:$mockHttpVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")

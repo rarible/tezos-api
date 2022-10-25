@@ -25,7 +25,7 @@ import preparedClient
 import java.time.Instant
 
 // this test will be disabled on jenkins
-@DisabledOnOs(OS.LINUX)
+@Disabled
 class TokenClientIt {
 
     val mapper = ObjectMapper().registerKotlinModule()

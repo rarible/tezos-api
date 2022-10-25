@@ -43,6 +43,7 @@ class OwnershipClientIt {
         assertThat(ids).hasSize(total)
     }
 
+    @Disabled
     @Test
     fun `should return ownerships with continuation for token`() = runBlocking<Unit> {
         var total = 10_000
