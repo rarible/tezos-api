@@ -32,8 +32,8 @@ class OrderClient(
     suspend fun getOrdersAll(
         statuses: List<OrderStatus>,
         platforms: List<TezosPlatform> = listOf(TezosPlatform.RARIBLE_V1, TezosPlatform.RARIBLE_V2),
-        isBid: Boolean = false,
         sort: DipDupOrderSort? = DipDupOrderSort.LAST_UPDATE_DESC,
+        isBid: Boolean? = null,
         size: Int = DEFAULT_PAGE,
         continuation: String?
     ): DipDupOrdersPage {
