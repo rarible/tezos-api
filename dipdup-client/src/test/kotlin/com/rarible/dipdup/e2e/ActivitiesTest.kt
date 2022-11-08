@@ -64,4 +64,60 @@ class ActivitiesTest {
             println("$sum | $continuation | $types")
         } while (continuation != null)
     }
+
+    @Test
+    fun `should iterate nft activities via sync`() = runBlocking<Unit> {
+        var continuation : String? = null
+        var types : MutableMap<DipDupActivityType, Int> = mapOf<DipDupActivityType, Int>().toMutableMap()
+        var step = 1000
+
+        // tokens
+        do {
+            val transfers = tokenActivityClient.getActivitySync(step, continuation, false)
+            transfers.activities.map {
+                val t = when (it) {
+                    is DipDupBurnActivity -> DipDupActivityType.BURN
+                    is DipDupMintActivity -> DipDupActivityType.MINT
+                    is DipDupTransferActivity -> DipDupActivityType.TRANSFER
+                    else -> throw RuntimeException("Unsupported: $it")
+                }
+                val current = types[t] ?: 0
+                types[t] = current + 1
+            }
+            val sum = types.map { it.value }.sum()
+            continuation = transfers.continuation
+            println("$sum | $continuation | $types")
+        } while (continuation != null)
+    }
+
+    @Test
+    fun `should iterate order activities via sync`() = runBlocking<Unit> {
+        var continuation : String? = null
+        var types : MutableMap<DipDupActivityType, Int> = mapOf<DipDupActivityType, Int>().toMutableMap()
+        var step = 1000
+
+        // orders
+        do {
+            val transfers = orderActivityClient.getActivitiesSync(step, continuation, false)
+            transfers.activities.map {
+                val t = when (it) {
+                    is DipDupOrderListActivity -> DipDupActivityType.LIST
+                    is DipDupOrderCancelActivity -> DipDupActivityType.CANCEL_LIST
+                    is DipDupOrderSellActivity -> DipDupActivityType.SELL
+//                    else -> throw RuntimeException("Unsupported: $it")
+                    else -> {
+                        print(".")
+                        null
+                    } // ignore
+                }
+                t?.let {
+                    val current = types[it] ?: 0
+                    types[it] = current + 1
+                }
+            }
+            val sum = types.map { it.value }.sum()
+            continuation = transfers.continuation
+            println("$sum | $continuation | $types")
+        } while (continuation != null)
+    }
 }

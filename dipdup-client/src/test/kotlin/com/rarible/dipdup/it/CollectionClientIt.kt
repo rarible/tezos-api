@@ -14,7 +14,7 @@ import org.junit.jupiter.api.condition.OS
 //@Disabled
 class CollectionClientIt {
 
-    val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://dev-tezos-indexer.rarible.org/v1/graphql").build() }
+    val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://testnet-tezos-indexer.rarible.org/v1/graphql").build() }
     val collectionClient = CollectionClient(client)
 
     @Test
@@ -30,6 +30,12 @@ class CollectionClientIt {
     // KT1GwtE3PeTxczqnqKwdFwxaZWgEKcg8xpY5
     @Test
     fun `should return collection`() = runBlocking<Unit> {
+        val collection = collectionClient.getCollectionById("KT1FZNJXVnELhB2ufr1Lqy8AZXtH3P8a3svL")
+        assertThat(collection).isNotNull
+    }
+
+    @Test
+    fun `should return collection meta`() = runBlocking<Unit> {
         val collection = collectionClient.getCollectionById("KT1RuoaCbnZpMgdRpSoLfJUzSkGz1ZSiaYwj")
         assertThat(collection).isNotNull
     }

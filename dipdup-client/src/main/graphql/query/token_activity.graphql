@@ -10,6 +10,7 @@ fragment token_activity on token_transfer {
     type
     tzkt_token_id
     tzkt_transaction_id
+    tzkt_origination_id
 }
 
 query GetTokenActivitiesDesc($types: [String!]!, $limit: Int!, $prevDate: timestamptz!, $prevId: bigint!) {
@@ -68,6 +69,32 @@ query GetTokenActivitiesByIds($ids: [bigint!]!) {
     token_transfer(
         where: {id: {_in: $ids}},
         order_by: {id: desc}
+    ) {
+        ...token_activity
+    }
+}
+
+query GetTokenActivitiesSyncDesc($limit: Int!, $prevDate: timestamptz!, $prevId: bigint!) {
+    token_transfer(
+        where: {_or: [
+            {date: {_lt: $prevDate}},
+            {date: {_eq: $prevDate}, id: {_lt: $prevId}}
+        ]}
+        order_by: {date: desc, id: desc},
+        limit: $limit
+    ) {
+        ...token_activity
+    }
+}
+
+query GetTokenActivitiesSyncAsc($limit: Int!, $prevDate: timestamptz!, $prevId: bigint!) {
+    token_transfer(
+        where: {_or: [
+            {date: {_gt: $prevDate}},
+            {date: {_eq: $prevDate}, id: {_gt: $prevId}}
+        ]}
+        order_by: {date: asc, id: asc},
+        limit: $limit
     ) {
         ...token_activity
     }

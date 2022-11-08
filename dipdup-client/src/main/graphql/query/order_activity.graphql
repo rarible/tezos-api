@@ -80,3 +80,30 @@ query GetOrderActivitiesByIds($ids: [uuid!]!) {
         ...order_activity
     }
 }
+
+
+query GetOrderActivitiesSyncDesc($limit: Int!, $prevDate: timestamptz!, $prevId: Int!) {
+    marketplace_activity(
+        where: {_or: [
+            {operation_timestamp: {_lt: $prevDate}},
+            {operation_timestamp: {_eq: $prevDate}, operation_counter: {_lt: $prevId}}
+        ]}
+        order_by: {operation_timestamp: desc, operation_counter: desc},
+        limit: $limit
+    ) {
+        ...order_activity
+    }
+}
+
+query GetOrderActivitiesSyncAsc($limit: Int!, $prevDate: timestamptz!, $prevId: Int!) {
+    marketplace_activity(
+        where: {_or: [
+            {operation_timestamp: {_gt: $prevDate}},
+            {operation_timestamp: {_eq: $prevDate}, operation_counter: {_gt: $prevId}}
+        ]}
+        order_by: {operation_timestamp: asc, operation_counter: asc},
+        limit: $limit
+    ) {
+        ...order_activity
+    }
+}
