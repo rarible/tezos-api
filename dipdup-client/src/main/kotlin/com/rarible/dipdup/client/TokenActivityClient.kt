@@ -5,6 +5,8 @@ import com.rarible.dipdup.client.converter.convertTokenActivitiesAllAsc
 import com.rarible.dipdup.client.converter.convertTokenActivitiesAllDesc
 import com.rarible.dipdup.client.converter.convertTokenActivitiesByItemAsc
 import com.rarible.dipdup.client.converter.convertTokenActivitiesByItemDesc
+import com.rarible.dipdup.client.converter.convertTokenActivitiesSyncAsc
+import com.rarible.dipdup.client.converter.convertTokenActivitiesSyncDesc
 import com.rarible.dipdup.client.converter.convertTokensActivitiesByIds
 import com.rarible.dipdup.client.core.model.DipDupActivity
 import com.rarible.dipdup.client.model.DipDupActivitiesPage
@@ -42,6 +44,36 @@ class TokenActivityClient(
                 safeExecution(
                     GetTokenActivitiesAscQuery(
                         types.map { it.name },
+                        limit,
+                        date.toString(),
+                        id
+                    )
+                ).token_transfer
+            )
+        }
+        return page(activities, limit)
+    }
+
+    suspend fun getActivitySync(
+        limit: Int,
+        continuation: String? = null,
+        sortAsc: Boolean = false
+    ): DipDupActivitiesPage {
+        var (date, id) = continuation?.let { DipDupActivityContinuation.parse(it) }
+            ?.let { Pair(it.date, it.id.toLong()) } ?: mockContinuation(sortAsc)
+        val activities = when (sortAsc) {
+            false -> convertTokenActivitiesSyncDesc(
+                safeExecution(
+                    GetTokenActivitiesSyncDescQuery(
+                        limit,
+                        date.toString(),
+                        id
+                    )
+                ).token_transfer
+            )
+            else -> convertTokenActivitiesSyncAsc(
+                safeExecution(
+                    GetTokenActivitiesSyncAscQuery(
                         limit,
                         date.toString(),
                         id

@@ -1225,7 +1225,7 @@ type dipdup_index {
   ): jsonb
 
   """
-  operation: operation\nbig_map: big_map\nhead: head\ntoken_transfer: token_transfer
+  operation: operation\nbig_map: big_map\nhead: head\ntoken_transfer: token_transfer\nevent: event
   """
   type: String!
   updated_at: timestamptz!
@@ -1337,7 +1337,7 @@ input dipdup_index_insert_input {
   template_values: jsonb
 
   """
-  operation: operation\nbig_map: big_map\nhead: head\ntoken_transfer: token_transfer
+  operation: operation\nbig_map: big_map\nhead: head\ntoken_transfer: token_transfer\nevent: event
   """
   type: String
   updated_at: timestamptz
@@ -1357,7 +1357,7 @@ type dipdup_index_max_fields {
   template: String
 
   """
-  operation: operation\nbig_map: big_map\nhead: head\ntoken_transfer: token_transfer
+  operation: operation\nbig_map: big_map\nhead: head\ntoken_transfer: token_transfer\nevent: event
   """
   type: String
   updated_at: timestamptz
@@ -1377,7 +1377,7 @@ type dipdup_index_min_fields {
   template: String
 
   """
-  operation: operation\nbig_map: big_map\nhead: head\ntoken_transfer: token_transfer
+  operation: operation\nbig_map: big_map\nhead: head\ntoken_transfer: token_transfer\nevent: event
   """
   type: String
   updated_at: timestamptz
@@ -1475,7 +1475,7 @@ input dipdup_index_set_input {
   template_values: jsonb
 
   """
-  operation: operation\nbig_map: big_map\nhead: head\ntoken_transfer: token_transfer
+  operation: operation\nbig_map: big_map\nhead: head\ntoken_transfer: token_transfer\nevent: event
   """
   type: String
   updated_at: timestamptz
@@ -4594,6 +4594,19 @@ type mutation_root {
   delete_royalties_by_pk(id: uuid!): royalties
 
   """
+  delete data from the table: "tasks"
+  """
+  delete_tasks(
+    """filter the rows which have to be deleted"""
+    where: tasks_bool_exp!
+  ): tasks_mutation_response
+
+  """
+  delete single row from the table: "tasks"
+  """
+  delete_tasks_by_pk(id: bigint!): tasks
+
+  """
   delete data from the table: "tezos_domains_domain"
   """
   delete_tezos_domains_domain(
@@ -5038,6 +5051,28 @@ type mutation_root {
     """upsert condition"""
     on_conflict: royalties_on_conflict
   ): royalties
+
+  """
+  insert data into the table: "tasks"
+  """
+  insert_tasks(
+    """the rows to be inserted"""
+    objects: [tasks_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: tasks_on_conflict
+  ): tasks_mutation_response
+
+  """
+  insert a single row into the table: "tasks"
+  """
+  insert_tasks_one(
+    """the row to be inserted"""
+    object: tasks_insert_input!
+
+    """upsert condition"""
+    on_conflict: tasks_on_conflict
+  ): tasks
 
   """
   insert data into the table: "tezos_domains_domain"
@@ -5903,6 +5938,32 @@ type mutation_root {
     _set: royalties_set_input
     pk_columns: royalties_pk_columns_input!
   ): royalties
+
+  """
+  update data of the table: "tasks"
+  """
+  update_tasks(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: tasks_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: tasks_set_input
+
+    """filter the rows which have to be updated"""
+    where: tasks_bool_exp!
+  ): tasks_mutation_response
+
+  """
+  update single row of the table: "tasks"
+  """
+  update_tasks_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: tasks_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: tasks_set_input
+    pk_columns: tasks_pk_columns_input!
+  ): tasks
 
   """
   update data of the table: "tezos_domains_domain"
@@ -7156,6 +7217,49 @@ type query_root {
 
   """fetch data from the table: "royalties" using primary key columns"""
   royalties_by_pk(id: uuid!): royalties
+
+  """
+  fetch data from the table: "tasks"
+  """
+  tasks(
+    """distinct select on columns"""
+    distinct_on: [tasks_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tasks_order_by!]
+
+    """filter the rows returned"""
+    where: tasks_bool_exp
+  ): [tasks!]!
+
+  """
+  fetch aggregated fields from the table: "tasks"
+  """
+  tasks_aggregate(
+    """distinct select on columns"""
+    distinct_on: [tasks_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tasks_order_by!]
+
+    """filter the rows returned"""
+    where: tasks_bool_exp
+  ): tasks_aggregate!
+
+  """fetch data from the table: "tasks" using primary key columns"""
+  tasks_by_pk(id: bigint!): tasks
 
   """
   fetch data from the table: "tezos_domains_domain"
@@ -8564,6 +8668,49 @@ type subscription_root {
   royalties_by_pk(id: uuid!): royalties
 
   """
+  fetch data from the table: "tasks"
+  """
+  tasks(
+    """distinct select on columns"""
+    distinct_on: [tasks_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tasks_order_by!]
+
+    """filter the rows returned"""
+    where: tasks_bool_exp
+  ): [tasks!]!
+
+  """
+  fetch aggregated fields from the table: "tasks"
+  """
+  tasks_aggregate(
+    """distinct select on columns"""
+    distinct_on: [tasks_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [tasks_order_by!]
+
+    """filter the rows returned"""
+    where: tasks_bool_exp
+  ): tasks_aggregate!
+
+  """fetch data from the table: "tasks" using primary key columns"""
+  tasks_by_pk(id: bigint!): tasks
+
+  """
   fetch data from the table: "tezos_domains_domain"
   """
   tezos_domains_domain(
@@ -8906,6 +9053,286 @@ type subscription_root {
 
   """fetch data from the table: "tzprofiles" using primary key columns"""
   tzprofiles_by_pk(account: String!): tzprofiles
+}
+
+"""
+columns and relationships of "tasks"
+"""
+type tasks {
+  created: timestamptz!
+  error: String
+  id: bigint!
+  name: String!
+  param: String
+  sample: String
+  status: String!
+  updated: timestamptz!
+  version: Int!
+}
+
+"""
+aggregated selection of "tasks"
+"""
+type tasks_aggregate {
+  aggregate: tasks_aggregate_fields
+  nodes: [tasks!]!
+}
+
+"""
+aggregate fields of "tasks"
+"""
+type tasks_aggregate_fields {
+  avg: tasks_avg_fields
+  count(columns: [tasks_select_column!], distinct: Boolean): Int!
+  max: tasks_max_fields
+  min: tasks_min_fields
+  stddev: tasks_stddev_fields
+  stddev_pop: tasks_stddev_pop_fields
+  stddev_samp: tasks_stddev_samp_fields
+  sum: tasks_sum_fields
+  var_pop: tasks_var_pop_fields
+  var_samp: tasks_var_samp_fields
+  variance: tasks_variance_fields
+}
+
+"""aggregate avg on columns"""
+type tasks_avg_fields {
+  id: Float
+  version: Float
+}
+
+"""
+Boolean expression to filter rows from the table "tasks". All fields are combined with a logical 'AND'.
+"""
+input tasks_bool_exp {
+  _and: [tasks_bool_exp!]
+  _not: tasks_bool_exp
+  _or: [tasks_bool_exp!]
+  created: timestamptz_comparison_exp
+  error: String_comparison_exp
+  id: bigint_comparison_exp
+  name: String_comparison_exp
+  param: String_comparison_exp
+  sample: String_comparison_exp
+  status: String_comparison_exp
+  updated: timestamptz_comparison_exp
+  version: Int_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "tasks"
+"""
+enum tasks_constraint {
+  """unique or primary key constraint"""
+  tasks_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "tasks"
+"""
+input tasks_inc_input {
+  id: bigint
+  version: Int
+}
+
+"""
+input type for inserting data into table "tasks"
+"""
+input tasks_insert_input {
+  created: timestamptz
+  error: String
+  id: bigint
+  name: String
+  param: String
+  sample: String
+  status: String
+  updated: timestamptz
+  version: Int
+}
+
+"""aggregate max on columns"""
+type tasks_max_fields {
+  created: timestamptz
+  error: String
+  id: bigint
+  name: String
+  param: String
+  sample: String
+  status: String
+  updated: timestamptz
+  version: Int
+}
+
+"""aggregate min on columns"""
+type tasks_min_fields {
+  created: timestamptz
+  error: String
+  id: bigint
+  name: String
+  param: String
+  sample: String
+  status: String
+  updated: timestamptz
+  version: Int
+}
+
+"""
+response of any mutation on the table "tasks"
+"""
+type tasks_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [tasks!]!
+}
+
+"""
+on_conflict condition type for table "tasks"
+"""
+input tasks_on_conflict {
+  constraint: tasks_constraint!
+  update_columns: [tasks_update_column!]! = []
+  where: tasks_bool_exp
+}
+
+"""Ordering options when selecting data from "tasks"."""
+input tasks_order_by {
+  created: order_by
+  error: order_by
+  id: order_by
+  name: order_by
+  param: order_by
+  sample: order_by
+  status: order_by
+  updated: order_by
+  version: order_by
+}
+
+"""primary key columns input for table: tasks"""
+input tasks_pk_columns_input {
+  id: bigint!
+}
+
+"""
+select columns of table "tasks"
+"""
+enum tasks_select_column {
+  """column name"""
+  created
+
+  """column name"""
+  error
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  param
+
+  """column name"""
+  sample
+
+  """column name"""
+  status
+
+  """column name"""
+  updated
+
+  """column name"""
+  version
+}
+
+"""
+input type for updating data in table "tasks"
+"""
+input tasks_set_input {
+  created: timestamptz
+  error: String
+  id: bigint
+  name: String
+  param: String
+  sample: String
+  status: String
+  updated: timestamptz
+  version: Int
+}
+
+"""aggregate stddev on columns"""
+type tasks_stddev_fields {
+  id: Float
+  version: Float
+}
+
+"""aggregate stddev_pop on columns"""
+type tasks_stddev_pop_fields {
+  id: Float
+  version: Float
+}
+
+"""aggregate stddev_samp on columns"""
+type tasks_stddev_samp_fields {
+  id: Float
+  version: Float
+}
+
+"""aggregate sum on columns"""
+type tasks_sum_fields {
+  id: bigint
+  version: Int
+}
+
+"""
+update columns of table "tasks"
+"""
+enum tasks_update_column {
+  """column name"""
+  created
+
+  """column name"""
+  error
+
+  """column name"""
+  id
+
+  """column name"""
+  name
+
+  """column name"""
+  param
+
+  """column name"""
+  sample
+
+  """column name"""
+  status
+
+  """column name"""
+  updated
+
+  """column name"""
+  version
+}
+
+"""aggregate var_pop on columns"""
+type tasks_var_pop_fields {
+  id: Float
+  version: Float
+}
+
+"""aggregate var_samp on columns"""
+type tasks_var_samp_fields {
+  id: Float
+  version: Float
+}
+
+"""aggregate variance on columns"""
+type tasks_variance_fields {
+  id: Float
+  version: Float
 }
 
 """
@@ -10129,6 +10556,7 @@ type token_transfer {
   GET_BID: GET_BID\nGET_FLOOR_BID: GET_FLOOR_BID\nORDER_LIST: LIST\nORDER_MATCH: SELL\nORDER_CANCEL: CANCEL_LIST\nCANCEL_BID: CANCEL_BID\nCANCEL_FLOOR_BID: CANCEL_FLOOR_BID\nMAKE_BID: MAKE_BID\nMAKE_FLOOR_BID: MAKE_FLOOR_BID\nTOKEN_MINT: MINT\nTOKEN_TRANSFER: TRANSFER\nTOKEN_BURN: BURN
   """
   type: String!
+  tzkt_origination_id: bigint
   tzkt_token_id: bigint!
   tzkt_transaction_id: bigint
 }
@@ -10162,6 +10590,7 @@ type token_transfer_aggregate_fields {
 type token_transfer_avg_fields {
   amount: Float
   id: Float
+  tzkt_origination_id: Float
   tzkt_token_id: Float
   tzkt_transaction_id: Float
 }
@@ -10182,6 +10611,7 @@ input token_transfer_bool_exp {
   to_address: String_comparison_exp
   token_id: String_comparison_exp
   type: String_comparison_exp
+  tzkt_origination_id: bigint_comparison_exp
   tzkt_token_id: bigint_comparison_exp
   tzkt_transaction_id: bigint_comparison_exp
 }
@@ -10200,6 +10630,7 @@ input type for incrementing numeric columns in table "token_transfer"
 input token_transfer_inc_input {
   amount: numeric
   id: bigint
+  tzkt_origination_id: bigint
   tzkt_token_id: bigint
   tzkt_transaction_id: bigint
 }
@@ -10221,6 +10652,7 @@ input token_transfer_insert_input {
   GET_BID: GET_BID\nGET_FLOOR_BID: GET_FLOOR_BID\nORDER_LIST: LIST\nORDER_MATCH: SELL\nORDER_CANCEL: CANCEL_LIST\nCANCEL_BID: CANCEL_BID\nCANCEL_FLOOR_BID: CANCEL_FLOOR_BID\nMAKE_BID: MAKE_BID\nMAKE_FLOOR_BID: MAKE_FLOOR_BID\nTOKEN_MINT: MINT\nTOKEN_TRANSFER: TRANSFER\nTOKEN_BURN: BURN
   """
   type: String
+  tzkt_origination_id: bigint
   tzkt_token_id: bigint
   tzkt_transaction_id: bigint
 }
@@ -10240,6 +10672,7 @@ type token_transfer_max_fields {
   GET_BID: GET_BID\nGET_FLOOR_BID: GET_FLOOR_BID\nORDER_LIST: LIST\nORDER_MATCH: SELL\nORDER_CANCEL: CANCEL_LIST\nCANCEL_BID: CANCEL_BID\nCANCEL_FLOOR_BID: CANCEL_FLOOR_BID\nMAKE_BID: MAKE_BID\nMAKE_FLOOR_BID: MAKE_FLOOR_BID\nTOKEN_MINT: MINT\nTOKEN_TRANSFER: TRANSFER\nTOKEN_BURN: BURN
   """
   type: String
+  tzkt_origination_id: bigint
   tzkt_token_id: bigint
   tzkt_transaction_id: bigint
 }
@@ -10259,6 +10692,7 @@ type token_transfer_min_fields {
   GET_BID: GET_BID\nGET_FLOOR_BID: GET_FLOOR_BID\nORDER_LIST: LIST\nORDER_MATCH: SELL\nORDER_CANCEL: CANCEL_LIST\nCANCEL_BID: CANCEL_BID\nCANCEL_FLOOR_BID: CANCEL_FLOOR_BID\nMAKE_BID: MAKE_BID\nMAKE_FLOOR_BID: MAKE_FLOOR_BID\nTOKEN_MINT: MINT\nTOKEN_TRANSFER: TRANSFER\nTOKEN_BURN: BURN
   """
   type: String
+  tzkt_origination_id: bigint
   tzkt_token_id: bigint
   tzkt_transaction_id: bigint
 }
@@ -10294,6 +10728,7 @@ input token_transfer_order_by {
   to_address: order_by
   token_id: order_by
   type: order_by
+  tzkt_origination_id: order_by
   tzkt_token_id: order_by
   tzkt_transaction_id: order_by
 }
@@ -10335,6 +10770,9 @@ enum token_transfer_select_column {
   type
 
   """column name"""
+  tzkt_origination_id
+
+  """column name"""
   tzkt_token_id
 
   """column name"""
@@ -10358,6 +10796,7 @@ input token_transfer_set_input {
   GET_BID: GET_BID\nGET_FLOOR_BID: GET_FLOOR_BID\nORDER_LIST: LIST\nORDER_MATCH: SELL\nORDER_CANCEL: CANCEL_LIST\nCANCEL_BID: CANCEL_BID\nCANCEL_FLOOR_BID: CANCEL_FLOOR_BID\nMAKE_BID: MAKE_BID\nMAKE_FLOOR_BID: MAKE_FLOOR_BID\nTOKEN_MINT: MINT\nTOKEN_TRANSFER: TRANSFER\nTOKEN_BURN: BURN
   """
   type: String
+  tzkt_origination_id: bigint
   tzkt_token_id: bigint
   tzkt_transaction_id: bigint
 }
@@ -10366,6 +10805,7 @@ input token_transfer_set_input {
 type token_transfer_stddev_fields {
   amount: Float
   id: Float
+  tzkt_origination_id: Float
   tzkt_token_id: Float
   tzkt_transaction_id: Float
 }
@@ -10374,6 +10814,7 @@ type token_transfer_stddev_fields {
 type token_transfer_stddev_pop_fields {
   amount: Float
   id: Float
+  tzkt_origination_id: Float
   tzkt_token_id: Float
   tzkt_transaction_id: Float
 }
@@ -10382,6 +10823,7 @@ type token_transfer_stddev_pop_fields {
 type token_transfer_stddev_samp_fields {
   amount: Float
   id: Float
+  tzkt_origination_id: Float
   tzkt_token_id: Float
   tzkt_transaction_id: Float
 }
@@ -10390,6 +10832,7 @@ type token_transfer_stddev_samp_fields {
 type token_transfer_sum_fields {
   amount: numeric
   id: bigint
+  tzkt_origination_id: bigint
   tzkt_token_id: bigint
   tzkt_transaction_id: bigint
 }
@@ -10426,6 +10869,9 @@ enum token_transfer_update_column {
   type
 
   """column name"""
+  tzkt_origination_id
+
+  """column name"""
   tzkt_token_id
 
   """column name"""
@@ -10436,6 +10882,7 @@ enum token_transfer_update_column {
 type token_transfer_var_pop_fields {
   amount: Float
   id: Float
+  tzkt_origination_id: Float
   tzkt_token_id: Float
   tzkt_transaction_id: Float
 }
@@ -10444,6 +10891,7 @@ type token_transfer_var_pop_fields {
 type token_transfer_var_samp_fields {
   amount: Float
   id: Float
+  tzkt_origination_id: Float
   tzkt_token_id: Float
   tzkt_transaction_id: Float
 }
@@ -10452,6 +10900,7 @@ type token_transfer_var_samp_fields {
 type token_transfer_variance_fields {
   amount: Float
   id: Float
+  tzkt_origination_id: Float
   tzkt_token_id: Float
   tzkt_transaction_id: Float
 }

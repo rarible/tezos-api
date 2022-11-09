@@ -5,11 +5,15 @@ import com.rarible.dipdup.client.GetOrderActivitiesByIdsQuery
 import com.rarible.dipdup.client.GetOrderActivitiesByItemAscQuery
 import com.rarible.dipdup.client.GetOrderActivitiesByItemDescQuery
 import com.rarible.dipdup.client.GetOrderActivitiesDescQuery
+import com.rarible.dipdup.client.GetOrderActivitiesSyncAscQuery
+import com.rarible.dipdup.client.GetOrderActivitiesSyncDescQuery
 import com.rarible.dipdup.client.GetTokenActivitiesAscQuery
 import com.rarible.dipdup.client.GetTokenActivitiesByIdsQuery
 import com.rarible.dipdup.client.GetTokenActivitiesByItemAscQuery
 import com.rarible.dipdup.client.GetTokenActivitiesByItemDescQuery
 import com.rarible.dipdup.client.GetTokenActivitiesDescQuery
+import com.rarible.dipdup.client.GetTokenActivitiesSyncAscQuery
+import com.rarible.dipdup.client.GetTokenActivitiesSyncDescQuery
 import com.rarible.dipdup.client.core.model.Asset
 import com.rarible.dipdup.client.core.model.DipDupActivity
 import com.rarible.dipdup.client.core.model.DipDupBurnActivity
@@ -47,7 +51,7 @@ fun convert(source: Token_activity) = tokenActivity(
     type = source.type,
     id = source.id.toString(),
     date = OffsetDateTime.parse(source.date.toString()),
-    transactionId = source.tzkt_transaction_id.toString(),
+    transactionId = getTransactionId(source.tzkt_transaction_id, source.tzkt_origination_id),
     transferId = source.id.toString(),
     hash = source.hash,
     contract = source.contract,
@@ -56,6 +60,14 @@ fun convert(source: Token_activity) = tokenActivity(
     from = source.from_address,
     owner = source.to_address
 )
+
+fun getTransactionId(tz: Any?, originationId: Any?): String {
+    return when {
+        tz != null -> tz
+        originationId != null -> originationId
+        else -> ""
+    }.toString()
+}
 
 fun convertAllDesc(source: List<GetOrderActivitiesDescQuery.Marketplace_activity>): List<DipDupActivity> {
     return source.map { convert(it.order_activity) }
@@ -71,6 +83,22 @@ fun convertAllAsc(source: List<GetOrderActivitiesAscQuery.Marketplace_activity>)
 
 fun convertTokenActivitiesAllAsc(source: List<GetTokenActivitiesAscQuery.Token_transfer>): List<DipDupActivity> {
     return source.map { convert(it.token_activity) }
+}
+
+fun convertTokenActivitiesSyncDesc(source: List<GetTokenActivitiesSyncDescQuery.Token_transfer>): List<DipDupActivity> {
+    return source.map { convert(it.token_activity) }
+}
+
+fun convertTokenActivitiesSyncAsc(source: List<GetTokenActivitiesSyncAscQuery.Token_transfer>): List<DipDupActivity> {
+    return source.map { convert(it.token_activity) }
+}
+
+fun convertOrderActivitySyncDesc(source: List<GetOrderActivitiesSyncDescQuery.Marketplace_activity>): List<DipDupActivity> {
+    return source.map { convert(it.order_activity) }
+}
+
+fun convertOrderActivitySyncAsc(source: List<GetOrderActivitiesSyncAscQuery.Marketplace_activity>): List<DipDupActivity> {
+    return source.map { convert(it.order_activity) }
 }
 
 fun convertByItemDesc(source: List<GetOrderActivitiesByItemDescQuery.Marketplace_activity>): List<DipDupActivity> {

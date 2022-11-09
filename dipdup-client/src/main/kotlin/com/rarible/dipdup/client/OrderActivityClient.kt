@@ -2,12 +2,13 @@ package com.rarible.dipdup.client
 
 import com.apollographql.apollo3.ApolloClient
 import com.rarible.dipdup.client.converter.convertAllAsc
-import com.rarible.dipdup.client.converter.convertByIds
 import com.rarible.dipdup.client.converter.convertAllDesc
+import com.rarible.dipdup.client.converter.convertByIds
 import com.rarible.dipdup.client.converter.convertByItemAsc
 import com.rarible.dipdup.client.converter.convertByItemDesc
+import com.rarible.dipdup.client.converter.convertOrderActivitySyncAsc
+import com.rarible.dipdup.client.converter.convertOrderActivitySyncDesc
 import com.rarible.dipdup.client.core.model.DipDupActivity
-import com.rarible.dipdup.client.core.util.isValidUUID
 import com.rarible.dipdup.client.model.DipDupActivitiesPage
 import com.rarible.dipdup.client.model.DipDupActivityContinuation
 import com.rarible.dipdup.client.model.DipDupActivityType
@@ -41,6 +42,35 @@ class OrderActivityClient(
                 safeExecution(
                     GetOrderActivitiesDescQuery(
                         types.map { it.name },
+                        limit,
+                        date.toString(),
+                        id
+                    )
+                ).marketplace_activity
+            )
+        }
+        return page(activities, limit)
+    }
+
+    suspend fun getActivitiesSync(
+        limit: Int,
+        continuation: String? = null,
+        sortAsc: Boolean = false
+    ): DipDupActivitiesPage {
+        val (date, id) = activityOperation(continuation, sortAsc)
+        val activities = when (sortAsc) {
+            true -> convertOrderActivitySyncAsc(
+                safeExecution(
+                    GetOrderActivitiesSyncAscQuery(
+                        limit,
+                        date.toString(),
+                        id
+                    )
+                ).marketplace_activity
+            )
+            else -> convertOrderActivitySyncDesc(
+                safeExecution(
+                    GetOrderActivitiesSyncDescQuery(
                         limit,
                         date.toString(),
                         id
