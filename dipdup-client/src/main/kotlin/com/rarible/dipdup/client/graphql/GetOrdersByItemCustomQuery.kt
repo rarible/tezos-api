@@ -14,7 +14,7 @@ data class GetOrdersByItemCustomQuery(
     val prevId: String? = null,
     val prevDate: String? = null,
     val isBid: Boolean = false
-) : GetOrdersByItemQuery(limit, isBid) {
+) : GetOrdersByItemQuery(limit) {
 
     // Apollo couldn't generate dynamic query, that's why we do it here
     override fun document(): String {

@@ -11,7 +11,7 @@ data class GetOrderByMakerCustomQuery(
     val prevId: String? = null,
     val prevDate: String? = null,
     val isBid: Boolean = false
-) : GetOrdersByMakerQuery(limit, isBid) {
+) : GetOrdersByMakerQuery(limit) {
     // Apollo couldn't generate dynamic query, that's why we do it here
     override fun document(): String {
         val conditions = mutableListOf<String>()
