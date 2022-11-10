@@ -6,6 +6,8 @@ import com.rarible.dipdup.client.converter.convertAllDesc
 import com.rarible.dipdup.client.converter.convertByIds
 import com.rarible.dipdup.client.converter.convertByItemAsc
 import com.rarible.dipdup.client.converter.convertByItemDesc
+import com.rarible.dipdup.client.converter.convertOrderActivityContinuationSyncAsc
+import com.rarible.dipdup.client.converter.convertOrderActivityContinuationSyncDesc
 import com.rarible.dipdup.client.converter.convertOrderActivitySyncAsc
 import com.rarible.dipdup.client.converter.convertOrderActivitySyncDesc
 import com.rarible.dipdup.client.core.model.DipDupActivity
@@ -38,6 +40,7 @@ class OrderActivityClient(
                     )
                 ).marketplace_activity
             )
+
             else -> convertAllDesc(
                 safeExecution(
                     GetOrderActivitiesDescQuery(
@@ -57,26 +60,35 @@ class OrderActivityClient(
         continuation: String? = null,
         sortAsc: Boolean = false
     ): DipDupActivitiesPage {
-        val (date, id) = activityOperation(continuation, sortAsc)
-        val activities = when (sortAsc) {
-            true -> convertOrderActivitySyncAsc(
-                safeExecution(
-                    GetOrderActivitiesSyncAscQuery(
-                        limit,
-                        date.toString(),
-                        id
-                    )
-                ).marketplace_activity
-            )
-            else -> convertOrderActivitySyncDesc(
-                safeExecution(
-                    GetOrderActivitiesSyncDescQuery(
-                        limit,
-                        date.toString(),
-                        id
-                    )
-                ).marketplace_activity
-            )
+        val activities = if (continuation == null) {
+            when (sortAsc) {
+                true -> convertOrderActivitySyncAsc(safeExecution(GetOrderActivitiesSyncAscQuery(limit)).marketplace_activity)
+                else -> convertOrderActivitySyncDesc(safeExecution(GetOrderActivitiesSyncDescQuery(limit)).marketplace_activity)
+            }
+        } else {
+            val parsed = DipDupActivityContinuation.parse(continuation)!!
+            val (date, id) = parsed.date to parsed.id
+            when (sortAsc) {
+                true -> convertOrderActivityContinuationSyncAsc(
+                    safeExecution(
+                        GetOrderActivitiesSyncContinuationAscQuery(
+                            limit,
+                            date.toString(),
+                            id
+                        )
+                    ).marketplace_activity
+                )
+
+                else -> convertOrderActivityContinuationSyncDesc(
+                    safeExecution(
+                        GetOrderActivitiesSyncContinuationDescQuery(
+                            limit,
+                            date.toString(),
+                            id
+                        )
+                    ).marketplace_activity
+                )
+            }
         }
         return page(activities, limit)
     }
@@ -103,6 +115,7 @@ class OrderActivityClient(
                     )
                 ).marketplace_activity
             )
+
             else -> convertByItemDesc(
                 safeExecution(
                     GetOrderActivitiesByItemDescQuery(
@@ -142,6 +155,7 @@ class OrderActivityClient(
             limit -> activities[limit - 1].let {
                 DipDupActivityContinuation(it.date, it.id).toString()
             }
+
             else -> null
         }
         return DipDupActivitiesPage(

@@ -6,6 +6,8 @@ import com.rarible.dipdup.client.GetOrderActivitiesByItemAscQuery
 import com.rarible.dipdup.client.GetOrderActivitiesByItemDescQuery
 import com.rarible.dipdup.client.GetOrderActivitiesDescQuery
 import com.rarible.dipdup.client.GetOrderActivitiesSyncAscQuery
+import com.rarible.dipdup.client.GetOrderActivitiesSyncContinuationAscQuery
+import com.rarible.dipdup.client.GetOrderActivitiesSyncContinuationDescQuery
 import com.rarible.dipdup.client.GetOrderActivitiesSyncDescQuery
 import com.rarible.dipdup.client.GetTokenActivitiesAscQuery
 import com.rarible.dipdup.client.GetTokenActivitiesByIdsQuery
@@ -97,7 +99,15 @@ fun convertOrderActivitySyncDesc(source: List<GetOrderActivitiesSyncDescQuery.Ma
     return source.map { convert(it.order_activity) }
 }
 
+fun convertOrderActivityContinuationSyncDesc(source: List<GetOrderActivitiesSyncContinuationDescQuery.Marketplace_activity>): List<DipDupActivity> {
+    return source.map { convert(it.order_activity) }
+}
+
 fun convertOrderActivitySyncAsc(source: List<GetOrderActivitiesSyncAscQuery.Marketplace_activity>): List<DipDupActivity> {
+    return source.map { convert(it.order_activity) }
+}
+
+fun convertOrderActivityContinuationSyncAsc(source: List<GetOrderActivitiesSyncContinuationAscQuery.Marketplace_activity>): List<DipDupActivity> {
     return source.map { convert(it.order_activity) }
 }
 
