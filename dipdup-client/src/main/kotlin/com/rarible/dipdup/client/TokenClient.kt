@@ -147,10 +147,13 @@ class TokenClient(
         return Page.of(tokens, limit) { TimestampIdContinuation(it.updated, it.id) }
     }
 
-    suspend fun tokenCount(contract: String): BigInteger {
-        val request = GetTokenCountQuery(contract)
+    suspend fun getLastTokenId(contract: String): BigInteger {
+        val request = GetLastTokenIdQuery(contract)
         val response = safeExecution(request)
-        return response.token_aggregate.aggregate.count.toBigInteger()
+        return when (response.token.size) {
+            0 -> BigInteger.ZERO
+            else -> BigInteger(response.token.first().token_id)
+        }
     }
 
     private fun orderBy(id: Optional<order_by>?, updated: Optional<order_by>?) = Token_order_by(

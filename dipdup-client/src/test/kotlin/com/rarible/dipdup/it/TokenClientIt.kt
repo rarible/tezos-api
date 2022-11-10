@@ -2,11 +2,11 @@ package com.rarible.dipdup.it
 
 import com.apollographql.apollo3.ApolloClient
 import com.rarible.dipdup.client.TokenClient
-import com.rarible.dipdup.client.client.AuthorizationInterceptor
 import com.rarible.dipdup.client.exception.DipDupNotFound
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.condition.DisabledOnOs
@@ -16,6 +16,25 @@ import org.junit.jupiter.api.condition.OS
 @DisabledOnOs(OS.LINUX)
 //@Disabled
 class TokenClientIt {
+
+    @Nested
+    class Dev {
+        val client: ApolloClient =
+            runBlocking { ApolloClient.Builder().serverUrl("https://dev-tezos-indexer.rarible.org/v1/graphql").build() }
+        val tokenClient = TokenClient(client)
+
+        @Test
+        fun `should return lastTokenId`() = runBlocking<Unit> {
+            val count = tokenClient.getLastTokenId("KT1Uke8qc4YTfP41dGuoGC8UsgRyCtyvKPLA")
+            assertThat(count.toInt()).isGreaterThan(1000)
+        }
+
+        @Test
+        fun `should return 0 as lastTokenId`() = runBlocking<Unit> {
+            val count = tokenClient.getLastTokenId("xxxxxxxxxxxxxx")
+            assertThat(count.toInt()).isEqualTo(0)
+        }
+    }
 
     val client: ApolloClient = runBlocking {
         ApolloClient.Builder()

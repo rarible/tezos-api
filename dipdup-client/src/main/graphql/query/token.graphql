@@ -142,6 +142,12 @@ query GetTokensByCollectionContinuationDesc($address: String!, $limit: Int!, $da
     }
 }
 
+query GetLastTokenId($contract: String!) {
+    token(order_by: {minted_at: desc}, where: {contract: {_eq: $contract}}, limit: 1) {
+        token_id
+    }
+}
+
 mutation RemoveTokenIdMeta($id: uuid!) {
     update_metadata_token_by_pk(pk_columns: {id: $id},
         _set: {metadata_retries: 0, metadata_synced: false}
