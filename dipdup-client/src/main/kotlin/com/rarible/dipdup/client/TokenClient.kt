@@ -21,6 +21,7 @@ import com.rarible.dipdup.client.model.Page
 import com.rarible.dipdup.client.type.Token_order_by
 import com.rarible.dipdup.client.type.order_by
 import org.slf4j.LoggerFactory
+import java.math.BigInteger
 
 class TokenClient(
     client: ApolloClient
@@ -144,6 +145,12 @@ class TokenClient(
             convertByCollectionContinuation(response.token_by_owner)
         }
         return Page.of(tokens, limit) { TimestampIdContinuation(it.updated, it.id) }
+    }
+
+    suspend fun tokenCount(contract: String): BigInteger {
+        val request = GetTokenCountQuery(contract)
+        val response = safeExecution(request)
+        return response.token_aggregate.aggregate.count.toBigInteger()
     }
 
     private fun orderBy(id: Optional<order_by>?, updated: Optional<order_by>?) = Token_order_by(

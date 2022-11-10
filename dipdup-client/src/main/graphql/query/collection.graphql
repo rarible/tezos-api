@@ -32,3 +32,11 @@ query GetCollectionsAllContinuationAsc($limit: Int!, $id: String!) {
         ...collection
     }
 }
+
+query GetTokenCount($contract: String!) {
+    token_aggregate(where: {contract: {_eq: $contract}, deleted: {_neq: true}}) {
+        aggregate {
+            count
+        }
+    }
+}

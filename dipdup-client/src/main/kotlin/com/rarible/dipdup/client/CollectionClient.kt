@@ -7,11 +7,11 @@ import com.rarible.dipdup.client.converter.CollectionConverter.convertAllContinu
 import com.rarible.dipdup.client.converter.CollectionConverter.convertAllContinuationDesc
 import com.rarible.dipdup.client.converter.CollectionConverter.convertByIds
 import com.rarible.dipdup.client.core.model.DipDupCollection
-import com.rarible.dipdup.client.core.model.TimestampIdContinuation
 import com.rarible.dipdup.client.exception.DipDupNotFound
 import com.rarible.dipdup.client.model.Page
 import com.rarible.dipdup.client.type.Collection_with_meta_order_by
 import com.rarible.dipdup.client.type.order_by
+import java.math.BigInteger
 
 class CollectionClient(
     client: ApolloClient
@@ -53,6 +53,12 @@ class CollectionClient(
             }
         }
         return Page.of(collections, limit)  { it.id }
+    }
+
+    suspend fun getTokensCount(contract: String): BigInteger {
+        val request = GetTokenCountQuery(contract)
+        val response = safeExecution(request)
+        return response.token_aggregate.aggregate.count.toBigInteger()
     }
 
     private fun orderBy(id: Optional<order_by>?, updated: Optional<order_by>?) = Collection_with_meta_order_by(
