@@ -39,6 +39,25 @@ class OrderClientIt {
     }
 
     @Nested
+    class Dev {
+        val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://dev-tezos-indexer.rarible.org/v1/graphql").build() }
+        val orderClient = OrderClient(client)
+
+        @Test
+        fun `should return currency of bid orders from dev`() = runBlocking<Unit> {
+            val currencies = orderClient.getBidOrdersCurrenciesByItem("KT1Uke8qc4YTfP41dGuoGC8UsgRyCtyvKPLA", "1083")
+            assertThat(currencies).hasSize(1)
+        }
+
+        @Test
+        fun `should return bid orders from dev`() = runBlocking<Unit> {
+            val page = orderClient.getOrdersByItem("KT1Uke8qc4YTfP41dGuoGC8UsgRyCtyvKPLA", "1083", null, "XTZ",
+                emptyList(), listOf(TezosPlatform.RARIBLE_V2), true, 10, null)
+            assertThat(page.orders).hasSize(1)
+        }
+    }
+
+    @Nested
     class Testnet {
         val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://testnet-tezos-indexer.rarible.org/v1/graphql").build() }
         val orderClient = OrderClient(client)

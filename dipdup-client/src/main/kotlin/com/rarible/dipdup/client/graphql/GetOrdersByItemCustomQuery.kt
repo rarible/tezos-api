@@ -19,16 +19,19 @@ data class GetOrdersByItemCustomQuery(
     // Apollo couldn't generate dynamic query, that's why we do it here
     override fun document(): String {
         val conditions = mutableListOf<String>()
-        contract.also { conditions.add("make_contract: {_eq: \"$it\"}") }
-        tokenId.also { conditions.add("make_token_id: {_eq: \"$it\"}") }
+        val left = side(isBid)
+        val right = side(!isBid)
+        
+        contract.also { conditions.add("${left}_contract: {_eq: \"$it\"}") }
+        tokenId.also { conditions.add("${left}_token_id: {_eq: \"$it\"}") }
         maker?.let { conditions.add("maker: {_eq: \"$it\"}") }
         if (currencyId == "XTZ") {
-            conditions.add("take_contract: {_is_null: true}")
+            conditions.add("${right}_contract: {_is_null: true}")
         } else {
             val raw = currencyId.split(":")
-            conditions.add("take_contract: {_eq: \"${raw[0]}\"}")
+            conditions.add("${right}_contract: {_eq: \"${raw[0]}\"}")
             if (raw.size == 2) {
-                conditions.add("take_token_id: {_eq: \"${raw[1]}\"}")
+                conditions.add("${right}_token_id: {_eq: \"${raw[1]}\"}")
             }
         }
         conditions.add("is_bid: {_eq: $isBid}")
@@ -84,4 +87,6 @@ data class GetOrdersByItemCustomQuery(
             }
         """.trimIndent()
     }
+
+    private fun side(isBid: Boolean) = if (isBid) "take" else "make"
 }
