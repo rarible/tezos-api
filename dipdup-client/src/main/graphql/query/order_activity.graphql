@@ -18,6 +18,7 @@ fragment order_activity on marketplace_activity {
     take_token_id
     take_value
     taker
+    db_updated_at
 }
 
 query GetOrderActivitiesDesc($types: [String!]!, $limit: Int!, $prevDate: timestamptz!, $prevId: Int!) {
@@ -83,7 +84,7 @@ query GetOrderActivitiesByIds($ids: [uuid!]!) {
 
 query GetOrderActivitiesSyncDesc($limit: Int!) {
     marketplace_activity(
-        order_by: {operation_timestamp: desc, id: desc}
+        order_by: {db_updated_at: desc, id: desc}
         limit: $limit
     ) {
         ...order_activity
@@ -93,10 +94,10 @@ query GetOrderActivitiesSyncDesc($limit: Int!) {
 query GetOrderActivitiesSyncContinuationDesc($limit: Int!, $prevDate: timestamptz!, $prevId: uuid!) {
     marketplace_activity(
         where: {_or: [
-            {operation_timestamp: {_lt: $prevDate}},
-            {operation_timestamp: {_eq: $prevDate}, id: {_lt: $prevId}}
+            {db_updated_at: {_lt: $prevDate}},
+            {db_updated_at: {_eq: $prevDate}, id: {_lt: $prevId}}
         ]}
-        order_by: {operation_timestamp: desc, id: desc},
+        order_by: {db_updated_at: desc, id: desc},
         limit: $limit
     ) {
         ...order_activity
@@ -105,7 +106,7 @@ query GetOrderActivitiesSyncContinuationDesc($limit: Int!, $prevDate: timestampt
 
 query GetOrderActivitiesSyncAsc($limit: Int!) {
     marketplace_activity(
-        order_by: {operation_timestamp: asc, id: asc}
+        order_by: {db_updated_at: asc, id: asc}
         limit: $limit
     ) {
         ...order_activity
@@ -115,10 +116,10 @@ query GetOrderActivitiesSyncAsc($limit: Int!) {
 query GetOrderActivitiesSyncContinuationAsc($limit: Int!, $prevDate: timestamptz!, $prevId: uuid!) {
     marketplace_activity(
         where: {_or: [
-            {operation_timestamp: {_gt: $prevDate}},
-            {operation_timestamp: {_eq: $prevDate}, id: {_gt: $prevId}}
+            {db_updated_at: {_gt: $prevDate}},
+            {db_updated_at: {_eq: $prevDate}, id: {_gt: $prevId}}
         ]}
-        order_by: {operation_timestamp: asc, id: asc},
+        order_by: {db_updated_at: asc, id: asc},
         limit: $limit
     ) {
         ...order_activity

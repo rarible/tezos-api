@@ -11,6 +11,7 @@ fragment token_activity on token_transfer {
     tzkt_token_id
     tzkt_transaction_id
     tzkt_origination_id
+    db_updated_at
 }
 
 query GetTokenActivitiesDesc($types: [String!]!, $limit: Int!, $prevDate: timestamptz!, $prevId: bigint!) {
@@ -77,10 +78,10 @@ query GetTokenActivitiesByIds($ids: [bigint!]!) {
 query GetTokenActivitiesSyncDesc($limit: Int!, $prevDate: timestamptz!, $prevId: bigint!) {
     token_transfer(
         where: {_or: [
-            {date: {_lt: $prevDate}},
-            {date: {_eq: $prevDate}, id: {_lt: $prevId}}
+            {db_updated_at: {_lt: $prevDate}},
+            {db_updated_at: {_eq: $prevDate}, id: {_lt: $prevId}}
         ]}
-        order_by: {date: desc, id: desc},
+        order_by: {db_updated_at: desc, id: desc},
         limit: $limit
     ) {
         ...token_activity
@@ -90,10 +91,10 @@ query GetTokenActivitiesSyncDesc($limit: Int!, $prevDate: timestamptz!, $prevId:
 query GetTokenActivitiesSyncAsc($limit: Int!, $prevDate: timestamptz!, $prevId: bigint!) {
     token_transfer(
         where: {_or: [
-            {date: {_gt: $prevDate}},
-            {date: {_eq: $prevDate}, id: {_gt: $prevId}}
+            {db_updated_at: {_gt: $prevDate}},
+            {db_updated_at: {_eq: $prevDate}, id: {_gt: $prevId}}
         ]}
-        order_by: {date: asc, id: asc},
+        order_by: {db_updated_at: asc, id: asc},
         limit: $limit
     ) {
         ...token_activity

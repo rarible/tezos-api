@@ -41,6 +41,7 @@ fun convert(source: Order_activity) = orderActivity(
     operationCounter = source.operation_counter,
     reverted = false,
     date = OffsetDateTime.parse(source.operation_timestamp.toString()),
+    dbUpdatedAt = OffsetDateTime.parse(source.db_updated_at.toString()),
     hash = source.operation_hash,
     source = TezosPlatform.valueOf(source.platform),
     maker = source.maker,
@@ -53,6 +54,7 @@ fun convert(source: Token_activity) = tokenActivity(
     type = source.type,
     id = source.id.toString(),
     date = OffsetDateTime.parse(source.date.toString()),
+    dbUpdatedAt = OffsetDateTime.parse(source.db_updated_at.toString()),
     transactionId = getTransactionId(source.tzkt_transaction_id, source.tzkt_origination_id),
     transferId = source.id.toString(),
     hash = source.hash,
@@ -138,6 +140,7 @@ fun convertTokensActivitiesByIds(source: List<GetTokenActivitiesByIdsQuery.Token
 fun orderActivity(
     type: String, id: String, operationCounter: Int,
     date: OffsetDateTime,
+    dbUpdatedAt: OffsetDateTime,
     reverted: Boolean,
     hash: String,
     source: TezosPlatform,
@@ -151,6 +154,7 @@ fun orderActivity(
             id = id,
             operationCounter = operationCounter,
             date = date,
+            dbUpdatedAt = dbUpdatedAt,
             reverted = reverted,
             hash = hash,
             source = source,
@@ -162,6 +166,7 @@ fun orderActivity(
             id = id,
             operationCounter = operationCounter,
             date = date,
+            dbUpdatedAt = dbUpdatedAt,
             reverted = reverted,
             hash = hash,
             source = source,
@@ -174,6 +179,7 @@ fun orderActivity(
             id = id,
             operationCounter = operationCounter,
             date = date,
+            dbUpdatedAt = dbUpdatedAt,
             reverted = reverted,
             hash = hash,
             source = source,
@@ -184,6 +190,7 @@ fun orderActivity(
         DipDupActivity.MAKE_BID -> DipDupMakeBidActivity(
             id = id,
             date = date,
+            dbUpdatedAt = dbUpdatedAt,
             reverted = reverted,
             hash = hash,
             source = source,
@@ -195,6 +202,7 @@ fun orderActivity(
         DipDupActivity.GET_BID -> DipDupGetBidActivity(
             id = id,
             date = date,
+            dbUpdatedAt = dbUpdatedAt,
             reverted = reverted,
             hash = hash,
             source = source,
@@ -207,6 +215,7 @@ fun orderActivity(
         DipDupActivity.CANCEL_BID -> DipDupCancelBidActivity(
             id = id,
             date = date,
+            dbUpdatedAt = dbUpdatedAt,
             reverted = reverted,
             hash = hash,
             source = source,
@@ -219,13 +228,14 @@ fun orderActivity(
 }
 
 fun tokenActivity(
-    type: String, id: String, date: OffsetDateTime, transferId: String, hash: String?, contract: String, tokenId: BigInteger,
+    type: String, id: String, date: OffsetDateTime, dbUpdatedAt: OffsetDateTime, transferId: String, hash: String?, contract: String, tokenId: BigInteger,
     value: BigDecimal, transactionId: String, from: String?, owner: String?
 ): DipDupActivity {
     return when (type) {
         DipDupActivity.MINT -> DipDupMintActivity(
             id = id,
             date = date,
+            dbUpdatedAt = dbUpdatedAt,
             reverted = false,
             transferId = transferId,
             contract = contract,
@@ -237,6 +247,7 @@ fun tokenActivity(
         DipDupActivity.TRANSFER -> DipDupTransferActivity(
             id = id,
             date = date,
+            dbUpdatedAt = dbUpdatedAt,
             reverted = false,
             transferId = transferId,
             contract = contract,
@@ -249,6 +260,7 @@ fun tokenActivity(
         DipDupActivity.BURN -> DipDupBurnActivity(
             id = id,
             date = date,
+            dbUpdatedAt = dbUpdatedAt,
             reverted = false,
             transferId = transferId,
             contract = contract,

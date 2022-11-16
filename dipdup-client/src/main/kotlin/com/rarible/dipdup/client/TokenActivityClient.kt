@@ -81,7 +81,7 @@ class TokenActivityClient(
                 ).token_transfer
             )
         }
-        return page(activities, limit)
+        return syncPage(activities, limit)
     }
 
     suspend fun getActivitiesByItem(
@@ -133,6 +133,20 @@ class TokenActivityClient(
         val nextContinuation = when (activities.size) {
             limit -> activities[limit - 1].let {
                 DipDupActivityContinuation(it.date, it.id).toString()
+            }
+
+            else -> null
+        }
+        return DipDupActivitiesPage(
+            activities = activities,
+            continuation = nextContinuation
+        )
+    }
+
+    private fun syncPage(activities: List<DipDupActivity>, limit: Int): DipDupActivitiesPage {
+        val nextContinuation = when (activities.size) {
+            limit -> activities[limit - 1].let {
+                DipDupActivityContinuation(it.dbUpdatedAt!!, it.id).toString()
             }
 
             else -> null

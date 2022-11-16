@@ -96,6 +96,221 @@ input String_comparison_exp {
   _similar: String
 }
 
+"""
+columns and relationships of "aggregator_event"
+"""
+type aggregator_event {
+  id: bigint!
+  level: Int!
+  operation_hash: String!
+  tracker: String!
+}
+
+"""
+aggregated selection of "aggregator_event"
+"""
+type aggregator_event_aggregate {
+  aggregate: aggregator_event_aggregate_fields
+  nodes: [aggregator_event!]!
+}
+
+"""
+aggregate fields of "aggregator_event"
+"""
+type aggregator_event_aggregate_fields {
+  avg: aggregator_event_avg_fields
+  count(columns: [aggregator_event_select_column!], distinct: Boolean): Int!
+  max: aggregator_event_max_fields
+  min: aggregator_event_min_fields
+  stddev: aggregator_event_stddev_fields
+  stddev_pop: aggregator_event_stddev_pop_fields
+  stddev_samp: aggregator_event_stddev_samp_fields
+  sum: aggregator_event_sum_fields
+  var_pop: aggregator_event_var_pop_fields
+  var_samp: aggregator_event_var_samp_fields
+  variance: aggregator_event_variance_fields
+}
+
+"""aggregate avg on columns"""
+type aggregator_event_avg_fields {
+  id: Float
+  level: Float
+}
+
+"""
+Boolean expression to filter rows from the table "aggregator_event". All fields are combined with a logical 'AND'.
+"""
+input aggregator_event_bool_exp {
+  _and: [aggregator_event_bool_exp!]
+  _not: aggregator_event_bool_exp
+  _or: [aggregator_event_bool_exp!]
+  id: bigint_comparison_exp
+  level: Int_comparison_exp
+  operation_hash: String_comparison_exp
+  tracker: String_comparison_exp
+}
+
+"""
+unique or primary key constraints on table "aggregator_event"
+"""
+enum aggregator_event_constraint {
+  """unique or primary key constraint"""
+  aggregator_event_pkey
+}
+
+"""
+input type for incrementing numeric columns in table "aggregator_event"
+"""
+input aggregator_event_inc_input {
+  id: bigint
+  level: Int
+}
+
+"""
+input type for inserting data into table "aggregator_event"
+"""
+input aggregator_event_insert_input {
+  id: bigint
+  level: Int
+  operation_hash: String
+  tracker: String
+}
+
+"""aggregate max on columns"""
+type aggregator_event_max_fields {
+  id: bigint
+  level: Int
+  operation_hash: String
+  tracker: String
+}
+
+"""aggregate min on columns"""
+type aggregator_event_min_fields {
+  id: bigint
+  level: Int
+  operation_hash: String
+  tracker: String
+}
+
+"""
+response of any mutation on the table "aggregator_event"
+"""
+type aggregator_event_mutation_response {
+  """number of rows affected by the mutation"""
+  affected_rows: Int!
+
+  """data from the rows affected by the mutation"""
+  returning: [aggregator_event!]!
+}
+
+"""
+on_conflict condition type for table "aggregator_event"
+"""
+input aggregator_event_on_conflict {
+  constraint: aggregator_event_constraint!
+  update_columns: [aggregator_event_update_column!]! = []
+  where: aggregator_event_bool_exp
+}
+
+"""Ordering options when selecting data from "aggregator_event"."""
+input aggregator_event_order_by {
+  id: order_by
+  level: order_by
+  operation_hash: order_by
+  tracker: order_by
+}
+
+"""primary key columns input for table: aggregator_event"""
+input aggregator_event_pk_columns_input {
+  id: bigint!
+}
+
+"""
+select columns of table "aggregator_event"
+"""
+enum aggregator_event_select_column {
+  """column name"""
+  id
+
+  """column name"""
+  level
+
+  """column name"""
+  operation_hash
+
+  """column name"""
+  tracker
+}
+
+"""
+input type for updating data in table "aggregator_event"
+"""
+input aggregator_event_set_input {
+  id: bigint
+  level: Int
+  operation_hash: String
+  tracker: String
+}
+
+"""aggregate stddev on columns"""
+type aggregator_event_stddev_fields {
+  id: Float
+  level: Float
+}
+
+"""aggregate stddev_pop on columns"""
+type aggregator_event_stddev_pop_fields {
+  id: Float
+  level: Float
+}
+
+"""aggregate stddev_samp on columns"""
+type aggregator_event_stddev_samp_fields {
+  id: Float
+  level: Float
+}
+
+"""aggregate sum on columns"""
+type aggregator_event_sum_fields {
+  id: bigint
+  level: Int
+}
+
+"""
+update columns of table "aggregator_event"
+"""
+enum aggregator_event_update_column {
+  """column name"""
+  id
+
+  """column name"""
+  level
+
+  """column name"""
+  operation_hash
+
+  """column name"""
+  tracker
+}
+
+"""aggregate var_pop on columns"""
+type aggregator_event_var_pop_fields {
+  id: Float
+  level: Float
+}
+
+"""aggregate var_samp on columns"""
+type aggregator_event_var_samp_fields {
+  id: Float
+  level: Float
+}
+
+"""aggregate variance on columns"""
+type aggregator_event_variance_fields {
+  id: Float
+  level: Float
+}
+
 scalar bigint
 
 """
@@ -2703,6 +2918,7 @@ enum legacy_orders_update_column {
 columns and relationships of "marketplace_activity"
 """
 type marketplace_activity {
+  db_updated_at: timestamptz
   id: uuid!
   internal_order_id: String!
 
@@ -2783,6 +2999,7 @@ input marketplace_activity_bool_exp {
   _and: [marketplace_activity_bool_exp!]
   _not: marketplace_activity_bool_exp
   _or: [marketplace_activity_bool_exp!]
+  db_updated_at: timestamptz_comparison_exp
   id: uuid_comparison_exp
   internal_order_id: String_comparison_exp
   make_asset_class: String_comparison_exp
@@ -2829,6 +3046,7 @@ input marketplace_activity_inc_input {
 input type for inserting data into table "marketplace_activity"
 """
 input marketplace_activity_insert_input {
+  db_updated_at: timestamptz
   id: uuid
   internal_order_id: String
 
@@ -2870,6 +3088,7 @@ input marketplace_activity_insert_input {
 
 """aggregate max on columns"""
 type marketplace_activity_max_fields {
+  db_updated_at: timestamptz
   id: uuid
   internal_order_id: String
 
@@ -2911,6 +3130,7 @@ type marketplace_activity_max_fields {
 
 """aggregate min on columns"""
 type marketplace_activity_min_fields {
+  db_updated_at: timestamptz
   id: uuid
   internal_order_id: String
 
@@ -2972,6 +3192,7 @@ input marketplace_activity_on_conflict {
 
 """Ordering options when selecting data from "marketplace_activity"."""
 input marketplace_activity_order_by {
+  db_updated_at: order_by
   id: order_by
   internal_order_id: order_by
   make_asset_class: order_by
@@ -3004,6 +3225,9 @@ input marketplace_activity_pk_columns_input {
 select columns of table "marketplace_activity"
 """
 enum marketplace_activity_select_column {
+  """column name"""
+  db_updated_at
+
   """column name"""
   id
 
@@ -3072,6 +3296,7 @@ enum marketplace_activity_select_column {
 input type for updating data in table "marketplace_activity"
 """
 input marketplace_activity_set_input {
+  db_updated_at: timestamptz
   id: uuid
   internal_order_id: String
 
@@ -3151,6 +3376,9 @@ type marketplace_activity_sum_fields {
 update columns of table "marketplace_activity"
 """
 enum marketplace_activity_update_column {
+  """column name"""
+  db_updated_at
+
   """column name"""
   id
 
@@ -4373,6 +4601,19 @@ type metadata_token_variance_fields {
 """mutation root"""
 type mutation_root {
   """
+  delete data from the table: "aggregator_event"
+  """
+  delete_aggregator_event(
+    """filter the rows which have to be deleted"""
+    where: aggregator_event_bool_exp!
+  ): aggregator_event_mutation_response
+
+  """
+  delete single row from the table: "aggregator_event"
+  """
+  delete_aggregator_event_by_pk(id: bigint!): aggregator_event
+
+  """
   delete data from the table: "collection"
   """
   delete_collection(
@@ -4683,6 +4924,28 @@ type mutation_root {
   delete single row from the table: "tzprofiles"
   """
   delete_tzprofiles_by_pk(account: String!): tzprofiles
+
+  """
+  insert data into the table: "aggregator_event"
+  """
+  insert_aggregator_event(
+    """the rows to be inserted"""
+    objects: [aggregator_event_insert_input!]!
+
+    """upsert condition"""
+    on_conflict: aggregator_event_on_conflict
+  ): aggregator_event_mutation_response
+
+  """
+  insert a single row into the table: "aggregator_event"
+  """
+  insert_aggregator_event_one(
+    """the row to be inserted"""
+    object: aggregator_event_insert_input!
+
+    """upsert condition"""
+    on_conflict: aggregator_event_on_conflict
+  ): aggregator_event
 
   """
   insert data into the table: "collection"
@@ -5205,6 +5468,32 @@ type mutation_root {
     """upsert condition"""
     on_conflict: tzprofiles_on_conflict
   ): tzprofiles
+
+  """
+  update data of the table: "aggregator_event"
+  """
+  update_aggregator_event(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: aggregator_event_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: aggregator_event_set_input
+
+    """filter the rows which have to be updated"""
+    where: aggregator_event_bool_exp!
+  ): aggregator_event_mutation_response
+
+  """
+  update single row of the table: "aggregator_event"
+  """
+  update_aggregator_event_by_pk(
+    """increments the numeric columns with given value of the filtered values"""
+    _inc: aggregator_event_inc_input
+
+    """sets the columns of the filtered rows to the given values"""
+    _set: aggregator_event_set_input
+    pk_columns: aggregator_event_pk_columns_input!
+  ): aggregator_event
 
   """
   update data of the table: "collection"
@@ -6248,9 +6537,6 @@ unique or primary key constraints on table "ownership"
 """
 enum ownership_constraint {
   """unique or primary key constraint"""
-  ownership_id
-
-  """unique or primary key constraint"""
   ownership_pkey
 }
 
@@ -6433,6 +6719,51 @@ type ownership_variance_fields {
 }
 
 type query_root {
+  """
+  fetch data from the table: "aggregator_event"
+  """
+  aggregator_event(
+    """distinct select on columns"""
+    distinct_on: [aggregator_event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [aggregator_event_order_by!]
+
+    """filter the rows returned"""
+    where: aggregator_event_bool_exp
+  ): [aggregator_event!]!
+
+  """
+  fetch aggregated fields from the table: "aggregator_event"
+  """
+  aggregator_event_aggregate(
+    """distinct select on columns"""
+    distinct_on: [aggregator_event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [aggregator_event_order_by!]
+
+    """filter the rows returned"""
+    where: aggregator_event_bool_exp
+  ): aggregator_event_aggregate!
+
+  """
+  fetch data from the table: "aggregator_event" using primary key columns
+  """
+  aggregator_event_by_pk(id: bigint!): aggregator_event
+
   """
   fetch data from the table: "collection"
   """
@@ -7882,6 +8213,51 @@ type royalties_variance_fields {
 }
 
 type subscription_root {
+  """
+  fetch data from the table: "aggregator_event"
+  """
+  aggregator_event(
+    """distinct select on columns"""
+    distinct_on: [aggregator_event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [aggregator_event_order_by!]
+
+    """filter the rows returned"""
+    where: aggregator_event_bool_exp
+  ): [aggregator_event!]!
+
+  """
+  fetch aggregated fields from the table: "aggregator_event"
+  """
+  aggregator_event_aggregate(
+    """distinct select on columns"""
+    distinct_on: [aggregator_event_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [aggregator_event_order_by!]
+
+    """filter the rows returned"""
+    where: aggregator_event_bool_exp
+  ): aggregator_event_aggregate!
+
+  """
+  fetch data from the table: "aggregator_event" using primary key columns
+  """
+  aggregator_event_by_pk(id: bigint!): aggregator_event
+
   """
   fetch data from the table: "collection"
   """
@@ -10546,6 +10922,7 @@ type token_transfer {
   amount: numeric!
   contract: String!
   date: timestamptz!
+  db_updated_at: timestamptz
   from_address: String
   hash: String
   id: bigint!
@@ -10605,6 +10982,7 @@ input token_transfer_bool_exp {
   amount: numeric_comparison_exp
   contract: String_comparison_exp
   date: timestamptz_comparison_exp
+  db_updated_at: timestamptz_comparison_exp
   from_address: String_comparison_exp
   hash: String_comparison_exp
   id: bigint_comparison_exp
@@ -10642,6 +11020,7 @@ input token_transfer_insert_input {
   amount: numeric
   contract: String
   date: timestamptz
+  db_updated_at: timestamptz
   from_address: String
   hash: String
   id: bigint
@@ -10662,6 +11041,7 @@ type token_transfer_max_fields {
   amount: numeric
   contract: String
   date: timestamptz
+  db_updated_at: timestamptz
   from_address: String
   hash: String
   id: bigint
@@ -10682,6 +11062,7 @@ type token_transfer_min_fields {
   amount: numeric
   contract: String
   date: timestamptz
+  db_updated_at: timestamptz
   from_address: String
   hash: String
   id: bigint
@@ -10722,6 +11103,7 @@ input token_transfer_order_by {
   amount: order_by
   contract: order_by
   date: order_by
+  db_updated_at: order_by
   from_address: order_by
   hash: order_by
   id: order_by
@@ -10750,6 +11132,9 @@ enum token_transfer_select_column {
 
   """column name"""
   date
+
+  """column name"""
+  db_updated_at
 
   """column name"""
   from_address
@@ -10786,6 +11171,7 @@ input token_transfer_set_input {
   amount: numeric
   contract: String
   date: timestamptz
+  db_updated_at: timestamptz
   from_address: String
   hash: String
   id: bigint
@@ -10849,6 +11235,9 @@ enum token_transfer_update_column {
 
   """column name"""
   date
+
+  """column name"""
+  db_updated_at
 
   """column name"""
   from_address
