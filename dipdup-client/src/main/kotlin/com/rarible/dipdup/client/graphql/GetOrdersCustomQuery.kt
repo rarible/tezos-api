@@ -89,7 +89,7 @@ data class GetOrdersCustomQuery(
     }
 
     fun orderBy(sort: DipDupOrderSort) = when (sort) {
-        DipDupOrderSort.LAST_UPDATE_DESC -> "{last_updated_at: desc, id: desc}"
-        else -> "{last_updated_at: asc, id: asc}"
+        DipDupOrderSort.LAST_UPDATE_DESC -> "[{last_updated_at: desc}, {id: desc}]"
+        else -> "[{last_updated_at: asc}, {id: asc}]"
     }
 }

@@ -131,7 +131,7 @@ query GetOrdersByIds($ids: [uuid!]!) {
 query GetOrdersByItem($limit: Int!) {
     marketplace_order(
         limit: $limit
-        order_by: {last_updated_at: desc, id: desc}
+        order_by: [{last_updated_at: desc}, {id: desc}]
     ) {
         ...order
     }
@@ -140,7 +140,7 @@ query GetOrdersByItem($limit: Int!) {
 query GetOrdersByMaker($limit: Int!) {
     marketplace_order(
         limit: $limit
-        order_by: {last_updated_at: desc, id: desc}
+        order_by: [{last_updated_at: desc}, {id: desc}]
     ) {
         ...order
     }

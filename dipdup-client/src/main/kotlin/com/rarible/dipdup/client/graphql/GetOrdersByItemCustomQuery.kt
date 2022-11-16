@@ -21,7 +21,7 @@ data class GetOrdersByItemCustomQuery(
         val conditions = mutableListOf<String>()
         val left = side(isBid)
         val right = side(!isBid)
-        
+
         contract.also { conditions.add("${left}_contract: {_eq: \"$it\"}") }
         tokenId.also { conditions.add("${left}_token_id: {_eq: \"$it\"}") }
         maker?.let { conditions.add("maker: {_eq: \"$it\"}") }
@@ -53,7 +53,7 @@ data class GetOrdersByItemCustomQuery(
                 marketplace_order(
                     where: {${conditions.joinToString(",\n")}}
                     limit: ${'$'}limit
-                    order_by: {last_updated_at: desc, id: desc, make_price: asc}
+                    order_by: [{last_updated_at: desc},{id: desc}, {make_price: asc}]
                 ) { __typename ...order } }
             fragment order on marketplace_order {
                 cancelled

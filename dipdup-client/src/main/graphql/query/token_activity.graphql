@@ -20,7 +20,7 @@ query GetTokenActivitiesDesc($types: [String!]!, $limit: Int!, $prevDate: timest
             {date: {_lt: $prevDate}},
             {date: {_eq: $prevDate},
                 id: {_lt: $prevId}}], type: {_in: $types}}
-        order_by: {date: desc, id: desc},
+        order_by: [{date: desc}, {id: desc}],
         limit: $limit
     ) {
         ...token_activity
@@ -33,7 +33,7 @@ query GetTokenActivitiesAsc($types: [String!]!, $limit: Int!, $prevDate: timesta
             {date: {_gt: $prevDate}},
             {date: {_eq: $prevDate},
                 id: {_gt: $prevId}}], type: {_in: $types}}
-        order_by: {date: asc, id: asc},
+        order_by: [{date: asc}, {id: asc}],
         limit: $limit
     ) {
         ...token_activity
@@ -46,7 +46,7 @@ query GetTokenActivitiesByItemDesc($types: [String!]!, $contract: String!, $toke
             {date: {_lt: $prevDate}},
             {date: {_eq: $prevDate},
                 id: {_lt: $prevId}}], type: {_in: $types}, contract: {_eq: $contract}, token_id: {_eq: $tokenId}}
-        order_by: {date: desc, id: desc},
+        order_by: [{date: desc}, {id: desc}],
         limit: $limit
     ) {
         ...token_activity
@@ -59,7 +59,7 @@ query GetTokenActivitiesByItemAsc($types: [String!]!, $contract: String!, $token
             {date: {_gt: $prevDate}},
             {date: {_eq: $prevDate},
                 id: {_gt: $prevId}}], type: {_in: $types}, contract: {_eq: $contract}, token_id: {_eq: $tokenId}}
-        order_by: {date: asc, id: asc},
+        order_by: [{date: asc}, {id: asc}],
         limit: $limit
     ) {
         ...token_activity
@@ -81,7 +81,7 @@ query GetTokenActivitiesSyncDesc($limit: Int!, $prevDate: timestamptz!, $prevId:
             {db_updated_at: {_lt: $prevDate}},
             {db_updated_at: {_eq: $prevDate}, id: {_lt: $prevId}}
         ]}
-        order_by: {db_updated_at: desc, id: desc},
+        order_by: [{db_updated_at: desc}, {id: desc}],
         limit: $limit
     ) {
         ...token_activity
@@ -94,7 +94,7 @@ query GetTokenActivitiesSyncAsc($limit: Int!, $prevDate: timestamptz!, $prevId: 
             {db_updated_at: {_gt: $prevDate}},
             {db_updated_at: {_eq: $prevDate}, id: {_gt: $prevId}}
         ]}
-        order_by: {db_updated_at: asc, id: asc},
+        order_by: [{db_updated_at: asc}, {id: asc}],
         limit: $limit
     ) {
         ...token_activity
