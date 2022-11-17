@@ -37,7 +37,8 @@ class ActivityClientFt : BaseClientFt() {
                             "take_contract": null,
                             "take_token_id": null,
                             "take_value": 1,
-                            "taker": null
+                            "taker": null,
+                            "db_updated_at": "2022-02-23T15:26:38+00:00"
                         },
                         {
                             "__typename": "marketplace_activity",
@@ -59,7 +60,8 @@ class ActivityClientFt : BaseClientFt() {
                             "take_contract": null,
                             "take_token_id": null,
                             "take_value": 1,
-                            "taker": null
+                            "taker": null,
+                            "db_updated_at": "2022-02-23T15:26:38+00:00"
                         }
                     ]
                 }
@@ -98,7 +100,8 @@ class ActivityClientFt : BaseClientFt() {
                                 "take_contract": null,
                                 "take_token_id": null,
                                 "take_value": 100,
-                                "taker": null
+                                "taker": null,
+                                "db_updated_at": "2022-02-23T15:26:38+00:00"
                               },
                               {
                                 "__typename": "marketplace_activity",
@@ -122,7 +125,8 @@ class ActivityClientFt : BaseClientFt() {
                                 "take_contract": null,
                                 "take_token_id": null,
                                 "take_value": 1000,
-                                "taker": null
+                                "taker": null,
+                                "db_updated_at": "2022-02-23T15:26:38+00:00"
                               }
                     ]
                 }
@@ -162,7 +166,8 @@ class ActivityClientFt : BaseClientFt() {
                                 "take_contract": null,
                                 "take_token_id": null,
                                 "take_value": 10,
-                                "taker": null
+                                "taker": null,
+                                "db_updated_at": "2022-02-23T15:26:38+00:00"
                               }
                     ]
                 }
@@ -200,7 +205,8 @@ class ActivityClientFt : BaseClientFt() {
                             "take_contract": null,
                             "take_token_id": null,
                             "take_value": 1,
-                            "taker": null
+                            "taker": null,
+                            "db_updated_at": "2022-02-23T15:26:38+00:00"
                         },
                         {
                             "__typename": "marketplace_activity",
@@ -222,7 +228,8 @@ class ActivityClientFt : BaseClientFt() {
                             "take_contract": null,
                             "take_token_id": null,
                             "take_value": 1,
-                            "taker": null
+                            "taker": null,
+                            "db_updated_at": "2022-02-23T15:26:38+00:00"
                         }
                     ]
                 }
@@ -258,7 +265,8 @@ class ActivityClientFt : BaseClientFt() {
                             "take_contract": null,
                             "take_token_id": null,
                             "take_value": 1,
-                            "taker": null
+                            "taker": null,
+                            "db_updated_at": "2022-02-23T15:26:38+00:00"
                         }
                     ]
                 }

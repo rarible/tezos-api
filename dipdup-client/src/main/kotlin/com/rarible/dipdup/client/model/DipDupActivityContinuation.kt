@@ -1,8 +1,10 @@
 package com.rarible.dipdup.client.model
 
+import com.rarible.dipdup.client.core.util.isValidUUID
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+import java.util.*
 
 data class DipDupActivityContinuation(
     val date: OffsetDateTime,
@@ -24,11 +26,15 @@ data class DipDupActivityContinuation(
             }
         }
 
-        fun isValid(value: String): Boolean {
+        fun isIdValidLong(value: String): Boolean {
             val raw = value.split('_')
-            val parsed = raw.last().toIntOrNull()
+            val parsed = raw.last().toLongOrNull()
             return parsed != null
         }
-    }
 
+        fun isIdValidUUID(value: String): Boolean {
+            val raw = value.split('_')
+            return isValidUUID(raw.last())
+        }
+    }
 }

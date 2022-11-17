@@ -14,9 +14,11 @@ import com.rarible.dipdup.client.core.model.DipDupActivity
 import com.rarible.dipdup.client.model.DipDupActivitiesPage
 import com.rarible.dipdup.client.model.DipDupActivityContinuation
 import com.rarible.dipdup.client.model.DipDupActivityType
+import com.rarible.dipdup.client.model.DipDupSyncSort
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
+import java.util.*
 
 class OrderActivityClient(
     client: ApolloClient
@@ -58,18 +60,27 @@ class OrderActivityClient(
     suspend fun getActivitiesSync(
         limit: Int,
         continuation: String? = null,
-        sortAsc: Boolean = false
+        sortAsc: DipDupSyncSort = DipDupSyncSort.DB_UPDATE_DESC
     ): DipDupActivitiesPage {
         val activities = if (continuation == null) {
             when (sortAsc) {
-                true -> convertOrderActivitySyncAsc(safeExecution(GetOrderActivitiesSyncAscQuery(limit)).marketplace_activity)
-                else -> convertOrderActivitySyncDesc(safeExecution(GetOrderActivitiesSyncDescQuery(limit)).marketplace_activity)
+                DipDupSyncSort.DB_UPDATE_ASC -> convertOrderActivitySyncAsc(safeExecution(GetOrderActivitiesSyncAscQuery(limit)).marketplace_activity)
+                DipDupSyncSort.DB_UPDATE_DESC -> convertOrderActivitySyncDesc(safeExecution(GetOrderActivitiesSyncDescQuery(limit)).marketplace_activity)
             }
         } else {
             val parsed = DipDupActivityContinuation.parse(continuation)!!
-            val (date, id) = parsed.date to parsed.id
+            var (date, id) = parsed.date to parsed.id
+
+            // if we got there continuation from token activity, we have to mock it
+            if (!DipDupActivityContinuation.isIdValidUUID(id)) {
+                id = when (sortAsc) {
+                    DipDupSyncSort.DB_UPDATE_ASC -> UUID.fromString ("00000000-0000-0000-0000-000000000000")
+                    DipDupSyncSort.DB_UPDATE_DESC -> UUID.fromString("ffffffff-ffff-ffff-ffff-ffffffffffff")
+                }.toString()
+            }
+
             when (sortAsc) {
-                true -> convertOrderActivityContinuationSyncAsc(
+                DipDupSyncSort.DB_UPDATE_ASC -> convertOrderActivityContinuationSyncAsc(
                     safeExecution(
                         GetOrderActivitiesSyncContinuationAscQuery(
                             limit,
@@ -78,8 +89,7 @@ class OrderActivityClient(
                         )
                     ).marketplace_activity
                 )
-
-                else -> convertOrderActivityContinuationSyncDesc(
+                DipDupSyncSort.DB_UPDATE_DESC -> convertOrderActivityContinuationSyncDesc(
                     safeExecution(
                         GetOrderActivitiesSyncContinuationDescQuery(
                             limit,

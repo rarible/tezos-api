@@ -12,6 +12,7 @@ import com.rarible.dipdup.client.core.model.DipDupActivity
 import com.rarible.dipdup.client.model.DipDupActivitiesPage
 import com.rarible.dipdup.client.model.DipDupActivityContinuation
 import com.rarible.dipdup.client.model.DipDupActivityType
+import com.rarible.dipdup.client.model.DipDupSyncSort
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -54,15 +55,25 @@ class TokenActivityClient(
         return page(activities, limit)
     }
 
-    suspend fun getActivitySync(
+    suspend fun getActivitiesSync(
         limit: Int,
         continuation: String? = null,
-        sortAsc: Boolean = false
+        sortAsc: DipDupSyncSort = DipDupSyncSort.DB_UPDATE_DESC
     ): DipDupActivitiesPage {
         var (date, id) = continuation?.let { DipDupActivityContinuation.parse(it) }
-            ?.let { Pair(it.date, it.id.toLong()) } ?: mockContinuation(sortAsc)
+            ?.let {
+                var id = it.id
+                // if we got there continuation from order activity, we have to mock it
+                if (!DipDupActivityContinuation.isIdValidLong(id)) {
+                    id = when (sortAsc) {
+                        DipDupSyncSort.DB_UPDATE_ASC -> 0L
+                        DipDupSyncSort.DB_UPDATE_DESC -> Long.MAX_VALUE
+                    }.toString()
+                }
+                Pair(it.date, id.toLong())
+            } ?: mockContinuation(sortAsc)
         val activities = when (sortAsc) {
-            false -> convertTokenActivitiesSyncDesc(
+            DipDupSyncSort.DB_UPDATE_DESC -> convertTokenActivitiesSyncDesc(
                 safeExecution(
                     GetTokenActivitiesSyncDescQuery(
                         limit,
@@ -161,6 +172,13 @@ class TokenActivityClient(
         return when (sortAsc) {
             true -> LocalDateTime.now().minusYears(1000).atOffset(ZoneOffset.UTC) to 0
             else -> LocalDateTime.now().plusYears(1000).atOffset(ZoneOffset.UTC) to Long.MAX_VALUE
+        }
+    }
+
+    private fun mockContinuation(sortAsc: DipDupSyncSort): Pair<OffsetDateTime, Long> {
+        return when (sortAsc) {
+            DipDupSyncSort.DB_UPDATE_ASC -> LocalDateTime.now().minusYears(1000).atOffset(ZoneOffset.UTC) to 0
+            DipDupSyncSort.DB_UPDATE_DESC -> LocalDateTime.now().plusYears(1000).atOffset(ZoneOffset.UTC) to Long.MAX_VALUE
         }
     }
 }
