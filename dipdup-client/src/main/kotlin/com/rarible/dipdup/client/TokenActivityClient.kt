@@ -58,21 +58,22 @@ class TokenActivityClient(
     suspend fun getActivitiesSync(
         limit: Int,
         continuation: String? = null,
-        sortAsc: DipDupSyncSort = DipDupSyncSort.DB_UPDATE_DESC
+        sort: DipDupSyncSort? = DipDupSyncSort.DB_UPDATE_DESC
     ): DipDupActivitiesPage {
+        val sortInternal = sort ?: DipDupSyncSort.DB_UPDATE_DESC
         var (date, id) = continuation?.let { DipDupActivityContinuation.parse(it) }
             ?.let {
                 var id = it.id
                 // if we got there continuation from order activity, we have to mock it
                 if (!DipDupActivityContinuation.isIdValidLong(id)) {
-                    id = when (sortAsc) {
+                    id = when (sortInternal) {
                         DipDupSyncSort.DB_UPDATE_ASC -> 0L
                         DipDupSyncSort.DB_UPDATE_DESC -> Long.MAX_VALUE
                     }.toString()
                 }
                 Pair(it.date, id.toLong())
-            } ?: mockContinuation(sortAsc)
-        val activities = when (sortAsc) {
+            } ?: mockContinuation(sortInternal)
+        val activities = when (sortInternal) {
             DipDupSyncSort.DB_UPDATE_DESC -> convertTokenActivitiesSyncDesc(
                 safeExecution(
                     GetTokenActivitiesSyncDescQuery(
