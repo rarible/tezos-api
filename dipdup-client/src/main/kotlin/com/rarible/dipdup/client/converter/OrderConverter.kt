@@ -24,6 +24,7 @@ import kotlin.math.min
 
 fun convert(source: GetOrderByIdQuery.Marketplace_order_by_pk) = DipDupOrder(
     id = source.id.toString(),
+    internalOrderId = source.internal_order_id.toString(),
     cancelled = source.cancelled,
     createdAt = OffsetDateTime.parse(source.created_at.toString()),
     endedAt = source.ended_at?.let { OffsetDateTime.parse(it.toString()) },
@@ -86,6 +87,7 @@ fun convertByMaker(source: List<GetOrdersByMakerQuery.Marketplace_order>, limit:
 
 fun convert(source: Order) = DipDupOrder(
     id = source.id.toString(),
+    internalOrderId = source.internal_order_id.toString(),
     cancelled = source.cancelled,
     createdAt = OffsetDateTime.parse(source.created_at.toString()),
     endedAt = source.ended_at?.let { OffsetDateTime.parse(it.toString()) },
