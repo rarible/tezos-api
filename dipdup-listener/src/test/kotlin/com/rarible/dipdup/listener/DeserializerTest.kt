@@ -17,6 +17,7 @@ class DeserializerTest {
         val txt = """
             {
                 "id": "386ee88f-62e3-50db-9ad2-ef5846583715",
+                "internalOrderId": "bd38425f-493d-5644-8c5c-eca6731d84a2",
                 "network": "ithacanet",
                 "fill": "0",
                 "platform": "RARIBLE_V2",
@@ -61,10 +62,11 @@ class DeserializerTest {
     }
 
     @Test
-    fun `should deserialize activity v1`() {
+    fun `should deserialize order v1`() {
         val txt = """
             {
                 "id": "bd38425f-493d-5644-8c5c-eca6731d84a2",
+                "internalOrderId": "bd38425f-493d-5644-8c5c-eca6731d84a2",
                 "network": "ithacanet",
                 "fill": "0",
                 "platform": "RARIBLE_V1",
@@ -142,6 +144,7 @@ class DeserializerTest {
         val txt = """
             {
                 "id": "f9118ebd-e36e-583c-a3c7-378d0f84a4d5",
+                "internalOrderId": "bd38425f-493d-5644-8c5c-eca6731d84a2",
                 "network": "mainnet",
                 "fill": "0",
                 "platform": "RARIBLE_V1",

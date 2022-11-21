@@ -13,8 +13,8 @@ import org.junit.jupiter.api.condition.DisabledOnOs
 import org.junit.jupiter.api.condition.OS
 
 // this test will be disabled on jenkins
-@DisabledOnOs(OS.LINUX)
-//@Disabled
+//@DisabledOnOs(OS.LINUX)
+@Disabled
 class TokenClientIt {
 
     @Nested
@@ -38,7 +38,7 @@ class TokenClientIt {
 
     val client: ApolloClient = runBlocking {
         ApolloClient.Builder()
-            .serverUrl("https://testnet-tezos-indexer.rarible.org/v1/graphql")
+            .serverUrl("https://tezos-indexer.rarible.org/v1/graphql")
 //            .addHttpInterceptor(AuthorizationInterceptor(""))
             .build()
     }
@@ -46,7 +46,7 @@ class TokenClientIt {
 
     @Test
     fun `should return token`() = runBlocking<Unit> {
-        val token = tokenClient.getTokenById("KT1RuoaCbnZpMgdRpSoLfJUzSkGz1ZSiaYwj:572")
+        val token = tokenClient.getTokenById("KT1RJ6PbjHpwc3M5rw5s2Nbmefwbuwbdxton:487011")
         assertThat(token).isNotNull
     }
 
