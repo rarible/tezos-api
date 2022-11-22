@@ -15,7 +15,7 @@ data class Part(
 
 data class DipDupOrder(
     val id: String,
-    val internalOrderId: String,
+    val internalOrderId: String?,
     val fill: BigDecimal,
     val platform: TezosPlatform,
     val cancelled: Boolean,
