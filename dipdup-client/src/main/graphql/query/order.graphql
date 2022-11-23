@@ -145,3 +145,47 @@ query GetOrdersByMaker($limit: Int!) {
         ...order
     }
 }
+
+query GetOrdersSyncDesc($limit: Int!) {
+    marketplace_order(
+        order_by: [{last_updated_at: desc}, {id: desc}]
+        limit: $limit
+    ) {
+        ...order
+    }
+}
+
+query GetOrdersSyncContinuationDesc($limit: Int!, $prevDate: timestamptz!, $prevId: uuid!) {
+    marketplace_order(
+        where: {_or: [
+            {last_updated_at: {_lt: $prevDate}},
+            {last_updated_at: {_eq: $prevDate}, id: {_lt: $prevId}}
+        ]}
+        order_by: [{last_updated_at: desc}, {id: desc}],
+        limit: $limit
+    ) {
+        ...order
+    }
+}
+
+query GetOrdersSyncAsc($limit: Int!) {
+    marketplace_order(
+        order_by: [{last_updated_at: asc}, {id: asc}]
+        limit: $limit
+    ) {
+        ...order
+    }
+}
+
+query GetOrdersSyncContinuationAsc($limit: Int!, $prevDate: timestamptz!, $prevId: uuid!) {
+    marketplace_order(
+        where: {_or: [
+            {last_updated_at: {_gt: $prevDate}},
+            {last_updated_at: {_eq: $prevDate}, id: {_gt: $prevId}}
+        ]}
+        order_by: [{last_updated_at: asc}, {id: asc}],
+        limit: $limit
+    ) {
+        ...order
+    }
+}

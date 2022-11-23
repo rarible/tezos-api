@@ -7,6 +7,10 @@ import com.rarible.dipdup.client.GetOrdersByMakerQuery
 import com.rarible.dipdup.client.GetOrdersMakeContractsByTakeCollectionQuery
 import com.rarible.dipdup.client.GetOrdersMakeContractsByTakeItemQuery
 import com.rarible.dipdup.client.GetOrdersQuery
+import com.rarible.dipdup.client.GetOrdersSyncAscQuery
+import com.rarible.dipdup.client.GetOrdersSyncContinuationAscQuery
+import com.rarible.dipdup.client.GetOrdersSyncContinuationDescQuery
+import com.rarible.dipdup.client.GetOrdersSyncDescQuery
 import com.rarible.dipdup.client.GetOrdersTakeContractsByMakeCollectionQuery
 import com.rarible.dipdup.client.GetOrdersTakeContractsByMakeItemQuery
 import com.rarible.dipdup.client.core.model.Asset
@@ -55,6 +59,22 @@ fun convertAll(source: List<GetOrdersQuery.Marketplace_order>, limit: Int): DipD
         source.subList(0, min(source.size, limit)).map { convert(it.order) },
         continuation = continuation
     )
+}
+
+fun convertOrdersSyncDesc(source: List<GetOrdersSyncDescQuery.Marketplace_order>): List<DipDupOrder> {
+    return source.map { convert(it.order) }
+}
+
+fun convertOrdersContinuationSyncDesc(source: List<GetOrdersSyncContinuationDescQuery.Marketplace_order>): List<DipDupOrder> {
+    return source.map { convert(it.order) }
+}
+
+fun convertOrdersSyncAsc(source: List<GetOrdersSyncAscQuery.Marketplace_order>): List<DipDupOrder> {
+    return source.map { convert(it.order) }
+}
+
+fun convertOrdersContinuationSyncAsc(source: List<GetOrdersSyncContinuationAscQuery.Marketplace_order>): List<DipDupOrder> {
+    return source.map { convert(it.order) }
 }
 
 fun convertByIds(source: List<GetOrdersByIdsQuery.Marketplace_order>): List<DipDupOrder> {
