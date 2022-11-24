@@ -38,6 +38,7 @@ import java.time.OffsetDateTime
 fun convert(source: Order_activity) = orderActivity(
     type = source.type,
     id = source.id.toString(),
+    orderId = source.order_id.toString(),
     operationCounter = source.operation_counter,
     reverted = false,
     date = OffsetDateTime.parse(source.operation_timestamp.toString()),
@@ -138,6 +139,7 @@ fun convertTokensActivitiesByIds(source: List<GetTokenActivitiesByIdsQuery.Token
 }
 
 fun orderActivity(
+    orderId: String,
     type: String, id: String, operationCounter: Int,
     date: OffsetDateTime,
     dbUpdatedAt: OffsetDateTime,
@@ -152,6 +154,7 @@ fun orderActivity(
     return when (type) {
         DipDupActivity.LIST -> DipDupOrderListActivity(
             id = id,
+            orderId = orderId,
             operationCounter = operationCounter,
             date = date,
             dbUpdatedAt = dbUpdatedAt,
@@ -164,6 +167,7 @@ fun orderActivity(
         )
         DipDupActivity.SELL -> DipDupOrderSellActivity(
             id = id,
+            orderId = orderId,
             operationCounter = operationCounter,
             date = date,
             dbUpdatedAt = dbUpdatedAt,
@@ -177,6 +181,7 @@ fun orderActivity(
         )
         DipDupActivity.CANCEL_LIST -> DipDupOrderCancelActivity(
             id = id,
+            orderId = orderId,
             operationCounter = operationCounter,
             date = date,
             dbUpdatedAt = dbUpdatedAt,
@@ -189,6 +194,7 @@ fun orderActivity(
         )
         DipDupActivity.MAKE_BID -> DipDupMakeBidActivity(
             id = id,
+            orderId = orderId,
             date = date,
             dbUpdatedAt = dbUpdatedAt,
             reverted = reverted,
@@ -201,6 +207,7 @@ fun orderActivity(
         )
         DipDupActivity.GET_BID -> DipDupGetBidActivity(
             id = id,
+            orderId = orderId,
             date = date,
             dbUpdatedAt = dbUpdatedAt,
             reverted = reverted,
@@ -214,6 +221,7 @@ fun orderActivity(
         )
         DipDupActivity.CANCEL_BID -> DipDupCancelBidActivity(
             id = id,
+            orderId = orderId,
             date = date,
             dbUpdatedAt = dbUpdatedAt,
             reverted = reverted,

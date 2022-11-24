@@ -1,6 +1,7 @@
 fragment order_activity on marketplace_activity {
     type
     id
+    order_id
     internal_order_id
     make_asset_class
     make_contract
