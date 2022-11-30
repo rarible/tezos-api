@@ -1,5 +1,6 @@
 package com.rarible.dipdup.client.converter
 
+import com.rarible.dipdup.client.GetLegacyDataQuery
 import com.rarible.dipdup.client.GetOrderByIdQuery
 import com.rarible.dipdup.client.GetOrdersByIdsQuery
 import com.rarible.dipdup.client.GetOrdersByItemQuery
@@ -46,7 +47,8 @@ fun convert(source: GetOrderByIdQuery.Marketplace_order_by_pk) = DipDupOrder(
     status = OrderStatus.valueOf(source.status),
     salt = BigInteger(source.salt.toString()),
     originFees = getParts(source.origin_fees),
-    payouts = getParts(source.payouts)
+    payouts = getParts(source.payouts),
+    legacyData = null
 )
 
 fun convertAll(source: List<GetOrdersQuery.Marketplace_order>, limit: Int): DipDupOrdersPage {
@@ -81,14 +83,18 @@ fun convertByIds(source: List<GetOrdersByIdsQuery.Marketplace_order>): List<DipD
     return source.map { convert(it.order) }
 }
 
-fun convertByItem(source: List<GetOrdersByItemQuery.Marketplace_order>, limit: Int): DipDupOrdersPage {
+fun convertByItem(source: List<GetOrdersByItemQuery.Marketplace_order>): List<DipDupOrder> {
+    return source.map { convert(it.order) }
+}
+
+fun toPage(source: List<DipDupOrder>, limit: Int): DipDupOrdersPage {
     val continuation = when {
-        source.size == limit -> convert(source[limit - 1].order)
+        source.size == limit -> source[limit - 1]
             .let { DipDupContinuation(it.lastUpdatedAt, UUID.fromString(it.id)) }.toString()
         else -> null
     }
     return DipDupOrdersPage(
-        source.subList(0, min(source.size, limit)).map { convert(it.order) },
+        source.subList(0, min(source.size, limit)),
         continuation = continuation
     )
 }
@@ -125,7 +131,8 @@ fun convert(source: Order) = DipDupOrder(
     status = OrderStatus.valueOf(source.status),
     salt = BigInteger(source.salt.toString()),
     originFees = getParts(source.origin_fees),
-    payouts = getParts(source.payouts)
+    payouts = getParts(source.payouts),
+    legacyData = null
 )
 
 fun convert(source: com.rarible.dipdup.client.fragment.TakeType) =
@@ -154,4 +161,8 @@ fun convert(source: GetOrdersMakeContractsByTakeItemQuery.Data): List<Asset.Asse
 
 fun convert(source: GetOrdersMakeContractsByTakeCollectionQuery.Data): List<Asset.AssetType> = source.marketplace_order.map {
     convert(it.makeType)
+}
+
+fun convert(source: GetLegacyDataQuery.Data): Map<String, Any> {
+    return source.legacy_orders.map { it.id.toString() to it.data }.toMap()
 }

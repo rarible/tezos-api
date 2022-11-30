@@ -10,6 +10,7 @@ import com.rarible.dipdup.client.converter.convertOrdersContinuationSyncAsc
 import com.rarible.dipdup.client.converter.convertOrdersContinuationSyncDesc
 import com.rarible.dipdup.client.converter.convertOrdersSyncAsc
 import com.rarible.dipdup.client.converter.convertOrdersSyncDesc
+import com.rarible.dipdup.client.converter.toPage
 import com.rarible.dipdup.client.core.model.Asset
 import com.rarible.dipdup.client.core.model.DipDupOrder
 import com.rarible.dipdup.client.core.model.OrderStatus
@@ -32,7 +33,8 @@ class OrderClient(
         val request = GetOrderByIdQuery(id)
         val response = safeExecution(request)
         checkNotNull(response.marketplace_order_by_pk) { throw DipDupNotFound("${request}") }
-        return convert(response.marketplace_order_by_pk)
+        val order = convert(response.marketplace_order_by_pk)
+        return wrapWithLegacy(order)
     }
 
     suspend fun getOrdersAll(
@@ -96,7 +98,47 @@ class OrderClient(
 
     suspend fun getOrdersByIds(ids: List<String>): List<DipDupOrder> {
         val response = safeExecution(GetOrdersByIdsQuery(ids))
-        return convertByIds(response.marketplace_order)
+        val orders = convertByIds(response.marketplace_order)
+        return wrapWithLegacy(orders)
+    }
+
+    suspend fun wrapWithLegacy(orders: List<DipDupOrder>): List<DipDupOrder> {
+        val data = if (orders.isNotEmpty()) {
+            val legacyIds = orders
+                .filter { it.platform == TezosPlatform.RARIBLE_V1 }
+                .map { it.id }
+            if (legacyIds.isNotEmpty()) {
+                getLegacyData(legacyIds)
+            } else {
+                emptyMap()
+            }
+        } else {
+            emptyMap()
+        }
+        return if (data.isNotEmpty()) {
+            orders.map {
+                if (data.containsKey(it.id)) {
+                    it.copy(legacyData = data[it.id])
+                } else {
+                    it
+                }
+            }
+        } else {
+            orders
+        }
+    }
+
+    suspend fun wrapWithLegacy(order: DipDupOrder): DipDupOrder {
+        return if (order.platform == TezosPlatform.RARIBLE_V1) {
+            val data = getLegacyData(listOf(order.id))
+            if (data.containsKey(order.id)) {
+                order.copy(legacyData = data[order.id])
+            } else {
+                order
+            }
+        } else {
+            order
+        }
     }
 
     suspend fun getOrdersByItem(
@@ -125,7 +167,8 @@ class OrderClient(
                 isBid = isBid
             )
         )
-        return convertByItem(response.marketplace_order, size)
+        val items = convertByItem(response.marketplace_order)
+        return toPage(wrapWithLegacy(items), size)
     }
 
     suspend fun getOrdersByMakers(
@@ -178,6 +221,11 @@ class OrderClient(
         contract: String
     ): List<Asset.AssetType> {
         val response = safeExecution(GetOrdersMakeContractsByTakeCollectionQuery(contract))
+        return convert(response)
+    }
+
+    suspend fun getLegacyData(ids: List<String>): Map<String, Any> {
+        val response = safeExecution(GetLegacyDataQuery(ids))
         return convert(response)
     }
 

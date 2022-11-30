@@ -158,5 +158,15 @@ class OrderClientIt {
             } while (continuation != null)
             println("Count: ${count}")
         }
+
+        @Test
+        fun `should return legacy data`() = runBlocking<Unit> {
+            val page = orderClient.getOrdersByIds(listOf("0c09883b-ecd1-5c3b-a56c-5da346dd111a"))
+            assertThat(page).hasSize(1)
+            assertThat(page.first().legacyData).isNotNull
+
+            val order = orderClient.getOrderById("0c09883b-ecd1-5c3b-a56c-5da346dd111a")
+            assertThat(order.legacyData).isNotNull
+        }
     }
 }

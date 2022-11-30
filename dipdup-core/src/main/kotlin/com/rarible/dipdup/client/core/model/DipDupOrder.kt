@@ -33,5 +33,6 @@ data class DipDupOrder(
     val takePrice: BigDecimal?,
     val salt: BigInteger,
     val originFees: List<Part>,
-    val payouts: List<Part>
+    val payouts: List<Part>,
+    val legacyData: Any?
 )
