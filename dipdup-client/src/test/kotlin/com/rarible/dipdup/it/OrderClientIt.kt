@@ -39,6 +39,7 @@ class OrderClientIt {
     }
 
     @Nested
+    @Disabled
     class Dev {
         val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://dev-tezos-indexer.rarible.org/v1/graphql").build() }
         val orderClient = OrderClient(client)
