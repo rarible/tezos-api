@@ -1,11 +1,8 @@
 package com.rarible.dipdup.client
 
-import com.apollographql.apollo3.ApolloClient
-import com.rarible.dipdup.client.core.model.DipDupCollection
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.time.OffsetDateTime
 
 class CollectionClientFt : BaseClientFt() {
 
@@ -35,16 +32,7 @@ class CollectionClientFt : BaseClientFt() {
         )
 
         val collection = collectionClient.getCollectionById("KT1Pz65ssbPF7Zv9Dh7ggqUkgAYNSuJ9iia7")
-        assertThat(collection).isEqualTo(
-            DipDupCollection(
-                id = "KT1Pz65ssbPF7Zv9Dh7ggqUkgAYNSuJ9iia7",
-                owner = "tz2WFEmgnWqFY6FWBMFgrS4MW4c3pJRS8nzU",
-                name = "Test Taquito FA2 token Factory",
-                symbol = null,
-                standard = null,
-                minters = emptyList()
-            )
-        )
+        assertThat(collection).isNotNull
     }
 
     @Test
