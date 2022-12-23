@@ -31,7 +31,8 @@ object CollectionConverter {
                 name = meta?.name ?: "Unnamed Collection",
                 minters = listOf(),
                 standard = null,
-                symbol = null
+                symbol = null,
+                meta = meta
             )
         } catch (ex: Exception) {
             logger.warn("Wrong meta format for collection", ex)
@@ -46,20 +47,22 @@ object CollectionConverter {
         }
     }
 
-    fun convertMeta(data: String?): Meta? {
+    private fun convertMeta(data: String?): DipDupCollection.Meta? {
         return if (data != null) {
             val map: Map<String, Object> = MetaUtils.mapper().readValue(sanitizeJson(data))
-            Meta(
-                map["name"]?.let { it.toString() },
-                symbol = null
+            DipDupCollection.Meta(
+                name = map["name"]?.let { it.toString() },
+                description = map["description"]?.let { it.toString() },
+                homepage = map["homepage"]?.let { it.toString() },
+                symbol = null,
+                content = map["imageUri"]?.let { listOf(DipDupCollection.Content(
+                    uri = it.toString(),
+                    representation = DipDupCollection.Representation.ORIGINAL
+                )) } ?: emptyList()
             )
-        } else Meta(null ,null)
+        } else null
     }
 
-    fun sanitizeJson(data: String) = data.replace("False", "false").replace("True", "true")
+    private fun sanitizeJson(data: String) = data.replace("False", "false").replace("True", "true")
 
-    data class Meta(
-        val name: String?,
-        val symbol: String?
-    )
 }
