@@ -17,6 +17,7 @@ import com.rarible.dipdup.client.core.model.OrderStatus
 import com.rarible.dipdup.client.core.model.TezosPlatform
 import com.rarible.dipdup.client.exception.DipDupNotFound
 import com.rarible.dipdup.client.graphql.GetOrderByMakerCustomQuery
+import com.rarible.dipdup.client.graphql.GetOrdersByCollectionCustomQuery
 import com.rarible.dipdup.client.graphql.GetOrdersByItemCustomQuery
 import com.rarible.dipdup.client.graphql.GetOrdersCustomQuery
 import com.rarible.dipdup.client.model.DipDupActivityContinuation
@@ -159,6 +160,30 @@ class OrderClient(
                 tokenId = tokenId,
                 maker = maker,
                 currencyId = currencyId,
+                statuses = statuses.map { it.name },
+                platforms = platforms,
+                limit = size,
+                prevId = parsedContinuation?.let { it.id.toString() },
+                prevDate = parsedContinuation?.let { it.date.toString() },
+                isBid = isBid
+            )
+        )
+        val items = convertByItem(response.marketplace_order)
+        return toPage(wrapWithLegacy(items), size)
+    }
+
+    suspend fun getOrdersByCollection(
+        contract: String,
+        statuses: List<OrderStatus>,
+        platforms: List<TezosPlatform> = listOf(TezosPlatform.RARIBLE_V1, TezosPlatform.RARIBLE_V2),
+        isBid: Boolean = false,
+        size: Int = DEFAULT_PAGE,
+        continuation: String?
+    ): DipDupOrdersPage {
+        val parsedContinuation = DipDupContinuation.parse(continuation)
+        val response = safeExecution(
+            GetOrdersByCollectionCustomQuery(
+                contract = contract,
                 statuses = statuses.map { it.name },
                 platforms = platforms,
                 limit = size,

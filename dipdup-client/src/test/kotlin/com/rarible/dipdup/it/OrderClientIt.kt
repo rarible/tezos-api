@@ -3,6 +3,7 @@ package com.rarible.dipdup.it
 import com.apollographql.apollo3.ApolloClient
 import com.rarible.dipdup.client.OrderClient
 import com.rarible.dipdup.client.core.model.Asset
+import com.rarible.dipdup.client.core.model.OrderStatus
 import com.rarible.dipdup.client.core.model.TezosPlatform
 import com.rarible.dipdup.client.model.DipDupContinuation
 import com.rarible.dipdup.client.model.DipDupOrderSort
@@ -74,6 +75,32 @@ class OrderClientIt {
         fun `should return orders by maker from testnet`() = runBlocking<Unit> {
             val page = orderClient.getOrdersByMakers(listOf("tz1Mxsc66En4HsVHr6rppYZW82ZpLhpupToC"), listOf(),
                 listOf(TezosPlatform.OBJKT_V1, TezosPlatform.OBJKT_V2), false, 1, null)
+            assertThat(page.orders).hasSize(1)
+        }
+
+        @Test
+        fun `should return sell orders`() = runBlocking<Unit> {
+            val platforms = TezosPlatform.values().filter { it != TezosPlatform.RARIBLE_V1 }
+            platforms.forEach { platform ->
+                val page = orderClient.getOrdersAll(
+                    platforms = listOf(platform),
+                    statuses = listOf(OrderStatus.ACTIVE),
+                    size = 1,
+                    continuation = null
+                )
+                assertThat(page.orders).hasSize(1)
+            }
+        }
+
+        @Test
+        fun `should return sell order by collection`() = runBlocking<Unit> {
+            val page = orderClient.getOrdersByCollection(
+                contract = "KT1P2VyFd61A3ukizJoX37nFF9fqZnihv7Lw",
+                platforms = listOf(TezosPlatform.HEN),
+                statuses = listOf(OrderStatus.ACTIVE),
+                size = 1,
+                continuation = null
+            )
             assertThat(page.orders).hasSize(1)
         }
     }
