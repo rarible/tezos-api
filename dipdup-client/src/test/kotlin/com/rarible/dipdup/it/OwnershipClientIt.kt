@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test
 class OwnershipClientIt {
 
     @Nested
+    @Disabled
     class Prod {
         val client: ApolloClient =
             runBlocking { ApolloClient.Builder().serverUrl("https://tezos-indexer.rarible.org/v1/graphql").build() }
