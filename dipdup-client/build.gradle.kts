@@ -8,11 +8,15 @@ plugins {
 dependencies {
     api("com.apollographql.apollo3:apollo-runtime:$apolloVersion")
     api(project(":dipdup-core"))
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.1")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+
     testImplementation("com.apollographql.apollo3:apollo-mockserver:$apolloVersion")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.1")
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
+
+    testImplementation("com.fasterxml.jackson.core:jackson-databind:2.12.+")
+    testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.+")
 }
 
 apollo {

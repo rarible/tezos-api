@@ -14,10 +14,13 @@ import com.rarible.dipdup.client.exception.DipDupNotFound
 import com.rarible.dipdup.client.model.Page
 import com.rarible.dipdup.client.type.Ownership_order_by
 import com.rarible.dipdup.client.type.order_by
+import org.slf4j.LoggerFactory
 
 class OwnershipClient(
     client: ApolloClient
 ) : BaseClient(client) {
+
+    val logger = LoggerFactory.getLogger(javaClass)
 
     suspend fun getOwnershipById(id: String): DipDupOwnership {
         return getOwnershipsByIds(listOf(id)).firstOrNull() ?: throw DipDupNotFound(id)
@@ -27,7 +30,13 @@ class OwnershipClient(
         val uuids = ids.map(::toUuid5)
         val request = GetOwnershipsByIdsQuery(uuids)
         val response = safeExecution(request)
-        return convertByIds(response.ownership)
+        val ownerships = convertByIds(response.ownership)
+        if (ids.size > ownerships.size) {
+            val found = ownerships.map(DipDupOwnership::id).toSet()
+            val missed = ids.toSet().minus(found)
+            logger.warn("Ownerships with id {} are missed", missed)
+        }
+        return ownerships
     }
 
     suspend fun getOwnershipsAll(
