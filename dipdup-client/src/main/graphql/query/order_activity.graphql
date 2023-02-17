@@ -50,10 +50,12 @@ query GetOrderActivitiesAsc($types: [String!]!, $limit: Int!, $prevDate: timesta
 
 query GetOrderActivitiesByItemDesc($types: [String!]!, $contract: String!, $tokenId: String!, $limit: Int!, $prevDate: timestamptz!, $prevId: Int!) {
     marketplace_activity(
-        where: {_or: [
-            {operation_timestamp: {_lt: $prevDate}},
-            {operation_timestamp: {_eq: $prevDate},
-                operation_counter: {_lt: $prevId}}], type: {_in: $types}, make_contract: {_eq: $contract}, make_token_id: {_eq: $tokenId}}
+        where: {
+            make_contract: {_eq: $contract}, make_token_id: {_eq: $tokenId}, type: {_in: $types},
+            _or: [
+                {operation_timestamp: {_lt: $prevDate}},
+                {operation_timestamp: {_eq: $prevDate}, operation_counter: {_lt: $prevId}}
+            ]}
         order_by: [{operation_timestamp: desc}, {operation_counter: desc}],
         limit: $limit
     ) {
@@ -63,10 +65,12 @@ query GetOrderActivitiesByItemDesc($types: [String!]!, $contract: String!, $toke
 
 query GetOrderActivitiesByItemAsc($types: [String!]!, $contract: String!, $tokenId: String!, $limit: Int!, $prevDate: timestamptz!, $prevId: Int!) {
     marketplace_activity(
-        where: {_or: [
-            {operation_timestamp: {_gt: $prevDate}},
-            {operation_timestamp: {_eq: $prevDate},
-                operation_counter: {_gt: $prevId}}], type: {_in: $types}, make_contract: {_eq: $contract}, make_token_id: {_eq: $tokenId}}
+        where: {
+            make_contract: {_eq: $contract}, make_token_id: {_eq: $tokenId}, type: {_in: $types},
+            _or: [
+                {operation_timestamp: {_gt: $prevDate}},
+                {operation_timestamp: {_eq: $prevDate}, operation_counter: {_gt: $prevId}}
+            ]}
         order_by: [{operation_timestamp: asc}, {operation_counter: asc}],
         limit: $limit
     ) {
