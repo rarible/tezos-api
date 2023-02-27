@@ -7,6 +7,7 @@ import com.rarible.dipdup.client.GetCollectionsAllQuery
 import com.rarible.dipdup.client.GetCollectionsByIdsQuery
 import com.rarible.dipdup.client.core.model.DipDupCollection
 import com.rarible.dipdup.client.core.util.MetaUtils
+import com.rarible.dipdup.client.fragment.Collection
 import org.slf4j.LoggerFactory
 
 object CollectionConverter {
@@ -22,14 +23,15 @@ object CollectionConverter {
     fun convertAllContinuationDesc(source: List<GetCollectionsAllContinuationDescQuery.Collection_with_metum>) =
         source.map { convert(it.collection) }
 
-    fun convert(source: com.rarible.dipdup.client.fragment.Collection): DipDupCollection {
+    fun convert(source: Collection): DipDupCollection {
+        val minters = minters(source)
         return try {
             val meta = convertMeta(source.metadata)
             DipDupCollection(
                 id = source.id,
                 owner = source.owner,
                 name = meta?.name ?: "Unnamed Collection",
-                minters = listOf(),
+                minters = minters,
                 standard = null,
                 symbol = null,
                 meta = meta
@@ -40,10 +42,18 @@ object CollectionConverter {
                 id = source.id,
                 owner = source.owner,
                 name = "Unnamed Collection",
-                minters = listOf(),
+                minters = minters,
                 standard = null,
                 symbol = null
             )
+        }
+    }
+
+    private fun minters(source: Collection): List<String> {
+        return try {
+            source.minters as List<String>
+        } catch (ex: Exception) {
+            emptyList()
         }
     }
 

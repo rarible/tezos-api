@@ -1,6 +1,7 @@
 fragment collection on collection_with_meta {
     owner
     metadata
+    minters
     id
     db_updated_at
 }
