@@ -35,7 +35,7 @@ class CollectionClient(
         val collections = if (continuation == null) {
             val request = GetCollectionsAllQuery(
                 limit, listOf(
-                    orderBy(id = null, updated = sort(sortAsc)),
+//                    orderBy(id = null, updated = sort(sortAsc)),
                     orderBy(id = sort(sortAsc), updated = null)
                 )
             )
