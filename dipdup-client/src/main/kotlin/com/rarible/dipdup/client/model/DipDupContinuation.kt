@@ -1,11 +1,11 @@
 package com.rarible.dipdup.client.model
 
 import com.rarible.dipdup.client.core.util.isValidUUID
+import com.rarible.dipdup.client.exception.WrongArgument
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.util.UUID
-import java.util.regex.Pattern
 
 data class DipDupContinuation(
     val date: OffsetDateTime,
@@ -25,7 +25,9 @@ data class DipDupContinuation(
                     id = idStr?.let {
                         if (isValidUUID(it))
                             UUID.fromString(it)
-                        else null
+                        else {
+                            throw WrongArgument("Illegal continuation: $value")
+                        }
                     }
                 )
             }

@@ -52,7 +52,7 @@ class OrderClient(
             platforms = platforms,
             limit = size,
             sort = sort ?: DipDupOrderSort.LAST_UPDATE_DESC,
-            prevId = parsedContinuation?.let { it.id.toString() },
+            prevId = parsedContinuation?.let { it.id },
             prevDate = parsedContinuation?.let { it.date.toString() },
             isBid = isBid
         ))

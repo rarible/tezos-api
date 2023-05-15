@@ -3,13 +3,14 @@ package com.rarible.dipdup.client.graphql
 import com.rarible.dipdup.client.GetOrdersQuery
 import com.rarible.dipdup.client.core.model.TezosPlatform
 import com.rarible.dipdup.client.model.DipDupOrderSort
+import java.util.*
 
 data class GetOrdersCustomQuery(
     val statuses: List<String> = emptyList(),
     val platforms: List<TezosPlatform>,
     val limit: Int,
     val sort: DipDupOrderSort,
-    val prevId: String? = null,
+    val prevId: UUID? = null,
     val prevDate: String? = null,
     val isBid: Boolean? = null
 ) : GetOrdersQuery(limit) {
