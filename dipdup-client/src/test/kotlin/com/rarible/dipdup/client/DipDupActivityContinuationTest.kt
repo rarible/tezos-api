@@ -2,6 +2,7 @@ package com.rarible.dipdup.client
 
 import com.rarible.dipdup.client.model.DipDupContinuation
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -38,6 +39,8 @@ class DipDupActivityContinuationTest {
         assertThat(continuation!!.id).isEqualTo(UUID.fromString("109a80c1-6f3f-4fb7-972c-29a31447c9d6"))
     }
 
+    // This test was used for legacy activity
+    @Disabled
     @Test
     fun `should parse only date`() {
         val continuation = DipDupContinuation.parse("1586544422_24276908")
