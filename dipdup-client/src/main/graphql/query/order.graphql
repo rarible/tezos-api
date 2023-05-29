@@ -3,6 +3,7 @@ fragment order on marketplace_order {
     cancelled
     created_at
     fill
+    make_stock
     ended_at
     end_at
     id
@@ -93,6 +94,7 @@ query GetOrderById($id: uuid!) {
         ended_at
         end_at
         fill
+        make_stock
         id
         internal_order_id
         last_updated_at

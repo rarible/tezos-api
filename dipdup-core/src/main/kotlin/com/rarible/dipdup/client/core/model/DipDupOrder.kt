@@ -17,6 +17,7 @@ data class DipDupOrder(
     val id: String,
     val internalOrderId: String?,
     val fill: BigDecimal,
+    val makeStock: BigDecimal?,
     val platform: TezosPlatform,
     val cancelled: Boolean,
     val status: OrderStatus,

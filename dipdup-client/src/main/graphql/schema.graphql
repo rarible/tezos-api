@@ -103,6 +103,7 @@ type aggregator_event {
   id: bigint!
   level: Int!
   operation_hash: String!
+  operation_timestamp: timestamptz
   tracker: String!
 }
 
@@ -147,6 +148,7 @@ input aggregator_event_bool_exp {
   id: bigint_comparison_exp
   level: Int_comparison_exp
   operation_hash: String_comparison_exp
+  operation_timestamp: timestamptz_comparison_exp
   tracker: String_comparison_exp
 }
 
@@ -154,7 +156,9 @@ input aggregator_event_bool_exp {
 unique or primary key constraints on table "aggregator_event"
 """
 enum aggregator_event_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "id"
+  """
   aggregator_event_pkey
 }
 
@@ -173,6 +177,7 @@ input aggregator_event_insert_input {
   id: bigint
   level: Int
   operation_hash: String
+  operation_timestamp: timestamptz
   tracker: String
 }
 
@@ -181,6 +186,7 @@ type aggregator_event_max_fields {
   id: bigint
   level: Int
   operation_hash: String
+  operation_timestamp: timestamptz
   tracker: String
 }
 
@@ -189,6 +195,7 @@ type aggregator_event_min_fields {
   id: bigint
   level: Int
   operation_hash: String
+  operation_timestamp: timestamptz
   tracker: String
 }
 
@@ -217,6 +224,7 @@ input aggregator_event_order_by {
   id: order_by
   level: order_by
   operation_hash: order_by
+  operation_timestamp: order_by
   tracker: order_by
 }
 
@@ -239,6 +247,9 @@ enum aggregator_event_select_column {
   operation_hash
 
   """column name"""
+  operation_timestamp
+
+  """column name"""
   tracker
 }
 
@@ -249,6 +260,7 @@ input aggregator_event_set_input {
   id: bigint
   level: Int
   operation_hash: String
+  operation_timestamp: timestamptz
   tracker: String
 }
 
@@ -268,6 +280,26 @@ type aggregator_event_stddev_pop_fields {
 type aggregator_event_stddev_samp_fields {
   id: Float
   level: Float
+}
+
+"""
+Streaming cursor of the table "aggregator_event"
+"""
+input aggregator_event_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: aggregator_event_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input aggregator_event_stream_cursor_value_input {
+  id: bigint
+  level: Int
+  operation_hash: String
+  operation_timestamp: timestamptz
+  tracker: String
 }
 
 """aggregate sum on columns"""
@@ -290,7 +322,21 @@ enum aggregator_event_update_column {
   operation_hash
 
   """column name"""
+  operation_timestamp
+
+  """column name"""
   tracker
+}
+
+input aggregator_event_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: aggregator_event_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: aggregator_event_set_input
+
+  """filter the rows which have to be updated"""
+  where: aggregator_event_bool_exp!
 }
 
 """aggregate var_pop on columns"""
@@ -384,7 +430,9 @@ input collection_bool_exp {
 unique or primary key constraints on table "collection"
 """
 enum collection_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "id"
+  """
   collection_pkey
 }
 
@@ -515,6 +563,27 @@ input collection_set_input {
 }
 
 """
+Streaming cursor of the table "collection"
+"""
+input collection_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: collection_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input collection_stream_cursor_value_input {
+  db_updated_at: timestamptz
+  id: String
+  minters: jsonb
+  owner: String
+  standard: String
+  symbol: String
+}
+
+"""
 update columns of table "collection"
 """
 enum collection_update_column {
@@ -535,6 +604,35 @@ enum collection_update_column {
 
   """column name"""
   symbol
+}
+
+input collection_updates {
+  """append existing jsonb value of filtered columns with new jsonb value"""
+  _append: collection_append_input
+
+  """
+  delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+  """
+  _delete_at_path: collection_delete_at_path_input
+
+  """
+  delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+  """
+  _delete_elem: collection_delete_elem_input
+
+  """
+  delete key/value pair or string element. key/value pairs are matched based on their key value
+  """
+  _delete_key: collection_delete_key_input
+
+  """prepend existing jsonb value of filtered columns with new jsonb value"""
+  _prepend: collection_prepend_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: collection_set_input
+
+  """filter the rows which have to be updated"""
+  where: collection_bool_exp!
 }
 
 """
@@ -644,6 +742,37 @@ enum collection_with_meta_select_column {
 }
 
 """
+Streaming cursor of the table "collection_with_meta"
+"""
+input collection_with_meta_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: collection_with_meta_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input collection_with_meta_stream_cursor_value_input {
+  db_updated_at: timestamptz
+  id: String
+  metadata: String
+  minters: jsonb
+  owner: String
+  standard: String
+  symbol: String
+}
+
+"""ordering argument of a cursor"""
+enum cursor_ordering {
+  """ascending ordering of the cursor"""
+  ASC
+
+  """descending ordering of the cursor"""
+  DESC
+}
+
+"""
 columns and relationships of "dipdup_contract"
 """
 type dipdup_contract {
@@ -689,7 +818,9 @@ input dipdup_contract_bool_exp {
 unique or primary key constraints on table "dipdup_contract"
 """
 enum dipdup_contract_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "name"
+  """
   dipdup_contract_pkey
 }
 
@@ -785,10 +916,14 @@ input dipdup_contract_metadata_bool_exp {
 unique or primary key constraints on table "dipdup_contract_metadata"
 """
 enum dipdup_contract_metadata_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "id"
+  """
   dipdup_contract_metadata_pkey
 
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "network", "contract"
+  """
   uid_dipdup_cont_network_1ae32f
 }
 
@@ -952,6 +1087,28 @@ type dipdup_contract_metadata_stddev_samp_fields {
   update_id: Float
 }
 
+"""
+Streaming cursor of the table "dipdup_contract_metadata"
+"""
+input dipdup_contract_metadata_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: dipdup_contract_metadata_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input dipdup_contract_metadata_stream_cursor_value_input {
+  contract: String
+  created_at: timestamptz
+  id: Int
+  metadata: jsonb
+  network: String
+  update_id: Int
+  updated_at: timestamptz
+}
+
 """aggregate sum on columns"""
 type dipdup_contract_metadata_sum_fields {
   id: Int
@@ -982,6 +1139,38 @@ enum dipdup_contract_metadata_update_column {
 
   """column name"""
   updated_at
+}
+
+input dipdup_contract_metadata_updates {
+  """append existing jsonb value of filtered columns with new jsonb value"""
+  _append: dipdup_contract_metadata_append_input
+
+  """
+  delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+  """
+  _delete_at_path: dipdup_contract_metadata_delete_at_path_input
+
+  """
+  delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+  """
+  _delete_elem: dipdup_contract_metadata_delete_elem_input
+
+  """
+  delete key/value pair or string element. key/value pairs are matched based on their key value
+  """
+  _delete_key: dipdup_contract_metadata_delete_key_input
+
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: dipdup_contract_metadata_inc_input
+
+  """prepend existing jsonb value of filtered columns with new jsonb value"""
+  _prepend: dipdup_contract_metadata_prepend_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: dipdup_contract_metadata_set_input
+
+  """filter the rows which have to be updated"""
+  where: dipdup_contract_metadata_bool_exp!
 }
 
 """aggregate var_pop on columns"""
@@ -1077,6 +1266,26 @@ input dipdup_contract_set_input {
 }
 
 """
+Streaming cursor of the table "dipdup_contract"
+"""
+input dipdup_contract_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: dipdup_contract_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input dipdup_contract_stream_cursor_value_input {
+  address: String
+  created_at: timestamptz
+  name: String
+  typename: String
+  updated_at: timestamptz
+}
+
+"""
 update columns of table "dipdup_contract"
 """
 enum dipdup_contract_update_column {
@@ -1094,6 +1303,14 @@ enum dipdup_contract_update_column {
 
   """column name"""
   updated_at
+}
+
+input dipdup_contract_updates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: dipdup_contract_set_input
+
+  """filter the rows which have to be updated"""
+  where: dipdup_contract_bool_exp!
 }
 
 """
@@ -1157,7 +1374,9 @@ input dipdup_head_bool_exp {
 unique or primary key constraints on table "dipdup_head"
 """
 enum dipdup_head_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "name"
+  """
   dipdup_head_pkey
 }
 
@@ -1362,6 +1581,31 @@ input dipdup_head_status_set_input {
   status: String
 }
 
+"""
+Streaming cursor of the table "dipdup_head_status"
+"""
+input dipdup_head_status_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: dipdup_head_status_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input dipdup_head_status_stream_cursor_value_input {
+  name: String
+  status: String
+}
+
+input dipdup_head_status_updates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: dipdup_head_status_set_input
+
+  """filter the rows which have to be updated"""
+  where: dipdup_head_status_bool_exp!
+}
+
 """aggregate stddev on columns"""
 type dipdup_head_stddev_fields {
   level: Float
@@ -1375,6 +1619,27 @@ type dipdup_head_stddev_pop_fields {
 """aggregate stddev_samp on columns"""
 type dipdup_head_stddev_samp_fields {
   level: Float
+}
+
+"""
+Streaming cursor of the table "dipdup_head"
+"""
+input dipdup_head_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: dipdup_head_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input dipdup_head_stream_cursor_value_input {
+  created_at: timestamptz
+  hash: String
+  level: Int
+  name: String
+  timestamp: timestamptz
+  updated_at: timestamptz
 }
 
 """aggregate sum on columns"""
@@ -1403,6 +1668,17 @@ enum dipdup_head_update_column {
 
   """column name"""
   updated_at
+}
+
+input dipdup_head_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: dipdup_head_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: dipdup_head_set_input
+
+  """filter the rows which have to be updated"""
+  where: dipdup_head_bool_exp!
 }
 
 """aggregate var_pop on columns"""
@@ -1503,7 +1779,9 @@ input dipdup_index_bool_exp {
 unique or primary key constraints on table "dipdup_index"
 """
 enum dipdup_index_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "name"
+  """
   dipdup_index_pkey
 }
 
@@ -1711,6 +1989,38 @@ type dipdup_index_stddev_samp_fields {
   level: Float
 }
 
+"""
+Streaming cursor of the table "dipdup_index"
+"""
+input dipdup_index_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: dipdup_index_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input dipdup_index_stream_cursor_value_input {
+  config_hash: String
+  created_at: timestamptz
+  level: Int
+  name: String
+
+  """
+  NEW: NEW\nSYNCING: SYNCING\nREALTIME: REALTIME\nROLLBACK: ROLLBACK\nONESHOT: ONESHOT
+  """
+  status: String
+  template: String
+  template_values: jsonb
+
+  """
+  operation: operation\nbig_map: big_map\nhead: head\ntoken_transfer: token_transfer\nevent: event
+  """
+  type: String
+  updated_at: timestamptz
+}
+
 """aggregate sum on columns"""
 type dipdup_index_sum_fields {
   level: Int
@@ -1748,6 +2058,38 @@ enum dipdup_index_update_column {
   updated_at
 }
 
+input dipdup_index_updates {
+  """append existing jsonb value of filtered columns with new jsonb value"""
+  _append: dipdup_index_append_input
+
+  """
+  delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+  """
+  _delete_at_path: dipdup_index_delete_at_path_input
+
+  """
+  delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+  """
+  _delete_elem: dipdup_index_delete_elem_input
+
+  """
+  delete key/value pair or string element. key/value pairs are matched based on their key value
+  """
+  _delete_key: dipdup_index_delete_key_input
+
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: dipdup_index_inc_input
+
+  """prepend existing jsonb value of filtered columns with new jsonb value"""
+  _prepend: dipdup_index_prepend_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: dipdup_index_set_input
+
+  """filter the rows which have to be updated"""
+  where: dipdup_index_bool_exp!
+}
+
 """aggregate var_pop on columns"""
 type dipdup_index_var_pop_fields {
   level: Float
@@ -1763,13 +2105,7 @@ type dipdup_index_variance_fields {
   level: Float
 }
 
-"""
-Model update created within versioned transactions
-
-
-columns and relationships of "dipdup_model_update"
-
-"""
+"""Model update created within versioned transactions"""
 type dipdup_model_update {
   """INSERT: INSERT\nUPDATE: UPDATE\nDELETE: DELETE"""
   action: String!
@@ -1844,7 +2180,9 @@ input dipdup_model_update_bool_exp {
 unique or primary key constraints on table "dipdup_model_update"
 """
 enum dipdup_model_update_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "id"
+  """
   dipdup_model_update_pkey
 }
 
@@ -2028,6 +2366,31 @@ type dipdup_model_update_stddev_samp_fields {
   level: Float
 }
 
+"""
+Streaming cursor of the table "dipdup_model_update"
+"""
+input dipdup_model_update_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: dipdup_model_update_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input dipdup_model_update_stream_cursor_value_input {
+  """INSERT: INSERT\nUPDATE: UPDATE\nDELETE: DELETE"""
+  action: String
+  created_at: timestamptz
+  data: jsonb
+  id: Int
+  index: String
+  level: Int
+  model_name: String
+  model_pk: String
+  updated_at: timestamptz
+}
+
 """aggregate sum on columns"""
 type dipdup_model_update_sum_fields {
   id: Int
@@ -2064,6 +2427,38 @@ enum dipdup_model_update_update_column {
 
   """column name"""
   updated_at
+}
+
+input dipdup_model_update_updates {
+  """append existing jsonb value of filtered columns with new jsonb value"""
+  _append: dipdup_model_update_append_input
+
+  """
+  delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+  """
+  _delete_at_path: dipdup_model_update_delete_at_path_input
+
+  """
+  delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+  """
+  _delete_elem: dipdup_model_update_delete_elem_input
+
+  """
+  delete key/value pair or string element. key/value pairs are matched based on their key value
+  """
+  _delete_key: dipdup_model_update_delete_key_input
+
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: dipdup_model_update_inc_input
+
+  """prepend existing jsonb value of filtered columns with new jsonb value"""
+  _prepend: dipdup_model_update_prepend_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: dipdup_model_update_set_input
+
+  """filter the rows which have to be updated"""
+  where: dipdup_model_update_bool_exp!
 }
 
 """aggregate var_pop on columns"""
@@ -2134,7 +2529,9 @@ input dipdup_schema_bool_exp {
 unique or primary key constraints on table "dipdup_schema"
 """
 enum dipdup_schema_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "name"
+  """
   dipdup_schema_pkey
 }
 
@@ -2249,6 +2646,30 @@ input dipdup_schema_set_input {
 }
 
 """
+Streaming cursor of the table "dipdup_schema"
+"""
+input dipdup_schema_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: dipdup_schema_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input dipdup_schema_stream_cursor_value_input {
+  created_at: timestamptz
+  hash: String
+  name: String
+
+  """
+  manual: manual\nmigration: migration\nrollback: rollback\nconfig_modified: config_modified\nschema_modified: schema_modified
+  """
+  reindex: String
+  updated_at: timestamptz
+}
+
+"""
 update columns of table "dipdup_schema"
 """
 enum dipdup_schema_update_column {
@@ -2266,6 +2687,14 @@ enum dipdup_schema_update_column {
 
   """column name"""
   updated_at
+}
+
+input dipdup_schema_updates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: dipdup_schema_set_input
+
+  """filter the rows which have to be updated"""
+  where: dipdup_schema_bool_exp!
 }
 
 """
@@ -2342,10 +2771,14 @@ input dipdup_token_metadata_bool_exp {
 unique or primary key constraints on table "dipdup_token_metadata"
 """
 enum dipdup_token_metadata_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "id"
+  """
   dipdup_token_metadata_pkey
 
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "network", "token_id", "contract"
+  """
   uid_dipdup_toke_network_5d1a25
 }
 
@@ -2517,6 +2950,29 @@ type dipdup_token_metadata_stddev_samp_fields {
   update_id: Float
 }
 
+"""
+Streaming cursor of the table "dipdup_token_metadata"
+"""
+input dipdup_token_metadata_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: dipdup_token_metadata_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input dipdup_token_metadata_stream_cursor_value_input {
+  contract: String
+  created_at: timestamptz
+  id: Int
+  metadata: jsonb
+  network: String
+  token_id: String
+  update_id: Int
+  updated_at: timestamptz
+}
+
 """aggregate sum on columns"""
 type dipdup_token_metadata_sum_fields {
   id: Int
@@ -2550,6 +3006,38 @@ enum dipdup_token_metadata_update_column {
 
   """column name"""
   updated_at
+}
+
+input dipdup_token_metadata_updates {
+  """append existing jsonb value of filtered columns with new jsonb value"""
+  _append: dipdup_token_metadata_append_input
+
+  """
+  delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+  """
+  _delete_at_path: dipdup_token_metadata_delete_at_path_input
+
+  """
+  delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+  """
+  _delete_elem: dipdup_token_metadata_delete_elem_input
+
+  """
+  delete key/value pair or string element. key/value pairs are matched based on their key value
+  """
+  _delete_key: dipdup_token_metadata_delete_key_input
+
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: dipdup_token_metadata_inc_input
+
+  """prepend existing jsonb value of filtered columns with new jsonb value"""
+  _prepend: dipdup_token_metadata_prepend_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: dipdup_token_metadata_set_input
+
+  """filter the rows which have to be updated"""
+  where: dipdup_token_metadata_bool_exp!
 }
 
 """aggregate var_pop on columns"""
@@ -2613,7 +3101,9 @@ input indexing_status_bool_exp {
 unique or primary key constraints on table "indexing_status"
 """
 enum indexing_status_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "index"
+  """
   indexing_status_pkey
 }
 
@@ -2703,6 +3193,26 @@ input indexing_status_set_input {
 }
 
 """
+Streaming cursor of the table "indexing_status"
+"""
+input indexing_status_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: indexing_status_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input indexing_status_stream_cursor_value_input {
+  """
+  COLLECTION: COLLECTION\nCOLLECTION_METADATA: COLLECTION_METADATA\nNFT: NFT\nNFT_METADATA: NFT_METADATA\nLEGACY_ORDERS: LEGACY_ORDERS\nV1_CLEANING: V1_CLEANING\nV1_FILL_FIX: V1_FILL_FIX
+  """
+  index: String
+  last_level: String
+}
+
+"""
 update columns of table "indexing_status"
 """
 enum indexing_status_update_column {
@@ -2713,12 +3223,26 @@ enum indexing_status_update_column {
   last_level
 }
 
+input indexing_status_updates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: indexing_status_set_input
+
+  """filter the rows which have to be updated"""
+  where: indexing_status_bool_exp!
+}
+
 scalar jsonb
+
+input jsonb_cast_exp {
+  String: String_comparison_exp
+}
 
 """
 Boolean expression to compare columns of type "jsonb". All fields are combined with logical 'AND'.
 """
 input jsonb_comparison_exp {
+  _cast: jsonb_cast_exp
+
   """is the column contained in the given json value"""
   _contained_in: jsonb
 
@@ -2794,7 +3318,9 @@ input legacy_orders_bool_exp {
 unique or primary key constraints on table "legacy_orders"
 """
 enum legacy_orders_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "hash"
+  """
   legacy_orders_pkey
 }
 
@@ -2901,6 +3427,24 @@ input legacy_orders_set_input {
 }
 
 """
+Streaming cursor of the table "legacy_orders"
+"""
+input legacy_orders_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: legacy_orders_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input legacy_orders_stream_cursor_value_input {
+  data: jsonb
+  hash: String
+  id: uuid
+}
+
+"""
 update columns of table "legacy_orders"
 """
 enum legacy_orders_update_column {
@@ -2912,6 +3456,35 @@ enum legacy_orders_update_column {
 
   """column name"""
   id
+}
+
+input legacy_orders_updates {
+  """append existing jsonb value of filtered columns with new jsonb value"""
+  _append: legacy_orders_append_input
+
+  """
+  delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+  """
+  _delete_at_path: legacy_orders_delete_at_path_input
+
+  """
+  delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+  """
+  _delete_elem: legacy_orders_delete_elem_input
+
+  """
+  delete key/value pair or string element. key/value pairs are matched based on their key value
+  """
+  _delete_key: legacy_orders_delete_key_input
+
+  """prepend existing jsonb value of filtered columns with new jsonb value"""
+  _prepend: legacy_orders_prepend_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: legacy_orders_set_input
+
+  """filter the rows which have to be updated"""
+  where: legacy_orders_bool_exp!
 }
 
 """
@@ -2927,6 +3500,7 @@ type marketplace_activity {
   """
   make_asset_class: String!
   make_contract: String
+  make_price: numeric
   make_token_id: String
   make_value: numeric!
   maker: String
@@ -2948,6 +3522,7 @@ type marketplace_activity {
   """
   take_asset_class: String
   take_contract: String
+  take_price: numeric
   take_token_id: String
   take_value: numeric
   taker: String
@@ -2985,10 +3560,12 @@ type marketplace_activity_aggregate_fields {
 
 """aggregate avg on columns"""
 type marketplace_activity_avg_fields {
+  make_price: Float
   make_value: Float
   operation_counter: Float
   operation_level: Float
   operation_nonce: Float
+  take_price: Float
   take_value: Float
 }
 
@@ -3004,6 +3581,7 @@ input marketplace_activity_bool_exp {
   internal_order_id: String_comparison_exp
   make_asset_class: String_comparison_exp
   make_contract: String_comparison_exp
+  make_price: numeric_comparison_exp
   make_token_id: String_comparison_exp
   make_value: numeric_comparison_exp
   maker: String_comparison_exp
@@ -3017,6 +3595,7 @@ input marketplace_activity_bool_exp {
   platform: String_comparison_exp
   take_asset_class: String_comparison_exp
   take_contract: String_comparison_exp
+  take_price: numeric_comparison_exp
   take_token_id: String_comparison_exp
   take_value: numeric_comparison_exp
   taker: String_comparison_exp
@@ -3027,7 +3606,9 @@ input marketplace_activity_bool_exp {
 unique or primary key constraints on table "marketplace_activity"
 """
 enum marketplace_activity_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "id"
+  """
   marketplace_activity_pkey
 }
 
@@ -3035,10 +3616,12 @@ enum marketplace_activity_constraint {
 input type for incrementing numeric columns in table "marketplace_activity"
 """
 input marketplace_activity_inc_input {
+  make_price: numeric
   make_value: numeric
   operation_counter: Int
   operation_level: Int
   operation_nonce: Int
+  take_price: numeric
   take_value: numeric
 }
 
@@ -3055,6 +3638,7 @@ input marketplace_activity_insert_input {
   """
   make_asset_class: String
   make_contract: String
+  make_price: numeric
   make_token_id: String
   make_value: numeric
   maker: String
@@ -3076,6 +3660,7 @@ input marketplace_activity_insert_input {
   """
   take_asset_class: String
   take_contract: String
+  take_price: numeric
   take_token_id: String
   take_value: numeric
   taker: String
@@ -3097,6 +3682,7 @@ type marketplace_activity_max_fields {
   """
   make_asset_class: String
   make_contract: String
+  make_price: numeric
   make_token_id: String
   make_value: numeric
   maker: String
@@ -3118,6 +3704,7 @@ type marketplace_activity_max_fields {
   """
   take_asset_class: String
   take_contract: String
+  take_price: numeric
   take_token_id: String
   take_value: numeric
   taker: String
@@ -3139,6 +3726,7 @@ type marketplace_activity_min_fields {
   """
   make_asset_class: String
   make_contract: String
+  make_price: numeric
   make_token_id: String
   make_value: numeric
   maker: String
@@ -3160,6 +3748,7 @@ type marketplace_activity_min_fields {
   """
   take_asset_class: String
   take_contract: String
+  take_price: numeric
   take_token_id: String
   take_value: numeric
   taker: String
@@ -3197,6 +3786,7 @@ input marketplace_activity_order_by {
   internal_order_id: order_by
   make_asset_class: order_by
   make_contract: order_by
+  make_price: order_by
   make_token_id: order_by
   make_value: order_by
   maker: order_by
@@ -3210,6 +3800,7 @@ input marketplace_activity_order_by {
   platform: order_by
   take_asset_class: order_by
   take_contract: order_by
+  take_price: order_by
   take_token_id: order_by
   take_value: order_by
   taker: order_by
@@ -3241,6 +3832,9 @@ enum marketplace_activity_select_column {
   make_contract
 
   """column name"""
+  make_price
+
+  """column name"""
   make_token_id
 
   """column name"""
@@ -3278,6 +3872,9 @@ enum marketplace_activity_select_column {
 
   """column name"""
   take_contract
+
+  """column name"""
+  take_price
 
   """column name"""
   take_token_id
@@ -3305,6 +3902,7 @@ input marketplace_activity_set_input {
   """
   make_asset_class: String
   make_contract: String
+  make_price: numeric
   make_token_id: String
   make_value: numeric
   maker: String
@@ -3326,6 +3924,7 @@ input marketplace_activity_set_input {
   """
   take_asset_class: String
   take_contract: String
+  take_price: numeric
   take_token_id: String
   take_value: numeric
   taker: String
@@ -3338,37 +3937,100 @@ input marketplace_activity_set_input {
 
 """aggregate stddev on columns"""
 type marketplace_activity_stddev_fields {
+  make_price: Float
   make_value: Float
   operation_counter: Float
   operation_level: Float
   operation_nonce: Float
+  take_price: Float
   take_value: Float
 }
 
 """aggregate stddev_pop on columns"""
 type marketplace_activity_stddev_pop_fields {
+  make_price: Float
   make_value: Float
   operation_counter: Float
   operation_level: Float
   operation_nonce: Float
+  take_price: Float
   take_value: Float
 }
 
 """aggregate stddev_samp on columns"""
 type marketplace_activity_stddev_samp_fields {
+  make_price: Float
   make_value: Float
   operation_counter: Float
   operation_level: Float
   operation_nonce: Float
+  take_price: Float
   take_value: Float
+}
+
+"""
+Streaming cursor of the table "marketplace_activity"
+"""
+input marketplace_activity_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: marketplace_activity_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input marketplace_activity_stream_cursor_value_input {
+  db_updated_at: timestamptz
+  id: uuid
+  internal_order_id: String
+
+  """
+  ETH: ETH\nXTZ: XTZ\nFUNGIBLE_TOKEN: TEZOS_FT\nNON_FUNGIBLE_TOKEN: TEZOS_NFT\nMULTI_TOKEN: TEZOS_MT\nERC20: ERC20\nERC721: ERC721\nERC1155: ERC1155\nERC721_LAZY: ERC721_LAZY\nERC1155_LAZY: ERC1155_LAZY\nCOLLECTION: COLLECTION\nGEN_ART: GEN_ART
+  """
+  make_asset_class: String
+  make_contract: String
+  make_price: numeric
+  make_token_id: String
+  make_value: numeric
+  maker: String
+  network: String
+  operation_counter: Int
+  operation_hash: String
+  operation_level: Int
+  operation_nonce: Int
+  operation_timestamp: timestamptz
+  order_id: uuid
+
+  """
+  HEN: HEN\nTEIA_V1: TEIA_V1\nVERSUM_V1: VERSUM_V1\nOBJKT_V1: OBJKT_V1\nOBJKT_V2: OBJKT_V2\nRARIBLE_V1: RARIBLE_V1\nRARIBLE_V2: RARIBLE_V2\nFXHASH_V1: FXHASH_V1\nFXHASH_V2: FXHASH_V2
+  """
+  platform: String
+
+  """
+  ETH: ETH\nXTZ: XTZ\nFUNGIBLE_TOKEN: TEZOS_FT\nNON_FUNGIBLE_TOKEN: TEZOS_NFT\nMULTI_TOKEN: TEZOS_MT\nERC20: ERC20\nERC721: ERC721\nERC1155: ERC1155\nERC721_LAZY: ERC721_LAZY\nERC1155_LAZY: ERC1155_LAZY\nCOLLECTION: COLLECTION\nGEN_ART: GEN_ART
+  """
+  take_asset_class: String
+  take_contract: String
+  take_price: numeric
+  take_token_id: String
+  take_value: numeric
+  taker: String
+
+  """
+  GET_BID: GET_BID\nGET_FLOOR_BID: GET_FLOOR_BID\nORDER_LIST: LIST\nORDER_MATCH: SELL\nORDER_CANCEL: CANCEL_LIST\nCANCEL_BID: CANCEL_BID\nCANCEL_FLOOR_BID: CANCEL_FLOOR_BID\nMAKE_BID: MAKE_BID\nMAKE_FLOOR_BID: MAKE_FLOOR_BID\nTOKEN_MINT: MINT\nTOKEN_TRANSFER: TRANSFER\nTOKEN_BURN: BURN
+  """
+  type: String
 }
 
 """aggregate sum on columns"""
 type marketplace_activity_sum_fields {
+  make_price: numeric
   make_value: numeric
   operation_counter: Int
   operation_level: Int
   operation_nonce: Int
+  take_price: numeric
   take_value: numeric
 }
 
@@ -3390,6 +4052,9 @@ enum marketplace_activity_update_column {
 
   """column name"""
   make_contract
+
+  """column name"""
+  make_price
 
   """column name"""
   make_token_id
@@ -3431,6 +4096,9 @@ enum marketplace_activity_update_column {
   take_contract
 
   """column name"""
+  take_price
+
+  """column name"""
   take_token_id
 
   """column name"""
@@ -3443,30 +4111,47 @@ enum marketplace_activity_update_column {
   type
 }
 
+input marketplace_activity_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: marketplace_activity_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: marketplace_activity_set_input
+
+  """filter the rows which have to be updated"""
+  where: marketplace_activity_bool_exp!
+}
+
 """aggregate var_pop on columns"""
 type marketplace_activity_var_pop_fields {
+  make_price: Float
   make_value: Float
   operation_counter: Float
   operation_level: Float
   operation_nonce: Float
+  take_price: Float
   take_value: Float
 }
 
 """aggregate var_samp on columns"""
 type marketplace_activity_var_samp_fields {
+  make_price: Float
   make_value: Float
   operation_counter: Float
   operation_level: Float
   operation_nonce: Float
+  take_price: Float
   take_value: Float
 }
 
 """aggregate variance on columns"""
 type marketplace_activity_variance_fields {
+  make_price: Float
   make_value: Float
   operation_counter: Float
   operation_level: Float
   operation_nonce: Float
+  take_price: Float
   take_value: Float
 }
 
@@ -3490,6 +4175,7 @@ type marketplace_order {
   make_asset_class: String!
   make_contract: String
   make_price: numeric
+  make_stock: numeric
   make_token_id: String
   make_value: numeric!
   maker: String!
@@ -3561,6 +4247,7 @@ input marketplace_order_append_input {
 type marketplace_order_avg_fields {
   fill: Float
   make_price: Float
+  make_stock: Float
   make_value: Float
   take_price: Float
   take_value: Float
@@ -3585,6 +4272,7 @@ input marketplace_order_bool_exp {
   make_asset_class: String_comparison_exp
   make_contract: String_comparison_exp
   make_price: numeric_comparison_exp
+  make_stock: numeric_comparison_exp
   make_token_id: String_comparison_exp
   make_value: numeric_comparison_exp
   maker: String_comparison_exp
@@ -3607,7 +4295,9 @@ input marketplace_order_bool_exp {
 unique or primary key constraints on table "marketplace_order"
 """
 enum marketplace_order_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "id"
+  """
   marketplace_order_pkey
 }
 
@@ -3641,6 +4331,7 @@ input type for incrementing numeric columns in table "marketplace_order"
 input marketplace_order_inc_input {
   fill: numeric
   make_price: numeric
+  make_stock: numeric
   make_value: numeric
   take_price: numeric
   take_value: numeric
@@ -3666,6 +4357,7 @@ input marketplace_order_insert_input {
   make_asset_class: String
   make_contract: String
   make_price: numeric
+  make_stock: numeric
   make_token_id: String
   make_value: numeric
   maker: String
@@ -3712,6 +4404,7 @@ type marketplace_order_max_fields {
   make_asset_class: String
   make_contract: String
   make_price: numeric
+  make_stock: numeric
   make_token_id: String
   make_value: numeric
   maker: String
@@ -3756,6 +4449,7 @@ type marketplace_order_min_fields {
   make_asset_class: String
   make_contract: String
   make_price: numeric
+  make_stock: numeric
   make_token_id: String
   make_value: numeric
   maker: String
@@ -3818,6 +4512,7 @@ input marketplace_order_order_by {
   make_asset_class: order_by
   make_contract: order_by
   make_price: order_by
+  make_stock: order_by
   make_token_id: order_by
   make_value: order_by
   maker: order_by
@@ -3888,6 +4583,9 @@ enum marketplace_order_select_column {
   make_price
 
   """column name"""
+  make_stock
+
+  """column name"""
   make_token_id
 
   """column name"""
@@ -3956,6 +4654,7 @@ input marketplace_order_set_input {
   make_asset_class: String
   make_contract: String
   make_price: numeric
+  make_stock: numeric
   make_token_id: String
   make_value: numeric
   maker: String
@@ -3990,6 +4689,7 @@ input marketplace_order_set_input {
 type marketplace_order_stddev_fields {
   fill: Float
   make_price: Float
+  make_stock: Float
   make_value: Float
   take_price: Float
   take_value: Float
@@ -3999,6 +4699,7 @@ type marketplace_order_stddev_fields {
 type marketplace_order_stddev_pop_fields {
   fill: Float
   make_price: Float
+  make_stock: Float
   make_value: Float
   take_price: Float
   take_value: Float
@@ -4008,15 +4709,77 @@ type marketplace_order_stddev_pop_fields {
 type marketplace_order_stddev_samp_fields {
   fill: Float
   make_price: Float
+  make_stock: Float
   make_value: Float
   take_price: Float
   take_value: Float
+}
+
+"""
+Streaming cursor of the table "marketplace_order"
+"""
+input marketplace_order_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: marketplace_order_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input marketplace_order_stream_cursor_value_input {
+  cancelled: Boolean
+  created_at: timestamptz
+  end_at: timestamptz
+  ended_at: timestamptz
+  fill: numeric
+  id: uuid
+  internal_order_id: String
+  is_bid: Boolean
+  last_updated_at: timestamptz
+
+  """
+  ETH: ETH\nXTZ: XTZ\nFUNGIBLE_TOKEN: TEZOS_FT\nNON_FUNGIBLE_TOKEN: TEZOS_NFT\nMULTI_TOKEN: TEZOS_MT\nERC20: ERC20\nERC721: ERC721\nERC1155: ERC1155\nERC721_LAZY: ERC721_LAZY\nERC1155_LAZY: ERC1155_LAZY\nCOLLECTION: COLLECTION\nGEN_ART: GEN_ART
+  """
+  make_asset_class: String
+  make_contract: String
+  make_price: numeric
+  make_stock: numeric
+  make_token_id: String
+  make_value: numeric
+  maker: String
+  network: String
+  origin_fees: jsonb
+  payouts: jsonb
+
+  """
+  HEN: HEN\nTEIA_V1: TEIA_V1\nVERSUM_V1: VERSUM_V1\nOBJKT_V1: OBJKT_V1\nOBJKT_V2: OBJKT_V2\nRARIBLE_V1: RARIBLE_V1\nRARIBLE_V2: RARIBLE_V2\nFXHASH_V1: FXHASH_V1\nFXHASH_V2: FXHASH_V2
+  """
+  platform: String
+  salt: String
+  start_at: timestamptz
+
+  """
+  ACTIVE: ACTIVE\nFILLED: FILLED\nHISTORICAL: HISTORICAL\nINACTIVE: INACTIVE\nCANCELLED: CANCELLED
+  """
+  status: String
+
+  """
+  ETH: ETH\nXTZ: XTZ\nFUNGIBLE_TOKEN: TEZOS_FT\nNON_FUNGIBLE_TOKEN: TEZOS_NFT\nMULTI_TOKEN: TEZOS_MT\nERC20: ERC20\nERC721: ERC721\nERC1155: ERC1155\nERC721_LAZY: ERC721_LAZY\nERC1155_LAZY: ERC1155_LAZY\nCOLLECTION: COLLECTION\nGEN_ART: GEN_ART
+  """
+  take_asset_class: String
+  take_contract: String
+  take_price: numeric
+  take_token_id: String
+  take_value: numeric
+  taker: String
 }
 
 """aggregate sum on columns"""
 type marketplace_order_sum_fields {
   fill: numeric
   make_price: numeric
+  make_stock: numeric
   make_value: numeric
   take_price: numeric
   take_value: numeric
@@ -4061,6 +4824,9 @@ enum marketplace_order_update_column {
 
   """column name"""
   make_price
+
+  """column name"""
+  make_stock
 
   """column name"""
   make_token_id
@@ -4111,10 +4877,43 @@ enum marketplace_order_update_column {
   taker
 }
 
+input marketplace_order_updates {
+  """append existing jsonb value of filtered columns with new jsonb value"""
+  _append: marketplace_order_append_input
+
+  """
+  delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+  """
+  _delete_at_path: marketplace_order_delete_at_path_input
+
+  """
+  delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+  """
+  _delete_elem: marketplace_order_delete_elem_input
+
+  """
+  delete key/value pair or string element. key/value pairs are matched based on their key value
+  """
+  _delete_key: marketplace_order_delete_key_input
+
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: marketplace_order_inc_input
+
+  """prepend existing jsonb value of filtered columns with new jsonb value"""
+  _prepend: marketplace_order_prepend_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: marketplace_order_set_input
+
+  """filter the rows which have to be updated"""
+  where: marketplace_order_bool_exp!
+}
+
 """aggregate var_pop on columns"""
 type marketplace_order_var_pop_fields {
   fill: Float
   make_price: Float
+  make_stock: Float
   make_value: Float
   take_price: Float
   take_value: Float
@@ -4124,6 +4923,7 @@ type marketplace_order_var_pop_fields {
 type marketplace_order_var_samp_fields {
   fill: Float
   make_price: Float
+  make_stock: Float
   make_value: Float
   take_price: Float
   take_value: Float
@@ -4133,6 +4933,7 @@ type marketplace_order_var_samp_fields {
 type marketplace_order_variance_fields {
   fill: Float
   make_price: Float
+  make_stock: Float
   make_value: Float
   take_price: Float
   take_value: Float
@@ -4197,7 +4998,9 @@ input metadata_collection_bool_exp {
 unique or primary key constraints on table "metadata_collection"
 """
 enum metadata_collection_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "id"
+  """
   metadata_collection_pkey
 }
 
@@ -4315,6 +5118,26 @@ type metadata_collection_stddev_samp_fields {
   metadata_retries: Float
 }
 
+"""
+Streaming cursor of the table "metadata_collection"
+"""
+input metadata_collection_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: metadata_collection_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input metadata_collection_stream_cursor_value_input {
+  db_updated_at: timestamptz
+  id: String
+  metadata: String
+  metadata_retries: Int
+  metadata_synced: Boolean
+}
+
 """aggregate sum on columns"""
 type metadata_collection_sum_fields {
   metadata_retries: Int
@@ -4338,6 +5161,17 @@ enum metadata_collection_update_column {
 
   """column name"""
   metadata_synced
+}
+
+input metadata_collection_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: metadata_collection_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: metadata_collection_set_input
+
+  """filter the rows which have to be updated"""
+  where: metadata_collection_bool_exp!
 }
 
 """aggregate var_pop on columns"""
@@ -4418,7 +5252,9 @@ input metadata_token_bool_exp {
 unique or primary key constraints on table "metadata_token"
 """
 enum metadata_token_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "id"
+  """
   metadata_token_pkey
 }
 
@@ -4552,6 +5388,28 @@ type metadata_token_stddev_samp_fields {
   metadata_retries: Float
 }
 
+"""
+Streaming cursor of the table "metadata_token"
+"""
+input metadata_token_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: metadata_token_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input metadata_token_stream_cursor_value_input {
+  contract: String
+  db_updated_at: timestamptz
+  id: uuid
+  metadata: String
+  metadata_retries: Int
+  metadata_synced: Boolean
+  token_id: String
+}
+
 """aggregate sum on columns"""
 type metadata_token_sum_fields {
   metadata_retries: Int
@@ -4581,6 +5439,17 @@ enum metadata_token_update_column {
 
   """column name"""
   token_id
+}
+
+input metadata_token_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: metadata_token_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: metadata_token_set_input
+
+  """filter the rows which have to be updated"""
+  where: metadata_token_bool_exp!
 }
 
 """aggregate var_pop on columns"""
@@ -5496,6 +6365,14 @@ type mutation_root {
   ): aggregator_event
 
   """
+  update multiples rows of table: "aggregator_event"
+  """
+  update_aggregator_event_many(
+    """updates to execute, in order"""
+    updates: [aggregator_event_updates!]!
+  ): [aggregator_event_mutation_response]
+
+  """
   update data of the table: "collection"
   """
   update_collection(
@@ -5558,6 +6435,14 @@ type mutation_root {
   ): collection
 
   """
+  update multiples rows of table: "collection"
+  """
+  update_collection_many(
+    """updates to execute, in order"""
+    updates: [collection_updates!]!
+  ): [collection_mutation_response]
+
+  """
   update data of the table: "dipdup_contract"
   """
   update_dipdup_contract(
@@ -5576,6 +6461,14 @@ type mutation_root {
     _set: dipdup_contract_set_input
     pk_columns: dipdup_contract_pk_columns_input!
   ): dipdup_contract
+
+  """
+  update multiples rows of table: "dipdup_contract"
+  """
+  update_dipdup_contract_many(
+    """updates to execute, in order"""
+    updates: [dipdup_contract_updates!]!
+  ): [dipdup_contract_mutation_response]
 
   """
   update data of the table: "dipdup_contract_metadata"
@@ -5646,6 +6539,14 @@ type mutation_root {
   ): dipdup_contract_metadata
 
   """
+  update multiples rows of table: "dipdup_contract_metadata"
+  """
+  update_dipdup_contract_metadata_many(
+    """updates to execute, in order"""
+    updates: [dipdup_contract_metadata_updates!]!
+  ): [dipdup_contract_metadata_mutation_response]
+
+  """
   update data of the table: "dipdup_head"
   """
   update_dipdup_head(
@@ -5672,6 +6573,14 @@ type mutation_root {
   ): dipdup_head
 
   """
+  update multiples rows of table: "dipdup_head"
+  """
+  update_dipdup_head_many(
+    """updates to execute, in order"""
+    updates: [dipdup_head_updates!]!
+  ): [dipdup_head_mutation_response]
+
+  """
   update data of the table: "dipdup_head_status"
   """
   update_dipdup_head_status(
@@ -5681,6 +6590,14 @@ type mutation_root {
     """filter the rows which have to be updated"""
     where: dipdup_head_status_bool_exp!
   ): dipdup_head_status_mutation_response
+
+  """
+  update multiples rows of table: "dipdup_head_status"
+  """
+  update_dipdup_head_status_many(
+    """updates to execute, in order"""
+    updates: [dipdup_head_status_updates!]!
+  ): [dipdup_head_status_mutation_response]
 
   """
   update data of the table: "dipdup_index"
@@ -5751,6 +6668,14 @@ type mutation_root {
   ): dipdup_index
 
   """
+  update multiples rows of table: "dipdup_index"
+  """
+  update_dipdup_index_many(
+    """updates to execute, in order"""
+    updates: [dipdup_index_updates!]!
+  ): [dipdup_index_mutation_response]
+
+  """
   update data of the table: "dipdup_model_update"
   """
   update_dipdup_model_update(
@@ -5819,6 +6744,14 @@ type mutation_root {
   ): dipdup_model_update
 
   """
+  update multiples rows of table: "dipdup_model_update"
+  """
+  update_dipdup_model_update_many(
+    """updates to execute, in order"""
+    updates: [dipdup_model_update_updates!]!
+  ): [dipdup_model_update_mutation_response]
+
+  """
   update data of the table: "dipdup_schema"
   """
   update_dipdup_schema(
@@ -5837,6 +6770,14 @@ type mutation_root {
     _set: dipdup_schema_set_input
     pk_columns: dipdup_schema_pk_columns_input!
   ): dipdup_schema
+
+  """
+  update multiples rows of table: "dipdup_schema"
+  """
+  update_dipdup_schema_many(
+    """updates to execute, in order"""
+    updates: [dipdup_schema_updates!]!
+  ): [dipdup_schema_mutation_response]
 
   """
   update data of the table: "dipdup_token_metadata"
@@ -5907,6 +6848,14 @@ type mutation_root {
   ): dipdup_token_metadata
 
   """
+  update multiples rows of table: "dipdup_token_metadata"
+  """
+  update_dipdup_token_metadata_many(
+    """updates to execute, in order"""
+    updates: [dipdup_token_metadata_updates!]!
+  ): [dipdup_token_metadata_mutation_response]
+
+  """
   update data of the table: "indexing_status"
   """
   update_indexing_status(
@@ -5925,6 +6874,14 @@ type mutation_root {
     _set: indexing_status_set_input
     pk_columns: indexing_status_pk_columns_input!
   ): indexing_status
+
+  """
+  update multiples rows of table: "indexing_status"
+  """
+  update_indexing_status_many(
+    """updates to execute, in order"""
+    updates: [indexing_status_updates!]!
+  ): [indexing_status_mutation_response]
 
   """
   update data of the table: "legacy_orders"
@@ -5989,6 +6946,14 @@ type mutation_root {
   ): legacy_orders
 
   """
+  update multiples rows of table: "legacy_orders"
+  """
+  update_legacy_orders_many(
+    """updates to execute, in order"""
+    updates: [legacy_orders_updates!]!
+  ): [legacy_orders_mutation_response]
+
+  """
   update data of the table: "marketplace_activity"
   """
   update_marketplace_activity(
@@ -6013,6 +6978,14 @@ type mutation_root {
     _set: marketplace_activity_set_input
     pk_columns: marketplace_activity_pk_columns_input!
   ): marketplace_activity
+
+  """
+  update multiples rows of table: "marketplace_activity"
+  """
+  update_marketplace_activity_many(
+    """updates to execute, in order"""
+    updates: [marketplace_activity_updates!]!
+  ): [marketplace_activity_mutation_response]
 
   """
   update data of the table: "marketplace_order"
@@ -6083,6 +7056,14 @@ type mutation_root {
   ): marketplace_order
 
   """
+  update multiples rows of table: "marketplace_order"
+  """
+  update_marketplace_order_many(
+    """updates to execute, in order"""
+    updates: [marketplace_order_updates!]!
+  ): [marketplace_order_mutation_response]
+
+  """
   update data of the table: "metadata_collection"
   """
   update_metadata_collection(
@@ -6107,6 +7088,14 @@ type mutation_root {
     _set: metadata_collection_set_input
     pk_columns: metadata_collection_pk_columns_input!
   ): metadata_collection
+
+  """
+  update multiples rows of table: "metadata_collection"
+  """
+  update_metadata_collection_many(
+    """updates to execute, in order"""
+    updates: [metadata_collection_updates!]!
+  ): [metadata_collection_mutation_response]
 
   """
   update data of the table: "metadata_token"
@@ -6135,6 +7124,14 @@ type mutation_root {
   ): metadata_token
 
   """
+  update multiples rows of table: "metadata_token"
+  """
+  update_metadata_token_many(
+    """updates to execute, in order"""
+    updates: [metadata_token_updates!]!
+  ): [metadata_token_mutation_response]
+
+  """
   update data of the table: "ownership"
   """
   update_ownership(
@@ -6159,6 +7156,14 @@ type mutation_root {
     _set: ownership_set_input
     pk_columns: ownership_pk_columns_input!
   ): ownership
+
+  """
+  update multiples rows of table: "ownership"
+  """
+  update_ownership_many(
+    """updates to execute, in order"""
+    updates: [ownership_updates!]!
+  ): [ownership_mutation_response]
 
   """
   update data of the table: "royalties"
@@ -6229,6 +7234,14 @@ type mutation_root {
   ): royalties
 
   """
+  update multiples rows of table: "royalties"
+  """
+  update_royalties_many(
+    """updates to execute, in order"""
+    updates: [royalties_updates!]!
+  ): [royalties_mutation_response]
+
+  """
   update data of the table: "tasks"
   """
   update_tasks(
@@ -6253,6 +7266,14 @@ type mutation_root {
     _set: tasks_set_input
     pk_columns: tasks_pk_columns_input!
   ): tasks
+
+  """
+  update multiples rows of table: "tasks"
+  """
+  update_tasks_many(
+    """updates to execute, in order"""
+    updates: [tasks_updates!]!
+  ): [tasks_mutation_response]
 
   """
   update data of the table: "tezos_domains_domain"
@@ -6281,6 +7302,14 @@ type mutation_root {
   ): tezos_domains_domain
 
   """
+  update multiples rows of table: "tezos_domains_domain"
+  """
+  update_tezos_domains_domain_many(
+    """updates to execute, in order"""
+    updates: [tezos_domains_domain_updates!]!
+  ): [tezos_domains_domain_mutation_response]
+
+  """
   update data of the table: "tezos_domains_record"
   """
   update_tezos_domains_record(
@@ -6301,6 +7330,14 @@ type mutation_root {
   ): tezos_domains_record
 
   """
+  update multiples rows of table: "tezos_domains_record"
+  """
+  update_tezos_domains_record_many(
+    """updates to execute, in order"""
+    updates: [tezos_domains_record_updates!]!
+  ): [tezos_domains_record_mutation_response]
+
+  """
   update data of the table: "tezos_domains_tld"
   """
   update_tezos_domains_tld(
@@ -6319,6 +7356,14 @@ type mutation_root {
     _set: tezos_domains_tld_set_input
     pk_columns: tezos_domains_tld_pk_columns_input!
   ): tezos_domains_tld
+
+  """
+  update multiples rows of table: "tezos_domains_tld"
+  """
+  update_tezos_domains_tld_many(
+    """updates to execute, in order"""
+    updates: [tezos_domains_tld_updates!]!
+  ): [tezos_domains_tld_mutation_response]
 
   """
   update data of the table: "token"
@@ -6347,6 +7392,14 @@ type mutation_root {
   ): token
 
   """
+  update multiples rows of table: "token"
+  """
+  update_token_many(
+    """updates to execute, in order"""
+    updates: [token_updates!]!
+  ): [token_mutation_response]
+
+  """
   update data of the table: "token_transfer"
   """
   update_token_transfer(
@@ -6371,6 +7424,14 @@ type mutation_root {
     _set: token_transfer_set_input
     pk_columns: token_transfer_pk_columns_input!
   ): token_transfer
+
+  """
+  update multiples rows of table: "token_transfer"
+  """
+  update_token_transfer_many(
+    """updates to execute, in order"""
+    updates: [token_transfer_updates!]!
+  ): [token_transfer_mutation_response]
 
   """
   update data of the table: "tzprofiles"
@@ -6433,6 +7494,14 @@ type mutation_root {
     _set: tzprofiles_set_input
     pk_columns: tzprofiles_pk_columns_input!
   ): tzprofiles
+
+  """
+  update multiples rows of table: "tzprofiles"
+  """
+  update_tzprofiles_many(
+    """updates to execute, in order"""
+    updates: [tzprofiles_updates!]!
+  ): [tzprofiles_mutation_response]
 }
 
 scalar numeric
@@ -6536,7 +7605,14 @@ input ownership_bool_exp {
 unique or primary key constraints on table "ownership"
 """
 enum ownership_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "token_id", "contract", "owner"
+  """
+  ownership_id
+
+  """
+  unique or primary key constraint on columns "id"
+  """
   ownership_pkey
 }
 
@@ -6672,6 +7748,28 @@ type ownership_stddev_samp_fields {
   balance: Float
 }
 
+"""
+Streaming cursor of the table "ownership"
+"""
+input ownership_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: ownership_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input ownership_stream_cursor_value_input {
+  balance: numeric
+  contract: String
+  created: timestamptz
+  id: uuid
+  owner: String
+  token_id: String
+  updated: timestamptz
+}
+
 """aggregate sum on columns"""
 type ownership_sum_fields {
   balance: numeric
@@ -6701,6 +7799,17 @@ enum ownership_update_column {
 
   """column name"""
   updated
+}
+
+input ownership_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: ownership_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: ownership_set_input
+
+  """filter the rows which have to be updated"""
+  where: ownership_bool_exp!
 }
 
 """aggregate var_pop on columns"""
@@ -8008,7 +9117,9 @@ input royalties_bool_exp {
 unique or primary key constraints on table "royalties"
 """
 enum royalties_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "id"
+  """
   royalties_pkey
 }
 
@@ -8166,6 +9277,28 @@ type royalties_stddev_samp_fields {
   royalties_retries: Float
 }
 
+"""
+Streaming cursor of the table "royalties"
+"""
+input royalties_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: royalties_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input royalties_stream_cursor_value_input {
+  contract: String
+  db_updated_at: timestamptz
+  id: uuid
+  parts: jsonb
+  royalties_retries: Int
+  royalties_synced: Boolean
+  token_id: String
+}
+
 """aggregate sum on columns"""
 type royalties_sum_fields {
   royalties_retries: Int
@@ -8195,6 +9328,38 @@ enum royalties_update_column {
 
   """column name"""
   token_id
+}
+
+input royalties_updates {
+  """append existing jsonb value of filtered columns with new jsonb value"""
+  _append: royalties_append_input
+
+  """
+  delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+  """
+  _delete_at_path: royalties_delete_at_path_input
+
+  """
+  delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+  """
+  _delete_elem: royalties_delete_elem_input
+
+  """
+  delete key/value pair or string element. key/value pairs are matched based on their key value
+  """
+  _delete_key: royalties_delete_key_input
+
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: royalties_inc_input
+
+  """prepend existing jsonb value of filtered columns with new jsonb value"""
+  _prepend: royalties_prepend_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: royalties_set_input
+
+  """filter the rows which have to be updated"""
+  where: royalties_bool_exp!
 }
 
 """aggregate var_pop on columns"""
@@ -8259,6 +9424,20 @@ type subscription_root {
   aggregator_event_by_pk(id: bigint!): aggregator_event
 
   """
+  fetch data from the table in a streaming manner: "aggregator_event"
+  """
+  aggregator_event_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [aggregator_event_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: aggregator_event_bool_exp
+  ): [aggregator_event!]!
+
+  """
   fetch data from the table: "collection"
   """
   collection(
@@ -8302,6 +9481,20 @@ type subscription_root {
   collection_by_pk(id: String!): collection
 
   """
+  fetch data from the table in a streaming manner: "collection"
+  """
+  collection_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [collection_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: collection_bool_exp
+  ): [collection!]!
+
+  """
   fetch data from the table: "collection_with_meta"
   """
   collection_with_meta(
@@ -8340,6 +9533,20 @@ type subscription_root {
     """filter the rows returned"""
     where: collection_with_meta_bool_exp
   ): collection_with_meta_aggregate!
+
+  """
+  fetch data from the table in a streaming manner: "collection_with_meta"
+  """
+  collection_with_meta_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [collection_with_meta_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: collection_with_meta_bool_exp
+  ): [collection_with_meta!]!
 
   """
   fetch data from the table: "dipdup_contract"
@@ -8430,6 +9637,34 @@ type subscription_root {
   dipdup_contract_metadata_by_pk(id: Int!): dipdup_contract_metadata
 
   """
+  fetch data from the table in a streaming manner: "dipdup_contract_metadata"
+  """
+  dipdup_contract_metadata_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [dipdup_contract_metadata_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: dipdup_contract_metadata_bool_exp
+  ): [dipdup_contract_metadata!]!
+
+  """
+  fetch data from the table in a streaming manner: "dipdup_contract"
+  """
+  dipdup_contract_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [dipdup_contract_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: dipdup_contract_bool_exp
+  ): [dipdup_contract!]!
+
+  """
   fetch data from the table: "dipdup_head"
   """
   dipdup_head(
@@ -8513,6 +9748,34 @@ type subscription_root {
   ): dipdup_head_status_aggregate!
 
   """
+  fetch data from the table in a streaming manner: "dipdup_head_status"
+  """
+  dipdup_head_status_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [dipdup_head_status_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: dipdup_head_status_bool_exp
+  ): [dipdup_head_status!]!
+
+  """
+  fetch data from the table in a streaming manner: "dipdup_head"
+  """
+  dipdup_head_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [dipdup_head_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: dipdup_head_bool_exp
+  ): [dipdup_head!]!
+
+  """
   fetch data from the table: "dipdup_index"
   """
   dipdup_index(
@@ -8554,6 +9817,20 @@ type subscription_root {
 
   """fetch data from the table: "dipdup_index" using primary key columns"""
   dipdup_index_by_pk(name: String!): dipdup_index
+
+  """
+  fetch data from the table in a streaming manner: "dipdup_index"
+  """
+  dipdup_index_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [dipdup_index_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: dipdup_index_bool_exp
+  ): [dipdup_index!]!
 
   """
   fetch data from the table: "dipdup_model_update"
@@ -8601,6 +9878,20 @@ type subscription_root {
   dipdup_model_update_by_pk(id: Int!): dipdup_model_update
 
   """
+  fetch data from the table in a streaming manner: "dipdup_model_update"
+  """
+  dipdup_model_update_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [dipdup_model_update_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: dipdup_model_update_bool_exp
+  ): [dipdup_model_update!]!
+
+  """
   fetch data from the table: "dipdup_schema"
   """
   dipdup_schema(
@@ -8642,6 +9933,20 @@ type subscription_root {
 
   """fetch data from the table: "dipdup_schema" using primary key columns"""
   dipdup_schema_by_pk(name: String!): dipdup_schema
+
+  """
+  fetch data from the table in a streaming manner: "dipdup_schema"
+  """
+  dipdup_schema_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [dipdup_schema_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: dipdup_schema_bool_exp
+  ): [dipdup_schema!]!
 
   """
   fetch data from the table: "dipdup_token_metadata"
@@ -8687,6 +9992,20 @@ type subscription_root {
   fetch data from the table: "dipdup_token_metadata" using primary key columns
   """
   dipdup_token_metadata_by_pk(id: Int!): dipdup_token_metadata
+
+  """
+  fetch data from the table in a streaming manner: "dipdup_token_metadata"
+  """
+  dipdup_token_metadata_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [dipdup_token_metadata_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: dipdup_token_metadata_bool_exp
+  ): [dipdup_token_metadata!]!
 
   """
   fetch data from the table: "indexing_status"
@@ -8737,6 +10056,20 @@ type subscription_root {
   ): indexing_status
 
   """
+  fetch data from the table in a streaming manner: "indexing_status"
+  """
+  indexing_status_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [indexing_status_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: indexing_status_bool_exp
+  ): [indexing_status!]!
+
+  """
   fetch data from the table: "legacy_orders"
   """
   legacy_orders(
@@ -8778,6 +10111,20 @@ type subscription_root {
 
   """fetch data from the table: "legacy_orders" using primary key columns"""
   legacy_orders_by_pk(hash: String!): legacy_orders
+
+  """
+  fetch data from the table in a streaming manner: "legacy_orders"
+  """
+  legacy_orders_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [legacy_orders_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: legacy_orders_bool_exp
+  ): [legacy_orders!]!
 
   """
   fetch data from the table: "marketplace_activity"
@@ -8825,6 +10172,20 @@ type subscription_root {
   marketplace_activity_by_pk(id: uuid!): marketplace_activity
 
   """
+  fetch data from the table in a streaming manner: "marketplace_activity"
+  """
+  marketplace_activity_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [marketplace_activity_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: marketplace_activity_bool_exp
+  ): [marketplace_activity!]!
+
+  """
   fetch data from the table: "marketplace_order"
   """
   marketplace_order(
@@ -8868,6 +10229,20 @@ type subscription_root {
   fetch data from the table: "marketplace_order" using primary key columns
   """
   marketplace_order_by_pk(id: uuid!): marketplace_order
+
+  """
+  fetch data from the table in a streaming manner: "marketplace_order"
+  """
+  marketplace_order_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [marketplace_order_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: marketplace_order_bool_exp
+  ): [marketplace_order!]!
 
   """
   fetch data from the table: "metadata_collection"
@@ -8915,6 +10290,20 @@ type subscription_root {
   metadata_collection_by_pk(id: String!): metadata_collection
 
   """
+  fetch data from the table in a streaming manner: "metadata_collection"
+  """
+  metadata_collection_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [metadata_collection_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: metadata_collection_bool_exp
+  ): [metadata_collection!]!
+
+  """
   fetch data from the table: "metadata_token"
   """
   metadata_token(
@@ -8956,6 +10345,20 @@ type subscription_root {
 
   """fetch data from the table: "metadata_token" using primary key columns"""
   metadata_token_by_pk(id: uuid!): metadata_token
+
+  """
+  fetch data from the table in a streaming manner: "metadata_token"
+  """
+  metadata_token_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [metadata_token_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: metadata_token_bool_exp
+  ): [metadata_token!]!
 
   """
   fetch data from the table: "ownership"
@@ -9001,6 +10404,20 @@ type subscription_root {
   ownership_by_pk(id: uuid!): ownership
 
   """
+  fetch data from the table in a streaming manner: "ownership"
+  """
+  ownership_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [ownership_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: ownership_bool_exp
+  ): [ownership!]!
+
+  """
   fetch data from the table: "royalties"
   """
   royalties(
@@ -9044,6 +10461,20 @@ type subscription_root {
   royalties_by_pk(id: uuid!): royalties
 
   """
+  fetch data from the table in a streaming manner: "royalties"
+  """
+  royalties_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [royalties_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: royalties_bool_exp
+  ): [royalties!]!
+
+  """
   fetch data from the table: "tasks"
   """
   tasks(
@@ -9085,6 +10516,20 @@ type subscription_root {
 
   """fetch data from the table: "tasks" using primary key columns"""
   tasks_by_pk(id: bigint!): tasks
+
+  """
+  fetch data from the table in a streaming manner: "tasks"
+  """
+  tasks_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [tasks_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: tasks_bool_exp
+  ): [tasks!]!
 
   """
   fetch data from the table: "tezos_domains_domain"
@@ -9132,6 +10577,20 @@ type subscription_root {
   tezos_domains_domain_by_pk(id: String!): tezos_domains_domain
 
   """
+  fetch data from the table in a streaming manner: "tezos_domains_domain"
+  """
+  tezos_domains_domain_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [tezos_domains_domain_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: tezos_domains_domain_bool_exp
+  ): [tezos_domains_domain!]!
+
+  """
   fetch data from the table: "tezos_domains_record"
   """
   tezos_domains_record(
@@ -9177,6 +10636,20 @@ type subscription_root {
   tezos_domains_record_by_pk(id: String!): tezos_domains_record
 
   """
+  fetch data from the table in a streaming manner: "tezos_domains_record"
+  """
+  tezos_domains_record_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [tezos_domains_record_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: tezos_domains_record_bool_exp
+  ): [tezos_domains_record!]!
+
+  """
   fetch data from the table: "tezos_domains_tld"
   """
   tezos_domains_tld(
@@ -9220,6 +10693,20 @@ type subscription_root {
   fetch data from the table: "tezos_domains_tld" using primary key columns
   """
   tezos_domains_tld_by_pk(id: String!): tezos_domains_tld
+
+  """
+  fetch data from the table in a streaming manner: "tezos_domains_tld"
+  """
+  tezos_domains_tld_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [tezos_domains_tld_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: tezos_domains_tld_bool_exp
+  ): [tezos_domains_tld!]!
 
   """
   fetch data from the table: "token"
@@ -9301,8 +10788,36 @@ type subscription_root {
     where: token_by_owner_bool_exp
   ): token_by_owner_aggregate!
 
+  """
+  fetch data from the table in a streaming manner: "token_by_owner"
+  """
+  token_by_owner_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [token_by_owner_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: token_by_owner_bool_exp
+  ): [token_by_owner!]!
+
   """fetch data from the table: "token" using primary key columns"""
   token_by_pk(id: uuid!): token
+
+  """
+  fetch data from the table in a streaming manner: "token"
+  """
+  token_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [token_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: token_bool_exp
+  ): [token!]!
 
   """
   fetch data from the table: "token_transfer"
@@ -9348,6 +10863,20 @@ type subscription_root {
   token_transfer_by_pk(id: bigint!): token_transfer
 
   """
+  fetch data from the table in a streaming manner: "token_transfer"
+  """
+  token_transfer_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [token_transfer_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: token_transfer_bool_exp
+  ): [token_transfer!]!
+
+  """
   fetch data from the table: "token_with_meta"
   """
   token_with_meta(
@@ -9386,6 +10915,20 @@ type subscription_root {
     """filter the rows returned"""
     where: token_with_meta_bool_exp
   ): token_with_meta_aggregate!
+
+  """
+  fetch data from the table in a streaming manner: "token_with_meta"
+  """
+  token_with_meta_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [token_with_meta_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: token_with_meta_bool_exp
+  ): [token_with_meta!]!
 
   """
   fetch data from the table: "tzprofiles"
@@ -9429,6 +10972,20 @@ type subscription_root {
 
   """fetch data from the table: "tzprofiles" using primary key columns"""
   tzprofiles_by_pk(account: String!): tzprofiles
+
+  """
+  fetch data from the table in a streaming manner: "tzprofiles"
+  """
+  tzprofiles_stream(
+    """maximum number of rows returned in a single batch"""
+    batch_size: Int!
+
+    """cursor to stream the results returned by the query"""
+    cursor: [tzprofiles_stream_cursor_input]!
+
+    """filter the rows returned"""
+    where: tzprofiles_bool_exp
+  ): [tzprofiles!]!
 }
 
 """
@@ -9499,7 +11056,9 @@ input tasks_bool_exp {
 unique or primary key constraints on table "tasks"
 """
 enum tasks_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "id"
+  """
   tasks_pkey
 }
 
@@ -9655,6 +11214,30 @@ type tasks_stddev_samp_fields {
   version: Float
 }
 
+"""
+Streaming cursor of the table "tasks"
+"""
+input tasks_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: tasks_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input tasks_stream_cursor_value_input {
+  created: timestamptz
+  error: String
+  id: bigint
+  name: String
+  param: String
+  sample: String
+  status: String
+  updated: timestamptz
+  version: Int
+}
+
 """aggregate sum on columns"""
 type tasks_sum_fields {
   id: bigint
@@ -9691,6 +11274,17 @@ enum tasks_update_column {
 
   """column name"""
   version
+}
+
+input tasks_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: tasks_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: tasks_set_input
+
+  """filter the rows which have to be updated"""
+  where: tasks_bool_exp!
 }
 
 """aggregate var_pop on columns"""
@@ -9768,6 +11362,17 @@ type tezos_domains_domain_aggregate {
   nodes: [tezos_domains_domain!]!
 }
 
+input tezos_domains_domain_aggregate_bool_exp {
+  count: tezos_domains_domain_aggregate_bool_exp_count
+}
+
+input tezos_domains_domain_aggregate_bool_exp_count {
+  arguments: [tezos_domains_domain_select_column!]
+  distinct: Boolean
+  filter: tezos_domains_domain_bool_exp
+  predicate: Int_comparison_exp!
+}
+
 """
 aggregate fields of "tezos_domains_domain"
 """
@@ -9834,6 +11439,7 @@ input tezos_domains_domain_bool_exp {
   id: String_comparison_exp
   owner: String_comparison_exp
   records: tezos_domains_record_bool_exp
+  records_aggregate: tezos_domains_record_aggregate_bool_exp
   tld: tezos_domains_tld_bool_exp
   tld_id: String_comparison_exp
   token_id: bigint_comparison_exp
@@ -9843,7 +11449,9 @@ input tezos_domains_domain_bool_exp {
 unique or primary key constraints on table "tezos_domains_domain"
 """
 enum tezos_domains_domain_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "id"
+  """
   tezos_domains_domain_pkey
 }
 
@@ -10010,6 +11618,25 @@ input tezos_domains_domain_stddev_samp_order_by {
   token_id: order_by
 }
 
+"""
+Streaming cursor of the table "tezos_domains_domain"
+"""
+input tezos_domains_domain_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: tezos_domains_domain_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input tezos_domains_domain_stream_cursor_value_input {
+  id: String
+  owner: String
+  tld_id: String
+  token_id: bigint
+}
+
 """aggregate sum on columns"""
 type tezos_domains_domain_sum_fields {
   token_id: bigint
@@ -10037,6 +11664,17 @@ enum tezos_domains_domain_update_column {
 
   """column name"""
   token_id
+}
+
+input tezos_domains_domain_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: tezos_domains_domain_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: tezos_domains_domain_set_input
+
+  """filter the rows which have to be updated"""
+  where: tezos_domains_domain_bool_exp!
 }
 
 """aggregate var_pop on columns"""
@@ -10095,6 +11733,17 @@ type tezos_domains_record_aggregate {
   nodes: [tezos_domains_record!]!
 }
 
+input tezos_domains_record_aggregate_bool_exp {
+  count: tezos_domains_record_aggregate_bool_exp_count
+}
+
+input tezos_domains_record_aggregate_bool_exp_count {
+  arguments: [tezos_domains_record_select_column!]
+  distinct: Boolean
+  filter: tezos_domains_record_bool_exp
+  predicate: Int_comparison_exp!
+}
+
 """
 aggregate fields of "tezos_domains_record"
 """
@@ -10140,7 +11789,9 @@ input tezos_domains_record_bool_exp {
 unique or primary key constraints on table "tezos_domains_record"
 """
 enum tezos_domains_record_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "id"
+  """
   tezos_domains_record_pkey
 }
 
@@ -10243,6 +11894,24 @@ input tezos_domains_record_set_input {
 }
 
 """
+Streaming cursor of the table "tezos_domains_record"
+"""
+input tezos_domains_record_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: tezos_domains_record_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input tezos_domains_record_stream_cursor_value_input {
+  address: String
+  domain_id: String
+  id: String
+}
+
+"""
 update columns of table "tezos_domains_record"
 """
 enum tezos_domains_record_update_column {
@@ -10254,6 +11923,14 @@ enum tezos_domains_record_update_column {
 
   """column name"""
   id
+}
+
+input tezos_domains_record_updates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: tezos_domains_record_set_input
+
+  """filter the rows which have to be updated"""
+  where: tezos_domains_record_bool_exp!
 }
 
 """
@@ -10324,6 +12001,7 @@ input tezos_domains_tld_bool_exp {
   _not: tezos_domains_tld_bool_exp
   _or: [tezos_domains_tld_bool_exp!]
   domains: tezos_domains_domain_bool_exp
+  domains_aggregate: tezos_domains_domain_aggregate_bool_exp
   id: String_comparison_exp
   owner: String_comparison_exp
 }
@@ -10332,7 +12010,9 @@ input tezos_domains_tld_bool_exp {
 unique or primary key constraints on table "tezos_domains_tld"
 """
 enum tezos_domains_tld_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "id"
+  """
   tezos_domains_tld_pkey
 }
 
@@ -10419,6 +12099,23 @@ input tezos_domains_tld_set_input {
 }
 
 """
+Streaming cursor of the table "tezos_domains_tld"
+"""
+input tezos_domains_tld_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: tezos_domains_tld_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input tezos_domains_tld_stream_cursor_value_input {
+  id: String
+  owner: String
+}
+
+"""
 update columns of table "tezos_domains_tld"
 """
 enum tezos_domains_tld_update_column {
@@ -10427,6 +12124,14 @@ enum tezos_domains_tld_update_column {
 
   """column name"""
   owner
+}
+
+input tezos_domains_tld_updates {
+  """sets the columns of the filtered rows to the given values"""
+  _set: tezos_domains_tld_set_input
+
+  """filter the rows which have to be updated"""
+  where: tezos_domains_tld_bool_exp!
 }
 
 scalar timestamptz
@@ -10702,6 +12407,34 @@ type token_by_owner_stddev_samp_fields {
   tzkt_id: Float
 }
 
+"""
+Streaming cursor of the table "token_by_owner"
+"""
+input token_by_owner_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: token_by_owner_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input token_by_owner_stream_cursor_value_input {
+  contract: String
+  creator: String
+  db_updated_at: timestamptz
+  deleted: Boolean
+  id: uuid
+  item_id: String
+  minted: numeric
+  minted_at: timestamptz
+  owner: String
+  supply: numeric
+  token_id: String
+  tzkt_id: bigint
+  updated: timestamptz
+}
+
 """aggregate sum on columns"""
 type token_by_owner_sum_fields {
   minted: numeric
@@ -10734,7 +12467,9 @@ type token_by_owner_variance_fields {
 unique or primary key constraints on table "token"
 """
 enum token_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "id"
+  """
   token_pkey
 }
 
@@ -10908,6 +12643,32 @@ type token_stddev_samp_fields {
   tzkt_id: Float
 }
 
+"""
+Streaming cursor of the table "token"
+"""
+input token_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: token_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input token_stream_cursor_value_input {
+  contract: String
+  creator: String
+  db_updated_at: timestamptz
+  deleted: Boolean
+  id: uuid
+  minted: numeric
+  minted_at: timestamptz
+  supply: numeric
+  token_id: String
+  tzkt_id: bigint
+  updated: timestamptz
+}
+
 """aggregate sum on columns"""
 type token_sum_fields {
   minted: numeric
@@ -10998,7 +12759,9 @@ input token_transfer_bool_exp {
 unique or primary key constraints on table "token_transfer"
 """
 enum token_transfer_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "id"
+  """
   token_transfer_pkey
 }
 
@@ -11214,6 +12977,38 @@ type token_transfer_stddev_samp_fields {
   tzkt_transaction_id: Float
 }
 
+"""
+Streaming cursor of the table "token_transfer"
+"""
+input token_transfer_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: token_transfer_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input token_transfer_stream_cursor_value_input {
+  amount: numeric
+  contract: String
+  date: timestamptz
+  db_updated_at: timestamptz
+  from_address: String
+  hash: String
+  id: bigint
+  to_address: String
+  token_id: String
+
+  """
+  GET_BID: GET_BID\nGET_FLOOR_BID: GET_FLOOR_BID\nORDER_LIST: LIST\nORDER_MATCH: SELL\nORDER_CANCEL: CANCEL_LIST\nCANCEL_BID: CANCEL_BID\nCANCEL_FLOOR_BID: CANCEL_FLOOR_BID\nMAKE_BID: MAKE_BID\nMAKE_FLOOR_BID: MAKE_FLOOR_BID\nTOKEN_MINT: MINT\nTOKEN_TRANSFER: TRANSFER\nTOKEN_BURN: BURN
+  """
+  type: String
+  tzkt_origination_id: bigint
+  tzkt_token_id: bigint
+  tzkt_transaction_id: bigint
+}
+
 """aggregate sum on columns"""
 type token_transfer_sum_fields {
   amount: numeric
@@ -11265,6 +13060,17 @@ enum token_transfer_update_column {
 
   """column name"""
   tzkt_transaction_id
+}
+
+input token_transfer_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: token_transfer_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: token_transfer_set_input
+
+  """filter the rows which have to be updated"""
+  where: token_transfer_bool_exp!
 }
 
 """aggregate var_pop on columns"""
@@ -11330,6 +13136,17 @@ enum token_update_column {
 
   """column name"""
   updated
+}
+
+input token_updates {
+  """increments the numeric columns with given value of the filtered values"""
+  _inc: token_inc_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: token_set_input
+
+  """filter the rows which have to be updated"""
+  where: token_bool_exp!
 }
 
 """aggregate var_pop on columns"""
@@ -11524,6 +13341,32 @@ type token_with_meta_stddev_samp_fields {
   tzkt_id: Float
 }
 
+"""
+Streaming cursor of the table "token_with_meta"
+"""
+input token_with_meta_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: token_with_meta_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input token_with_meta_stream_cursor_value_input {
+  contract: String
+  creator: String
+  deleted: Boolean
+  id: uuid
+  metadata: String
+  minted: numeric
+  minted_at: timestamptz
+  supply: numeric
+  token_id: String
+  tzkt_id: bigint
+  updated: timestamptz
+}
+
 """aggregate sum on columns"""
 type token_with_meta_sum_fields {
   minted: numeric
@@ -11628,7 +13471,9 @@ input tzprofiles_bool_exp {
 unique or primary key constraints on table "tzprofiles"
 """
 enum tzprofiles_constraint {
-  """unique or primary key constraint"""
+  """
+  unique or primary key constraint on columns "account"
+  """
   tzprofiles_pkey
 }
 
@@ -11823,6 +13668,35 @@ input tzprofiles_set_input {
 }
 
 """
+Streaming cursor of the table "tzprofiles"
+"""
+input tzprofiles_stream_cursor_input {
+  """Stream column input with initial value"""
+  initial_value: tzprofiles_stream_cursor_value_input!
+
+  """cursor ordering"""
+  ordering: cursor_ordering
+}
+
+"""Initial value of the column from where the streaming should start"""
+input tzprofiles_stream_cursor_value_input {
+  account: String
+  alias: String
+  contract: String
+  description: String
+  discord: String
+  domain_name: String
+  errored: Boolean
+  ethereum: String
+  github: String
+  invalid_claims: jsonb
+  logo: String
+  twitter: String
+  valid_claims: jsonb
+  website: String
+}
+
+"""
 update columns of table "tzprofiles"
 """
 enum tzprofiles_update_column {
@@ -11867,6 +13741,35 @@ enum tzprofiles_update_column {
 
   """column name"""
   website
+}
+
+input tzprofiles_updates {
+  """append existing jsonb value of filtered columns with new jsonb value"""
+  _append: tzprofiles_append_input
+
+  """
+  delete the field or element with specified path (for JSON arrays, negative integers count from the end)
+  """
+  _delete_at_path: tzprofiles_delete_at_path_input
+
+  """
+  delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array
+  """
+  _delete_elem: tzprofiles_delete_elem_input
+
+  """
+  delete key/value pair or string element. key/value pairs are matched based on their key value
+  """
+  _delete_key: tzprofiles_delete_key_input
+
+  """prepend existing jsonb value of filtered columns with new jsonb value"""
+  _prepend: tzprofiles_prepend_input
+
+  """sets the columns of the filtered rows to the given values"""
+  _set: tzprofiles_set_input
+
+  """filter the rows which have to be updated"""
+  where: tzprofiles_bool_exp!
 }
 
 scalar uuid
