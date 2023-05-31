@@ -68,6 +68,7 @@ data class GetOrdersByItemCustomQuery(
                 make_contract
                 make_token_id
                 make_value
+                make_stock
                 make_price
                 maker
                 network

@@ -65,8 +65,14 @@ class OrderClientIt {
         val orderClient = OrderClient(client)
 
         @Test
+        fun `should return orderby id`() = runBlocking<Unit> {
+            val order = orderClient.getOrdersByIds(listOf("6106507f-8d0f-5dc6-b83a-1d14b502c852"))
+            assertThat(order).hasSize(1)
+        }
+
+        @Test
         fun `should return orders by item from testnet`() = runBlocking<Unit> {
-            val page = orderClient.getOrdersByItem("KT1Uke8qc4YTfP41dGuoGC8UsgRyCtyvKPLA", "1027", null, "XTZ",
+            val page = orderClient.getOrdersByItem("KT19BpuLgVw3sA7y7UcrWt4E3Brq9qJv4WDV", "2", null, "XTZ",
                 emptyList(), listOf(TezosPlatform.RARIBLE_V2, TezosPlatform.OBJKT_V1, TezosPlatform.OBJKT_V2), false, 1, null)
             assertThat(page.orders).hasSize(1)
         }
