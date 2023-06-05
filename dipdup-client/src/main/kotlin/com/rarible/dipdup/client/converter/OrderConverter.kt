@@ -20,6 +20,7 @@ import com.rarible.dipdup.client.core.model.OrderStatus
 import com.rarible.dipdup.client.core.model.TezosPlatform
 import com.rarible.dipdup.client.fragment.Order
 import com.rarible.dipdup.client.model.DipDupContinuation
+import com.rarible.dipdup.client.model.DipDupCurrencyContinuation
 import com.rarible.dipdup.client.model.DipDupOrdersPage
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -92,6 +93,18 @@ fun toPage(source: List<DipDupOrder>, limit: Int): DipDupOrdersPage {
     val continuation = when {
         source.size == limit -> source[limit - 1]
             .let { DipDupContinuation(it.lastUpdatedAt, UUID.fromString(it.id)) }.toString()
+        else -> null
+    }
+    return DipDupOrdersPage(
+        source.subList(0, min(source.size, limit)),
+        continuation = continuation
+    )
+}
+
+fun toPageCurrency(source: List<DipDupOrder>, limit: Int): DipDupOrdersPage {
+    val continuation = when {
+        source.size == limit -> source[limit - 1]
+            .let { DipDupCurrencyContinuation(it.makePrice, UUID.fromString(it.id)) }.toString()
         else -> null
     }
     return DipDupOrdersPage(

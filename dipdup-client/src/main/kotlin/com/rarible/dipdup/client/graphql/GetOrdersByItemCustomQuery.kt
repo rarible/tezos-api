@@ -12,7 +12,7 @@ data class GetOrdersByItemCustomQuery(
     val platforms: List<TezosPlatform>,
     val limit: Int,
     val prevId: String? = null,
-    val prevDate: String? = null,
+    val prevValue: String? = null,
     val isBid: Boolean = false
 ) : GetOrdersByItemQuery(limit) {
 
@@ -37,14 +37,14 @@ data class GetOrdersByItemCustomQuery(
         conditions.add("is_bid: {_eq: $isBid}")
         if (statuses.isNotEmpty()) conditions.add("status: {_in: [${statuses.joinToString(",")}]}")
         conditions.add("platform: {_in: [${platforms.joinToString(",")}]}")
-        prevDate?.let { conditions.add("""
+        prevValue?.let { conditions.add("""
             _or: [
                 {
-                    last_updated_at: {_lt: "$prevDate"}
+                    make_price: {_gt: "$prevValue"}
                 },
                 {
-                    last_updated_at: {_eq: "$prevDate"}
-                    id: {_lt: "$prevId"}
+                    make_price: {_eq: "$prevValue"}
+                    id: {_gt: "$prevId"}
                 }
             ]
         """.trimIndent()) }
@@ -53,7 +53,7 @@ data class GetOrdersByItemCustomQuery(
                 marketplace_order(
                     where: {${conditions.joinToString(",\n")}}
                     limit: ${'$'}limit
-                    order_by: [{last_updated_at: desc},{id: desc}, {make_price: asc}]
+                    order_by: [{make_price: asc},{id: asc}]
                 ) { __typename ...order } }
             fragment order on marketplace_order {
                 cancelled

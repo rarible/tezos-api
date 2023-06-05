@@ -11,6 +11,7 @@ import com.rarible.dipdup.client.converter.convertOrdersContinuationSyncDesc
 import com.rarible.dipdup.client.converter.convertOrdersSyncAsc
 import com.rarible.dipdup.client.converter.convertOrdersSyncDesc
 import com.rarible.dipdup.client.converter.toPage
+import com.rarible.dipdup.client.converter.toPageCurrency
 import com.rarible.dipdup.client.core.model.Asset
 import com.rarible.dipdup.client.core.model.DipDupOrder
 import com.rarible.dipdup.client.core.model.OrderStatus
@@ -22,6 +23,7 @@ import com.rarible.dipdup.client.graphql.GetOrdersByItemCustomQuery
 import com.rarible.dipdup.client.graphql.GetOrdersCustomQuery
 import com.rarible.dipdup.client.model.DipDupActivityContinuation
 import com.rarible.dipdup.client.model.DipDupContinuation
+import com.rarible.dipdup.client.model.DipDupCurrencyContinuation
 import com.rarible.dipdup.client.model.DipDupOrderSort
 import com.rarible.dipdup.client.model.DipDupOrdersPage
 import com.rarible.dipdup.client.model.DipDupSyncSort
@@ -153,7 +155,7 @@ class OrderClient(
         size: Int = DEFAULT_PAGE,
         continuation: String?
     ): DipDupOrdersPage {
-        val parsedContinuation = DipDupContinuation.parse(continuation)
+        val parsedContinuation = DipDupCurrencyContinuation.parse(continuation)
         val response = safeExecution(
             GetOrdersByItemCustomQuery(
                 contract = contract,
@@ -164,12 +166,12 @@ class OrderClient(
                 platforms = platforms,
                 limit = size,
                 prevId = parsedContinuation?.let { it.id.toString() },
-                prevDate = parsedContinuation?.let { it.date.toString() },
+                prevValue = parsedContinuation?.let { it.value.toString() },
                 isBid = isBid
             )
         )
         val items = convertByItem(response.marketplace_order)
-        return toPage(wrapWithLegacy(items), size)
+        return toPageCurrency(wrapWithLegacy(items), size)
     }
 
     suspend fun getOrdersByCollection(
