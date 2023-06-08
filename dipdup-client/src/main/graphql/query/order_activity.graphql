@@ -98,9 +98,12 @@ query GetOrderActivitiesSyncDesc($limit: Int!) {
 
 query GetOrderActivitiesSyncContinuationDesc($limit: Int!, $prevDate: timestamptz!, $prevId: uuid!) {
     marketplace_activity(
-        where: {_or: [
-            {db_updated_at: {_lt: $prevDate}},
-            {db_updated_at: {_eq: $prevDate}, id: {_lt: $prevId}}
+        where: {_and: [
+            {db_updated_at: {_lte: $prevDate}},
+            {_not:
+                {_and: [ {db_updated_at: {_eq: $prevDate}},
+                    {id: {_gte: $prevId}}]}
+            }
         ]}
         order_by: [{db_updated_at: desc}, {id: desc}],
         limit: $limit
@@ -120,9 +123,12 @@ query GetOrderActivitiesSyncAsc($limit: Int!) {
 
 query GetOrderActivitiesSyncContinuationAsc($limit: Int!, $prevDate: timestamptz!, $prevId: uuid!) {
     marketplace_activity(
-        where: {_or: [
-            {db_updated_at: {_gt: $prevDate}},
-            {db_updated_at: {_eq: $prevDate}, id: {_gt: $prevId}}
+        where: {_and: [
+            {db_updated_at: {_gte: $prevDate}},
+            {_not:
+                {_and: [ {db_updated_at: {_eq: $prevDate}},
+                    {id: {_lte: $prevId}}]}
+            }
         ]}
         order_by: [{db_updated_at: asc}, {id: asc}],
         limit: $limit
