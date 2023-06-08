@@ -27,7 +27,7 @@ import java.time.OffsetDateTime
 sealed class DipDupActivity {
     abstract val id: String
     abstract val date: OffsetDateTime
-    abstract val dbUpdatedAt: OffsetDateTime
+    abstract val dbUpdatedAt: OffsetDateTime?
     abstract val reverted: Boolean
 
     companion object {
@@ -75,7 +75,7 @@ data class DipDupOrderListActivity(
 data class DipDupOrderCancelActivity(
     override val id: String,
     override val date: OffsetDateTime,
-    override val dbUpdatedAt: OffsetDateTime,
+    override val dbUpdatedAt: OffsetDateTime?,
     override val reverted: Boolean,
     override val operationCounter: Int,
     val hash: String,
@@ -89,7 +89,7 @@ data class DipDupOrderCancelActivity(
 data class DipDupOrderSellActivity(
     override val id: String,
     override val date: OffsetDateTime,
-    override val dbUpdatedAt: OffsetDateTime,
+    override val dbUpdatedAt: OffsetDateTime?,
     override val reverted: Boolean,
     override val operationCounter: Int,
     val hash: String,
@@ -104,7 +104,7 @@ data class DipDupOrderSellActivity(
 data class DipDupTransferActivity(
     override val id: String,
     override val date: OffsetDateTime,
-    override val dbUpdatedAt: OffsetDateTime,
+    override val dbUpdatedAt: OffsetDateTime?,
     override val reverted: Boolean,
     val transferId: String,
     val contract: String,
@@ -118,7 +118,7 @@ data class DipDupTransferActivity(
 data class DipDupMintActivity(
     override val id: String,
     override val date: OffsetDateTime,
-    override val dbUpdatedAt: OffsetDateTime,
+    override val dbUpdatedAt: OffsetDateTime?,
     override val reverted: Boolean,
     val transferId: String,
     val contract: String,
@@ -131,7 +131,7 @@ data class DipDupMintActivity(
 data class DipDupBurnActivity(
     override val id: String,
     override val date: OffsetDateTime,
-    override val dbUpdatedAt: OffsetDateTime,
+    override val dbUpdatedAt: OffsetDateTime?,
     override val reverted: Boolean,
     val transferId: String,
     val contract: String,
@@ -144,7 +144,7 @@ data class DipDupBurnActivity(
 data class DipDupMakeBidActivity(
     override val id: String,
     override val date: OffsetDateTime,
-    override val dbUpdatedAt: OffsetDateTime,
+    override val dbUpdatedAt: OffsetDateTime?,
     override val reverted: Boolean,
     val orderId: String,
     val hash: String,
@@ -158,7 +158,7 @@ data class DipDupMakeBidActivity(
 data class DipDupGetBidActivity(
     override val id: String,
     override val date: OffsetDateTime,
-    override val dbUpdatedAt: OffsetDateTime,
+    override val dbUpdatedAt: OffsetDateTime?,
     override val reverted: Boolean,
     val orderId: String,
     val hash: String,
@@ -173,7 +173,7 @@ data class DipDupGetBidActivity(
 data class DipDupCancelBidActivity(
     override val id: String,
     override val date: OffsetDateTime,
-    override val dbUpdatedAt: OffsetDateTime,
+    override val dbUpdatedAt: OffsetDateTime?,
     override val reverted: Boolean,
     val orderId: String,
     val hash: String,
@@ -186,7 +186,7 @@ data class DipDupCancelBidActivity(
 data class DipDupMakeFloorBidActivity(
     override val id: String,
     override val date: OffsetDateTime,
-    override val dbUpdatedAt: OffsetDateTime,
+    override val dbUpdatedAt: OffsetDateTime?,
     override val reverted: Boolean,
     val hash: String,
     val source: TezosPlatform,
@@ -199,7 +199,7 @@ data class DipDupMakeFloorBidActivity(
 data class DipDupGetFloorBidActivity(
     override val id: String,
     override val date: OffsetDateTime,
-    override val dbUpdatedAt: OffsetDateTime,
+    override val dbUpdatedAt: OffsetDateTime?,
     override val reverted: Boolean,
     val hash: String,
     val source: TezosPlatform,
@@ -213,7 +213,7 @@ data class DipDupGetFloorBidActivity(
 data class DipDupCancelFloorBidActivity(
     override val id: String,
     override val date: OffsetDateTime,
-    override val dbUpdatedAt: OffsetDateTime,
+    override val dbUpdatedAt: OffsetDateTime?,
     override val reverted: Boolean,
     val hash: String,
     val source: TezosPlatform,

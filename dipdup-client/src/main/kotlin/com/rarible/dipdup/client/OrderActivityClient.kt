@@ -178,7 +178,7 @@ class OrderActivityClient(
     private fun syncPage(activities: List<DipDupActivity>, limit: Int): DipDupActivitiesPage {
         val nextContinuation = when (activities.size) {
             limit -> activities[limit - 1].let {
-                DipDupActivityContinuation(it.dbUpdatedAt, it.id).toString()
+                DipDupActivityContinuation(it.dbUpdatedAt!!, it.id).toString()
             }
 
             else -> null

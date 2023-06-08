@@ -121,7 +121,6 @@ class DeserializerTest {
             {
                 "id":"64ad4815-2de9-5bba-95b5-5bc77407990e",
                 "date":"2022-04-26T07:36:45Z",
-                "dbUpdatedAt":"2022-04-26T07:36:45Z",
                 "reverted":"false",
                 "transferId":"27148400",
                 "contract":"KT1MjD39KZWvX2QF3MJuhG3JGDkUq5LrMygw",
