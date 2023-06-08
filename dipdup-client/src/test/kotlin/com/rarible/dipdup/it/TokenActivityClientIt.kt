@@ -2,18 +2,17 @@ package com.rarible.dipdup.it
 
 import com.apollographql.apollo3.ApolloClient
 import com.rarible.dipdup.client.TokenActivityClient
+import com.rarible.dipdup.client.model.DipDupActivityContinuation
 import com.rarible.dipdup.client.model.DipDupActivityType
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.condition.DisabledOnOs
-import org.junit.jupiter.api.condition.OS
 
-// this test will be disabled on jenkins
-@DisabledOnOs(OS.LINUX)
+@Disabled
 class TokenActivityClientIt {
 
-    val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://dev-tezos-indexer.rarible.org/v1/graphql").build() }
+    val client: ApolloClient = runBlocking { ApolloClient.Builder().serverUrl("https://testnet-tezos-indexer.rarible.org/v1/graphql").build() }
     val tokenActivityClient = TokenActivityClient(client)
 
     @Test
@@ -57,5 +56,22 @@ class TokenActivityClientIt {
             sortAsc = false
         )
         assertThat(page.activities).hasSize(1)
+    }
+
+    @Test
+    fun `should return sync activities desc`() = runBlocking<Unit> {
+        var continuation: String? = null  // this's fine for test
+        var count = 0
+        do {
+            val transfers = tokenActivityClient.getActivitiesSync(1000, continuation)
+            continuation = transfers.continuation
+            count += transfers.activities.size
+            DipDupActivityContinuation.parse(continuation)?.let {
+                assertThat(transfers.activities.first().id).isNotEqualTo(it.id)
+            }
+            println("continuation: ${continuation}")
+
+        } while (continuation != null)
+        println("Count: ${count}")
     }
 }
