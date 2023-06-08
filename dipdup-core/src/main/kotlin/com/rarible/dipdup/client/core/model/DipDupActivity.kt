@@ -61,7 +61,7 @@ interface WithOperationCounter {
 data class DipDupOrderListActivity(
     override val id: String,
     override val date: OffsetDateTime,
-    override val dbUpdatedAt: OffsetDateTime,
+    override val dbUpdatedAt: OffsetDateTime?,
     override val reverted: Boolean,
     override val operationCounter: Int,
     val hash: String,
