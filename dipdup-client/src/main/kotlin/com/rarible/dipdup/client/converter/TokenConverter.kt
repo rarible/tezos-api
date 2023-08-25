@@ -18,12 +18,14 @@ import com.rarible.dipdup.client.core.model.TokenMeta
 import com.rarible.dipdup.client.core.util.MetaUtils
 import com.rarible.dipdup.client.fragment.Token
 import com.rarible.dipdup.client.fragment.Token_by_owner
+import org.slf4j.LoggerFactory
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.time.OffsetDateTime
 
 object TokenConverter {
     val mapper = MetaUtils.mapper()
+    val logger = LoggerFactory.getLogger(javaClass)
 
     fun convertByIds(source: List<GetTokensByIdsQuery.Token>) = source.map { convert(it.token) }
 
@@ -79,17 +81,27 @@ object TokenConverter {
         }
     }
 
-    fun processMetadata(metadata: String): TokenMeta {
-        val map: Map<String, Any> = mapper.readValue(metadata)
-        val meta: TokenMeta.TzktMeta = mapper.convertValue(adjustMeta(map))
-        var tokenAttributes = meta.attributes
-        return TokenMeta(
-            name = meta.name ?: TokenMeta.UNTITLED,
-            description = meta.description,
-            content = meta.contents(),
-            attributes = tokenAttributes ?: emptyList(),
-            tags = meta.tags ?: emptyList()
-        )
+    fun processMetadata(metadata: String): TokenMeta? {
+        try {
+            val map: Map<String, Any> = mapper.readValue(fixBoolean(metadata))
+            val meta: TokenMeta.TzktMeta = mapper.convertValue(adjustMeta(map))
+            var tokenAttributes = meta.attributes
+            return TokenMeta(
+                name = meta.name ?: TokenMeta.UNTITLED,
+                description = meta.description,
+                content = meta.contents(),
+                attributes = tokenAttributes ?: emptyList(),
+                tags = meta.tags ?: emptyList()
+            )
+        } catch (ex: Exception) {
+            logger.error("Failed during parsing meta: $metadata", ex)
+            return null
+        }
+    }
+
+    // Mailformed json: KT1XKUyUtRqobh5CqZzXFJW6UT5t55Sn3iT6:7
+    private fun fixBoolean(metadata: String): String {
+        return metadata.replace("False", "false")
     }
 
     private fun adjustMeta(source: Map<String, *>): Map<String, *> {
