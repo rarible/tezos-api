@@ -81,7 +81,7 @@ object TokenConverter {
         }
     }
 
-    fun processMetadata(metadata: String): TokenMeta? {
+    fun processMetadata(id: String, metadata: String): TokenMeta? {
         try {
             val map: Map<String, Any> = mapper.readValue(fixBoolean(metadata))
             val meta: TokenMeta.TzktMeta = mapper.convertValue(adjustMeta(map))
@@ -94,7 +94,7 @@ object TokenConverter {
                 tags = meta.tags ?: emptyList()
             )
         } catch (ex: Exception) {
-            logger.error("Failed during parsing meta: $metadata", ex)
+            logger.warn("Failed during parsing meta for $id: $metadata", ex)
             return null
         }
     }

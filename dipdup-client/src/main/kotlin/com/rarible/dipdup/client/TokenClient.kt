@@ -38,7 +38,7 @@ class TokenClient(
         val request = GetTokenMetaByIdQuery(uuid)
         val response = safeExecution(request)
         val data = response.metadata_token.firstOrNull()
-        val metadata = data?.metadata.takeUnless { it.isNullOrEmpty() }?.let { processMetadata(it) }
+        val metadata = data?.metadata.takeUnless { it.isNullOrEmpty() }?.let { processMetadata(id, it) }
         return if (metadata != null) {
             metadata
         } else {
